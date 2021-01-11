@@ -34,13 +34,13 @@ const asyncRoutes = [
         name: 'Examp1',
         component: '/example/examp1/index',
         redirect: '/example/examp1/examp1-1',
-        meta: { title: '二级路由1', roles: ['admin'] },
+        meta: { title: '二级路由1', roles: ['admin', 'editor'] },
         children: [
           {
             path: '/example/examp1/examp1-1',
             name: 'Examp1-1',
             component: '/example/examp1/examp1-1/index',
-            meta: { title: '三级路由1-1', roles: ['admin'] }
+            meta: { title: '三级路由1-1', roles: ['admin', 'editor'] }
           },
           {
             path: '/example/examp1/examp1-2',
