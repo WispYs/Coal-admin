@@ -11,6 +11,7 @@ NProgress.configure({ showSpinner: false })
 const whiteList = ['/login'] // 路由白名单
 
 router.beforeEach(async(to, from, next) => {
+  console.log(to)
   NProgress.start()
   document.title = getPageTitle(to.meta.title)
   const hasToken = getToken()
@@ -28,7 +29,6 @@ router.beforeEach(async(to, from, next) => {
           const { roles } = await store.dispatch('user/getInfo')
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
           router.addRoutes(accessRoutes)
-          console.log(to)
 
           // 如果参数 to 不能找到对应的路由的话，就再执行一次beforeEach直到能找到对应的路由为止。
           // 使用 replace: true 替换掉当前的 history 记录
