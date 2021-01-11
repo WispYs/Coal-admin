@@ -4,7 +4,7 @@ import Layout from '@/layout'
 import { constantRoutes } from '@/router'
 
 /**
- * Use meta.role to determine if the current user has permission
+ * 通过用户角色判断是否有权限
  * @param roles
  * @param route
  */
@@ -19,8 +19,8 @@ const loadView = (view) => {
   return (resolve) => require([`@/views/${view}.vue`], resolve)
 }
 /**
- * Filter asynchronous routing tables by recursion
- * @param routes asyncRoutes
+ * 通过角色权限过滤路由配置
+ * @param routes asyncRoutes 动态路由
  * @param roles
  */
 export function filterAsyncRoutes(routes, roles) {

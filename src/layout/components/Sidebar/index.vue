@@ -28,7 +28,7 @@ export default {
   components: { SidebarItem, Logo },
   computed: {
     ...mapGetters([
-      'permission_routes',
+      'permission_routes', // state 里存储的路由配置
       'sidebar'
     ]),
     // routes() {
