@@ -53,7 +53,7 @@ const asyncRoutes = [
                 path: '/example/examp1/examp1-2/examp1-2-1',
                 name: 'Examp1-2-1',
                 component: '/example/examp1/examp1-2/examp1-2-1/index',
-                meta: { title: '四级路由1-2-1', roles: ['admin'] }
+                meta: { title: '四级路由1-2-1', roles: ['admin'], affix: true }
               },
               {
                 path: '/example/examp1/examp1-2/examp1-1-2',

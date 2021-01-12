@@ -73,11 +73,11 @@ export default {
       return tag.meta && tag.meta.affix
     },
     filterAffixTags(routes, basePath = '/') {
-      console.log(routes)
       let tags = []
       routes.forEach(route => {
         if (route.meta && route.meta.affix) {
           const tagPath = path.resolve(basePath, route.path)
+          console.log(tagPath)
           tags.push({
             fullPath: tagPath,
             path: tagPath,
