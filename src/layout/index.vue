@@ -4,9 +4,10 @@
       <headbar class="sidebar-container clearfix" />
       <avatar class="avatar-container" />
     </div>
-    <div class="main-container">
+    <div :class="{hasTagsView:needTagsView}" class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
         <navbar />
+        <tags-view v-if="needTagsView" />
       </div>
       <app-main />
     </div>
@@ -14,7 +15,7 @@
 </template>
 
 <script>
-import { Navbar, Headbar, AppMain, Avatar } from './components'
+import { Navbar, Headbar, AppMain, Avatar, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
@@ -23,7 +24,8 @@ export default {
     Navbar,
     Headbar,
     AppMain,
-    Avatar
+    Avatar,
+    TagsView
   },
   mixins: [ResizeMixin],
   computed: {
@@ -32,6 +34,9 @@ export default {
     },
     fixedHeader() {
       return this.$store.state.settings.fixedHeader
+    },
+    needTagsView() {
+      return this.$store.state.settings.needTagsView
     }
   },
   methods: {
