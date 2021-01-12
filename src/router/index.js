@@ -22,16 +22,29 @@ export const constantRoutes = [
       path: '/dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard', affix: true }
+      meta: { title: '首页', affix: true }
     }]
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
     component: () => import('@/views/dashboard/index'),
-    meta: { title: '首页', icon: 'dashboard', affix: true }
+    meta: { title: '首页', affix: true }
   },
-  managerRouter
+  managerRouter,
+
+  // 重定向路由
+  {
+    path: '/redirect',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: '/redirect/:path(.*)',
+        component: () => import('@/views/redirect/index')
+      }
+    ]
+  }
 ]
 
 const createRouter = () => new Router({

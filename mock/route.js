@@ -5,19 +5,19 @@ const asyncRoutes = [
     redirect: '/permission/adminPage',
     alwaysShow: true, // 一直显示根路由
     name: 'Permission',
-    meta: { title: '权限', icon: 'lock', roles: ['admin', 'editor'] },
+    meta: { title: '权限', roles: ['admin', 'editor'] },
     children: [
       {
         path: '/permission/adminPage',
         name: 'AdminPage',
         component: '/permission/admin-page/index',
-        meta: { title: '管理员', icon: 'editor', roles: ['admin'] }
+        meta: { title: '管理员', roles: ['admin'] }
       },
       {
         path: '/permission/editorPage',
         name: 'EditorPage',
         component: '/permission/editor-page/index',
-        meta: { title: '操作员', icon: 'editor', roles: ['admin', 'editor'] }
+        meta: { title: '操作员', roles: ['admin', 'editor'] }
       }
     ]
   },
@@ -53,7 +53,7 @@ const asyncRoutes = [
                 path: '/example/examp1/examp1-2/examp1-2-1',
                 name: 'Examp1-2-1',
                 component: '/example/examp1/examp1-2/examp1-2-1/index',
-                meta: { title: '四级路由1-2-1', roles: ['admin'], affix: true }
+                meta: { title: '四级路由1-2-1', roles: ['admin'] }
               },
               {
                 path: '/example/examp1/examp1-2/examp1-1-2',

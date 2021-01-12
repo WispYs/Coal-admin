@@ -1,5 +1,6 @@
 <template>
   <div id="tags-view-container" class="tags-view-container">
+    <i class="el-icon-arrow-left icon-back" @click="$router.back(-1)" />
     <scroll-pane ref="scrollPane" class="tags-view-wrapper" @scroll="handleScroll">
       <router-link
         v-for="tag in visitedViews"
@@ -17,10 +18,10 @@
       </router-link>
     </scroll-pane>
     <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
-      <li @click="refreshSelectedTag(selectedTag)">Refresh</li>
-      <li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)">Close</li>
-      <li @click="closeOthersTags">Close Others</li>
-      <li @click="closeAllTags(selectedTag)">Close All</li>
+      <li @click="refreshSelectedTag(selectedTag)">刷新</li>
+      <li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)">关闭</li>
+      <li @click="closeOthersTags">关闭其他</li>
+      <li @click="closeAllTags(selectedTag)">关闭所有</li>
     </ul>
   </div>
 </template>
@@ -126,6 +127,7 @@ export default {
       })
     },
     refreshSelectedTag(view) {
+      console.log(view)
       this.$store.dispatch('tagsView/delCachedView', view).then(() => {
         const { fullPath } = view
         this.$nextTick(() => {
@@ -184,7 +186,7 @@ export default {
         this.left = left
       }
 
-      this.top = e.clientY
+      this.top = 34 // tagsView height
       this.visible = true
       this.selectedTag = tag
     },
@@ -206,7 +208,17 @@ export default {
   background: #fff;
   border-bottom: 1px solid #d8dce5;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
+  overflow: hidden;
+  .icon-back {
+    float: left;
+    width: 16px;
+    margin-left: 10px;
+    line-height: 34px;
+    cursor: pointer;
+  }
   .tags-view-wrapper {
+    float: left;
+    width: calc(100% - 34px);
     .tags-view-item {
       display: inline-block;
       position: relative;

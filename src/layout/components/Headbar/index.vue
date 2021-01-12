@@ -22,7 +22,7 @@ export default {
     //   return this.$router.options.routes
     // },
     showLogo() {
-      return this.$store.state.settings.sidebarLogo
+      return this.$store.state.settings.headbarLogo
     }
   }
 }

@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">后台管理系统登录</h3>
+        <h3 class="title">用户登录</h3>
       </div>
 
       <el-form-item prop="username">
@@ -124,10 +124,11 @@ export default {
 
 <style lang="scss">
 $bg:#283443;
-
-@supports (-webkit-mask: none) and (not (cater-color: #fff)) {
+$cursor: #fff;
+// 解决光标颜色和文字颜色一致
+@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
-    color: #fff;
+    color: $cursor;
   }
 }
 
@@ -143,9 +144,9 @@ $bg:#283443;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: #fff;
-      height: 50px;
-      caret-color: #fff;
+      color: $cursor;
+      height: 100%;
+      caret-color: $cursor;
 
       &:-webkit-autofill {
         box-shadow: 0 0 0px 1000px $bg inset !important;
@@ -230,5 +231,35 @@ $light_gray:#eee;
     cursor: pointer;
     user-select: none;
   }
+}
+@media screen and (max-width: 1200px){
+  .login-container {
+    .login-form {
+      width: 350px;
+      height: 350px;
+      padding: 40px 40px 0;
+    }
+    .title-container {
+      position: relative;
+
+      .title {
+        font-size: 20px;
+        margin: 0px auto 40px auto;
+        text-align: center;
+        font-weight: bold;
+        letter-spacing: 1px;
+      }
+    }
+    .el-input {
+      height: 40px;
+    }
+    .el-button {
+      padding: 10px 20px;
+    }
+    .svg-container {
+      padding: 0 5px 0 15px;
+    }
+  }
+
 }
 </style>

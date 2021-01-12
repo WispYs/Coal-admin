@@ -1,8 +1,8 @@
 import Cookies from 'js-cookie'
 
 const state = {
-  sidebar: {
-    opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
+  headbar: {
+    opened: Cookies.get('headbarStatus') ? !!+Cookies.get('headbarStatus') : true,
     withoutAnimation: false
   },
   device: 'desktop'
@@ -10,18 +10,18 @@ const state = {
 
 const mutations = {
   TOGGLE_SIDEBAR: state => {
-    state.sidebar.opened = !state.sidebar.opened
-    state.sidebar.withoutAnimation = false
-    if (state.sidebar.opened) {
-      Cookies.set('sidebarStatus', 1)
+    state.headbar.opened = !state.headbar.opened
+    state.headbar.withoutAnimation = false
+    if (state.headbar.opened) {
+      Cookies.set('headbarStatus', 1)
     } else {
-      Cookies.set('sidebarStatus', 0)
+      Cookies.set('headbarStatus', 0)
     }
   },
   CLOSE_SIDEBAR: (state, withoutAnimation) => {
-    Cookies.set('sidebarStatus', 0)
-    state.sidebar.opened = false
-    state.sidebar.withoutAnimation = withoutAnimation
+    Cookies.set('headbarStatus', 0)
+    state.headbar.opened = false
+    state.headbar.withoutAnimation = withoutAnimation
   },
   TOGGLE_DEVICE: (state, device) => {
     state.device = device

@@ -10,9 +10,9 @@ module.exports = {
 
   /**
    * @type {boolean} true | false
-   * @description Whether show the logo in sidebar
+   * @description Whether show the logo in headbar
    */
-  sidebarLogo: true,
+  headbarLogo: true,
   /**
    * @type {boolean} true | false
    * @description Whether need tagsView

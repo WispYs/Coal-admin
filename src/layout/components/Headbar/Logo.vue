@@ -1,9 +1,9 @@
 <template>
-  <div class="sidebar-logo-container">
-    <transition name="sidebarLogoFade">
-      <router-link class="sidebar-logo-link" to="/">
-        <img src="@/assets/images/logo_demo.png" class="sidebar-logo">
-        <h1 class="sidebar-title">煤炭工业合肥设计研究院</h1>
+  <div class="headbar-logo-container">
+    <transition name="headbarLogoFade">
+      <router-link class="headbar-logo-link" to="/">
+        <img src="@/assets/images/logo_demo.png" class="headbar-logo">
+        <h1 class="headbar-title">煤炭工业合肥设计研究院</h1>
       </router-link>
     </transition>
   </div>
@@ -22,16 +22,16 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/assets/styles/variables.scss';
-.sidebarLogoFade-enter-active {
+.headbarLogoFade-enter-active {
   transition: opacity 1.5s;
 }
 
-.sidebarLogoFade-enter,
-.sidebarLogoFade-leave-to {
+.headbarLogoFade-enter,
+.headbarLogoFade-leave-to {
   opacity: 0;
 }
 
-.sidebar-logo-container {
+.headbar-logo-container {
   float: left;
   width: 200px;
   height: 60px;
@@ -41,18 +41,18 @@ export default {
   text-align: center;
   overflow: hidden;
 
-  & .sidebar-logo-link {
+  & .headbar-logo-link {
     height: 100%;
     width: 100%;
 
-    & .sidebar-logo {
+    & .headbar-logo {
       width: 32px;
       height: 32px;
       vertical-align: middle;
       margin-right: 12px;
     }
 
-    & .sidebar-title {
+    & .headbar-title {
       display: inline-block;
       margin: 0;
       color: #fff;
@@ -65,7 +65,7 @@ export default {
   }
 
   &.collapse {
-    .sidebar-logo {
+    .headbar-logo {
       margin-right: 0px;
     }
   }

@@ -1,5 +1,5 @@
 const getters = {
-  sidebar: state => state.app.sidebar,
+  headbar: state => state.app.headbar,
   device: state => state.app.device,
   token: state => state.user.token,
   avatar: state => state.user.avatar,
