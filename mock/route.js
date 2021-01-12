@@ -1,5 +1,32 @@
 const asyncRoutes = [
   {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: '/dashboard/index',
+    meta: { title: '首页', affix: true }
+  },
+  {
+    path: '/manager',
+    component: 'Layout',
+    redirect: '/manager/product',
+    name: 'Manager',
+    meta: { title: '项目管理', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: '/manager/product',
+        name: 'Product',
+        component: '/manager/product/index',
+        meta: { title: '项目生产', icon: 'table' }
+      },
+      {
+        path: '/manager/operation',
+        name: 'Operation',
+        component: '/manager/operation/index',
+        meta: { title: '运维管理', icon: 'tree' }
+      }
+    ]
+  },
+  {
     path: '/permission',
     component: 'Layout',
     redirect: '/permission/adminPage',

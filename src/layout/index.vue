@@ -15,7 +15,6 @@
 
 <script>
 import { Headbar, AppMain, Avatar, TagsView } from './components'
-import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
   name: 'Layout',
@@ -25,7 +24,6 @@ export default {
     Avatar,
     TagsView
   },
-  mixins: [ResizeMixin],
   computed: {
     headbar() {
       return this.$store.state.app.headbar

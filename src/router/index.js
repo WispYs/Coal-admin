@@ -5,7 +5,6 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
-import managerRouter from './modules/manager'
 
 export const constantRoutes = [
   {
@@ -25,13 +24,6 @@ export const constantRoutes = [
       meta: { title: '首页', affix: true }
     }]
   },
-  {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: () => import('@/views/dashboard/index'),
-    meta: { title: '首页', affix: true }
-  },
-  managerRouter,
 
   // 重定向路由
   {

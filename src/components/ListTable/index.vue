@@ -103,7 +103,6 @@ export default {
         }
         if (data && column.property === 'money') {
           const values = data.map(item => Number(item[column.property]))
-          console.log(values)
           sums[index] = values.reduce((prev, curr) => {
             const value = Number(curr)
             const prevNum = Number(prev)

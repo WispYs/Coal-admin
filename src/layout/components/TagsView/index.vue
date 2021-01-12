@@ -78,7 +78,6 @@ export default {
       routes.forEach(route => {
         if (route.meta && route.meta.affix) {
           const tagPath = path.resolve(basePath, route.path)
-          console.log(tagPath)
           tags.push({
             fullPath: tagPath,
             path: tagPath,
@@ -98,7 +97,6 @@ export default {
     initTags() {
       const affixTags = this.affixTags = this.filterAffixTags(this.routes)
       for (const tag of affixTags) {
-        // Must have tag name
         if (tag.name) {
           this.$store.dispatch('tagsView/addVisitedView', tag)
         }
@@ -117,7 +115,6 @@ export default {
         for (const tag of tags) {
           if (tag.to.path === this.$route.path) {
             this.$refs.scrollPane.moveToTarget(tag)
-            // when query is different then update
             if (tag.to.fullPath !== this.$route.fullPath) {
               this.$store.dispatch('tagsView/updateVisitedView', this.$route)
             }
@@ -163,10 +160,8 @@ export default {
       if (latestView) {
         this.$router.push(latestView.fullPath)
       } else {
-        // now the default is to redirect to the home page if there is no tags-view,
-        // you can adjust it according to your needs.
+        // 关闭所有tag时默认跳转到首页
         if (view.name === 'Dashboard') {
-          // to reload home page
           this.$router.replace({ path: '/redirect' + view.fullPath })
         } else {
           this.$router.push('/')
@@ -175,10 +170,10 @@ export default {
     },
     openMenu(tag, e) {
       const menuMinWidth = 105
-      const offsetLeft = this.$el.getBoundingClientRect().left // container margin left
-      const offsetWidth = this.$el.offsetWidth // container width
-      const maxLeft = offsetWidth - menuMinWidth // left boundary
-      const left = e.clientX - offsetLeft + 15 // 15: margin right
+      const offsetLeft = this.$el.getBoundingClientRect().left // getBoundingClientRect 获取某个元素相对于视窗的位置
+      const offsetWidth = this.$el.offsetWidth
+      const maxLeft = offsetWidth - menuMinWidth
+      const left = e.clientX - offsetLeft
 
       if (left > maxLeft) {
         this.left = maxLeft
@@ -280,7 +275,6 @@ export default {
 </style>
 
 <style lang="scss">
-//reset element css of el-icon-close
 .tags-view-wrapper {
   .tags-view-item {
     .el-icon-close {
