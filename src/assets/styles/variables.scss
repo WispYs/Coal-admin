@@ -12,6 +12,8 @@ $subMenuHover:#001528;
 $sideBarWidth: 210px;
 $sideBarHeight: 60px;
 
+$iconColor: #eeeeee;
+
 // export
 :export {
   menuText: $menuText;
@@ -22,4 +24,5 @@ $sideBarHeight: 60px;
   subMenuBg: $subMenuBg;
   subMenuHover: $subMenuHover;
   sideBarWidth: $sideBarWidth;
+  iconColor: $iconColor;
 }

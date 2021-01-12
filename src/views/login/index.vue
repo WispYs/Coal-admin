@@ -7,8 +7,8 @@
       </div>
 
       <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
+        <span class="icon-container">
+          <icon class="fa fa-user" />
         </span>
         <el-input
           ref="username"
@@ -22,8 +22,8 @@
       </el-form-item>
 
       <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
+        <span class="icon-container">
+          <icon class="fa fa-lock" />
         </span>
         <el-input
           :key="passwordType"
@@ -37,7 +37,7 @@
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          <icon :class="passwordType === 'password' ? 'fa fa-eye-slash' : 'fa fa-eye'" />
         </span>
       </el-form-item>
 
@@ -165,7 +165,6 @@ $cursor: #fff;
 
 <style lang="scss" scoped>
 $bg:#2d3a4b;
-$dark_gray:#889aa4;
 $light_gray:#eee;
 
 .login-container {
@@ -201,9 +200,9 @@ $light_gray:#eee;
     }
   }
 
-  .svg-container {
+  .icon-container {
     padding: 6px 5px 6px 15px;
-    color: $dark_gray;
+    color: $light_gray;
     vertical-align: middle;
     width: 30px;
     display: inline-block;
@@ -227,7 +226,7 @@ $light_gray:#eee;
     right: 10px;
     top: 7px;
     font-size: 16px;
-    color: $dark_gray;
+    color: $light_gray;
     cursor: pointer;
     user-select: none;
   }
@@ -256,7 +255,7 @@ $light_gray:#eee;
     .el-button {
       padding: 10px 20px;
     }
-    .svg-container {
+    .icon-container {
       padding: 0 5px 0 15px;
     }
   }
