@@ -5,49 +5,35 @@
     element-loading-text="Loading"
     border
     fit
-    show-summary
-    :summary-method="getSummaries"
-    highlight-current-row
+    :show-summary="config.summary"
+    :summary-method="(param) => getSummaries(param, config.summaryField)"
+    :cell-style="cellStyle"
+    header-cell-class-name="pre-line"
   >
     <el-table-column align="center" label="ID" width="95" fixed>
       <template slot-scope="scope">
         {{ scope.$index+1 }}
       </template>
     </el-table-column>
-    <el-table-column label="标题" width="350" prop="title">
+    <el-table-column
+      v-for="column in config.columns"
+      :key="column.field"
+      :label="column.label"
+      :width="column.width"
+      :align="column.align || 'center'"
+      :prop="column.field"
+      :sortable="column.sortable"
+    >
       <template slot-scope="scope">
-        {{ scope.row.title }}
+        <span v-if="column.filter">
+          {{ filterMethod(column.filter, scope.row[column.field]) }}
+        </span>
+        <span v-else>{{ scope.row[column.field] }}</span>
       </template>
     </el-table-column>
-    <el-table-column label="作者" width="110" prop="author" align="center">
+    <el-table-column v-if="config.button" fixed="right" label="操作" width="100" align="center">
       <template slot-scope="scope">
-        <span>{{ scope.row.author }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column align="center" prop="start_time" label="开始时间" sortable>
-      <template slot-scope="scope">
-        <i class="el-icon-time" />
-        <span>{{ scope.row.start_time }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="完成率" width="110" prop="completed" align="center">
-      <template slot-scope="scope">
-        {{ scope.row.completed }}
-      </template>
-    </el-table-column>
-    <el-table-column label="金额（元）" width="150" prop="money" align="center" sortable>
-      <template slot-scope="scope">
-        {{ scope.row.money }}
-      </template>
-    </el-table-column>
-    <el-table-column class-name="status-col" label="状态" prop="status" width="110" align="center">
-      <template slot-scope="scope">
-        <el-tag :type="scope.row.status | typeFilter">{{ scope.row.status | statusFilter }}</el-tag>
-      </template>
-    </el-table-column>
-    <el-table-column fixed="right" label="操作" width="100" align="center">
-      <template slot-scope="scope">
-        <el-button type="text" size="small" @click="handleClick(scope.row)">查看</el-button>
+        <el-button type="text" size="small" @click="handleClick(scope.row, scope.$index)">查看</el-button>
         <el-button type="text" size="small">编辑</el-button>
       </template>
     </el-table-column>
@@ -84,6 +70,10 @@ export default {
     listLoading: {
       type: Boolean,
       default: true
+    },
+    config: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -92,8 +82,27 @@ export default {
     }
   },
   methods: {
+    // filter
+    filterMethod(filter, field) {
+      if (filter === 'statusFilter') {
+        const statusMap = {
+          1: '已完成',
+          2: '进行中',
+          3: '未开始',
+          4: '已搁置'
+        }
+        return statusMap[field]
+      }
+      // ...
+      // if(filter === 'typeFilter') {
+
+      // }
+    },
     // 计算合计总工时
-    getSummaries(param) {
+    getSummaries(param, field) {
+      if (!field) {
+        return false
+      }
       const { columns, data } = param
       const sums = []
       columns.forEach((column, index) => {
@@ -101,29 +110,36 @@ export default {
           sums[index] = '合计'
           return
         }
-        if (data && column.property === 'money') {
-          const values = data.map(item => Number(item[column.property]))
-          sums[index] = values.reduce((prev, curr) => {
-            const value = Number(curr)
-            const prevNum = Number(prev)
-            if (!isNaN(value)) {
-              return prevNum + curr
-            } else {
-              return prev
-            }
-          }, 0)
-        } else {
-          sums[index] = ''
-        }
+        field.forEach((it, i) => {
+          if (data && column.property === it) {
+            const values = data.map(item => Number(item[column.property]))
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr)
+              const prevNum = Number(prev)
+              if (!isNaN(value)) {
+                return prevNum + curr
+              } else {
+                return prev
+              }
+            }, 0)
+            sums[index] += ' 元'
+          } else {
+            sums[index] = ''
+          }
+        })
       })
       return sums
     },
-    handleClick(row) {
-      console.log(row)
+    // 表格单元格样式
+    cellStyle() {
+      return 'font-size: 13px'
+    },
+    handleClick(row, index) {
+      console.log(row, index)
     }
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 
 </style>

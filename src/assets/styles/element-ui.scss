@@ -35,7 +35,24 @@
   }
 }
 
-// to fix el-date-picker css style
+// fix el-date-picker css style
 .el-range-separator {
   box-sizing: content-box;
+}
+
+// fix table css style
+.el-table--border {
+  .th.gutter:last-of-type {
+    display: block !important;
+  }
+}
+
+.el-table {
+  .pre-line {
+    background: #f5f7fa;
+
+    .cell {
+      white-space: pre-line;
+    }
+  }
 }

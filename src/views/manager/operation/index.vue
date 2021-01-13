@@ -15,7 +15,7 @@
 <script>
 import { getList } from '@/api/table'
 import FilterBar from '@/components/FilterBar'
-import ListTable from '@/components/ListTable'
+import ListTable from './components/ListTable'
 import Pagination from '@/components/Pagination'
 
 export default {
