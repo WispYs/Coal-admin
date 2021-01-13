@@ -10,7 +10,7 @@
     :cell-style="cellStyle"
     header-cell-class-name="pre-line"
   >
-    <el-table-column align="center" label="ID" width="95" fixed>
+    <el-table-column align="center" label="序号" width="95" fixed>
       <template slot-scope="scope">
         {{ scope.$index+1 }}
       </template>
