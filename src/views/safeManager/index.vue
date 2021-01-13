@@ -7,7 +7,7 @@
 export default {
   data() {
     return {
-      name: 'editor'
+      name: '安全管理'
     }
   }
 }

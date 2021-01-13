@@ -32,6 +32,7 @@ export function filterAsyncRoutes(routes, roles) {
     } else {
       let sub_view = tmp.component || ''
       sub_view = sub_view.replace(/^\/*/g, '')
+      // ESlint 报错
       // tmp.component = () => import(`@/views/${sub_view}`)
       tmp.component = loadView(sub_view)
     }

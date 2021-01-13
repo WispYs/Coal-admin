@@ -5,7 +5,7 @@
       <app-link :to="item.path">
         <span>{{ item.meta.title }}</span>
       </app-link>
-      <div v-if="item.children && item.children.length > 0" class="item-extend">
+      <div v-if="item.children && item.children.length > 0 && !item.meta.hiddenChild" class="item-extend">
         <div v-for="it in item.children" :key="it.path" class="extend-second clearfix">
           <!-- 二级菜单 -->
           <app-link :to="it.path">
@@ -64,7 +64,6 @@ export default {
     showFourth(e) {
       const target = e.currentTarget
       const offsetTop = target.offsetTop
-      console.log(offsetTop)
       target.childNodes.forEach(item => {
         if (item.className === 'extend-fourth--wrapper') {
           item.style.display = 'block'

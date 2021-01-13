@@ -7,7 +7,7 @@
 export default {
   data() {
     return {
-      name: 'admin'
+      name: '应急救援'
     }
   }
 }

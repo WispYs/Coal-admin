@@ -96,27 +96,6 @@ const asyncRoutes = [
     ]
   },
   {
-    path: '/permission',
-    component: 'Layout',
-    redirect: '/permission/adminPage',
-    name: 'Permission',
-    meta: { title: '权限', roles: ['admin', 'editor'] },
-    children: [
-      {
-        path: '/permission/adminPage',
-        name: 'AdminPage',
-        component: '/permission/admin-page/index',
-        meta: { title: '管理员', roles: ['admin'] }
-      },
-      {
-        path: '/permission/editorPage',
-        name: 'EditorPage',
-        component: '/permission/editor-page/index',
-        meta: { title: '操作员', roles: ['admin', 'editor'] }
-      }
-    ]
-  },
-  {
     path: '/example',
     component: 'Layout',
     redirect: '/example/examp1/examp1-1',
@@ -194,6 +173,36 @@ const asyncRoutes = [
             meta: { title: '三级路由3-2', roles: ['admin'] }
           }
         ]
+      }
+    ]
+  },
+  {
+    path: '/safeManager',
+    name: 'SafeManager',
+    component: 'Layout',
+    redirect: '/safeManager/index',
+    meta: { title: '安全管理', roles: ['admin'], hiddenChild: true },
+    children: [
+      {
+        path: '/safeManager/index',
+        name: 'SafeManagerIndex',
+        component: '/safeManager/index',
+        meta: { title: '安全管理' }
+      }
+    ]
+  },
+  {
+    path: '/emergency',
+    name: 'Emergency',
+    component: 'Layout',
+    redirect: '/emergency/index',
+    meta: { title: '应急救援', roles: ['admin'], hiddenChild: true },
+    children: [
+      {
+        path: '/emergency/index',
+        name: 'EmergencyIndex',
+        component: '/emergency/index',
+        meta: { title: '应急救援' }
       }
     ]
   },
