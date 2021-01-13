@@ -58,34 +58,40 @@
               .extend-second {
                 padding: 4px 20px;
                 border-bottom: 1px dashed #bbb;
+                position: relative;
 
                 &__title {
+                  float: left;
                   font-weight: bold;
-                  margin-right: 100px;
+                  width: 150px;
                 }
               }
 
               .extend-third {
                 display: inline-block;
-                position: relative;
                 padding: 0 5px;
                 margin-right: 15px;
 
                 &:hover {
                   background-color: black;
 
-                  .extend-fourth--wrapper {
-                    display: block;
-                  }
+                  // .extend-fourth--wrapper {
+                  //   display: block;
+                  // }
                 }
+              }
+
+              .extend-third--wrapper {
+                float: left;
+                width: calc(100% - 150px);
               }
 
               .extend-fourth--wrapper {
                 display: none;
                 position: absolute;
                 top: 40px;
-                left: -50px;
-                width: 400px;
+                left: 150px;
+                width: 630px;
                 padding: 0 10px;
                 background-color: black;
                 z-index: 1002;

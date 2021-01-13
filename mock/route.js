@@ -8,21 +8,90 @@ const asyncRoutes = [
   {
     path: '/manager',
     component: 'Layout',
-    redirect: '/manager/product',
+    redirect: '/manager/manager1/manager1-1',
     name: 'Manager',
-    meta: { title: '项目管理', icon: 'el-icon-s-help' },
+    meta: { title: '地测防治水' },
     children: [
       {
-        path: '/manager/product',
-        name: 'Product',
-        component: '/manager/product/index',
-        meta: { title: '项目生产', icon: 'table' }
+        path: '/manager/manager1',
+        name: 'Manager1',
+        component: '/manager/manager1/index',
+        meta: { title: '地质管理' },
+        children: [
+          {
+            path: '/manager/manager1/manager1-1',
+            name: 'Manager1-1',
+            component: '/manager/manager1/manager1-1/index',
+            meta: { title: '区域数据' }
+          },
+          {
+            path: '/manager/manager1/manager1-2',
+            name: 'Manager1-2',
+            component: '/manager/manager1/manager1-2/index',
+            redirect: '/manager/manager1/manager1-2/manager1-2-1',
+            meta: { title: '行业标准管理' },
+            children: [
+              {
+                path: '/manager/manager1/manager1-2/manager1-2-1',
+                name: 'Manager1-2-1',
+                component: '/manager/manager1/manager1-2/manager1-2-1/index',
+                meta: { title: '国家地质文件标准规范' }
+              },
+              {
+                path: '/manager/manager1/manager1-2/manager1-2-2',
+                name: 'Manager1-2-2',
+                component: '/manager/manager1/manager1-2/manager1-2-2/index',
+                meta: { title: '公司地质文件标准规范' }
+              },
+              {
+                path: '/manager/manager1/manager1-2/manager1-2-3',
+                name: 'Manager1-2-3',
+                component: '/manager/manager1/manager1-2/manager1-2-3/index',
+                meta: { title: '矿井地质文件标准规范' }
+              }
+            ]
+          },
+          {
+            path: '/manager/manager1/manager1-3',
+            name: 'Manager1-3',
+            component: '/manager/manager1/manager1-3/index',
+            meta: { title: '地质技术资料' }
+          },
+          {
+            path: '/manager/manager1/manager1-4',
+            name: 'Manager1-4',
+            component: '/manager/manager1/manager1-3/index',
+            meta: { title: '地质图件' }
+          }
+        ]
       },
       {
-        path: '/manager/operation',
-        name: 'Operation',
-        component: '/manager/operation/index',
-        meta: { title: '运维管理', icon: 'tree' }
+        path: '/manager/manager2',
+        name: 'Manager2',
+        component: '/manager/manager2/index',
+        meta: { title: '测量管理' },
+        children: [
+          {
+            path: '/manager/manager2/manager2-1',
+            name: 'Manager2-1',
+            component: '/manager/manager2/manager2-1/index',
+            meta: { title: '测量图件' }
+          }
+        ]
+      },
+      {
+        path: '/manager/manager3',
+        name: 'Manager3',
+        component: '/manager/manager3/index',
+        meta: { title: '水文管理' },
+        children: [
+          {
+            path: '/manager/manager3/manager3-1',
+            name: 'Manager3-1',
+            component: '/manager/manager3/manager3-1/index',
+            meta: { title: '水文台账' }
+          }
+        ]
       }
     ]
   },
@@ -30,7 +99,6 @@ const asyncRoutes = [
     path: '/permission',
     component: 'Layout',
     redirect: '/permission/adminPage',
-    alwaysShow: true, // 一直显示根路由
     name: 'Permission',
     meta: { title: '权限', roles: ['admin', 'editor'] },
     children: [
@@ -52,7 +120,6 @@ const asyncRoutes = [
     path: '/example',
     component: 'Layout',
     redirect: '/example/examp1/examp1-1',
-    alwaysShow: true, // 一直显示根路由
     name: 'Example',
     meta: { title: '一级路由', roles: ['admin', 'editor'] },
     children: [
