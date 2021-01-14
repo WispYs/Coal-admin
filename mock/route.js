@@ -16,6 +16,7 @@ const asyncRoutes = [
         path: '/manager/manager1',
         name: 'Manager1',
         component: '/manager/manager1/index',
+        redirect: '/manager/manager1/manager1-1',
         meta: { title: '地质管理' },
         children: [
           {

@@ -1,26 +1,29 @@
 <template>
   <div class="app-container">
     <filter-bar />
-    <list-table :list="list" :list-loading="listLoading" :config="ProductConfig" />
+    <list-table :list="list" :list-loading="listLoading" />
     <pagination
       v-show="total>0"
       :total="total"
       :page.sync="listQuery.page"
       :limit.sync="listQuery.size"
-      @pagination="fetchData"
+      @pagination="__fetchData"
     />
+    <create-dialog />
+    <editor-dialog />
   </div>
 </template>
 
 <script>
 import { getList } from '@/api/table'
-import FilterBar from '@/components/FilterBar'
-import ListTable from '@/components/ListTable'
+import FilterBar from './components/FilterBar'
+import ListTable from './components/ListTable'
 import Pagination from '@/components/Pagination'
-import ProductConfig from '@/data/product-config'
+import CreateDialog from './components/CreateDialog'
+import EditorDialog from './components/EditorDialog'
 
 export default {
-  components: { FilterBar, ListTable, Pagination },
+  components: { FilterBar, ListTable, Pagination, CreateDialog, EditorDialog },
   data() {
     return {
       list: null,
@@ -29,15 +32,14 @@ export default {
         page: 1,
         size: 10
       },
-      listLoading: true,
-      ProductConfig
+      listLoading: true
     }
   },
   created() {
-    this.fetchData()
+    this.__fetchData()
   },
   methods: {
-    fetchData() {
+    __fetchData() {
       this.listLoading = true
       getList().then(response => {
         this.list = response.data.items

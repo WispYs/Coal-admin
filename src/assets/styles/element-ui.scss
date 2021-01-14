@@ -1,20 +1,36 @@
-// cover some element-ui styles
+// 解决 el-date-picker 样式问题
+.el-range-separator {
+  box-sizing: content-box;
+}
 
-.el-upload {
-  input[type="file"] {
-    display: none !important;
+// 解决 el-table 组件错位问题
+.el-table--border {
+  .th.gutter:last-of-type {
+    display: block !important;
   }
 }
 
-.el-upload__input {
-  display: none;
+// 自定义表头颜色
+.el-table {
+  .pre-line {
+    background: #f5f7fa;
+
+    .cell {
+      white-space: pre-line;
+    }
+  }
 }
 
+// dialog 弹窗css
 .el-dialog {
   transform: none;
   left: 0;
   position: relative;
   margin: 0 auto;
+
+  .el-dialog__body {
+    padding: 0;
+  }
 }
 
 .upload-container {
@@ -28,31 +44,18 @@
   }
 }
 
-// dropdown
+.el-upload {
+  input[type="file"] {
+    display: none !important;
+  }
+}
+
+.el-upload__input {
+  display: none;
+}
+
 .el-dropdown-menu {
   a {
     display: block
-  }
-}
-
-// fix el-date-picker css style
-.el-range-separator {
-  box-sizing: content-box;
-}
-
-// fix table css style
-.el-table--border {
-  .th.gutter:last-of-type {
-    display: block !important;
-  }
-}
-
-.el-table {
-  .pre-line {
-    background: #f5f7fa;
-
-    .cell {
-      white-space: pre-line;
-    }
   }
 }

@@ -8,7 +8,7 @@ const data = Mock.mock({
     person: '@cname',
     time: '@datetime',
     money: '@integer(1000, 3000)',
-    completed: '@integer(0, 100)%'
+    completed: '@integer(0, 100)'
   }]
 })
 

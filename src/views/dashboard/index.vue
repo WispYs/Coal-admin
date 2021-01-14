@@ -86,6 +86,7 @@ export default {
         const lineValue = []
         const barName = []
         const barValue = []
+
         line.forEach(item => {
           lineName.push(item.month + '月')
           lineValue.push(item.value)

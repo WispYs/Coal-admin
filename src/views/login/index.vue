@@ -8,7 +8,7 @@
 
       <el-form-item prop="username">
         <span class="icon-container">
-          <icon icon-class="fa fa-user" />
+          <icon icon-class="fa-user" />
         </span>
         <el-input
           ref="username"
@@ -23,7 +23,7 @@
 
       <el-form-item prop="password">
         <span class="icon-container">
-          <icon icon-class="fa fa-lock" />
+          <icon icon-class="fa-lock" />
         </span>
         <el-input
           :key="passwordType"
@@ -37,7 +37,7 @@
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
-          <icon :icon-class="passwordType === 'password' ? 'fa fa-eye-slash' : 'fa fa-eye'" />
+          <icon :icon-class="passwordType === 'password' ? 'fa-eye-slash' : 'fa-eye'" />
         </span>
       </el-form-item>
 

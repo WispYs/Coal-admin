@@ -3,6 +3,7 @@
 @import './transition.scss';
 @import './element-ui.scss';
 @import './nav.scss';
+@import './common.scss';
 
 body {
   height: 100%;
@@ -13,7 +14,7 @@ body {
 }
 
 label {
-  font-weight: 700;
+  font-weight: 400;
 }
 
 html {

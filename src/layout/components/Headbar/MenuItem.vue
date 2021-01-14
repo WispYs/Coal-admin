@@ -16,7 +16,10 @@
               <div v-for="i in it.children" :key="i.path" class="extend-third" @mouseover.prevent="showFourth($event)" @mouseout.prevent="hideFourth($event)">
                 <!-- 三级菜单 -->
                 <app-link :to="i.path">
-                  <span class="extend-third__title">{{ i.meta.title }}</span>
+                  <span class="extend-third__title">
+                    {{ i.meta.title }}
+                    <icon v-if="i.children && i.children.length > 0" icon-class="fa-angle-down" class="third-icon" />
+                  </span>
                 </app-link>
                 <div v-if="i.children && i.children.length > 0" class="extend-fourth--wrapper">
                   <div v-for="j in i.children" :key="j.path" class="extend-fourth">
