@@ -1,5 +1,5 @@
 <template>
-  <Echarts id="quarterCount" :options="options" />
+  <Echarts id="lineChart" :options="options" />
 </template>
 <script>
 import Echarts from '@/components/Echarts'
