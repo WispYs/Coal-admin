@@ -2,7 +2,7 @@
   <div :class="{'has-logo':showLogo}">
     <logo v-if="showLogo" />
     <div class="menu-container">
-      <menu-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
+      <menu-wrap :routes="permission_routes" />
     </div>
   </div>
 </template>
@@ -10,10 +10,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import Logo from './Logo'
-import MenuItem from './MenuItem'
+import MenuWrap from './MenuWrap'
 
 export default {
-  components: { MenuItem, Logo },
+  components: { MenuWrap, Logo },
   computed: {
     ...mapGetters([
       'permission_routes' // state 里存储的路由配置

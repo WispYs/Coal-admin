@@ -32,89 +32,99 @@
         padding: 0 20px;
         height: $sideBarHeight;
 
-        .nav-item {
+        .menu-first--wrapper {
           float: left;
+          position: relative;
           width: 120px;
           height: $sideBarHeight;
           line-height: $sideBarHeight;
           text-align: center;
 
-          &__title {
-            display: block;
-            position: relative;
+          .menu-second--wrapper {
+            position: absolute;
+            top: 100%;
+            left: -100px;
+            width: 750px;
+            height: auto;
+            padding: 10px 0;
+            background-color: $menuHover;
+            color: white;
+            font-size: 13px;
+            text-align: left;
+            line-height: 40px;
+            display: none;
 
-            .item-extend {
-              position: absolute;
-              top: 100%;
-              left: -100px;
-              width: 800px;
-              height: 300px;
-              background-color: $menuHover;
-              color: white;
-              font-size: 13px;
-              text-align: left;
-              line-height: 40px;
-              display: none;
+            .menu-second {
+              padding: 4px 20px;
+              position: relative;
 
-              .extend-second {
-                padding: 4px 20px;
+              &:not(:last-of-type) {
                 border-bottom: 1px dashed #bbb;
-                position: relative;
-
-                &__title {
-                  float: left;
-                  font-weight: bold;
-                  width: 150px;
-                }
               }
 
-              .extend-third {
-                display: inline-block;
-                padding: 0 5px;
-                margin-right: 15px;
-
-                .third-icon {
-                  margin-left: 2px;
-                }
-
-                &:hover {
-                  background-color: black;
-
-                  // .extend-fourth--wrapper {
-                  //   display: block;
-                  // }
-                }
-              }
-
-              .extend-third--wrapper {
+              &__title {
                 float: left;
-                width: calc(100% - 150px);
+                font-weight: bold;
+                width: 150px;
               }
 
-              .extend-fourth--wrapper {
-                display: none;
-                position: absolute;
-                top: 40px;
-                left: 150px;
-                width: 630px;
-                padding: 0 10px;
-                background-color: black;
-                z-index: 1002;
-                color: white;
-                font-size: 13px;
-              }
-
-              .extend-fourth {
+              &--nochild {
                 display: inline-block;
-                position: relative;
-                margin-right: 20px;
+
+                .menu-second__title {
+                  width: auto;
+                  padding: 4px 20px;
+                  line-height: 0;
+                }
               }
             }
 
-            &:hover {
-              .item-extend {
-                display: block;
+            .menu-third {
+              display: inline-block;
+              padding: 0 5px;
+              margin-right: 15px;
+
+              .third-icon {
+                margin-left: 2px;
               }
+
+              &:hover {
+                background-color: black;
+
+                // .menu-fourth--wrapper {
+                //   display: block;
+                // }
+              }
+            }
+
+            .menu-third--wrapper {
+              float: left;
+              width: calc(100% - 150px);
+            }
+
+            .menu-fourth--wrapper {
+              display: none;
+              position: absolute;
+              top: 40px;
+              left: 150px;
+              width: 580px;
+              padding: 0 10px;
+              background-color: black;
+              z-index: 1002;
+              color: white;
+              font-size: 13px;
+            }
+
+            .menu-fourth {
+              display: inline-block;
+              position: relative;
+              margin-right: 20px;
+            }
+          }
+
+          &:hover {
+            .menu-second--wrapper {
+              display: block;
             }
           }
 
