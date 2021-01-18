@@ -1,5 +1,5 @@
 <template>
-  <div class="clearfix" style="white-space: nowrap">
+  <div class="menu-container clearfix">
     <div v-for="item in routes" :key="item.path" style="display: inline-block">
       <div v-if="!item.hidden && item.meta" class="menu-first--wrapper">
         <!-- 一级菜单 -->

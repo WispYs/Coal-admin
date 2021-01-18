@@ -1,7 +1,7 @@
 <template>
   <div :class="{'has-logo':showLogo}">
     <logo v-if="showLogo" />
-    <div class="menu-container">
+    <div class="menu-wrapper">
       <menu-wrap :routes="permission_routes" />
     </div>
   </div>
