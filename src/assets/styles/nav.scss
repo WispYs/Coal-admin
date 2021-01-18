@@ -1,3 +1,10 @@
+/*
+ * @Author: Wisper 
+ * @Date: 2021-01-08 14:12:56 
+ * @Last Modified by: Wisper
+ * @Last Modified time: 2021-01-18 13:25:32
+ */
+
 #app {
 
   .main-container {
@@ -27,14 +34,50 @@
       color: white;
       float: left;
 
+      // logo
+      .headbar-logo-container {
+        float: left;
+        height: 60px;
+        line-height: 60px;
+
+        background: $menuBg;
+        text-align: center;
+        overflow: hidden;
+
+        & .headbar-logo-link {
+          height: 100%;
+          width: 100%;
+
+          & .headbar-logo {
+            width: 32px;
+            height: 32px;
+            vertical-align: middle;
+            margin-right: 12px;
+          }
+
+          & .headbar-title {
+            display: inline-block;
+            margin: 0;
+            color: #fff;
+            font-weight: 600;
+            line-height: 50px;
+            font-size: 14px;
+            font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
+            vertical-align: middle;
+          }
+        }
+      }
+
+      // menu
       .menu-container {
         float: left;
-        padding: 0 20px;
+        width: 100%;
         height: $sideBarHeight;
+        position: relative;
 
         .menu-first--wrapper {
           float: left;
-          position: relative;
+          // position: relative;
           width: 120px;
           height: $sideBarHeight;
           line-height: $sideBarHeight;
@@ -43,8 +86,9 @@
           .menu-second--wrapper {
             position: absolute;
             top: 100%;
-            left: -100px;
-            width: 750px;
+            left: 0;
+            width: initial;
+            width: -webkit-fill-available;
             height: auto;
             padding: 10px 0;
             background-color: $menuHover;
@@ -107,7 +151,7 @@
               position: absolute;
               top: 40px;
               left: 150px;
-              width: 580px;
+              width: 1000px;
               padding: 0 10px;
               background-color: black;
               z-index: 1002;
@@ -140,7 +184,8 @@
 
       &.has-logo {
         .menu-container {
-          width: calc(100% - 200px);
+          width: calc(100% - 44px); // Logo width
+          padding: 0 20px;
         }
       }
     }

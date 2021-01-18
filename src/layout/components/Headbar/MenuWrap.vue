@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div v-for="item in routes" :key="item.path">
+  <div class="clearfix" style="white-space: nowrap">
+    <div v-for="item in routes" :key="item.path" style="display: inline-block">
       <div v-if="!item.hidden && item.meta" class="menu-first--wrapper">
         <!-- 一级菜单 -->
         <menu-tier :class-name="'item-first'" :children="item.children" :hidden-child="item.meta.hiddenChild" :title="item.meta.title" :path="item.path" />
@@ -20,7 +20,6 @@
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
