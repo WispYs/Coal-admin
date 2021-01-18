@@ -1,9 +1,9 @@
-export default {
+export var TableConfig = {
   button: true,
   summary: true,
   summaryField: ['money'],
   columns: [
-    { label: '标题', field: 'title', width: '', align: 'left', layout: 'Text', placeholder: '请填写标题' },
+    { label: '标题2', field: 'title', width: '', align: 'left', layout: 'Text', placeholder: '请填写标题' },
     { label: '负责人', field: 'person', width: '110', layout: 'Text', placeholder: '请填写负责人' },
     { label: '项目时间', field: 'time', width: '350', sortable: true, layout: 'DataTime', placeholder: '请选择项目时间' },
     { label: '完成率', field: 'completed', width: '110', layout: 'Progress', placeholder: '请填写项目完成率' },
@@ -25,4 +25,8 @@ export default {
         }
       ], placeholder: '请选择项目状态' }
   ]
+}
+
+export var FilterConfig = {
+
 }
