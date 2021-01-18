@@ -3,11 +3,6 @@
  * 验证方法
  */
 
-// 判断字符串是否是https?:|mailto:|tal: 开头的
-export function isExternal(path) {
-  return /^(https?:|mailto:|tel:)/.test(path)
-}
-
 // 暂时限制登录名称为'admin' 和 'editor'，便于测试动态路由权限
 export function validUsername(str) {
   const valid_map = ['admin', 'editor']
@@ -18,3 +13,9 @@ export function validUsername(str) {
 export function validUserPassword(str) {
   return /^(\w){3,20}$/.test(str)
 }
+
+// 判断字符串是否是https?:|mailto:|tal: 开头的，路由地址是否为第三方外部链接
+export function isExternal(path) {
+  return /^(https?:|mailto:|tel:)/.test(path)
+}
+

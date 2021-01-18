@@ -19,6 +19,7 @@ export default {
       return isExternal(this.to)
     },
     type() {
+      // 外部链接用 a 标签跳转
       if (this.isExternal) {
         return 'a'
       }
