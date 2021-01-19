@@ -1,13 +1,13 @@
 <template>
   <div class="app-container">
-    <filter-bar />
-    <list-table :list="list" :list-loading="listLoading" :config="TableConfig" />
+    <filter-bar :config="FilterConfig" @search-click="queryData" @reset-click="queryData" />
+    <list-table :list="list" :list-loading="listLoading" :config="TableConfig" :filter-method="statusFilter" />
     <pagination
       v-show="total>0"
       :total="total"
       :page.sync="listQuery.page"
       :limit.sync="listQuery.size"
-      @pagination="fetchData"
+      @pagination="__fetchData"
     />
   </div>
 </template>
@@ -29,23 +29,42 @@ export default {
         page: 1,
         size: 10
       },
+      filter: {}, // 筛选项
       listLoading: true,
       FilterConfig,
       TableConfig
     }
   },
   created() {
-    this.fetchData()
+    this.__fetchData()
   },
   methods: {
-    fetchData() {
+    // 获取数据
+    __fetchData() {
       this.listLoading = true
-      getList().then(response => {
+      const query = Object.assign(this.listQuery, this.filter)
+      getList(query).then(response => {
         this.list = response.data.items
         this.listLoading = false
         this.total = response.data.total
       })
+    },
+    // 查询数据
+    queryData(filter) {
+      this.filter = Object.assign(this.filter, filter)
+      this.__fetchData()
+    },
+    // 项目状态过滤器
+    statusFilter(status) {
+      const statusMap = {
+        1: '已完成',
+        2: '进行中',
+        3: '未开始',
+        4: '已搁置'
+      }
+      return statusMap[status]
     }
+
   }
 }
 </script>

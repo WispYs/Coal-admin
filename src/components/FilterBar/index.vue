@@ -1,24 +1,34 @@
 <template>
   <div class="filter-bar">
-    <div class="filter-bar__item">
-      <label>关键字：</label>
-      <el-input v-model="keywords" class="filter-item" style="width: 150px" placeholder="输入关键字" suffix-icon="el-icon-search" />
-    </div>
-    <div class="filter-bar__item">
-      <label>项目状态：</label>
-      <el-select v-model="status" placeholder="请选择项目状态" style="width: 150px">
+    <div v-for="(item, index) in config.filters" :key="index" class="filter-bar__item">
+      <label>{{ item.label }}：</label>
+      <!-- input  -->
+      <el-input
+        v-if="item.layout === 'Text'"
+        v-model="filterForm[item.field]"
+        class="filter-item"
+        :style="`width:${item.width}px`"
+        :placeholder="item.placeholder"
+        suffix-icon="el-icon-search"
+      />
+      <!-- select  -->
+      <el-select
+        v-if="item.layout === 'Select'"
+        v-model="filterForm[item.field]"
+        :style="`width:${item.width}px`"
+        :placeholder="item.placeholder"
+      >
         <el-option
-          v-for="item in statusOption"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
+          v-for="it in item.options"
+          :key="it.value"
+          :label="it.label"
+          :value="it.value"
         />
       </el-select>
-    </div>
-    <div class="filter-bar__item">
-      <label>开始时间：</label>
+      <!-- date-picker  -->
       <el-date-picker
-        v-model="time"
+        v-if="item.layout === 'DateTime'"
+        v-model="filterForm[item.field]"
         class="filter-item"
         type="daterange"
         align="right"
@@ -30,9 +40,10 @@
         value-format="yyyy-MM-dd"
       />
     </div>
-    <div class="filter-bar__item">
-      <el-button type="primary" size="medium" @click="search()">搜索</el-button>
-      <el-button type="primary" size="medium" @click="reset()">重置</el-button>
+    <div v-if="config.actions && config.actions.length > 0" class="filter-bar__item">
+      <el-button v-if="config.actions.indexOf('search') > -1" type="primary" size="medium" @click="search()">搜索</el-button>
+      <el-button v-if="config.actions.indexOf('reset') > -1" type="primary" size="medium" @click="reset()">重置</el-button>
+      <el-button v-if="config.actions.indexOf('create') > -1" type="primary" size="medium" @click="reset()">新建</el-button>
     </div>
 
   </div>
@@ -40,28 +51,15 @@
 
 <script>
 export default {
+  props: {
+    config: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
-      keywords: '',
-      time: '',
-      startTime: '',
-      endTime: '',
-      status: '',
-      statusOption: [
-        {
-          value: 1,
-          label: '已完成'
-        }, {
-          value: 2,
-          label: '进行中'
-        }, {
-          value: 3,
-          label: '未开始'
-        }, {
-          value: 4,
-          label: '已搁置'
-        }
-      ],
+      filterForm: {}, // 筛选项表单字段
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -91,25 +89,21 @@ export default {
       }
     }
   },
-  mounted() {
-
+  created() {
+    const { filters } = { ...this.config }
+    const obj = {}
+    filters.forEach(item => {
+      obj[item.field] = ''
+    })
+    this.filterForm = Object.assign({}, obj)
   },
   methods: {
     __initFilter() {
-      this.keywords = ''
-      this.startTime = ''
-      this.endTime = ''
-      this.time = ''
-      this.status = ''
+      Object.keys(this.filterForm).forEach(key => { this.filterForm[key] = '' })
     },
 
     __getFilter() {
-      return {
-        keywords: this.keywords,
-        startTime: this.time[0] ? this.time[0] : '',
-        endTime: this.time[0] ? this.time[1] : '',
-        status: this.status
-      }
+      return Object.assign({}, this.filterForm)
     },
 
     search() {

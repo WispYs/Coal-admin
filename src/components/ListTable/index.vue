@@ -26,15 +26,16 @@
     >
       <template slot-scope="scope">
         <span v-if="column.filter">
-          {{ filterMethod(column.filter, scope.row[column.field]) }}
+          {{ filterField(scope.row[column.field]) }}
         </span>
         <span v-else>{{ scope.row[column.field] }}</span>
       </template>
     </el-table-column>
-    <el-table-column v-if="config.button" fixed="right" label="操作" width="100" align="center">
+    <el-table-column v-if="config.actions && config.actions.length > 0" fixed="right" label="操作" width="150" align="center">
       <template slot-scope="scope">
-        <el-button type="text" size="small" @click="handleClick(scope.row, scope.$index)">查看</el-button>
-        <el-button type="text" size="small">编辑</el-button>
+        <el-button v-if="config.actions.indexOf('preview') > -1" type="text" size="small" @click="handleClick(scope.row, scope.$index)">查看</el-button>
+        <el-button v-if="config.actions.indexOf('edit') > -1" type="text" size="small">编辑</el-button>
+        <el-button v-if="config.actions.indexOf('delete') > -1" type="text" size="small" style="color: red">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -42,26 +43,6 @@
 
 <script>
 export default {
-  filters: {
-    typeFilter(status) {
-      const statusMap = {
-        1: 'success',
-        2: '',
-        3: 'info',
-        4: 'danger'
-      }
-      return statusMap[status]
-    },
-    statusFilter(status) {
-      const statusMap = {
-        1: '已完成',
-        2: '进行中',
-        3: '未开始',
-        4: '已搁置'
-      }
-      return statusMap[status]
-    }
-  },
   props: {
     list: {
       type: Array,
@@ -74,6 +55,10 @@ export default {
     config: {
       type: Object,
       default: () => ({})
+    },
+    filterMethod: {
+      type: Function,
+      default: null
     }
   },
   data() {
@@ -82,21 +67,11 @@ export default {
     }
   },
   methods: {
-    // filter
-    filterMethod(filter, field) {
-      if (filter === 'statusFilter') {
-        const statusMap = {
-          1: '已完成',
-          2: '进行中',
-          3: '未开始',
-          4: '已搁置'
-        }
-        return statusMap[field]
+    // filter 方法
+    filterField(field) {
+      if (this.filterMethod) {
+        return this.filterMethod(field)
       }
-      // ...
-      // if(filter === 'typeFilter') {
-
-      // }
     },
     // 计算合计总工时
     getSummaries(param, field) {

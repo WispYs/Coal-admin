@@ -1,32 +1,47 @@
 export var TableConfig = {
-  button: true,
+  /**
+   * @param actions         {Array}   操作按钮
+   * @param summary         {Boolean} 是否需要合计数据
+   * @param summaryField    {Array}   合计字段
+   * @param columns         {Array}   每列参数
+   * @param sortable        {Boolean} 是否需要排序
+   * @param layout          {String}  表单类型
+   * @param filter          {Boolean} 字段值是否需要方法处理
+   * @param options         {Array}   选择器配置项
+   */
+  actions: ['preview', 'edit', 'delete'],
   summary: true,
   summaryField: ['money'],
   columns: [
-    { label: '标题2', field: 'title', width: '', align: 'left', layout: 'Text', placeholder: '请填写标题' },
-    { label: '负责人', field: 'person', width: '110', layout: 'Text', placeholder: '请填写负责人' },
-    { label: '项目时间', field: 'time', width: '350', sortable: true, layout: 'DataTime', placeholder: '请选择项目时间' },
-    { label: '完成率', field: 'completed', width: '110', layout: 'Progress', placeholder: '请填写项目完成率' },
-    { label: '金额（元）', field: 'money', width: '150', layout: 'Text', placeholder: '请填写项目金额' },
-    { label: '状态', field: 'status', width: '110', filter: 'statusFilter', layout: 'Select',
-      options: [
-        {
-          value: 1,
-          label: '已完成'
-        }, {
-          value: 2,
-          label: '进行中'
-        }, {
-          value: 3,
-          label: '未开始'
-        }, {
-          value: 4,
-          label: '已搁置'
-        }
-      ], placeholder: '请选择项目状态' }
+    { label: '设备名称', field: 'name', width: '150', layout: 'Text', placeholder: '请填写设备名称' },
+    { label: '地区', field: 'region', width: '150', layout: 'Text', placeholder: '请填写设备所在地区' },
+    { label: '维护时间', field: 'date', width: '150', sortable: true, layout: 'DataTime', placeholder: '请选择维护时间' },
+    { label: '描述', field: 'describe', width: '', align: 'left', layout: 'Text', placeholder: '请填写备注' },
+    { label: '开启状态', field: 'open', width: '150', filter: true, layout: 'Radio', placeholder: '请选择开启状态' }
+
   ]
 }
 
 export var FilterConfig = {
-
+  /**
+   * @param actions         {Array}   操作按钮
+   * @param filters         {Array}   筛选项
+   * @param options         {Array}   选择器配置项
+   */
+  actions: ['search', 'reset', 'create'],
+  filters: [
+    { label: '设备名称', field: 'name', width: '150', layout: 'Text', placeholder: '请输入设备名称' },
+    { label: '维护时间', field: 'date', width: '150', layout: 'DateTime', placeholder: '请选择维护时间' },
+    { label: '开启状态', field: 'open', width: '150', layout: 'Select',
+      options: [
+        {
+          value: 0,
+          label: '关闭'
+        }, {
+          value: 1,
+          label: '开启'
+        }
+      ],
+      placeholder: '请选择开启状态' }
+  ]
 }

@@ -5,8 +5,8 @@ import { constantRoutes } from '@/router'
 
 /**
  * 通过用户角色判断是否有权限
- * @param roles
- * @param route
+ * @param roles       {Array}   权限分配的角色，例如: ['admin', 'editor']
+ * @param route       {Object}  路由
  */
 function hasPermission(roles, route) {
   if (route.meta && route.meta.roles) {
@@ -20,8 +20,8 @@ const loadView = (view) => {
 }
 /**
  * 通过角色权限过滤路由配置
- * @param routes asyncRoutes 动态路由
- * @param roles
+ * @param routes      {Array}   asyncRoutes 动态路由
+ * @param roles       {Array}   权限分配的角色，例如: ['admin', 'editor']
  */
 export function filterAsyncRoutes(routes, roles) {
   const res = []
