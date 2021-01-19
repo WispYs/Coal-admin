@@ -9,16 +9,16 @@ export var TableConfig = {
    * @param filter          {Boolean} 字段值是否需要方法处理
    * @param options         {Array}   选择器配置项
    */
-  actions: [],
+  actions: ['preview', 'edit', 'delete'],
   summary: true,
   summaryField: ['money'],
   columns: [
     { label: '标题', field: 'title', width: '', align: 'left', layout: 'Text', placeholder: '请填写标题' },
     { label: '负责人', field: 'person', width: '110', layout: 'Text', placeholder: '请填写负责人' },
     { label: '项目时间', field: 'time', width: '350', sortable: true, layout: 'DateTime', placeholder: '请选择项目时间' },
-    { label: '完成率', field: 'completed', width: '110', layout: 'Progress', placeholder: '请填写项目完成率' },
-    { label: '金额（元）', field: 'money', width: '150', layout: 'Text', placeholder: '请填写项目金额' },
-    { label: '状态', field: 'status', width: '110', filter: true, layout: 'Select',
+    { label: '完成率', field: 'completed', width: '110', layout: 'Slider', placeholder: '请填写项目完成率' },
+    { label: '金额（元）', field: 'money', unit: '元', width: '150', layout: 'Text', placeholder: '请填写项目金额' },
+    { label: '项目状态', field: 'status', width: '110', filter: true, layout: 'Select',
       options: [
         {
           value: 1,
@@ -43,7 +43,7 @@ export var FilterConfig = {
    * @param filters         {Array}   筛选项
    * @param options         {Array}   选择器配置项
    */
-  actions: ['search', 'reset'],
+  actions: ['search', 'reset', 'create'],
   filters: [
     { label: '关键字', field: 'keywords', width: '150', layout: 'Text', placeholder: '请输入关键字' },
     { label: '项目时间', field: 'time', width: '150', layout: 'DateTime', placeholder: '请选择开始时间' },

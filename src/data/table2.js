@@ -9,7 +9,7 @@ export var TableConfig = {
    * @param filter          {Boolean} 字段值是否需要方法处理
    * @param options         {Array}   选择器配置项
    */
-  actions: ['preview', 'edit', 'delete'],
+  actions: [],
   summary: true,
   summaryField: ['money'],
   columns: [
@@ -28,7 +28,7 @@ export var FilterConfig = {
    * @param filters         {Array}   筛选项
    * @param options         {Array}   选择器配置项
    */
-  actions: ['search', 'reset', 'create'],
+  actions: ['search', 'reset'],
   filters: [
     { label: '设备名称', field: 'name', width: '150', layout: 'Text', placeholder: '请输入设备名称' },
     { label: '维护时间', field: 'date', width: '150', layout: 'DateTime', placeholder: '请选择维护时间' },

@@ -11,6 +11,7 @@
         :placeholder="item.placeholder"
         suffix-icon="el-icon-search"
       />
+
       <!-- select  -->
       <el-select
         v-if="item.layout === 'Select'"
@@ -25,6 +26,7 @@
           :value="it.value"
         />
       </el-select>
+
       <!-- date-picker  -->
       <el-date-picker
         v-if="item.layout === 'DateTime'"
@@ -43,7 +45,7 @@
     <div v-if="config.actions && config.actions.length > 0" class="filter-bar__item">
       <el-button v-if="config.actions.indexOf('search') > -1" type="primary" size="medium" @click="search()">搜索</el-button>
       <el-button v-if="config.actions.indexOf('reset') > -1" type="primary" size="medium" @click="reset()">重置</el-button>
-      <el-button v-if="config.actions.indexOf('create') > -1" type="primary" size="medium" @click="reset()">新建</el-button>
+      <el-button v-if="config.actions.indexOf('create') > -1" type="primary" size="medium" @click="create()">新建</el-button>
     </div>
 
   </div>
@@ -59,7 +61,7 @@ export default {
   },
   data() {
     return {
-      filterForm: {}, // 筛选项表单字段
+      filterForm: {}, // 筛选项表单
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -113,6 +115,9 @@ export default {
     reset() {
       this.__initFilter()
       this.$emit('reset-click', this.__getFilter())
+    },
+    create() {
+      this.$emit('create-click')
     }
   }
 }
