@@ -23,7 +23,7 @@ module.exports = [
       return {
         code: 20000,
         data: {
-          count: lineCount,
+          lineCount: lineCount,
           lineData: lineData,
           barData: barData
         }

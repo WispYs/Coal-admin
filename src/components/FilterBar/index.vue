@@ -103,6 +103,7 @@ export default {
     },
 
     __getFilter() {
+      // 时间段需要分开成两个参数
       return Object.assign({}, this.filterForm)
     },
 

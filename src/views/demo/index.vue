@@ -1,6 +1,6 @@
 <template>
   <div>
-    Demo Page : {{ title }}
+    <!-- Demo Page : {{ title }} -->
     <router-view />
   </div>
 </template>
