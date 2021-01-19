@@ -52,18 +52,20 @@
 
 export default {
   props: {
-    name: {
-      type: String,
-      default: ''
-    },
     dialogVisible: {
       type: Boolean,
       default: false
     },
+    // 弹窗配置项
     config: {
       type: Object,
       default: () => ({})
     }
+    // 弹窗表单
+    // formData: {
+    //   type: Object,
+    //   default: () => ({})
+    // }
   },
   data() {
     return {
@@ -86,10 +88,9 @@ export default {
     onSubmit() {
       console.log(this.formData)
     },
+    // 更新父组件 xxxxxDialogVisible 的值
     closeDialog() {
-      const visible = `${this.name}DialogVisible`
-      console.log(visible)
-      this.$emit('set-visible', visible)
+      this.$emit('close-dialog')
     }
   }
 }

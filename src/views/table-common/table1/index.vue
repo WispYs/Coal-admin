@@ -4,14 +4,14 @@
       :config="FilterConfig"
       @search-click="queryData"
       @reset-click="queryData"
-      @create-click="openCreateDialog"
+      @create-click="openDialog('create')"
     />
     <list-table
       :list="list"
       :list-loading="listLoading"
       :config="TableConfig"
       :filter-method="statusFilter"
-      @edit-click="openEditDialog"
+      @edit-click="(row) => openDialog('edit', row)"
     />
     <pagination
       v-show="total>0"
@@ -21,18 +21,19 @@
       @pagination="__fetchData"
     />
     <!-- 新建弹窗 -->
+    <!-- 'create' 取自 createDialogVisible -->
     <form-dialog
-      name="create"
       :config="initCreateConfig()"
       :dialog-visible="createDialogVisible"
-      @set-visible="setVisible"
+      @close-dialog="closeDialog('create')"
     />
     <!-- 编辑弹窗 -->
+    <!-- 'edit' 取自 editDialogVisible -->
     <form-dialog
-      name="edit"
       :config="initEditConfig()"
       :dialog-visible="editDialogVisible"
-      @set-visible="setVisible"
+      :form-data="editFormData"
+      @close-dialog="closeDialog('edit')"
     />
   </div>
 </template>
@@ -60,7 +61,8 @@ export default {
       FilterConfig,
       TableConfig,
       createDialogVisible: false,
-      editDialogVisible: false
+      editDialogVisible: false,
+      editFormData: null
     }
   },
   created() {
@@ -100,17 +102,19 @@ export default {
       })
       return editConfig
     },
-    // 打开新建弹窗
-    openCreateDialog() {
-      this.createDialogVisible = true
+    // 打开弹窗
+    openDialog(name, row) {
+      const visible = `${name}DialogVisible`
+      this[visible] = true
+      console.log(row)
+      if (row) {
+        this.editFormData = row
+      }
     },
-    // 打开编辑弹窗
-    openEditDialog() {
-      this.editDialogVisible = true
-    },
-    // 关闭弹窗后手动设置弹窗 visible ：false
-    setVisible(visible) {
-      console.log(visible)
+    // 关闭弹窗后手动设置弹窗隐藏 xxxxxDialogVisible ：false
+    // 否则会因为使用同一组件导致 dialogVisible 错乱
+    closeDialog(name) {
+      const visible = `${name}DialogVisible`
       this[visible] = false
     },
 
