@@ -26,7 +26,7 @@
     >
       <template slot-scope="scope">
         <span v-if="column.filter">
-          {{ filterField(scope.row[column.field]) }}
+          {{ filterField(column.filterName, scope.row[column.field]) }}
         </span>
         <span v-else>{{ scope.row[column.field] }}</span>
       </template>
@@ -68,9 +68,13 @@ export default {
   },
   methods: {
     // filter 方法
-    filterField(field) {
+    /**
+     * @param name  filter方法名
+     * @param field 过滤字
+     */
+    filterField(name, field) {
       if (this.filterMethod) {
-        return this.filterMethod(field)
+        return this.filterMethod(name, field)
       }
     },
     // 计算合计总工时
@@ -109,6 +113,7 @@ export default {
     handleClick(row, index) {
       console.log(row, index)
     },
+    // 编辑
     edit(row) {
       this.$emit('edit-click', row)
     },

@@ -10,7 +10,7 @@
       :list="list"
       :list-loading="listLoading"
       :config="TableConfig"
-      :filter-method="statusFilter"
+      :filter-method="filterMethods"
       @edit-click="(row) => openDialog('edit', row)"
     />
     <pagination
@@ -120,22 +120,29 @@ export default {
     },
 
     // submit data
-    createSubmit() {
-
+    createSubmit(submitData) {
+      console.log(submitData)
     },
-    editSubmit() {
-
+    editSubmit(submitData) {
+      console.log(submitData)
     },
 
-    // 项目状态过滤器
-    statusFilter(status) {
-      const statusMap = {
-        1: '已完成',
-        2: '进行中',
-        3: '未开始',
-        4: '已搁置'
+    // 字段过滤方法
+    filterMethods(name, str) {
+      if (name === 'statusFilter') {
+        // 项目状态
+        const statusMap = {
+          1: '已完成',
+          2: '进行中',
+          3: '未开始',
+          4: '已搁置'
+        }
+        return statusMap[str]
+      } else if (name === 'urgencyFilter') {
+        // 紧急状态
+        return str ? '是' : '否'
       }
-      return statusMap[status]
+      // else if ...
     }
 
   }
