@@ -22,7 +22,7 @@
       @pagination="__fetchData"
     />
     <!-- 新建弹窗 -->
-    <!-- 'create' 对应 createDialogVisible -->
+    <!-- 'create' 对应 createDialogVisible字段 -->
     <form-dialog
       :config="initCreateConfig()"
       :dialog-visible="createDialogVisible"
@@ -30,7 +30,7 @@
       @submit="createSubmit"
     />
     <!-- 编辑弹窗 -->
-    <!-- 'edit' 对应 editDialogVisible -->
+    <!-- 'edit' 对应 editDialogVisible字段 -->
     <form-dialog
       ref="editDialog"
       :config="initEditConfig()"

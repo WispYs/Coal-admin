@@ -114,19 +114,19 @@ export default [
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-1',
                 name: 'Geodesy1-1-1',
                 component: '/table/table1/index',
-                meta: { title: '矿区构造纲要图' }
+                meta: { title: '矿区构造纲要图', affix: true }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-2',
                 name: 'Geodesy1-1-2',
                 component: '/table/table2/index',
-                meta: { title: '地质地形图' }
+                meta: { title: '地质地形图', affix: true }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-3',
                 name: 'Geodesy1-1-3',
-                component: '/demo/index',
-                meta: { title: '地层综合柱状图' }
+                component: '/table/table3/index',
+                meta: { title: '地层综合柱状图', affix: true }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-4',

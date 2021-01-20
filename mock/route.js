@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-01-20 16:44:05
+ * @Last Modified time: 2021-01-20 17:35:31
  */
 
 /**
@@ -130,8 +130,8 @@ const asyncRoutes = [
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-3',
                 name: 'Geodesy1-1-3',
-                component: '/demo/index',
-                meta: { title: '地层综合柱状图' }
+                component: '/table/table3/index',
+                meta: { title: '地层综合柱状图', affix: true }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-4',
