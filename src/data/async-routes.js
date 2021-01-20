@@ -1,4 +1,17 @@
 export default [
+
+  /**
+ * @param path          {String}  路由路径
+ * @param name          {String}  路由名称
+ * @param component     {String}  路由所引用的前端页面模板路径
+ * @param redirect      {String}  路由重定向路径
+ * @param hidden        {Boolean} true表示隐藏路由，不显示在headbar菜单中
+ * @param title         {String}  路由在菜单和导航 tagView 中显示的中文名称
+ * @param affix         {Boolean} meta参数，true表示永久固定在路由导航tagView中不可删除
+ * @param roles         {Array}   meta参数，['admin', 'editor']表示该路由仅对admin和editor开放，现权限按角色分配，后可根据项目需求修改
+ * @param hiddenChild   {Boolean} meta参数，true表示隐藏该路由下所有子路由，仅一级路由显示在headbar菜单中
+ */
+
   // 首页
   // {
   //   path: '/dashboard',
@@ -6,6 +19,7 @@ export default [
   //   component: '/dashboard/index',
   //   meta: { title: '首页', affix: true }
   // },
+
   // GIS一张图
   {
     path: '/demo-gis',
