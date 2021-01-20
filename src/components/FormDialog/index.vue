@@ -42,7 +42,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">创建</el-button>
+        <el-button type="primary" @click="onSubmit">{{ config.title }}</el-button>
         <el-button @click="closeDialog">取消</el-button>
       </el-form-item>
     </el-form>
@@ -85,8 +85,14 @@ export default {
     // })
   },
   methods: {
-    onSubmit() {
+    // 更新组件内 form 数据
+    updataForm(form) {
+      console.log(form)
+      this.formData = Object.assign(this.formData, form)
       console.log(this.formData)
+    },
+    onSubmit() {
+      this.$emit('submit', this.formData)
     },
     // 更新父组件 xxxxxDialogVisible 的值
     closeDialog() {

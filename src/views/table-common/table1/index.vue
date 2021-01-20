@@ -21,19 +21,21 @@
       @pagination="__fetchData"
     />
     <!-- 新建弹窗 -->
-    <!-- 'create' 取自 createDialogVisible -->
+    <!-- 'create' 对应 createDialogVisible -->
     <form-dialog
       :config="initCreateConfig()"
       :dialog-visible="createDialogVisible"
       @close-dialog="closeDialog('create')"
+      @submit="createSubmit"
     />
     <!-- 编辑弹窗 -->
-    <!-- 'edit' 取自 editDialogVisible -->
+    <!-- 'edit' 对应 editDialogVisible -->
     <form-dialog
+      ref="editDialog"
       :config="initEditConfig()"
       :dialog-visible="editDialogVisible"
-      :form-data="editFormData"
       @close-dialog="closeDialog('edit')"
+      @submit="editSubmit"
     />
   </div>
 </template>
@@ -61,8 +63,7 @@ export default {
       FilterConfig,
       TableConfig,
       createDialogVisible: false,
-      editDialogVisible: false,
-      editFormData: null
+      editDialogVisible: false
     }
   },
   created() {
@@ -106,9 +107,9 @@ export default {
     openDialog(name, row) {
       const visible = `${name}DialogVisible`
       this[visible] = true
-      console.log(row)
       if (row) {
-        this.editFormData = row
+        // 如果有数据，更新子组件的 formData
+        this.$refs.editDialog.updataForm(row)
       }
     },
     // 关闭弹窗后手动设置弹窗隐藏 xxxxxDialogVisible ：false
