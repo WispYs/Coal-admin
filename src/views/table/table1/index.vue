@@ -12,6 +12,7 @@
       :config="TableConfig"
       :filter-method="filterMethods"
       @edit-click="(row) => openDialog('edit', row)"
+      @delete-click="deleteClick"
     />
     <pagination
       v-show="total>0"
@@ -117,6 +118,16 @@ export default {
     closeDialog(name) {
       const visible = `${name}DialogVisible`
       this[visible] = false
+    },
+    // 删除
+    deleteClick(id) {
+      this.$confirm('确定删除该项目?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        console.log(id)
+      })
     },
 
     // submit data

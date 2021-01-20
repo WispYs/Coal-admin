@@ -35,7 +35,7 @@
       <template slot-scope="scope">
         <el-button v-if="config.actions.indexOf('preview') > -1" type="text" size="small" @click="handleClick(scope.row, scope.$index)">查看</el-button>
         <el-button v-if="config.actions.indexOf('edit') > -1" type="text" size="small" @click="edit(scope.row)">编辑</el-button>
-        <el-button v-if="config.actions.indexOf('delete') > -1" type="text" size="small" style="color: red">删除</el-button>
+        <el-button v-if="config.actions.indexOf('delete') > -1" type="text" size="small" style="color: red" @click="del(scope.row.id)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -116,6 +116,10 @@ export default {
     // 编辑
     edit(row) {
       this.$emit('edit-click', row)
+    },
+    // 删除
+    del(id) {
+      this.$emit('delete-click', id)
     },
     // 表格单元格样式
     cellStyle() {
