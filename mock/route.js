@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-01-18 17:32:47
+ * @Last Modified time: 2021-01-20 10:41:25
  */
 
 const asyncRoutes = [
@@ -106,19 +106,19 @@ const asyncRoutes = [
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-1',
                 name: 'Geodesy1-1-1',
-                component: '/table-common/table1/index',
+                component: '/table/table1/index',
                 meta: { title: '矿区构造纲要图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-2',
                 name: 'Geodesy1-1-2',
-                component: '/table-common/table2/index',
+                component: '/table/table2/index',
                 meta: { title: '地质地形图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-3',
                 name: 'Geodesy1-1-3',
-                component: '/table/index',
+                component: '/demo/index',
                 meta: { title: '地层综合柱状图' }
               },
               {

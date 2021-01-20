@@ -119,6 +119,14 @@ export default {
       this[visible] = false
     },
 
+    // submit data
+    createSubmit() {
+
+    },
+    editSubmit() {
+
+    },
+
     // 项目状态过滤器
     statusFilter(status) {
       const statusMap = {
