@@ -1,21 +1,21 @@
 /**
  * Parse the time to string
- * @param {(Object|string|number)} time
- * @param {string} cFormat
+ * @param   {(Object|string|number)}  time
+ * @param   {string}                  cFormat  YYYY-MM-DD、YYYY-MM-DD hh:mm:ss
  * @returns {string | null}
  */
 export function parseTime(time, cFormat) {
-  if (arguments.length === 0 || !time) {
+  if (!time) {
     return null
   }
-  const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
+  const format = cFormat || 'YYYY-MM-DD'
   let date
   if (typeof time === 'object') {
     date = time
   } else {
     if ((typeof time === 'string')) {
       if ((/^[0-9]+$/.test(time))) {
-        // "1548221490638"
+        // "1598221490638"
         time = parseInt(time)
       } else {
         time = time.replace(new RegExp(/-/gm), '/')
@@ -28,26 +28,25 @@ export function parseTime(time, cFormat) {
     date = new Date(time)
   }
   const formatObj = {
-    y: date.getFullYear(),
-    m: date.getMonth() + 1,
-    d: date.getDate(),
-    h: date.getHours(),
-    i: date.getMinutes(),
-    s: date.getSeconds(),
-    a: date.getDay()
+    YYYY: date.getFullYear(),
+    MM: date.getMonth() + 1,
+    DD: date.getDate(),
+    hh: date.getHours(),
+    mm: date.getMinutes(),
+    ss: date.getSeconds()
   }
-  const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
+
+  const time_str = format.replace(/(YYYY|MM|DD|hh|mm|ss)/g, (result, key) => {
     const value = formatObj[key]
-    // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+
     return value.toString().padStart(2, '0')
   })
   return time_str
 }
 
 /**
- * @param {number} time
- * @param {string} option
+ * @param   {number} time
+ * @param   {string} option
  * @returns {string}
  */
 export function formatTime(time, option) {
@@ -111,9 +110,9 @@ export function param2Obj(url) {
 }
 
 /**
- * @param {Function} func
- * @param {number} wait
- * @param {boolean} immediate
+ * @param {Function}  func
+ * @param {number}    wait
+ * @param {boolean}   immediate
  * @return {*}
  */
 export function debounce(func, wait, immediate) {
@@ -152,7 +151,7 @@ export function debounce(func, wait, immediate) {
 }
 
 /**
- * @param {Object} source
+ * @param   {Object} source
  * @returns {Object}
  */
 export function deepClone(source) {
