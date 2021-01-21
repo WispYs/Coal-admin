@@ -7,3 +7,10 @@ export function getList(params) {
     params
   })
 }
+
+export function getNestList() {
+  return request({
+    url: '/example/nest-table/list',
+    method: 'get'
+  })
+}

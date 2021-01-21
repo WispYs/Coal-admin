@@ -33,12 +33,42 @@ const data = Mock.mock({
   }]
 })
 
+const nestData = Mock.mock({
+  'items|5': [{
+    'team|+1': ['一区101队', '一区102队', '一区103队', '一区104队', '一区105队'],
+    addr: '@city',
+    monitor: '@cname',
+    count: '@integer(10, 50)',
+    'workload|1-5.2': 1,
+    workplan: '@integer(50, 100)'
+  }]
+})
+
+// table 数据
 module.exports = [
   {
     url: '/example/table/list',
     type: 'get',
     response: config => {
       const items = data.items
+      return {
+        code: 20000,
+        data: {
+          total: items.length,
+          items: items
+        }
+      }
+    }
+  }
+]
+
+// nest-table 数据
+module.exports = [
+  {
+    url: '/example/nest-table/list',
+    type: 'get',
+    response: config => {
+      const items = nestData.items
       return {
         code: 20000,
         data: {

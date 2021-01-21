@@ -1,112 +1,173 @@
 <template>
   <div class="nest-table">
     <el-table
-      :data="tableData"
+      v-loading="listLoading"
+      :data="list"
+      :header-cell-class-name="headerCellClassName"
     >
       <el-table-column
         prop="team"
-        label="单位"
+        width="100"
       />
       <el-table-column
         prop="addr"
         label="工作地点"
+        width="120"
       />
-      <el-table-column label="配送信息">
+      <el-table-column label="第一班" align="center">
         <el-table-column
-          prop="name"
-          label="姓名"
-          width="120"
+          prop="monitor"
+          label="跟班班长"
+          width="100"
+          align="center"
         />
-        <el-table-column label="地址">
-          <el-table-column
-            prop="province"
-            label="省份"
-            width="120"
-          />
-          <el-table-column
-            prop="city"
-            label="市区"
-            width="120"
-          />
-          <el-table-column
-            prop="address"
-            label="地址"
-            width="350"
-          />
-          <el-table-column
-            prop="zip"
-            label="邮编"
-            width="120"
-          />
-        </el-table-column>
+        <el-table-column
+          prop="count"
+          label="出勤人数"
+          width="80"
+          align="center"
+        />
+        <el-table-column
+          prop="workload"
+          label="当班工作量"
+          width="100"
+          align="center"
+        />
+        <el-table-column
+          prop="workplan"
+          label="当日计划"
+          width="80"
+          align="center"
+        />
+      </el-table-column>
+      <el-table-column label="第二班" align="center">
+        <el-table-column
+          prop="monitor"
+          label="跟班班长"
+          width="100"
+          align="center"
+        />
+        <el-table-column
+          prop="count"
+          label="出勤人数"
+          width="80"
+          align="center"
+        />
+        <el-table-column
+          prop="workload"
+          label="当班工作量"
+          width="100"
+          align="center"
+        />
+        <el-table-column
+          prop="workplan"
+          label="当日计划"
+          width="80"
+          align="center"
+        />
+      </el-table-column>
+      <el-table-column label="第三班" align="center">
+        <el-table-column
+          prop="monitor"
+          label="跟班班长"
+          width="100"
+          align="center"
+        />
+        <el-table-column
+          prop="count"
+          label="出勤人数"
+          width="80"
+          align="center"
+        />
+        <el-table-column
+          prop="workload"
+          label="当班工作量"
+          width="100"
+          align="center"
+        />
+        <el-table-column
+          prop="workplan"
+          label="当日计划"
+          width="80"
+          align="center"
+        />
       </el-table-column>
     </el-table>
   </div>
 
 </template>
 <script>
+import { getNestList } from '@/api/table'
+
 export default {
   data() {
     return {
-      tableData: [{
-        team: '2016-05-03',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        team: '2016-05-02',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        team: '2016-05-04',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        team: '2016-05-01',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        team: '2016-05-08',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        team: '2016-05-06',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        team: '2016-05-07',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }]
-
+      list: null,
+      listLoading: false
+    }
+  },
+  mounted() {
+    this.__fetchData()
+  },
+  methods: {
+    __fetchData() {
+      getNestList().then(response => {
+        this.list = response.data.items
+        this.listLoading = false
+      })
+    },
+    // 单元格的style回调方法
+    headerCellClassName(row) {
+      if (row.rowIndex === 0 && row.columnIndex === 0) {
+        return 'th-slash'
+      }
     }
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
   .nest-table {
-    width: 1000px;
+    width: 1300px;
     padding-top: 40px;
     margin: 0 auto;
+    .el-table {
+      .th-slash {
+        position: relative;
+
+        .cell {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 141px;   // 根据勾股定理计算得出长度和旋转角度
+          height: 1px;
+          background-color: #EBEEF5;
+          display: block;
+          text-align: center;
+          transform: rotate(43deg);
+          transform-origin: top left;
+          -ms-transform: rotate(43deg);
+          -ms-transform-origin: top left;
+          -webkit-transform: rotate(43deg);
+          -webkit-transform-origin: top left;
+        }
+        &:before {
+          content: '单位';
+          position: absolute;
+          left: 0;
+          bottom: 15px; // padding-top + 行高差值/2    12 + (22 - 16)/2
+          width: 50px;
+          text-align: center;
+        }
+        &:after {
+          content: '项目';
+          position: absolute;
+          right: 0;
+          top: 15px;
+          width: 50px;
+          text-align: center;
+        }
+      }
+    }
+
   }
 </style>
