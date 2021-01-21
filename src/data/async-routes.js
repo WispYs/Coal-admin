@@ -125,7 +125,7 @@ export default [
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-3',
                 name: 'Geodesy1-1-3',
-                component: '/table/table3/index',
+                component: '/table/mult-table/index',
                 meta: { title: '地层综合柱状图', affix: true }
               },
               {

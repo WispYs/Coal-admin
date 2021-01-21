@@ -8,9 +8,9 @@ export function getList(params) {
   })
 }
 
-export function getNestList() {
+export function getMultList() {
   return request({
-    url: '/example/nest-table/list',
+    url: '/example/mult-table/list',
     method: 'get'
   })
 }

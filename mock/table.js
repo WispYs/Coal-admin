@@ -33,7 +33,7 @@ const data = Mock.mock({
   }]
 })
 
-const nestData = Mock.mock({
+const multData = Mock.mock({
   'items|5': [{
     'team|+1': ['一区101队', '一区102队', '一区103队', '一区104队', '一区105队'],
     addr: '@city',
@@ -65,12 +65,12 @@ module.exports = [
       }
     }
   },
-  // nest-table 数据
+  // mult-table 数据
   {
-    url: '/example/nest-table/list',
+    url: '/example/mult-table/list',
     type: 'get',
     response: config => {
-      const items = nestData.items
+      const items = multData.items
       return {
         code: 20000,
         data: {

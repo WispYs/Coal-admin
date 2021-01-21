@@ -1,5 +1,5 @@
 <template>
-  <div class="nest-table">
+  <div class="mult-table">
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -97,7 +97,7 @@
 
 </template>
 <script>
-import { getNestList } from '@/api/table'
+import { getMultList } from '@/api/table'
 
 export default {
   data() {
@@ -111,7 +111,7 @@ export default {
   },
   methods: {
     __fetchData() {
-      getNestList().then(response => {
+      getMultList().then(response => {
         this.list = response.data.items
         this.listLoading = false
       })
@@ -126,7 +126,7 @@ export default {
 }
 </script>
 <style lang="scss">
-  .nest-table {
+  .mult-table {
     width: 1300px;
     padding-top: 40px;
     margin: 0 auto;
