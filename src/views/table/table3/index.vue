@@ -16,25 +16,25 @@
       />
       <el-table-column label="第一班" align="center">
         <el-table-column
-          prop="monitor"
+          prop="groups[0].monitor"
           label="跟班班长"
           width="100"
           align="center"
         />
         <el-table-column
-          prop="count"
+          prop="groups[0].count"
           label="出勤人数"
           width="80"
           align="center"
         />
         <el-table-column
-          prop="workload"
+          prop="groups[0].workload"
           label="当班工作量"
           width="100"
           align="center"
         />
         <el-table-column
-          prop="workplan"
+          prop="groups[0].workplan"
           label="当日计划"
           width="80"
           align="center"
@@ -42,25 +42,25 @@
       </el-table-column>
       <el-table-column label="第二班" align="center">
         <el-table-column
-          prop="monitor"
+          prop="groups[1].monitor"
           label="跟班班长"
           width="100"
           align="center"
         />
         <el-table-column
-          prop="count"
+          prop="groups[1].count"
           label="出勤人数"
           width="80"
           align="center"
         />
         <el-table-column
-          prop="workload"
+          prop="groups[1].workload"
           label="当班工作量"
           width="100"
           align="center"
         />
         <el-table-column
-          prop="workplan"
+          prop="groups[1].workplan"
           label="当日计划"
           width="80"
           align="center"
@@ -68,25 +68,25 @@
       </el-table-column>
       <el-table-column label="第三班" align="center">
         <el-table-column
-          prop="monitor"
+          prop="groups[2].monitor"
           label="跟班班长"
           width="100"
           align="center"
         />
         <el-table-column
-          prop="count"
+          prop="groups[2].count"
           label="出勤人数"
           width="80"
           align="center"
         />
         <el-table-column
-          prop="workload"
+          prop="groups[2].workload"
           label="当班工作量"
           width="100"
           align="center"
         />
         <el-table-column
-          prop="workplan"
+          prop="groups[2].workplan"
           label="当日计划"
           width="80"
           align="center"
