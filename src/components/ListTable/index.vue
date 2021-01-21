@@ -69,8 +69,8 @@ export default {
   methods: {
     // filter 方法
     /**
-     * @param name  filter方法名
-     * @param field 过滤字
+     * @param {string}  name  filter方法名
+     * @param {string}  field 过滤字
      */
     filterField(name, field) {
       if (this.filterMethod) {

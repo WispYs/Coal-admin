@@ -1,17 +1,17 @@
 export var TableConfig = {
   /**
-   * @param actions         {Array}   操作按钮，例如：['preview', 'edit', 'delete']
-   * @param summary         {Boolean} 是否需要合计数据
-   * @param summaryField    {Array}   合计字段
-   * @param columns         {Array}   每列参数
-   * @param sortable        {Boolean} 是否需要排序
-   * @param align           {String}  单元表格对齐方向，默认为'center'
-   * @param unit            {String}  字段单位，例如：元、kw/h
-   * @param layout          {String}  表单类型
-   * @param dateFormat      {String}  日期格式
-   * @param filter          {Boolean} 字段值是否需要方法处理
-   * @param filterName      {String}  过滤函数方法的名称,由前端定义
-   * @param options         {Array}   选择器配置项
+   * @param {array}   actions         操作按钮，例如：['preview', 'edit', 'delete']
+   * @param {boolean} summary         是否需要合计数据
+   * @param {array}   summaryField    合计字段
+   * @param {array}   columns         每列参数
+   * @param {boolean} sortable        是否需要排序
+   * @param {string}  align           单元表格对齐方向，默认为'center'
+   * @param {string}  unit            字段单位，例如：元、kw/h
+   * @param {string}  layout          表单类型
+   * @param {string}  dateFormat      日期格式
+   * @param {boolean} filter          字段值是否需要方法处理
+   * @param {string}  filterName      过滤函数方法的名称,由前端定义
+   * @param {array}   options         选择器配置项
    */
   actions: ['preview', 'edit', 'delete'],
   summary: true,
@@ -50,9 +50,9 @@ export var TableConfig = {
 
 export var FilterConfig = {
   /**
-   * @param actions         {Array}   操作按钮
-   * @param filters         {Array}   筛选项
-   * @param options         {Array}   选择器配置项
+   * @param {array} actions   操作按钮
+   * @param {array} filters   筛选项
+   * @param {array} options   选择器配置项
    */
   actions: ['search', 'reset', 'create'],
   filters: [
