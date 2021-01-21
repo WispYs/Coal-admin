@@ -49,6 +49,15 @@ const multData = Mock.mock({
   }]
 })
 
+const uploadData = Mock.mock({
+  'items|5': [{
+    id: '@id',
+    'title|+1': ['2020年12月地形地质图', '2020年11月地形地质图', '2020年10月地形地质图', '2020年09月地形地质图', '2020年08月地形地质图'],
+    updateTime: '@datetime',
+    uploader: '@cname'
+  }]
+})
+
 module.exports = [
   // table 数据
   {
@@ -71,6 +80,21 @@ module.exports = [
     type: 'get',
     response: config => {
       const items = multData.items
+      return {
+        code: 20000,
+        data: {
+          total: items.length,
+          items: items
+        }
+      }
+    }
+  },
+  // upload-table 数据
+  {
+    url: '/example/upload-table/list',
+    type: 'get',
+    response: config => {
+      const items = uploadData.items
       return {
         code: 20000,
         data: {

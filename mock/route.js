@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-01-21 13:50:47
+ * @Last Modified time: 2021-01-21 16:18:43
  */
 
 /**
@@ -136,8 +136,8 @@ const asyncRoutes = [
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-4',
                 name: 'Geodesy1-1-4',
-                component: '/demo/index',
-                meta: { title: '主要地质剖面图' }
+                component: '/table/upload/index',
+                meta: { title: '主要地质剖面图', affix: true }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-5',

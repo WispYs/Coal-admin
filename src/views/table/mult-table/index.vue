@@ -1,5 +1,5 @@
 <template>
-  <div class="mult-table">
+  <div class="page-container mult-table">
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -127,7 +127,7 @@ export default {
 </script>
 <style lang="scss">
   .mult-table {
-    width: 1300px;
+    width: 1340px;
     padding-top: 40px;
     margin: 0 auto;
     .el-table {

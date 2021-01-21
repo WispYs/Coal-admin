@@ -14,3 +14,10 @@ export function getMultList() {
     method: 'get'
   })
 }
+
+export function getUploadList() {
+  return request({
+    url: '/example/upload-table/list',
+    method: 'get'
+  })
+}

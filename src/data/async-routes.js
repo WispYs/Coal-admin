@@ -131,8 +131,8 @@ export default [
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-4',
                 name: 'Geodesy1-1-4',
-                component: '/demo/index',
-                meta: { title: '主要地质剖面图' }
+                component: '/table/upload/index',
+                meta: { title: '主要地质剖面图', affix: true }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-5',

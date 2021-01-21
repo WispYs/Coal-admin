@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="page-container">
     <filter-bar
       :config="FilterConfig"
       @search-click="queryData"
@@ -76,8 +76,8 @@ export default {
       this.listLoading = true
       const query = Object.assign(this.listQuery, this.filter)
       getList(query).then(response => {
-        this.list = response.data.items
         this.listLoading = false
+        this.list = response.data.items
         this.total = response.data.total
       })
     },
@@ -126,7 +126,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async() => {
-        console.log(id)
+        this.$message.success(id)
       })
     },
 

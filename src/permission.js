@@ -6,7 +6,7 @@ import 'nprogress/nprogress.css'
 import { getToken } from '@/utils/auth'
 import getPageTitle from '@/utils/get-page-title'
 
-NProgress.configure({ showSpinner: false })
+NProgress.configure({ showSpinner: false }) // 是否显示螺旋加载（就是右上角那个加载的圈圈图表）
 
 const whiteList = ['/login'] // 路由白名单
 
