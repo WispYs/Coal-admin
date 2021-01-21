@@ -57,12 +57,11 @@
         <el-input v-if="item.layout === 'Textarea'" v-model="formData[item.field]" type="textarea" />
 
       </el-form-item>
-
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">{{ config.title }}</el-button>
-        <el-button @click="closeDialog">取消</el-button>
-      </el-form-item>
     </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="closeDialog">取消</el-button>
+      <el-button type="primary" @click="onSubmit">{{ config.title }}</el-button>
+    </span>
   </el-dialog>
 </template>
 <script>

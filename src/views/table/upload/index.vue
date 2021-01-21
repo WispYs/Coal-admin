@@ -2,7 +2,7 @@
   <div class="page-container upload-page">
     <div class="upload-button">
       <el-button type="primary" size="medium"><i class="el-icon-plus el-icon--left" />新建文件</el-button>
-      <el-button type="success" size="medium" plain><i class="el-icon-upload el-icon--left" />上传</el-button>
+      <el-button type="success" size="medium" plain @click="uploadClick"><i class="el-icon-upload el-icon--left" />上传</el-button>
       <el-button type="danger" size="medium" plain @click="deleteBatches"><i class="el-icon-delete el-icon--left" />批量删除</el-button>
     </div>
     <el-table
@@ -43,13 +43,15 @@
       :limit.sync="listQuery.size"
       @pagination="__fetchData"
     />
+    <upload-file :dialog-visible="uploadDialogVisible" />
   </div>
 </template>
 <script>
 import Pagination from '@/components/Pagination'
+import UploadFile from '@/components/UploadFile'
 import { getUploadList } from '@/api/table'
 export default {
-  components: { Pagination },
+  components: { Pagination, UploadFile },
   data() {
     return {
       list: null,
@@ -59,7 +61,8 @@ export default {
         page: 1,
         size: 10
       },
-      multipleSelection: []
+      multipleSelection: [],
+      uploadDialogVisible: false
     }
   },
   mounted() {
@@ -81,6 +84,10 @@ export default {
     },
     handleClick(row) {
       console.log(row)
+    },
+    // 上传文件
+    uploadClick() {
+      this.uploadDialogVisible = true
     },
     del(id) {
       this.$confirm('确定删除该项目文件?', '提示', {

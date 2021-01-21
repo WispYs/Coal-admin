@@ -29,9 +29,17 @@
   .el-dialog {
     height: calc(85vh - 50px);
 
+    .el-dialog__header {
+      border-bottom: 1px solid #ededed;
+    }
+
+    .el-dialog__footer {
+      border-top: 1px solid #ededed;
+    }
+
     .el-dialog__body {
       padding: 0;
-      height: calc(100% - 54px); // header 高度
+      height: calc(100% - 124px); // 124 = header + footer
       overflow: auto;
     }
   }
