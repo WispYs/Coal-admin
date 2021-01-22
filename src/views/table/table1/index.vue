@@ -22,20 +22,18 @@
       @pagination="__fetchData"
     />
     <!-- 新建弹窗 -->
-    <!-- 'create' 对应 createDialogVisible字段 -->
     <form-dialog
       :config="initCreateConfig()"
       :dialog-visible="createDialogVisible"
-      @close-dialog="closeDialog('create')"
+      @close-dialog="createDialogVisible = false"
       @submit="createSubmit"
     />
     <!-- 编辑弹窗 -->
-    <!-- 'edit' 对应 editDialogVisible字段 -->
     <form-dialog
       ref="editDialog"
       :config="initEditConfig()"
       :dialog-visible="editDialogVisible"
-      @close-dialog="closeDialog('edit')"
+      @close-dialog="editDialogVisible = false"
       @submit="editSubmit"
     />
   </div>
@@ -113,12 +111,7 @@ export default {
         this.$refs.editDialog.updataForm(row)
       }
     },
-    // 关闭弹窗后手动设置弹窗隐藏 xxxxxDialogVisible ：false
-    // 否则会因为使用同一组件导致 dialogVisible 错乱
-    closeDialog(name) {
-      const visible = `${name}DialogVisible`
-      this[visible] = false
-    },
+
     // 删除
     deleteClick(id) {
       this.$confirm('确定删除该项目?', '提示', {
@@ -133,9 +126,13 @@ export default {
     // submit data
     createSubmit(submitData) {
       console.log(submitData)
+      this.createDialogVisible = false
+      this.$message.success(JSON.stringify(submitData))
     },
     editSubmit(submitData) {
       console.log(submitData)
+      this.editDialogVisible = false
+      this.$message.success(JSON.stringify(submitData))
     },
 
     // 字段过滤方法

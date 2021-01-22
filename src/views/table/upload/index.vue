@@ -2,7 +2,7 @@
   <div class="page-container upload-page">
     <div class="upload-button">
       <el-button type="primary" size="medium"><i class="el-icon-plus el-icon--left" />新建文件</el-button>
-      <el-button type="success" size="medium" plain @click="uploadClick"><i class="el-icon-upload el-icon--left" />上传</el-button>
+      <el-button type="success" size="medium" plain @click="uploadDialogVisible = true"><i class="el-icon-upload el-icon--left" />上传</el-button>
       <el-button type="danger" size="medium" plain @click="deleteBatches"><i class="el-icon-delete el-icon--left" />批量删除</el-button>
     </div>
     <el-table
@@ -43,7 +43,7 @@
       :limit.sync="listQuery.size"
       @pagination="__fetchData"
     />
-    <upload-file :dialog-visible="uploadDialogVisible" />
+    <upload-file :dialog-visible="uploadDialogVisible" @close-dialog="uploadDialogVisible = false" />
   </div>
 </template>
 <script>
@@ -85,10 +85,7 @@ export default {
     handleClick(row) {
       console.log(row)
     },
-    // 上传文件
-    uploadClick() {
-      this.uploadDialogVisible = true
-    },
+
     del(id) {
       this.$confirm('确定删除该项目文件?', '提示', {
         confirmButtonText: '确定',

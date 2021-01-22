@@ -14,6 +14,22 @@ $sideBarHeight: 60px;
 
 $iconColor: #eeeeee;
 
+// color
+$primaryColor: #409EFF;
+$greenColor: #67C23A;
+$orangeColor: #E6A23C;
+$redColor: #F56C6C;
+$grayColor: #909399;
+$darkblueColor: #304156;
+
+// font-size
+$fontSizeLargest: 20px;
+$fontSizeLarger: 18px;
+$fontSizeLarge: 16px;
+$fontSizeMedium: 14px;
+$fontSizeSmall: 13px;
+$fontSizeSmaller: 12px;
+
 // export
 :export {
   menuText: $menuText;
@@ -25,4 +41,16 @@ $iconColor: #eeeeee;
   subMenuHover: $subMenuHover;
   sideBarWidth: $sideBarWidth;
   iconColor: $iconColor;
+  primaryColor: $primaryColor;
+  greenColor: $greenColor;
+  orangeColor: $orangeColor;
+  redColor: $redColor;
+  grayColor: $grayColor;
+  darkblueColor: $darkblueColor;
+  fontSizeLargest: $fontSizeLargest;
+  fontSizeLarger: $fontSizeLarger;
+  fontSizeLarge: $fontSizeLarge;
+  fontSizeMedium: $fontSizeMedium;
+  fontSizeSmall: $fontSizeSmall;
+  fontSizeSmaller: $fontSizeSmaller;
 }

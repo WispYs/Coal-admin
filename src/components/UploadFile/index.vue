@@ -4,6 +4,7 @@
     :visible.sync="dialogVisible"
     width="500px"
     class="upload-dialog"
+    :before-close="closeDialog"
   >
     <el-upload
       class="upload-content"
@@ -16,8 +17,8 @@
       <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
     </el-upload>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      <el-button @click="closeDialog">取 消</el-button>
+      <el-button type="primary" @click="closeDialog">确 定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -34,7 +35,10 @@ export default {
     }
   },
   methods: {
-
+    // 更新父组件 xxxxxDialogVisible 的值
+    closeDialog() {
+      this.$emit('close-dialog')
+    }
   }
 }
 </script>
