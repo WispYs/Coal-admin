@@ -147,6 +147,35 @@ export default {
         return this.filterMethod(name, field)
       }
     },
+    handleClick(row, index) {
+      console.log(row, index)
+    },
+    // 编辑
+    edit(row) {
+      if (this.config && this.config.inlineEdit) {
+        console.log(row)
+        row.edit = true
+      } else {
+        this.$emit('edit-click', row)
+      }
+    },
+    // 提交编辑后的行内数据
+    async submitRow(row) {
+      console.log(row)
+      row.edit = false
+      // 提交数据时，删除 edit 属性
+      delete row.edit
+      await this.$emit('submit-data', row)
+      // 刷新数据
+      this.$emit('update')
+    },
+    cancelSubmit(row) {
+      this.$emit('update')
+    },
+    // 删除
+    del(id) {
+      this.$emit('delete-click', id)
+    },
     // 计算合计总工时
     getSummaries(param, field) {
       if (!field) {
@@ -178,36 +207,6 @@ export default {
         })
       })
       return sums
-    },
-
-    handleClick(row, index) {
-      console.log(row, index)
-    },
-    // 编辑
-    edit(row) {
-      if (this.config && this.config.inlineEdit) {
-        console.log(row)
-        row.edit = true
-      } else {
-        this.$emit('edit-click', row)
-      }
-    },
-    // 提交编辑后的行内数据
-    async submitRow(row) {
-      console.log(row)
-      row.edit = false
-      // 提交数据时，删除 edit 属性
-      delete row.edit
-      await this.$emit('submit-data', row)
-      // 刷新数据
-      this.$emit('update')
-    },
-    cancelSubmit(row) {
-      this.$emit('update')
-    },
-    // 删除
-    del(id) {
-      this.$emit('delete-click', id)
     },
     // 表格单元格样式
     cellStyle() {
