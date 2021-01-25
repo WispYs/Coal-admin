@@ -13,6 +13,8 @@
       :filter-method="filterMethods"
       @edit-click="(row) => openDialog('edit', row)"
       @delete-click="deleteClick"
+      @submit-data="editSubmit"
+      @update="__fetchData()"
     />
     <pagination
       v-show="total>0"

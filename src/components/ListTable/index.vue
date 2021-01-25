@@ -1,7 +1,7 @@
 <template>
   <el-table
     v-loading="listLoading"
-    :data="list"
+    :data="normalizedList"
     element-loading-text="Loading"
     border
     fit
@@ -25,17 +25,73 @@
       :sortable="column.sortable"
     >
       <template slot-scope="scope">
-        <span v-if="column.filter">
-          {{ filterField(column.filterName, scope.row[column.field]) }}
-        </span>
-        <span v-else>{{ scope.row[column.field] }}</span>
+        <template v-if="config.inlineEdit && scope.row.edit">
+          <!-- input -->
+          <el-input v-if="column.layout === 'Text'" v-model="scope.row[column.field]" size="small" :placeholder="column.placeholder" />
+
+          <!-- select  -->
+          <el-select
+            v-if="column.layout === 'Select'"
+            v-model="scope.row[column.field]"
+            :placeholder="column.placeholder"
+            style="width: 100%;"
+            size="small"
+          >
+            <el-option
+              v-for="it in column.options"
+              :key="it.value"
+              :label="it.label"
+              :value="it.value"
+            />
+          </el-select>
+
+          <!-- date-picker  -->
+          <el-date-picker
+            v-if="column.layout === 'DateTime'"
+            v-model="scope.row[column.field]"
+            :value-format="column.dateFormat || 'yyyy-MM-dd'"
+            type="date"
+            :placeholder="column.placeholder"
+            style="width: 100%;"
+            size="small"
+          />
+
+          <!-- slider  -->
+          <el-slider v-if="column.layout === 'Slider'" v-model="scope.row[column.field]" />
+
+          <!-- switch -->
+          <el-switch v-if="column.layout === 'Switch'" v-model="scope.row[column.field]" />
+
+          <!-- radio -->
+          <el-radio-group v-if="column.layout === 'Radio'" v-model="scope.row[column.field]" size="mini">
+            <el-radio-button v-for="it in column.options" :key="it" :label="it" />
+          </el-radio-group>
+
+          <!-- checkbox -->
+          <el-checkbox-group v-if="column.layout === 'Checkbox'" v-model="scope.row[column.field]" size="mini">
+            <el-checkbox-button v-for="it in column.options" :key="it" :label="it" :name="it" />
+          </el-checkbox-group>
+
+          <!-- textarea -->
+          <el-input v-if="column.layout === 'Textarea'" v-model="scope.row[column.field]" type="textarea" :placeholder="column.placeholder" />
+
+        </template>
+        <template v-else>
+          <span v-if="column.filter">
+            {{ filterField(column.filterName, scope.row[column.field]) }}
+          </span>
+          <span v-else>{{ scope.row[column.field] }}</span>
+        </template>
+
       </template>
     </el-table-column>
-    <el-table-column v-if="config.actions && config.actions.length > 0" fixed="right" label="操作" width="150" align="center">
+    <el-table-column v-if="config.actions && config.actions.length > 0" fixed="right" label="操作" width="160" align="center">
       <template slot-scope="scope">
         <el-button v-if="config.actions.indexOf('preview') > -1" type="text" size="small" @click="handleClick(scope.row, scope.$index)">查看</el-button>
-        <el-button v-if="config.actions.indexOf('edit') > -1" type="text" size="small" @click="edit(scope.row)">编辑</el-button>
-        <el-button v-if="config.actions.indexOf('delete') > -1" type="text" size="small" style="color: red" @click="del(scope.row.id)">删除</el-button>
+        <el-button v-if="config.actions.indexOf('edit') > -1 && !scope.row.edit" type="text" size="small" @click="edit(scope.row)">编辑</el-button>
+        <el-button v-if="config.actions.indexOf('edit') > -1 && scope.row.edit" type="text" style="color: #67c23a" size="small" @click="submitRow(scope.row)">提交</el-button>
+        <el-button v-if="config.actions.indexOf('edit') > -1 && scope.row.edit" type="text" style="color: #e6a23c" size="small" @click="cancelSubmit(scope.row)">取消</el-button>
+        <el-button v-if="config.actions.indexOf('delete') > -1" type="text" size="small" style="color: #f56c6c" @click="del(scope.row.id)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -64,6 +120,20 @@ export default {
   data() {
     return {
 
+    }
+  },
+  computed: {
+    // list 数据中添加 edit 属性
+    normalizedList() {
+      let normalizedList = []
+      if (this.list && this.config && this.config.inlineEdit) {
+        normalizedList = this.list.map(it => {
+          this.$set(it, 'edit', false)
+          return it
+        })
+      } else normalizedList = this.list
+      console.log(normalizedList)
+      return normalizedList
     }
   },
   methods: {
@@ -115,7 +185,25 @@ export default {
     },
     // 编辑
     edit(row) {
-      this.$emit('edit-click', row)
+      if (this.config && this.config.inlineEdit) {
+        console.log(row)
+        row.edit = true
+      } else {
+        this.$emit('edit-click', row)
+      }
+    },
+    // 提交编辑后的行内数据
+    async submitRow(row) {
+      console.log(row)
+      row.edit = false
+      // 提交数据时，删除 edit 属性
+      delete row.edit
+      await this.$emit('submit-data', row)
+      // 刷新数据
+      this.$emit('update')
+    },
+    cancelSubmit(row) {
+      this.$emit('update')
     },
     // 删除
     del(id) {

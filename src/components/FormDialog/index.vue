@@ -8,7 +8,7 @@
     <el-form ref="formData" class="dialog-container" :model="formData" label-width="100px">
       <el-form-item v-for="(item, index) in config.form" :key="index" :label="`${item.label}：`">
         <!-- input -->
-        <el-input v-if="item.layout === 'Text'" v-model="formData[item.field]">
+        <el-input v-if="item.layout === 'Text'" v-model="formData[item.field]" :placeholder="item.placeholder">
           <template v-if="item.unit" slot="append">{{ item.unit }}</template>
         </el-input>
 
@@ -54,7 +54,7 @@
         </el-checkbox-group>
 
         <!-- textarea -->
-        <el-input v-if="item.layout === 'Textarea'" v-model="formData[item.field]" type="textarea" />
+        <el-input v-if="item.layout === 'Textarea'" v-model="formData[item.field]" type="textarea" :placeholder="item.placeholder" />
 
       </el-form-item>
     </el-form>

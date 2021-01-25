@@ -3,6 +3,7 @@ export var TableConfig = {
    * @param {array}   actions         操作按钮，例如：['preview', 'edit', 'delete']
    * @param {boolean} summary         是否需要合计数据
    * @param {array}   summaryField    合计字段
+   * @param {boolean} inlineEdit      是否支持在表格行内直接编辑，默认为弹窗
    * @param {array}   columns         每列参数
    * @param {boolean} sortable        是否需要排序
    * @param {string}  align           单元表格对齐方向，默认为'center'
