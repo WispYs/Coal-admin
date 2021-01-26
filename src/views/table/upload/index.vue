@@ -43,7 +43,11 @@
       :limit.sync="listQuery.size"
       @pagination="__fetchData"
     />
-    <upload-file :dialog-visible="uploadDialogVisible" @close-dialog="uploadDialogVisible = false" />
+    <upload-file
+      :dialog-visible="uploadDialogVisible"
+      @close-dialog="uploadDialogVisible = false"
+      @upload-submit="uploadSubmit"
+    />
   </div>
 </template>
 <script>
@@ -84,6 +88,12 @@ export default {
     },
     handleClick(row) {
       console.log(row)
+    },
+
+    // 上传文件控件成功回调
+    uploadSubmit(fileList) {
+      console.log(fileList)
+      this.uploadDialogVisible = false
     },
 
     del(id) {

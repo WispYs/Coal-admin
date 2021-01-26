@@ -2,23 +2,30 @@
   <div :class="{fullscreen:fullscreen}" class="tinymce-container" :style="{width:containerWidth}">
     <textarea :id="tinymceId" class="tinymce-textarea" />
     <div class="editor-custom-btn-container">
-      <editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK" />
+      <el-button icon="el-icon-upload" size="mini" type="primary" @click="uploadDialogVisible = true">
+        上传图片
+      </el-button>
+      <upload-file
+        :accept="accept"
+        :dialog-visible="uploadDialogVisible"
+        @close-dialog="uploadDialogVisible = false"
+        @upload-submit="uploadSubmit"
+      />
     </div>
   </div>
 </template>
 
 <script>
-
-import editorImage from './components/EditorImage'
+import UploadFile from '@/components/UploadFile'
 import plugins from './plugins'
 import toolbar from './toolbar'
-import load from './dynamicLoadScript'
+import load from './loadScript'
 
 const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
 
 export default {
   name: 'Tinymce',
-  components: { editorImage },
+  components: { UploadFile },
   props: {
     id: {
       type: String,
@@ -54,6 +61,8 @@ export default {
   },
   data() {
     return {
+      accept: ['jpg', 'jpeg', 'png'],
+      uploadDialogVisible: false,
       hasChange: false,
       hasInit: false,
       tinymceId: this.id,
@@ -156,8 +165,10 @@ export default {
     getContent() {
       window.tinymce.get(this.tinymceId).getContent()
     },
-    imageSuccessCBK(arr) {
-      arr.forEach(v => window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`))
+    uploadSubmit(fileList) {
+      console.log(fileList)
+      fileList.forEach(it => window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${it.url}" >`))
+      this.uploadDialogVisible = false
     }
   }
 }
@@ -197,4 +208,5 @@ export default {
 .editor-upload-btn {
   display: inline-block;
 }
+
 </style>
