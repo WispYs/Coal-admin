@@ -132,7 +132,6 @@ export default {
           return it
         })
       } else normalizedList = this.list
-      console.log(normalizedList)
       return normalizedList
     }
   },

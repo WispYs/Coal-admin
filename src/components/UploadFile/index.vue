@@ -9,7 +9,7 @@
     <el-upload
       class="upload-content"
       drag
-      multiple
+      :multiple="multiple"
       :accept="acceptList"
       :action="action"
       :show-file-list="true"
@@ -43,6 +43,10 @@ export default {
     accept: {
       type: Array,
       default: () => ['xls', 'xlsx', 'doc', 'docx', 'png', 'jpg', 'jpeg']
+    },
+    multiple: {
+      type: Boolean,
+      default: true
     }
   },
   data() {

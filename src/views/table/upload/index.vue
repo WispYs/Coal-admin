@@ -45,6 +45,7 @@
     />
     <upload-file
       :dialog-visible="uploadDialogVisible"
+      :multiple="false"
       @close-dialog="uploadDialogVisible = false"
       @upload-submit="uploadSubmit"
     />
