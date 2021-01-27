@@ -4,8 +4,10 @@
       :config="FilterConfig"
       @search-click="queryData"
       @reset-click="queryData"
+      @export-click="handelExport"
     />
     <list-table
+      :id="id"
       :list="list"
       :list-loading="listLoading"
       :config="TableConfig"
@@ -27,11 +29,13 @@ import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import { TableConfig, FilterConfig } from '@/data/table2'
+import exportExcel from '@/utils/export-excel'
 
 export default {
   components: { FilterBar, ListTable, Pagination },
   data() {
     return {
+      id: 'table2',
       list: null,
       total: 0,
       listQuery: {
@@ -61,6 +65,13 @@ export default {
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
       this.__fetchData()
+    },
+
+    // 定义导出Excel表格事件
+    handelExport() {
+      // 第一个参数为 table 的 id
+      // 第二个参数为导出文件的 name
+      exportExcel(this.id, 'excel-table2')
     },
 
     // 字段过滤方法

@@ -33,7 +33,7 @@ export var FilterConfig = {
    * @param {array} filters   筛选项
    * @param {array} options   选择器配置项
    */
-  actions: ['search', 'reset'],
+  actions: ['search', 'reset', 'export'],
   filters: [
     { label: '设备名称', field: 'name', width: '150', layout: 'Text', placeholder: '请输入设备名称' },
     { label: '维护时间', field: 'date', width: '150', layout: 'DateTime', placeholder: '请选择维护时间' },

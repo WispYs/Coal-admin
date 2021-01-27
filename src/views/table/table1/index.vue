@@ -5,8 +5,10 @@
       @search-click="queryData"
       @reset-click="queryData"
       @create-click="openDialog('create')"
+      @export-click="handelExport"
     />
     <list-table
+      :id="id"
       :list="list"
       :list-loading="listLoading"
       :config="TableConfig"
@@ -48,11 +50,13 @@ import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import { TableConfig, FilterConfig } from '@/data/table1'
+import exportExcel from '@/utils/export-excel'
 
 export default {
   components: { FilterBar, ListTable, Pagination, FormDialog },
   data() {
     return {
+      id: 'table1',
       list: null,
       total: 0,
       listQuery: {
@@ -135,6 +139,13 @@ export default {
       console.log(submitData)
       this.editDialogVisible = false
       this.$message.success(JSON.stringify(submitData))
+    },
+
+    // 定义导出Excel表格事件
+    handelExport() {
+      // 第一个参数为 table 的 id
+      // 第二个参数为导出文件的 name
+      exportExcel(this.id, 'excel-table1')
     },
 
     // 字段过滤方法

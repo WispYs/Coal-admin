@@ -1,13 +1,6 @@
 <template>
   <div class="page-container">
-    <div class="tinymce-btn">
-      <el-button type="primary" size="medium" @click="onSubmit">保存</el-button>
-      <el-button type="primary" size="medium" @click="onSubmit">下载</el-button>
-      <el-button type="primary" size="medium" @click="onSubmit">预览</el-button>
-
-    </div>
-
-    <tinymce v-model="content" :height="300" />
+    <tinymce v-model="content" :height="300" @submit-content="submitContent" />
 
   </div>
 
@@ -23,16 +16,25 @@ export default {
     }
   },
   methods: {
-    onSubmit() {
+    submitContent() {
       console.log(this.content)
+      this.$confirm('确定保存该文档?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          message: `保存成功${this.content}`,
+          type: 'success'
+        })
+      }).catch(() => {
+        console.log('cancel')
+      })
     }
   }
 }
 </script>
-<style lang="scss">
-.tox-tinymce-aux {
-  z-index: 3000!important;
-}
+<style lang="scss" scoped>
 .tinymce-btn {
   margin-bottom: 10px;
 }

@@ -5,20 +5,21 @@
       <el-button icon="el-icon-upload" size="mini" type="primary" @click="uploadDialogVisible = true">
         上传图片
       </el-button>
-      <upload-file
-        :accept="accept"
-        :dialog-visible="uploadDialogVisible"
-        @close-dialog="uploadDialogVisible = false"
-        @upload-submit="uploadSubmit"
-      />
+      <el-button size="mini" type="primary" @click="onSubmit">保存</el-button>
+
     </div>
+    <upload-file
+      :accept="accept"
+      :dialog-visible="uploadDialogVisible"
+      @close-dialog="uploadDialogVisible = false"
+      @upload-submit="uploadSubmit"
+    />
   </div>
 </template>
 
 <script>
 import UploadFile from '@/components/UploadFile'
-import plugins from './plugins'
-import toolbar from './toolbar'
+import { Plugins, Toolbar, FontFormats, FontSizeFormats } from './config'
 import load from './loadScript'
 
 const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
@@ -40,9 +41,7 @@ export default {
     toolbar: {
       type: Array,
       required: false,
-      default() {
-        return []
-      }
+      default: () => ([])
     },
     menubar: {
       type: String,
@@ -118,9 +117,12 @@ export default {
         height: this.height,
         body_class: 'panel-body ',
         object_resizing: false,
-        toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
+        toolbar: this.toolbar.length > 0 ? this.toolbar : Toolbar,
         menubar: this.menubar,
-        plugins: plugins,
+        plugins: Plugins,
+        font_formats: FontFormats,
+        fontsize_formats: FontSizeFormats,
+        preview_styles: true,
         end_container_on_empty_block: true,
         powerpaste_word_import: 'clean',
         code_dialog_height: 450,
@@ -131,6 +133,7 @@ export default {
         default_link_target: '_blank',
         link_title: false,
         nonbreaking_force_tab: true,
+        content_style: 'body { font-family:Arial,sans-serif,Microsoft YaHei; font-size:14px }',
         init_instance_callback: editor => {
           if (_this.value) {
             editor.setContent(_this.value)
@@ -141,12 +144,18 @@ export default {
             this.$emit('input', editor.getContent())
           })
         },
+        convert_urls: false,
         setup(editor) {
           editor.on('FullscreenStateChanged', (e) => {
             _this.fullscreen = e.state
           })
-        },
-        convert_urls: false
+          // 方法不起作用，官方文档也没找见对应方法o(╥﹏╥)o
+          // editor.on('add', (e) => {
+          //   console.log(e)
+          //   e.execCommand('fontName', false, 'Arial')
+          //   e.execCommand('fontSize', false, '22')
+          // })
+        }
       })
     },
     destroyTinymce() {
@@ -165,10 +174,15 @@ export default {
     getContent() {
       window.tinymce.get(this.tinymceId).getContent()
     },
+    // 上传文件提交
     uploadSubmit(fileList) {
       console.log(fileList)
       fileList.forEach(it => window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${it.url}" >`))
       this.uploadDialogVisible = false
+    },
+    // 富文本编辑器内容提交
+    onSubmit() {
+      this.$emit('submit-content')
     }
   }
 }

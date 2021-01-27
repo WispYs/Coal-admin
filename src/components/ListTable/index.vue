@@ -1,5 +1,6 @@
 <template>
   <el-table
+    :id="id"
     v-loading="listLoading"
     :data="normalizedList"
     element-loading-text="Loading"
@@ -100,6 +101,10 @@
 <script>
 export default {
   props: {
+    id: {
+      type: String,
+      default: ''
+    },
     list: {
       type: Array,
       default: () => []

@@ -1,6 +1,8 @@
 <template>
   <div class="page-container mult-table">
+
     <el-table
+      id="mult-table"
       v-loading="listLoading"
       :data="list"
       :header-cell-class-name="headerCellClassName"

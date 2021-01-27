@@ -46,6 +46,7 @@
       <el-button v-if="config.actions.indexOf('search') > -1" type="primary" size="medium" @click="search()">搜索</el-button>
       <el-button v-if="config.actions.indexOf('reset') > -1" type="primary" size="medium" @click="reset()">重置</el-button>
       <el-button v-if="config.actions.indexOf('create') > -1" type="primary" size="medium" @click="create()">新建</el-button>
+      <el-button v-if="config.actions.indexOf('export') > -1" type="primary" size="medium" @click="exportExcel()">导出</el-button>
     </div>
 
   </div>
@@ -118,6 +119,9 @@ export default {
     },
     create() {
       this.$emit('create-click')
+    },
+    exportExcel() {
+      this.$emit('export-click')
     }
   }
 }

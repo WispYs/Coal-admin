@@ -56,7 +56,7 @@ export var FilterConfig = {
    * @param {array} filters   筛选项
    * @param {array} options   选择器配置项
    */
-  actions: ['search', 'reset', 'create'],
+  actions: ['search', 'reset', 'create', 'export'],
   filters: [
     { label: '关键字', field: 'keywords', width: '150', layout: 'Text', placeholder: '请输入关键字' },
     { label: '项目时间', field: 'time', width: '150', layout: 'DateTime', placeholder: '请选择开始时间' },
