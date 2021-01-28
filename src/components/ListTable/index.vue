@@ -1,54 +1,98 @@
 <template>
   <el-table
+    :id="id"
     v-loading="listLoading"
-    :data="list"
+    :data="normalizedList"
     element-loading-text="Loading"
     border
     fit
-    show-summary
-    :summary-method="getSummaries"
-    highlight-current-row
+    :show-summary="config.summary"
+    :summary-method="(param) => getSummaries(param, config.summaryField)"
+    :cell-style="cellStyle"
+    header-cell-class-name="pre-line"
   >
-    <el-table-column align="center" label="ID" width="95" fixed>
+    <el-table-column align="center" label="序号" width="95" fixed>
       <template slot-scope="scope">
         {{ scope.$index+1 }}
       </template>
     </el-table-column>
-    <el-table-column label="标题" width="350" prop="title">
+    <el-table-column
+      v-for="column in config.columns"
+      :key="column.field"
+      :label="column.label"
+      :width="column.width"
+      :align="column.align || 'center'"
+      :prop="column.field"
+      :sortable="column.sortable"
+    >
       <template slot-scope="scope">
-        {{ scope.row.title }}
+        <template v-if="config.inlineEdit && scope.row.edit">
+          <!-- input -->
+          <el-input v-if="column.layout === 'Text'" v-model="scope.row[column.field]" size="small" :placeholder="column.placeholder" />
+
+          <!-- select  -->
+          <el-select
+            v-if="column.layout === 'Select'"
+            v-model="scope.row[column.field]"
+            :placeholder="column.placeholder"
+            style="width: 100%;"
+            size="small"
+          >
+            <el-option
+              v-for="it in column.options"
+              :key="it.value"
+              :label="it.label"
+              :value="it.value"
+            />
+          </el-select>
+
+          <!-- date-picker  -->
+          <el-date-picker
+            v-if="column.layout === 'DateTime'"
+            v-model="scope.row[column.field]"
+            :value-format="column.dateFormat || 'yyyy-MM-dd'"
+            type="date"
+            :placeholder="column.placeholder"
+            style="width: 100%;"
+            size="small"
+          />
+
+          <!-- slider  -->
+          <el-slider v-if="column.layout === 'Slider'" v-model="scope.row[column.field]" />
+
+          <!-- switch -->
+          <el-switch v-if="column.layout === 'Switch'" v-model="scope.row[column.field]" />
+
+          <!-- radio -->
+          <el-radio-group v-if="column.layout === 'Radio'" v-model="scope.row[column.field]" size="mini">
+            <el-radio-button v-for="it in column.options" :key="it" :label="it" />
+          </el-radio-group>
+
+          <!-- checkbox -->
+          <el-checkbox-group v-if="column.layout === 'Checkbox'" v-model="scope.row[column.field]" size="mini">
+            <el-checkbox-button v-for="it in column.options" :key="it" :label="it" :name="it" />
+          </el-checkbox-group>
+
+          <!-- textarea -->
+          <el-input v-if="column.layout === 'Textarea'" v-model="scope.row[column.field]" type="textarea" :placeholder="column.placeholder" />
+
+        </template>
+        <template v-else>
+          <span v-if="column.filter">
+            {{ filterField(column.filterName, scope.row[column.field]) }}
+          </span>
+          <span v-else>{{ scope.row[column.field] }}</span>
+        </template>
+
       </template>
     </el-table-column>
-    <el-table-column label="作者" width="110" prop="author" align="center">
+    <el-table-column v-if="config.actions && config.actions.length > 0" fixed="right" label="操作" width="160" align="center">
       <template slot-scope="scope">
-        <span>{{ scope.row.author }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column align="center" prop="start_time" label="开始时间" sortable>
-      <template slot-scope="scope">
-        <i class="el-icon-time" />
-        <span>{{ scope.row.start_time }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="完成率" width="110" prop="completed" align="center">
-      <template slot-scope="scope">
-        {{ scope.row.completed }}
-      </template>
-    </el-table-column>
-    <el-table-column label="金额（元）" width="150" prop="money" align="center" sortable>
-      <template slot-scope="scope">
-        {{ scope.row.money }}
-      </template>
-    </el-table-column>
-    <el-table-column class-name="status-col" label="状态" prop="status" width="110" align="center">
-      <template slot-scope="scope">
-        <el-tag :type="scope.row.status | typeFilter">{{ scope.row.status | statusFilter }}</el-tag>
-      </template>
-    </el-table-column>
-    <el-table-column fixed="right" label="操作" width="100" align="center">
-      <template slot-scope="scope">
-        <el-button type="text" size="small" @click="handleClick(scope.row)">查看</el-button>
-        <el-button type="text" size="small">编辑</el-button>
+        <el-button v-if="config.actions.indexOf('preview') > -1" type="text" size="small" @click="handleClick(scope.row, scope.$index)">查看</el-button>
+        <el-button v-if="config.actions.indexOf('edit') > -1 && !scope.row.edit" type="text" size="small" @click="edit(scope.row)">编辑</el-button>
+        <el-button v-if="config.actions.indexOf('edit') > -1 && scope.row.edit" type="text" style="color: #67c23a" size="small" @click="submitRow(scope.row)">提交</el-button>
+        <el-button v-if="config.actions.indexOf('edit') > -1 && scope.row.edit" type="text" style="color: #e6a23c" size="small" @click="cancelSubmit(scope.row)">取消</el-button>
+        <el-button v-if="config.actions.indexOf('delete') > -1" type="text" size="small" style="color: #f56c6c" @click="del(scope.row.id)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -56,27 +100,11 @@
 
 <script>
 export default {
-  filters: {
-    typeFilter(status) {
-      const statusMap = {
-        1: 'success',
-        2: '',
-        3: 'info',
-        4: 'danger'
-      }
-      return statusMap[status]
-    },
-    statusFilter(status) {
-      const statusMap = {
-        1: '已完成',
-        2: '进行中',
-        3: '未开始',
-        4: '已搁置'
-      }
-      return statusMap[status]
-    }
-  },
   props: {
+    id: {
+      type: String,
+      default: ''
+    },
     list: {
       type: Array,
       default: () => []
@@ -84,6 +112,14 @@ export default {
     listLoading: {
       type: Boolean,
       default: true
+    },
+    config: {
+      type: Object,
+      default: () => ({})
+    },
+    filterMethod: {
+      type: Function,
+      default: null
     }
   },
   data() {
@@ -91,9 +127,64 @@ export default {
 
     }
   },
+  computed: {
+    // list 数据中添加 edit 属性
+    normalizedList() {
+      let normalizedList = []
+      if (this.list && this.config && this.config.inlineEdit) {
+        normalizedList = this.list.map(it => {
+          this.$set(it, 'edit', false)
+          return it
+        })
+      } else normalizedList = this.list
+      return normalizedList
+    }
+  },
   methods: {
+    // filter 方法
+    /**
+     * @param {string}  name  filter方法名
+     * @param {string}  field 过滤字
+     */
+    filterField(name, field) {
+      if (this.filterMethod) {
+        return this.filterMethod(name, field)
+      }
+    },
+    handleClick(row, index) {
+      console.log(row, index)
+    },
+    // 编辑
+    edit(row) {
+      if (this.config && this.config.inlineEdit) {
+        console.log(row)
+        row.edit = true
+      } else {
+        this.$emit('edit-click', row)
+      }
+    },
+    // 提交编辑后的行内数据
+    async submitRow(row) {
+      console.log(row)
+      row.edit = false
+      // 提交数据时，删除 edit 属性
+      delete row.edit
+      await this.$emit('submit-data', row)
+      // 刷新数据
+      this.$emit('update')
+    },
+    cancelSubmit(row) {
+      this.$emit('update')
+    },
+    // 删除
+    del(id) {
+      this.$emit('delete-click', id)
+    },
     // 计算合计总工时
-    getSummaries(param) {
+    getSummaries(param, field) {
+      if (!field) {
+        return false
+      }
       const { columns, data } = param
       const sums = []
       columns.forEach((column, index) => {
@@ -101,30 +192,33 @@ export default {
           sums[index] = '合计'
           return
         }
-        if (data && column.property === 'money') {
-          const values = data.map(item => Number(item[column.property]))
-          console.log(values)
-          sums[index] = values.reduce((prev, curr) => {
-            const value = Number(curr)
-            const prevNum = Number(prev)
-            if (!isNaN(value)) {
-              return prevNum + curr
-            } else {
-              return prev
-            }
-          }, 0)
-        } else {
-          sums[index] = ''
-        }
+        field.forEach((it, i) => {
+          if (data && column.property === it) {
+            const values = data.map(item => Number(item[column.property]))
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr)
+              const prevNum = Number(prev)
+              if (!isNaN(value)) {
+                return prevNum + curr
+              } else {
+                return prev
+              }
+            }, 0)
+            sums[index] += ' 元'
+          } else {
+            sums[index] = ''
+          }
+        })
       })
       return sums
     },
-    handleClick(row) {
-      console.log(row)
+    // 表格单元格样式
+    cellStyle() {
+      return 'font-size: 13px'
     }
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 
 </style>

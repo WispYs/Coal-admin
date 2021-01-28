@@ -2,7 +2,8 @@
 @import './mixin.scss';
 @import './transition.scss';
 @import './element-ui.scss';
-@import './sidebar.scss';
+@import './nav.scss';
+@import './common.scss';
 
 body {
   height: 100%;
@@ -13,7 +14,7 @@ body {
 }
 
 label {
-  font-weight: 700;
+  font-weight: 400;
 }
 
 html {
@@ -60,7 +61,7 @@ div:focus {
 }
 
 // main-container global css
-.app-container {
+.page-container {
   padding: 20px;
 }
 

@@ -32,7 +32,7 @@ const mutations = {
 }
 
 const actions = {
-  // user login
+  // 用户登录
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
@@ -47,21 +47,21 @@ const actions = {
     })
   },
 
-  // get user info
+  // 获取用户信息
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
 
         if (!data) {
-          return reject('Verification failed, please Login again.')
+          return reject('获取用户信息失败，请重新登陆')
         }
 
         const { roles, name, avatar } = data
 
-        // roles must be a non-empty array
+        // roles 必须为非空数组
         if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
+          reject('获取用户角色失败，请重新登陆')
         }
 
         commit('SET_NAME', name)
@@ -75,11 +75,11 @@ const actions = {
     })
   },
 
-  // user logout
+  // 退出登录
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
-        removeToken() // must remove  token  first
+        removeToken() // 清空token
         resetRouter()
         commit('RESET_STATE')
         resolve()
@@ -89,10 +89,10 @@ const actions = {
     })
   },
 
-  // remove token
+  // 重置 token
   resetToken({ commit }) {
     return new Promise(resolve => {
-      removeToken() // must remove  token  first
+      removeToken()
       commit('RESET_STATE')
       resolve()
     })

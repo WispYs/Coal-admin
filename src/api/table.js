@@ -7,3 +7,17 @@ export function getList(params) {
     params
   })
 }
+
+export function getMultList() {
+  return request({
+    url: '/example/mult-table/list',
+    method: 'get'
+  })
+}
+
+export function getUploadList() {
+  return request({
+    url: '/example/upload-table/list',
+    method: 'get'
+  })
+}

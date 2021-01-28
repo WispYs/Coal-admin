@@ -1,16 +1,21 @@
 module.exports = {
 
-  title: 'Vue Admin Template',
+  title: 'Vue Pro',
 
   /**
-   * @type {boolean} true | false
-   * @description Whether fix the header
+   * @type {boolean}  true | false
+   * @description     固定头部导航
    */
-  fixedHeader: false,
+  fixedHeader: true,
 
   /**
-   * @type {boolean} true | false
-   * @description Whether show the logo in sidebar
+   * @type {boolean}  true | false
+   * @description     显示头部Logo
    */
-  sidebarLogo: false
+  headbarLogo: true,
+  /**
+   * @type {boolean}  true | false
+   * @description     显示固定标签导航
+   */
+  needTagsView: true
 }

@@ -8,13 +8,13 @@ const managerRouter = {
   meta: { title: '项目管理', icon: 'el-icon-s-help' },
   children: [
     {
-      path: 'product',
+      path: '/manager/product',
       name: 'Product',
       component: () => import('@/views/manager/product/index'),
       meta: { title: '项目生产', icon: 'table' }
     },
     {
-      path: 'operation',
+      path: '/manager/operation',
       name: 'Operation',
       component: () => import('@/views/manager/operation/index'),
       meta: { title: '运维管理', icon: 'tree' }

@@ -11,12 +11,12 @@ const tokens = {
 const users = {
   'admin-token': {
     roles: ['admin'],
-    avatar: '',
+    avatar: '/assets/images/avatar.jpg',
     name: 'Admin'
   },
   'editor-token': {
     roles: ['editor'],
-    avatar: '',
+    avatar: '/assets/images/avatar.jpg',
     name: 'Editor'
   }
 }
@@ -30,11 +30,10 @@ module.exports = [
       const { username } = config.body
       const token = tokens[username]
 
-      // mock error
       if (!token) {
         return {
-          code: 60204,
-          message: 'Account and password are incorrect.'
+          code: 20001,
+          message: '用户名或密码错误'
         }
       }
 
@@ -53,11 +52,10 @@ module.exports = [
       const { token } = config.query
       const info = users[token]
 
-      // mock error
       if (!info) {
         return {
-          code: 50008,
-          message: 'Login failed, unable to get user details.'
+          code: 20002,
+          message: '获取个人信息失败'
         }
       }
 

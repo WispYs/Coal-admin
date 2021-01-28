@@ -5,8 +5,8 @@ import { constantRoutes } from '@/router'
 
 /**
  * 通过用户角色判断是否有权限
- * @param roles
- * @param route
+ * @param {array}  roles   权限分配的角色，例如: ['admin', 'editor']
+ * @param {Object} route   路由
  */
 function hasPermission(roles, route) {
   if (route.meta && route.meta.roles) {
@@ -20,8 +20,8 @@ const loadView = (view) => {
 }
 /**
  * 通过角色权限过滤路由配置
- * @param routes asyncRoutes 动态路由
- * @param roles
+ * @param {array} routes   asyncRoutes 动态路由
+ * @param {array} roles    权限分配的角色，例如: ['admin', 'editor']
  */
 export function filterAsyncRoutes(routes, roles) {
   const res = []
@@ -32,6 +32,7 @@ export function filterAsyncRoutes(routes, roles) {
     } else {
       let sub_view = tmp.component || ''
       sub_view = sub_view.replace(/^\/*/g, '')
+      // ESlint 报错
       // tmp.component = () => import(`@/views/${sub_view}`)
       tmp.component = loadView(sub_view)
     }
