@@ -47,7 +47,6 @@
               :placeholder="column.placeholder"
               style="width: 100%;"
               size="small"
-              @blur="onBlur()"
             >
               <el-option
                 v-for="it in column.options"

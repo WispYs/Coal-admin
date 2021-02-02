@@ -169,6 +169,7 @@ export default {
       return classMap[str]
     },
     handleClick(row, index) {
+      this.$message.success('查看信息')
       console.log(row, index)
     },
     // 编辑

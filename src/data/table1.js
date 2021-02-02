@@ -1,4 +1,4 @@
-export var TableConfig = {
+export const TableConfig = {
   /**
    * 这种表格配置表对整个项目而言耦合性较高，后续每次对表格有特殊要求都需要修改
    * 而且由于某些字段需要前端方法处理，所以这个配置也应由前端定义交给后端，然后再通过接口动态调用
@@ -54,7 +54,7 @@ export var TableConfig = {
   ]
 }
 
-export var FilterConfig = {
+export const FilterConfig = {
   /**
    * @param {array} actions   操作按钮
    * @param {array} filters   筛选项
