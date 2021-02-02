@@ -1,5 +1,8 @@
 export var TableConfig = {
   /**
+   * 这种表格配置表对整个项目而言耦合性较高，后续每次对表格有特殊要求都需要修改
+   * 而且由于某些字段需要前端方法处理，所以这个配置也应由前端定义交给后端，然后再通过接口动态调用
+   *
    * @param {array}   actions         操作按钮，例如：['preview', 'edit', 'delete']
    * @param {boolean} summary         是否需要合计数据
    * @param {array}   summaryField    合计字段
@@ -13,6 +16,7 @@ export var TableConfig = {
    * @param {boolean} filter          字段值是否需要方法处理
    * @param {string}  filterName      过滤函数方法的名称,由前端定义
    * @param {array}   options         选择器配置项
+   * @param {string}  showType        表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump 色块显示
    */
   actions: ['preview', 'edit', 'delete'],
   summary: true,

@@ -103,19 +103,25 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success(id)
+        console.log(id)
+        this.$message.success('删除成功')
       })
     },
     // 批量删除
     deleteBatches() {
       const selectId = []
       this.multipleSelection.forEach(it => selectId.push(it.id))
+      if (selectId.length === 0) {
+        this.$message.warning('请选择所删除的文件')
+        return false
+      }
       this.$confirm('确定删除所选中文件?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success(selectId.toString())
+        console.log(selectId)
+        this.$message.success('删除成功')
       })
     }
   }

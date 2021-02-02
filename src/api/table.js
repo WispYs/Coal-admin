@@ -21,3 +21,10 @@ export function getUploadList() {
     method: 'get'
   })
 }
+
+export function getReportList() {
+  return request({
+    url: '/example/report-table/list',
+    method: 'get'
+  })
+}
