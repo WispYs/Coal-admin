@@ -28,7 +28,8 @@ const data = Mock.mock({
     date: '@date("yyyy-MM-dd")',
     describe: '@cparagraph(1,3)',
     region: '@region',
-    'open|1': true
+    'risk|1': [1, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4],
+    'open|1': ['开启', '关闭']
 
   }]
 })
@@ -36,7 +37,7 @@ const data = Mock.mock({
 const multData = Mock.mock({
   'items|5': [{
     'team|+1': ['一区101队', '一区102队', '一区103队', '一区104队', '一区105队'],
-    addr: '@city',
+    addr: '@city(true)',
     'groups|3': [
       {
         'group|+1': ['第一班', '第二班', '第三班'],
@@ -55,6 +56,20 @@ const uploadData = Mock.mock({
     'title|+1': ['2020年12月地形地质图', '2020年11月地形地质图', '2020年10月地形地质图', '2020年09月地形地质图', '2020年08月地形地质图'],
     updateTime: '@datetime',
     uploader: '@cname'
+  }]
+})
+
+const reportData = Mock.mock({
+  'items|5': [{
+    id: '@id',
+    'team|+1': ['掘203', '掘205', '掘202', '掘101', '掘105'],
+    'addr|+1': ['1311(3)底抽巷', '1311(3)轨顺提料斜巷', '1311(1)运顺', '1127(1)运顺底抽巷', '1127(3)底抽巷'],
+    'model|+1': ['FBDNo.8.0', 'FBDNo.8.0', 'FBDNo.6.3', 'FBDNo.8.0', 'FBDNo.7.5'],
+    'run|+1': ['1 × 55', '1 × 55', '1 × 30', '1 × 55', '2× 55'],
+    'standby|+1': ['1 × 55', '1 × 55', '1 × 30', '1 × 55', '2× 55'],
+    'status|1': ['单级', '双级'],
+    'diameter|1': ['800', '1000'],
+    blowingRate: '@integer(500, 1000)'
   }]
 })
 
@@ -95,6 +110,21 @@ module.exports = [
     type: 'get',
     response: config => {
       const items = uploadData.items
+      return {
+        code: 20000,
+        data: {
+          total: items.length,
+          items: items
+        }
+      }
+    }
+  },
+  // report-table 数据
+  {
+    url: '/example/report-table/list',
+    type: 'get',
+    response: config => {
+      const items = reportData.items
       return {
         code: 20000,
         data: {

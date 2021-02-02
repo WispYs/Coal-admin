@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-01-25 15:28:42
+ * @Last Modified time: 2021-02-01 15:53:20
  */
 
 /**
@@ -136,20 +136,20 @@ const asyncRoutes = [
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-4',
                 name: 'Geodesy1-1-4',
-                component: '/table/upload/index',
+                component: '/table/report-table/index',
                 meta: { title: '主要地质剖面图', affix: true }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-5',
                 name: 'Geodesy1-1-5',
-                component: '/text-editor/index',
+                component: '/table/upload/index',
                 meta: { title: '矿井煤岩层对比图', affix: true }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-6',
                 name: 'Geodesy1-1-6',
-                component: '/demo/index',
-                meta: { title: '煤矿可采煤层底板等高线及资源/储量估算图' }
+                component: '/text-editor/index',
+                meta: { title: '煤矿可采煤层底板等高线及资源/储量估算图', affix: true }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-7',
