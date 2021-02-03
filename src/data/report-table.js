@@ -24,11 +24,13 @@ export const TableConfig = {
   columns: [
     { label: '队名', field: 'team', width: '150', layout: 'Text', placeholder: '请填写队伍名称' },
     { label: '施工地点', field: 'addr', width: '', layout: 'Text', placeholder: '请填写施工地点' },
+    { label: '开工时间', field: 'startTime', width: '160', layout: 'DateTime', placeholder: '请选择开工时间' },
+    { label: '竣工时间', field: 'endTime', width: '160', layout: 'DateTime', placeholder: '请选择竣工地点' },
     { label: '局扇型号', field: 'model', width: '150', layout: 'Text', placeholder: '请填写局扇型号' },
-    { label: '运转(台数*KW)', field: 'run', width: '150', layout: 'Text', placeholder: '请填写运转台数和功率' },
-    { label: '备用(台数*KW)', field: 'standby', width: '150', layout: 'Text', placeholder: '请填写备用台数和功率' },
-    { label: '局扇运行状况', field: 'status', width: '150', layout: 'Select', options: ['单级', '双级'], placeholder: '请选择局扇运行状况' },
-    { label: '风筒直径', field: 'diameter', width: '150', layout: 'Text', placeholder: '请填写风筒直径' },
-    { label: '风量(m³/min)', field: 'blowingRate', width: '150', layout: 'Text', placeholder: '请填写风量' }
+    { label: '运转(台数*KW)', field: 'run', width: '120', layout: 'Text', placeholder: '请填写运转台数和功率' },
+    { label: '备用(台数*KW)', field: 'standby', width: '120', layout: 'Text', placeholder: '请填写备用台数和功率' },
+    { label: '局扇运行状况', field: 'status', width: '120', layout: 'Select', options: ['单级', '双级'], placeholder: '请选择局扇运行状况' },
+    { label: '风筒直径', field: 'diameter', width: '120', layout: 'Text', placeholder: '请填写风筒直径' },
+    { label: '风量(m³/min)', field: 'blowingRate', width: '120', layout: 'Text', placeholder: '请填写风量' }
   ]
 }

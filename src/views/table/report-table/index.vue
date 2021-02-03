@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="page-container report-table">
     <div class="report-button">
       <el-button type="primary" size="medium" @click="save()"><i class="el-icon-upload2 el-icon--left" />保存数据</el-button>
       <el-button type="success" size="medium" plain @click="handelExport()"><i class="el-icon-download el-icon--left" />导出数据</el-button>
@@ -13,13 +13,9 @@
       fit
       :cell-style="cellStyle"
       header-cell-class-name="pre-line"
+      :span-method="objectSpanMethod"
       @cell-dblclick="cellDbClick"
     >
-      <el-table-column align="center" label="序号" width="95" fixed>
-        <template slot-scope="scope">
-          {{ scope.$index+1 }}
-        </template>
-      </el-table-column>
       <el-table-column
         v-for="(column,index) in config.columns"
         :key="index"
@@ -91,6 +87,7 @@
               {{ filterField(column.filterName, scope.row[column.field]) }}
             </span>
             <span v-else>{{ scope.row[column.field] }}</span>
+
           </template>
         </template>
       </el-table-column>
@@ -110,8 +107,8 @@ export default {
       list: [],
       listLoading: true,
       config: TableConfig,
-      clickRowIndex: null, //
-      clickField: null
+      clickRowIndex: null, // 点击单元格的行序号
+      clickField: null // 点击单元格的字段
     }
   },
   computed: {
@@ -134,7 +131,6 @@ export default {
   },
   created() {
     this.__fetchData()
-    console.log(this.normalizedList)
   },
   methods: {
     __fetchData() {
@@ -162,6 +158,30 @@ export default {
       exportExcel(this.id, 'excel-report-table')
     },
 
+    // 合并行
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex === 0) {
+        if (rowIndex % 2 === 0) {
+          return {
+            rowspan: 2,
+            colspan: 1
+          }
+        } else {
+          return {
+            rowspan: 0,
+            colspan: 0
+          }
+        }
+      }
+    },
+    /** 判断单元格字段是否可编辑
+     * @param editable  可编辑字段数组
+     * @param field     当前字段
+     */
+    editableField(editable, field) {
+      return editable.indexOf(field) > -1
+    },
+
     // 表格单元格样式，给 row 添加 rowIndex 属性，以便在 doubleClickCell 函数中使用
     cellStyle(obj) {
       Object.defineProperty(obj.row, 'rowIndex', {
@@ -169,19 +189,19 @@ export default {
         writable: true,
         enumerable: false
       })
+      if (this.editableField(obj.row.editable, obj.column.property)) {
+        return 'background: #fdf5e6;'
+      }
     },
     // 双击单元格
     cellDbClick(row, column, cell, event) {
-      console.log(cell.querySelectorAll('input'))
-      if (column.label === '序号') {
-        return false
+      if (this.editableField(row.editable, column.property)) {
+        this.clickRowIndex = row.rowIndex
+        this.clickField = column.property
+        setTimeout(() => {
+          if (cell.querySelectorAll('input').length > 0) cell.querySelectorAll('input')[0].focus()
+        }, 50)
       }
-      this.clickRowIndex = row.rowIndex
-      this.clickField = column.property
-      setTimeout(() => {
-        console.log(cell.querySelectorAll('input'))
-        cell.querySelectorAll('input')[0].focus()
-      }, 50)
 
       // 关于 ref 注册时间的重要说明：
       // 因为 ref 本身是作为渲染结果被创建的，在初始渲染的时候你不能访问它们 - 它们还不存在！
@@ -197,7 +217,7 @@ export default {
 
     // 通过点击的行序号和字段锁定当前点击的单元格
     editCurrentCell(row, field) {
-      if (row.rowIndex === this.clickRowIndex && field === this.clickField) {
+      if (this.editableField(row.editable, field) && row.rowIndex === this.clickRowIndex && field === this.clickField) {
         return true
       }
       return false
@@ -212,9 +232,30 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.report-button {
-  padding: 10px 0;
+<style lang="scss">
+.report-table {
+  padding-bottom: 200px;
+  .report-button {
+    padding: 10px 0;
+  }
+  // 去掉选中蓝色背景
+  .el-table {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+  }
+  .editable-cell {
+    background: #fdf5e6;
+  }
+  .el-table td, .el-table th.is-leaf,.el-table--border, .el-table--group{
+    border-color: #999;
+  }
+  .el-table--border::after, .el-table--group::after, .el-table::before{
+    background-color: #999;
+  }
+
 }
 
 </style>

@@ -60,16 +60,19 @@ const uploadData = Mock.mock({
 })
 
 const reportData = Mock.mock({
-  'items|5': [{
+  'items|10': [{
     id: '@id',
-    'team|+1': ['掘203', '掘205', '掘202', '掘101', '掘105'],
+    'team|+1': ['掘203', '掘203', '掘205', '掘205', '掘202', '掘202', '掘101', '掘101', '掘105', '掘105'],
     'addr|+1': ['1311(3)底抽巷', '1311(3)轨顺提料斜巷', '1311(1)运顺', '1127(1)运顺底抽巷', '1127(3)底抽巷'],
+    startTime: '@date("yyyy-MM-dd")',
+    endTime: '@date("yyyy-MM-dd")',
     'model|+1': ['FBDNo.8.0', 'FBDNo.8.0', 'FBDNo.6.3', 'FBDNo.8.0', 'FBDNo.7.5'],
     'run|+1': ['1 × 55', '1 × 55', '1 × 30', '1 × 55', '2× 55'],
     'standby|+1': ['1 × 55', '1 × 55', '1 × 30', '1 × 55', '2× 55'],
     'status|1': ['单级', '双级'],
     'diameter|1': ['800', '1000'],
-    blowingRate: '@integer(500, 1000)'
+    blowingRate: '@integer(500, 1000)',
+    editable: ['addr', 'run', 'standby', 'status', 'diameter']
   }]
 })
 
