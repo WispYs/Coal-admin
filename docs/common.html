@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- import CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+  <style>
+    * {box-sizing: border-box;}
+    #app {padding-bottom: 100px;}
+    .title {text-align: center;position: relative;}
+    .title:after {position: absolute;content: "";left: 50%;bottom: -20px;width:200px;height: 2px;background: black;transform: translateX(-50%);}
+    .wrapper {margin: 20px;border: 1px solid #dedede;}
+    .wrapper-title {margin: 10px 0;color: #121212;}
+    .component-item {position:relative;border-bottom: 1px solid #ededed;overflow: hidden;}
+    .component-item:after {position: absolute;content:"";top:0;left:70%;width: 1px;height: 100%;background: #dedede;}
+    .item-left {float:left;width: 70%;padding: 10px 20px 10px;}
+    .item-left h3 {color: #333;}
+    .item-right {float:right;width: 30%;padding: 10px 20px 10px;}
+    .item-right p {margin:10px 0;}
+    .com-box {margin-bottom: 15px;}
+    .com-box label {color: #666;margin-left: 15px;}
+    .com-box .com-label{display:inline-block;margin-bottom: 15px;}
+    .com-color{line-height: 30px;overflow: hidden;}
+    .com-icon .com-label {display:flex;align-items: center;margin-bottom: 20px;}
+    .com-icon i{font-size: 24px;cursor: pointer;margin-right: 20px;}
+    .com-icon i:hover{color:#409EFF;}
+    .com-button .com-label {margin-right: 10px;}
+    .com-color label,.com-upload label{float:left;}
+    .com-upload .upload-demo {float:left;}
+    .com-color .color-lump {float:left;width:80px;height: 30px;margin-right: 15px;border-radius: 4px;text-align: center;color:white;font-size: 13px;} 
+    .com-input .el-input {width: 150px;}
+    .com-table .com-label {width: 100%;}
+    .com-table .el-table {width: 701px;margin-left: 20px;}
+    .com-table .pre-line {background: #f5f7fa}
+    .com-table label.el-radio-button {margin-left: 0;}
+    .com-tinymce .com-label {width: 100%;}
+    .primary {background: #409EFF;}
+    .green {background: #67C23A;}
+    .orange {background: #E6A23C;}
+    .red {background: #F56C6C;}
+    .gray {background: #F5F7FA;}
+    .darkblue {background: #304156;}
+    .darkestblue {background: #263445;}
+    .bordercolor {background: #EBEEF5;}
+    .blackcolor {background: #000000;}
+    .font-size-smaller {font-size: 12px;}
+    .font-size-small {font-size: 13px;}
+    .font-size-medium {font-size: 14px;}
+    .font-size-large {font-size: 16px;}
+    .font-size-larger {font-size: 18px;}
+    .font-size-largest {font-size: 20px;}
+    .pl-80 {padding-left: 80px;}
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1 class="title">前端 UI 组件库</h1>
+    <div class="wrapper">
+      <div class="component-item">
+        <div class="item-left" style="padding-bottom: 10px"><h2 class="wrapper-title">组件风格</h2></div>
+        <div class="item-right" style="padding-bottom: 10px"><h2 class="wrapper-title">要求</h2></div>
+      </div>
+      <div class="component-item">
+        <div class="item-left">
+          <h3>色调</h3>
+          <div class="com-color com-box">
+            <div class="com-label">
+              <label>选中颜色：</label>
+              <el-tooltip class="item" effect="dark" content="$primaryColor" placement="top">
+                <span class="color-lump primary">#409EFF</span>
+              </el-tooltip>
+              <label>成功提示：</label>
+              <el-tooltip class="item" effect="dark" content="$greenColor" placement="top">
+                <span class="color-lump green">#67C23A</span>
+              </el-tooltip>
+              <label>警告提示：</label>
+              <el-tooltip class="item" effect="dark" content="$redColor" placement="top">
+                <<span class="color-lump red">#F56C6C</span>
+              </el-tooltip>
+            </div>
+            <div class="com-label">
+              
+              <!-- <label>成功提示：</label>
+              <el-tooltip class="item" effect="dark" content="$orangeColor" placement="top">
+                <span class="color-lump orange">#E6A23C</span>
+              </el-tooltip> -->
+              
+              <label>不可用：</label>
+              <el-tooltip class="item" effect="dark" content="$lightGrayColor" placement="top">
+                <span class="color-lump gray" style="color: #000">#F5F7FA</span>
+              </el-tooltip>
+              <label>边框：</label>
+              <el-tooltip class="item" effect="dark" content="$borderColor" placement="top">
+                <span class="color-lump bordercolor" style="color: #000">#EBEEF5</span>
+              </el-tooltip>
+              
+            </div>
+            <div class="com-label">
+              <label>一级菜单背景：</label>
+              <el-tooltip class="item" effect="dark" content="$darkblueColor" placement="top">
+                <span class="color-lump darkblue">#304156</span>
+              </el-tooltip>
+              <label>二/三级菜单背景：</label>
+              <el-tooltip class="item" effect="dark" content="$darkestblueColor" placement="top">
+                <span class="color-lump darkestblue">#263445</span>
+              </el-tooltip>
+              <label>四级菜单背景：</label>
+              <el-tooltip class="item" effect="dark" content="$blackColor" placement="top">
+                <span class="color-lump blackcolor">#000000</span>
+              </el-tooltip>
+            </div>
+          </div>
+        </div>
+        <div class="item-right">
+          <p>页面内引用 variables.scss，调用相应色值即可</p>
+          <p>例如：$primaryColor、$greenColor</p>
+        </div>
+      </div>
+      <div class="component-item">
+        <div class="item-left">
+          <h3>字体</h3>
+          <div class="com-box">
+            <div class="com-label">
+              <label class="font-size-smaller">辅助文字：</label>
+              <span class="font-size-smaller">$font-size-smaller（12px）</span>
+            </div>
+            <div class="com-label">
+              <label class="font-size-small">较小文字：</label>
+              <span class="font-size-small">$font-size-small（13px）</span>
+            </div>
+            <div class="com-label">
+              <label class="font-size-medium">默认文字：</label>
+              <span class="font-size-medium">$font-size-medium（14px）</span>
+            </div>
+          </div>
+          <div class="com-box">
+            <div class="com-label">
+              <label class="font-size-large">小标题：</label>
+              <span class="font-size-large">$font-size-large（16px）</span>
+            </div>
+            <div class="com-label">
+              <label class="font-size-larger">标题：</label>
+              <span class="font-size-larger">$font-size-larger（18px）</span>
+            </div>
+            <div class="com-label">
+              <label class="font-size-largest">主标题：</label>
+              <span class="font-size-largest">$font-size-largest（20px）</span>
+            </div>
+          </div>
+        </div>
+        <div class="item-right">
+          <p>如涉及到特殊字体大小可按具体需求定义</p>
+          <p>默认字体类名如下：</p>
+          <p>font-family：Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif</p>
+        </div>
+      </div>
+      <div class="component-item">
+        <div class="item-left">
+          <h3>图标</h3>
+          <div class="com-icon com-box">
+            <div class="com-label">
+              <label>后退：</label>
+              <i class="el-icon-arrow-left"></i>
+              <label>前进：</label>
+              <i class="el-icon-arrow-right"></i>
+              <label>向下：</label>
+              <i class="el-icon-arrow-down"></i>
+              <label>向上：</label>
+              <i class="el-icon-arrow-up"></i>
+              <label>搜索：</label>
+              <i class="el-icon-search"></i>
+              <label>加载：</label>
+              <i class="el-icon-loading"></i>
+              
+            </div>
+            <div class="com-label">
+              <label>新增：</label>
+              <i class="el-icon-plus"></i>
+              <label>删除：</label>
+              <i class="el-icon-delete"></i>
+              <label>上传：</label>
+              <i class="el-icon-upload"></i>
+              <label>用户：</label>
+              <i class="el-icon-user"></i>
+              <label>密码：</label>
+              <i class="el-icon-view"></i>
+              <label>日期：</label>
+              <i class="el-icon-date"></i>
+            </div>
+          </div>
+        </div>
+        <div class="item-right">
+          <p>项目引用 Font Awesome 图标库，如果项目有特殊要求可后期加入其他图标</p>
+          <p>图标已封装成组件</p>
+          <p>实用例子：< icon icon-class="fa-lock" /></p>
+        </div>
+      </div>
+      <div class="component-item">
+        <div class="item-left">
+          <h3>按钮</h3>
+          <div class="com-box com-button">
+            <div class="com-label">
+              <label>确认按钮：</label>
+              <el-button type="primary" size="medium">确认</el-button>
+              <label>取消按钮：</label>
+              <el-button size="medium">取消</el-button>
+            </div>
+            <div class="com-label">
+              <label>新建文件：</label>
+              <el-button type="primary" size="medium"><i class="el-icon-plus el-icon--left"></i>新建文件</el-button>
+              <label>上传按钮：</label>
+              <el-button type="success" size="medium" plain><i class="el-icon-upload el-icon--left"></i>上传</el-button>
+              <label>删除按钮：</label>
+              <el-button type="danger" size="medium" plain><i class="el-icon-delete el-icon--left"></i>删除</el-button>
+            </div>
+            <div class="com-label">
+              <label>文字按钮：</label>
+              <el-button type="text">文字按钮</el-button>
+            </div>
+          </div>
+          
+        </div>
+        <div class="item-right">
+          <p>内边距 padding: 10px 20px;</p>
+          <p>字体大小 font-size: 14px;</p>
+          <p>圆角 border-radius: 4px;</p>
+        </div>
+      </div>
+      <div class="component-item">
+        <div class="item-left">
+          <h3>单选框</h3>
+          <div class="com-box">
+            <div class="com-label">
+              <label>选中状态：</label>
+              <el-radio v-model="radio" label="1">选项一</el-radio>
+              <label>未选中状态：</label>
+              <el-radio v-model="radio" label="2">选项二</el-radio>
+              <label>禁用状态：</label>
+              <el-radio v-model="radio" label="3" disabled >选项三</el-radio>
+            </div>
+          </div>
+        </div>
+        <div class="item-right">
+          <p>选项默认间距：30px</p>
+          <p>选项与按钮间距：10px</p>
+        </div>
+      </div>
+      <div class="component-item">
+        <div class="item-left">
+          <h3>多选框</h3>
+          <div class="com-box">
+            <div class="com-label">
+              <label>选中状态：</label>
+              <el-checkbox v-model="checkList" label="选项一"></el-checkbox>
+              <label>未选中状态：</label>
+              <el-checkbox v-model="checkList" label="选项二"></el-checkbox>
+              <label>禁用状态：</label>
+              <el-checkbox v-model="checkList" label="选项三" disabled></el-checkbox>
+            </div>
+          </div>
+        </div>
+        <div class="item-right">
+          <p>选项默认间距：30px</p>
+          <p>选项与对应按钮间距：10px</p>
+        </div>
+      </div>
+      <div class="component-item">
+        <div class="item-left">
+          <h3>表单</h3>
+          <div class="com-input com-box">
+            <div class="com-label">
+              <label>输入框：</label>
+              <el-input v-model="input" placeholder="请输入内容"></el-input>
+            </div>
+            <div class="com-label">
+              <label>禁用输入框：</label>
+              <el-input placeholder="请输入内容" v-model="input" :disabled="true"></el-input>
+            </div>
+            <div class="com-label">
+              <label>搜索框：</label>
+              <el-input placeholder="请选择日期" v-model="input"><i slot="suffix" class="el-input__icon el-icon-search"></i></el-input>
+            </div>
+          </div>
+          <div class="com-input com-box">
+            <div class="com-label">
+              <label>下拉框：</label>
+              <el-select v-model="select" placeholder="请选择">
+                <el-option label="选项一" value="1"></el-option>
+                <el-option label="选项二" value="2"></el-option>
+                <el-option label="选项三" value="3"></el-option>
+              </el-select>
+            </div>
+            <div class="com-label">
+              <label>可搜索下拉框：</label>
+               <el-select v-model="select2" filterable placeholder="请选择">
+                <el-option
+                  v-for="item in options2"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </div>
+            <div class="com-label">
+              <label>日期选择器：</label>
+              <el-date-picker v-model="date" type="date" placeholder="选择日期"></el-date-picker>
+            </div>
+            <!-- <div class="com-label">
+              <label>时间选择器：</label>
+              <el-time-picker v-model="time" placeholder="任意时间点"></el-time-picker>
+            </div> -->
+          </div>
+          <div class="com-input com-box">
+            <div class="com-label">
+              <label>日期和时间范围选择器：</label>
+              <el-date-picker v-model="datetime" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+            </div>
+          </div>
+        </div>
+        <div class="item-right">
+          <p>表单长度 width 可配置，默认100%</p>
+          <p>行高 line-height: 38px; 内间距 padding: 0 15px;</p>
+          <p>选中边框颜色为默认主题色：$primaryColor(#409EFF)</p>
+          <p>禁用输入框背景色值为 #F5F7FA</p>
+
+        </div>
+      </div>
+      <div class="component-item">
+        <div class="item-left">
+          <h3>分页器 - Pagination</h3>
+          <div class="com-box com-upload">
+            <div class="com-label">
+              <el-pagination
+                background
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="4"
+                :page-sizes="[10, 20, 30, 50]"
+                :page-size="100"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="100">
+              </el-pagination>
+            </div>
+          </div>
+        </div>
+        <div class="item-right">
+          <p>已封装成组件，按配置传入相应字段即可</p>
+          <p>配置字段：total - 总条数；page - 当前页码；limit - 每页条数；pageSizes - 每页显示条目个数</p>
+        </div>
+      </div>
+      <div class="component-item">
+        <div class="item-left">
+          <h3>上传组件 - Upload</h3>
+          <div class="com-box com-upload">
+            <div class="com-label">
+              <label>拖拽上传：</label>
+              <el-upload
+                class="upload-demo"
+                drag
+                action="https://jsonplaceholder.typicode.com/posts/"
+                multiple>
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+              </el-upload>
+            </div>
+          </div>
+        </div>
+        <div class="item-right">
+          <p>默认宽度 width: 360px; 高度 height: 180px</p>
+          <p>已封装成组件，按配置传入相应字段即可</p>
+          <p>配置字段：accept - 上传文件格式，例：['jpg','png']</p>
+          <p class="pl-80">multiple - 多文件上传</p>
+        </div>
+      </div>
+      <div class="component-item">
+        <div class="item-left">
+          <h3>弹窗组件 - FormDialog</h3>
+          <div class="com-box com-dialog">
+            <div class="com-label">
+              <label>新建/编辑弹窗：</label>
+              <el-button type="text" @click="dialogVisible = true">打开弹窗</el-button>
+            </div>
+            <div>
+              <img width="400" :src="imgUrl" alt="">
+            </div>
+          </div>
+        </div>
+        <div class="item-right">
+          <p>带 form 数据的弹窗已封装为组件 FormDialog，配置字段根据后台返回 JSON 数据动态绑定</p>
+          <p>根据 JSON 数据中 Layout 字段的值判断类型，例如：'Text' 对应 输入框，'Select' 对应下拉选择器等；具体配置字段可查看组件源码注释</p>
+        </div>
+      </div>
+      <div class="component-item">
+        <div class="item-left">
+          <h3>表格组件 - ListTable</h3>
+          <div class="com-box com-table">
+            <div class="com-label">
+              <label>编辑模式：</label>
+              <el-radio v-model="config.inlineEdit" label="0">弹窗编辑</el-radio>
+              <el-radio v-model="config.inlineEdit" label="1">行内编辑</el-radio>
+            </div>
+            <div class="com-label">
+              <el-table 
+                :data="tableData" 
+                border 
+                fit 
+                show-summary 
+                :summary-method="(param) => getSummaries(param, config.summaryField)" 
+                header-cell-class-name="pre-line">
+                <el-table-column
+                  v-for="column in config.columns"
+                  :key="column.field"
+                  :label="column.label"
+                  :width="column.width"
+                  :align="column.align || 'center'"
+                  :prop="column.field"
+                  :sortable="column.sortable"
+                >
+                  <template slot-scope="scope">
+                    <template v-if="config.inlineEdit && scope.row.edit">
+                      <!-- input -->
+                      <el-input v-if="column.layout === 'Text'" v-model="scope.row[column.field]" size="small" :placeholder="column.placeholder"></el-input>
+
+                      <!-- select  -->
+                      <el-select
+                        v-if="column.layout === 'Select'"
+                        v-model="scope.row[column.field]"
+                        :placeholder="column.placeholder"
+                        style="width: 100%;"
+                        size="small"
+                      >
+                        <el-option
+                          v-for="it in column.options"
+                          :key="it.value"
+                          :label="it.label"
+                          :value="it.value"
+                        ></el-option>
+                      </el-select>
+
+                      <!-- date-picker  -->
+                      <el-date-picker
+                        v-if="column.layout === 'DateTime'"
+                        v-model="scope.row[column.field]"
+                        :value-format="column.dateFormat || 'yyyy-MM-dd'"
+                        type="date"
+                        :placeholder="column.placeholder"
+                        style="width: 100%;"
+                        size="small"
+                      ></el-date-picker>
+
+                      <!-- slider  -->
+                      <el-slider v-if="column.layout === 'Slider'" v-model="scope.row[column.field]"></el-slider>
+
+                      <!-- switch -->
+                      <el-switch v-if="column.layout === 'Switch'" v-model="scope.row[column.field]"></el-switch>
+
+                      <!-- radio -->
+                      <el-radio-group v-if="column.layout === 'Radio'" v-model="scope.row[column.field]" size="mini">
+                        <el-radio-button v-for="it in column.options" :key="it" :label="it"></el-radio-button>
+                      </el-radio-group>
+
+                      <!-- checkbox -->
+                      <el-checkbox-group v-if="column.layout === 'Checkbox'" v-model="scope.row[column.field]" size="mini">
+                        <el-checkbox-button v-for="it in column.options" :key="it" :label="it" :name="it"></el-checkbox-button>
+                      </el-checkbox-group>
+
+                      <!-- textarea -->
+                      <el-input v-if="column.layout === 'Textarea'" v-model="scope.row[column.field]" type="textarea" :placeholder="column.placeholder"></el-input>
+
+                    </template>
+                    <template v-else>
+                      <span v-if="column.filter">
+                        {{ filterField(column.filterName, scope.row[column.field]) }}
+                      </span>
+                      <span v-else>{{ scope.row[column.field] }}</span>
+                    </template>
+
+                  </template>
+                </el-table-column>
+                <el-table-column v-if="config.actions && config.actions.length > 0" label="操作" align="center" width="180">
+                  <template slot-scope="scope">
+                    <el-button v-if="config.actions.indexOf('preview') > -1" type="text" size="small" @click="handleClick(scope.row, scope.$index)">查看</el-button>
+                    <el-button v-if="config.actions.indexOf('edit') > -1 && !scope.row.edit" type="text" size="small" @click="edit(scope.row)">编辑</el-button>
+                    <el-button v-if="config.actions.indexOf('edit') > -1 && scope.row.edit" type="text" style="color: #67c23a" size="small" @click="submitRow(scope.row)">提交</el-button>
+                    <el-button v-if="config.actions.indexOf('edit') > -1 && scope.row.edit" type="text" style="color: #e6a23c" size="small" @click="cancelSubmit(scope.row)">取消</el-button>
+                    <el-button v-if="config.actions.indexOf('delete') > -1" type="text" size="small" style="color: #f56c6c" @click="del(scope.row.id)">删除</el-button>
+                  </template>
+                </el-table-column>
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+        </div>
+        <div class="item-right">
+          <p>表格已封装为组件 ListTable，表头字段根据后台返回 JSON 数据动态绑定</p>
+          <p>编辑模式分为 '弹窗编辑' 和 '行内编辑'，可根据不同场景需求更改 inlineEdit 字段配置， 默认为 '弹窗编辑'</p>
+          <p>配置字段：actions - 操作按钮，例如：['edit', 'delete']</p>
+          <p class="pl-80">summary - 是否需要合计数据</p>
+          <p class="pl-80">summaryField - 合计字段</p>
+          <p class="pl-80">inlineEdit - 是否支持在表格行内直接编辑</p>
+          <p class="pl-80">columns - 每列参数</p>
+          <p class="pl-80">sortable - 是否需要排序</p>
+          <p class="pl-80">layout - 表单类型</p>
+          <p class="pl-80">dateFormat - 日期格式</p>
+          <p class="pl-80">filter - 字段值是否需要方法处理</p>
+          
+          <p></p>
+        </div>
+      </div>
+      <div class="component-item">
+        <div class="item-left">
+          <h3>富文本编辑器 - Tinymce</h3>
+          <div class="com-box com-tinymce">
+            <div class="com-label">
+              
+              <textarea id="mytextarea" v-model="tinymceContent"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="item-right">
+          <p>富文本编辑器使用 Tinymce，具体文档 <a href="http://tinymce.ax-z.cn/">点击查看</a></p>
+          <p>配置字段：id - 组件ID</p>
+          <p class="pl-80">value - 组件内容</p>
+          <p class="pl-80">width - 组件宽度</p>
+          <p class="pl-80">height - 组件高度</p>
+          <p class="pl-80">menubar - 配置菜单</p>
+          <p class="pl-80">toolbar - 工具菜单</p>
+        </div>
+      </div>
+    </div>
+    
+    <el-dialog
+      title="编辑"
+      :visible.sync="dialogVisible"
+      width="500px">
+      <el-form ref="form" :model="form" label-width="110px">
+        <el-form-item label="工作面名称">
+          <el-input v-model="form.title" placeholder="请填写工作面名称"></el-input>
+        </el-form-item>
+        <el-form-item label="工作单位">
+          <el-select v-model="form.team" placeholder="请选择项目状态" style="width: 100%">
+            <el-option label="综采一队" :value=1></el-option>
+            <el-option label="综采二队" :value=2></el-option>
+            <el-option label="综采三队" :value=3></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="工作面长度(m)">
+          <el-input v-model="form.width" placeholder="请填写工作面长度"></el-input>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-radio-group v-model="form.status">
+            <el-radio label="准备">准备</el-radio>
+            <el-radio label="生产">生产</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    
+  </div>
+</body>
+  <!-- import Vue before Element -->
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <!-- import JavaScript -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <!-- import Tinymce-->
+  <script src="https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: function() {
+        return { 
+          radio: '1',
+          checkList: ['选项一'],
+          input: '',
+          select: '',
+          select2: '',
+          options2: [{value: '项目一',label: '项目一'},{value: '项目二',label: '项目二'},{value: '项目三',label: '项目三'},],
+          date: '',
+          time: '',
+          datetime: '',
+          dialogVisible: false,
+          form: {
+            title: '',
+            team: '',
+            status: '',
+            width: ''
+          },
+          config: {
+            actions: ['preview', 'edit', 'delete'],
+            summary: true,
+            summaryField: ['width'],
+            inlineEdit: '0',
+            columns: [
+              { label: '工作面名称', field: 'title', width: '120', align: 'left', layout: 'Text', placeholder: '请填写工作面名称' },
+              { label: '工作单位', field: 'team', width: '130', layout: 'Select',filter: true, filterName: 'statusFilter', 
+                options: [{value: 1,label: '综采一队'},{value: 2,label: '综采二队'},{value: 3,label: '综采三队'}],
+                placeholder: '请填写工作单位' },
+              { label: '工作面长度(m)', field: 'width', width: '130', layout: 'Text', placeholder: '请填写工作单位' },
+              { label: '状态', field: 'status', width: '140',  layout: 'Radio', options: ['准备','生产'],placeholder: '请选择状态' }
+            ]
+          },
+          tableData: [
+            {
+              title: '1226工作面',
+              team: 1,
+              width: '2654',
+              status: '生产',
+              edit: false
+            },{
+              title: '2648工作面',
+              team: 2,
+              width: '1206',
+              status: '生产',
+              edit: false
+            },{
+              title: '1046工作面',
+              team: 3,
+              width: '1326',
+              status: '准备',
+              edit: false
+            }
+          ],
+          tinymceContent: '<h1><span style="color: rgb(255, 153, 0);" data-mce-style="color: #ff9900;">富文本编辑器</span></h1>',
+          imgUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAyMAAAJ9CAYAAAAmIK32AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAFseSURBVHhe7d3ttyRXfdh7/RnzHr1K5ATHcq6v5XsThWAwMAYG2xHYsvGAhQQjS+hhRtJImDcmi/gxTkKIr23IcrJsr9zkQvBdSbBvYvNkMBIgI0TAEihIGhlLlkAeSSDbU1e/1tlndtfs6q7u6t7VXfp81/quc7q6qrq7zpnp/T276pyL3vnOdzYkSZIk98PrrruuuHwfFSMkSZLkHilGSJIkSY6iGCFJkiQ5imKEJEmS5CiKEZIkSZKjKEZIkiRJjqIYIUmSJDmKYoQkSZLkKIoRkiRJkqMoRkiSJEmOohghSZIkOYpihCRJkuQoihGSJEmSoyhGSJIkSY6iGCFJkiQ5imKEJEmS5CiKEZIkSZKjKEZIkiRJjqIYIUmSJDmKYoQkSZLkKI4RI5dffnlz6aWXNqdPn57dPnnyZHPxxRfPlqd1Tpw40Rw5cqQ5fvz44bJlihGSJElyjxQjJEmSJEdx2zESwRHhcdFFF23ERXEiRkiSJMk90swISZIkyVEUIyRJkiRHcYwY2YYRNGKEJEmS3CNrxEia5ShdA7KK+WxKWzFCkiRJ7pk1Y2SVU67atk/tKilGSJIkyT1yF2KkdM1IWzFCkiRJTsxduGakT4z0UYyQJEmSe2TNGEnRUboeZJF9I0WMkCRJknvkGDFy7Nix4vJ2dMQpWXFqlhjZEX/mZ36GJEmSO2pp/LbrihEutPSNTpIkyd22NK7bRcUIi6Zv5He84x0z77jjjpm33347SZIkd8w0Vktjt32JEjHCC8xDJL654wtx2223Nbfeemtzyy23kCRJcseMcVqM12LcFuO3fQkSMcILzEPkl3/5l5uvfvWrDQAAAHafGLfF+C0PktJ4b1fctRhJn+e/TavvH0sUIxswD5EobCECAACwX8T4LcZx+xAkNWOky66ZkVUVIxswxUhMS8UXBgAAAPtHjONiPCdG6ilGNmB8s8bFT3HO4U033XTw7QwAAIB9IsZxMZ6LcZ0YqaMYGWh8o6YYiam9G2644eDbGQAAAPtEjONiPJdiZFeDRIzw0PSNGucXxm9lePvb337w7QwAAIB9IsZxMZ6LcZ0YqaMYGagYAQAAmAZipL5iZKBiBAAAYBqIkfqKkYGKEQAAgGkgRuorRgYqRgAAAKaBGKmvGBmoGAEAAJgGYmSx+V9aX/ePHbb/WKIYGagYAQAAmAZiZN7jx4/PwiP32LFjs/vSH4iMqGivE0ZwxDrtfYqRDStGAAAApoEYmTdi5MiRI82JEyeK94cRFZdeeuksTNKyCBYxUkkxAgAAMA3EyLxiZA8UIwAAANNAjMy7yRiJ9Uqnc4mRgYoRAACAaSBG5i1dMxKmQIkAiRBJsxzJRTMjsV1sb2ZkQ4oRAACAaSBG5l02M5LCItbLly/aLkIlgkaMbEgxAgAAMA3EyLyLoqJ97UdumjFJMykpVvLl8fHaa68VI0MVIwAAANNAjMzbFSMpKsL8WpFlppmUFCkzSyuyv2IEAABgGoiReSNG5sLhwJgRSaFSuj/ZjpU4RetFL3rRbLuYUZmdspU/IFdXjAAAAEwDMTLvotO0Ft1fOoUrLbviiivm7hMjAxUjAAAA00CMzLssRrquGyn9Nq20LK4TESMbVIwAAABMAzEy77IYCdNvx4p143Z8zG+H6RqTWLcdMGJkoGIEAABgGoiReVOMXH311bOYKF0PkkIj1jt69OjsvoiO9r6uvPLKWYiIkQ0rRgAAAKaBGDlvxEIKj2WzIykwukIkV4xsWDECAAAwDcTIvH1O08pD5JJLLpl9bP8WrdL6YmRDihEAAIBpIEbmXRQjeYSksGgvL82SiJENK0YAAACmgRiZtytG0ilci07JSteStNcTIxtWjAAAAEwDMbJ9xciG3acY+eu//uvmr/7qrw5u9ePb3/52c+7cuYNbAAAAq/PYY3/RPPjgwwe3FhPrxfpjIEbqK0YGOnaMRCj8+q//RnPzyVPNmTNnDpZeyGc/+7nm5S9/RfNv/s2vzqKkD2fPPtVc//YbmhtvvLl56qmnDpY2zd/8zd803/jGN5snnnhiqbFe38cDAADT5PP3fLH5V+/99eazn/v8wZIycX+sF+uPgRiprxgZ6Ngx8ud//ufNG370yubtN9zY/OVf/uXB0guJKLjmrW9rXvr9L2/u/WK/f+APPfRw89pjP9T82q/9+sGS54nIuPLKn2he/J3ftdQfeMWrmq985SsHWwIAgBcqKTS6gmTZ/TUQI/UVIwMdO0b+63/9b82l3/2/NR/5yEdnt+O0qp//+V9ofuzKH7/Al/zj758FwitfdfSC+2Kb2DYn9nnZ9/0fzec+d/fBkudJMfLuf/Zzc7MgbX/rt35bjAAAgEO6gmMXQiQQI/UVIwMdM0bSbEc+K/LMM880t952uvmJN/5k855//d5exrqxTWz7mc9+9nD5T131luYfveSls1BJy+KUsC9/+cuzGPnn//xXZo/Zxf/zgQ+KEQAAMEceHnHq966ESCBG6itGBjpmjMTMxff875cdzooEKUaWhUJOrJti5MMf/r3ZTMkP//A/mc24tGdR3vrWE83dd989i5FTt9zafPKTn+r0F3/pl8UIAAC4gBQg/+kDv7szIRKIkfqKkYGOFSNpViRdXP7ggw8+94359uYPP/KRQTGSiFOz4rSu9ilaQZyCFTES9+eh0jZCRowAAIA2MSPyP/7wY80v/4t/M/sYt3cBMVJfMTLQsWIkToH6P//B5c2f/MmfzH6j1m/8xvtmtz/1qU/NwmJZKOTGunmMxP7+r1/79eaqq65u7vrMZ2ZBceedd83uCyKETp26tXnf+//twZIyMcsSMylf+9rXDpYAAACYGRmqGOGhY8TIww8/3Pzwj1wxG+h/7GMfn13E/urXvLb5Zz/387NrRyIs1r1mJIjYiBCJILn//vvnYuTs2bPNpz99Z/G0rEU+/vjjs+0BAMALmxQi8dE1I+spRnjoGDHy5JNPNldf89bZb8aKCIkZkXQ61DrXjPzpn97XfOELXzj8eyD5KVqxzzxG0u381/f2MZ9ZAQAAL0y6wmNXgkSM1FeMDHSMGMlJcRCnacXpVXmMxB8tbP+63UU+++yzc6doxQxJO0aC9Bj5bEqJ0rUoAADghcmy4NiFIBEj9RUjAx0zRmImI07NeuNPHp/98cMgj5GwNEvRZQRHnE714z/xk7MgiTARIwAAYCj+AvtmFSM8dMwY+fgnPjE7RSsuFE/EbMj1b7/hMEbib4XEr/6NC97jlK74GLdjefrVvL/57/79YYwsOw0rfovWI488MouMeOz46++li+LD9oXxAADghcljj/1F8+CDDx/cWkysF+uPgRiprxgZ6Fgx8uijjzZvevNPNe/4mXceDvYjRGKGJILhP/7H/zQ3MxGREYEQH+N2LI/7g4iQCI342L5APeIl/vBhBEvcjj+K+M1vfnO2fQqdtG7biB0xAgAA9gUxUl8xMtAxYiR+80T8QcEIiH/wD//R7I8Txucvf/krmv/xP/6gee2xH5pFxDox0ibNlOT3pe2XhUb++AAAALuOGKmvGBnoGDESRGzcfsc7Zr+a9wMf/OBsJuLeL36xueeeL8xmMiIeIgZuvOnm5pE/+7PZX01//Rt+bPYxbsfyd/+zn5tduP4Hf/iHa8XI637oh5tf+Rf/8oJfFZxs/8pgAACAXUaM1FeMDHSsGOni937v92fxEBERMRKR0dc8OGL2JX6bVsRLzLj803/67uZf/st/1Zy49qcP/7Cia0YAAMCUECP1FSMD3aUYiUH/L/ziL83+Bkn8LZJ1Zkbit2il077avua1r5vFyH333T+LjGWh4TQtAACwT4iR+oqRgY4RI9/61reauz7zmdnpWT/3c78wOx0qZilSNMSpU/FrefMY6HvNyH/78Idn+/zt3/md5o//+NPNH/3RJ2czI6XTtPLQaP9NkwiWuIA9LnKP61hiPwAAALuMGKmvGBnoGDHy9a9/vfknV7x+FhBxKtSNN948i4f4myMxq/Hxj398tt46MdIm1k/XjHz729+eXTgfp2bl8dPHX/u1Xz/YIwAAwG4iRuorRgY6RozEHzuMSIhTsRJxfcc1b33bzPg8WCVGImLi1/a2yWMk+P/++3+fXZwecZH/Wt8vfOELczMj8Rj54wMAAOw6YuRCT5482Vx88cXN5ZdfXrx/VU+cONEcOXKkOX78+Oy2GBnoGDFS4t/9+38/C4r8DyDmMfC1r32tOXXq1tnHZ599tvngB/9zc8c7fmZ2UXr8XZJXHX1188AD/+tgy/O0Y2QVxAgAANgnxMiFdsVI3L7ooosWGtvF9vl2YmTD7kqMxB9BfN/7/+3sVKpE3P75n/+FuWU5/+W//NfZbMkbf/J486EP/e5sxqWNGAEAAC8UxMiFLoqRSy+9tDl9+vTc8uSxY8fESA13JUYAAAAwDDFyoWJkxxUjAAAA00CMnHfRaVgREqvGSOf+2htyNcUIAADANBAjF5pmMkozI8W4yDQzUkExAgAAMA3EyIXGDEeERSlGnKa1A4oRAACAaSBG5o3QiOCIGImP11577eF9YmRHFCMAAADTQIzMm8IhP/UqRcTQGDl69Gjzohe9SIwMVYwAAABMAzEybwRFBEPEQ8RHOmUrXcCeR0rJdozkcZNCRowMVIwAAABMAzFy3oiIiIkrrrhi9jHiI5ZHkMTn+cxI/nl7P2Esj/vDq6++2mlam1SMAAAATAMxct50mlVcJ5LHSDIPkPZ1IMkULvky14xsWDECAAAwDcTI86aZjIiJNEOyKEbat/PTseLakNKpWmJkQ4oRAACAaSBGznvllVfOIqJvjOQBEkbI5OsnxciGFSMAAADTQIxcaN8YCSNAIkTap2vl5jES+xYjAxUjAAAA00CMXGifGIl1LrnkklloxPK+MyOhGBmoGAEAAJgGYuRCSzESARIhkk7JCmOdWDe/rz1zEs4C5Ln70m/pEiMDFSMAAADTQIxcaClG8utDUoTk24RphiSMz9MpXGFESlyTIkY2oBgBAACYBmLkQksxEsbtRdeGhHF/aXYkV4wMVIwAAABMAzFSXzEyUDECAAAwDcRIfcXIQMUIAADANBAj9RUjAxUjAAAA00CM1FeMDFSMAAAATAMxUl8xMlAxAgAAMA3ESH3FyEDFCAAAwDQQI/UVIwMVIwAAANNAjJSNvynS9ccNhypGBipGAAAApoEYudD4g4XxhwuX/fHCdRUjAxUjAAAA00CMXGjXX2BPHjt2rLnooos6XfZX2sXIQMUIAADANBAjF3rixInmyJEjnVERMVI6hWvZdkkxMlAxAgAAMA3EyPOm2ZDSTEcyzZSIkZEVIwAAANNAjFxoREd+vUi6hmRIjMSyCJpZ8LTv5GqKEQAAgGkgRuYtXS+SlkWExG0xMrJiBAAAYBqIkXlTNORB0Y4Mp2mNrBgBAACYBmJk3lJotJeJkZEVIwAAANNAjJy3fW1Iviy/hkSMjKwYAQAAmAZi5LwpPOI0rQiOWJYCI90OxcjIihEAAIBpIEYuNEVFhMlll1229LSt9nZiZMuKEQAAgGkgRsqWZkmSYmRkxQgAAMA0ECNlIygiRJJ5YIiRkRUjAAAA00CMXGh+mlbMkER8RJD4o4c7ohgBAACYBmJk3giMCIb8t2eFKTQiRFKcdClGtqwYAQAAmAZi5LztGZHSOqHTtEZWjAAAAEwDMfK8aUYkQqN0/yYVIwMVIwAAANNAjNRXjAxUjAAAAEwDMVJfMTJQMQIAADANxEh9xchAxQgAAMA0ECP1FSMDFSMAAADTQIzUV4wMVIwAAABMAzFSXzEyUDECAAAwDcRIfcXIQMUIAADANBAj9RUjAxUjAAAA00CMlI2/wB5/ib3rr7FffvnlS/9Se5diZKBiBAAAYBqIkbInTpxojhw50vkX2fvESGx70UUXXWhpZfZXjAAAAEwDMVI2QuLiiy9uTp48Wbx/1ZmRiJtLLrlktj8xMlAxAgAAMA3EyIWmU7QiOMLi7MYCY0Yl4iPfpxjZoGIEAABgGoiRCz1+/HgxKMKIiYiKF73oRTNTYLTXaytGNqgYwa7z5Nmnm4ceeay5/4FHmvu+eoYkyZ033rPivSvew2oiRuZNsyJdMRKhEvdfdtlls7gIY1l7vTDCI071umD2pLQy+ytGsMs89viTzYNnHm3OPvVMc+7cuYOlAADsNvGeFe9d8R4W72W1ECPzRlh0nWoVxmlbcT1Jumbk6NGjs8/b64UpRmKfZkY2qBjBrhI/TYr/xEUIAGBfifeweC+rNUMiRs6bz2R0XfcRp2bFxxQjV199deepWnmMhOmCeDEyUDGCXSWmt+OnSgAA7DPxXhbvaTUQI+fNZztKMRIzInF/nMqV1o24iI+lXwHcjpG0rRgZqBjBrhLn25oVAQDsO/FeFu9pNRAjz5sCIwIiwqIdI/F5LIuoiNspRmK7fNYjrR/mMRLrh7FcjAxUjGBXiQsAAQCYArXe08TIhZZiJI+P9u2wNDuSYiTNtKSQESMDFSPYVcQIAGAqiJF5x4yRiIhlcVJaJ8VIXIOSrytGBipGsKuIEQDAVBAj844VIyko2rMe7RhJy/LTtfLTtNI6oRgZqBjBriJGAABTQYzMO0aMxG/KiuBI0RHLD/9WSMsIkXS6Vlo/nxmZs/Sg7K8Ywa4iRgAAU0GMzDtGjMQfNsxnOnJLMyNhCpC438zIlhQj2FXECABgKoiRece+gL1tV4zkipEtKUawq4gRAMBUECPz7nOMOE1rw4oR7CpiBAAwFcTIvGZGeKgYwa4iRgAAU0GMzFszRratGBmoGMGuIkYAAFNBjMwrRnioGMGuIkYAAFNBjMwrRnioGNk8jz/+RHPjTbc0H/jghw6WNLPPY1ncNxbvee+vbvQ5PP30M83Pvuvds/1ug7Fi5L6vPth87I8+2zz+xDcPlpS587P3zuzi8/fe13zy03/SnH3q6YMlu0+85njt8dwT8Xmf47FN4jhv8jnE1yS+Nou+fgCwScTIvGKEh4qR8/HwxuNXrWxpcP/pO+9qrnnbdc39939ldrvvoH3I80h2xUY8p7g/Pq5DvJZ4TbGPeC3xmtqvc9Ns4z/uCI18oF2iRoykQf8ffOzOtUz7HbKf0muM1/6RT9zVPPTw12e3+w7ah76esOuYx3OK++PjOsRridcU+0jHrf06AWDbiJF5xQgPFSOLWWcQH9GRBuxBDNZvuOnUoEH7kFmI9Br6mJ53ery0vB056f78dW6abfzHffc9X54NQlOQxCA7HxAvMx8Q5zGSBsx9jEH31x58ZPZxnQH2osjJSc9plceI15PvOwbr8TyHDNr7Bk2JVY5ret7p8dLyduSk+/PXCQDbRozMK0Z4qBhZzKoxkmY38vUjINKgfpGLQiPNTKwSRUHf7eI0sq5Zjti2HSOxrPQacoeGyrb+447BfAxSuwbpsbzrp/Q5eYyU6DMzEo+VPk+BtIxtxUj+nBLx+tKgfpGLjkOamej7PBJ9t4vj0TXLEdu2v5axrPQacoUKgE0jRuYVIzxUjCwmDbr7RkB74J7PipRCpS8RC6sO7vs+90UhErRfU5oV6Yqn9DrXmcXJ2eZ/3J+5+382X7rvgcMBeGlA2rY9QB0SIznrDtaXkQbdfffbHrjH84rb8bEUKn3pexxy+j73RSEStF9TPId4Ll1ft/Q6F31dAWAdxMi8YoSHipHF9B3QB2mQngbu7UF7nxhJ66TZhVXMgyECI5bFY6XnUXrceG75dok0o9J+jGQeL3lwBcvipi+1/uNu0x7A5qTBah4pYQxe0wB6kaVBbp/tcvsO7NN+4+My0iA9ve72oD297kX76jo2fcyPdwRGLIvHSs+j9Ljx3PLtEinu2o+RzOMlD65gWdwAwLqIkXnFCA8VI4tZJUbSumlwH4PyfKCfQmPRvtrrpJCIfeXE7Vge9wexfnqs/PMg1nnf+39z9tzSftLj9Jm9KL2Oj37047PPgzxG2gE2hE3/xx2D1zQgXTSgj4FvaZDbJvaXx8Wy7drrJ2IA3OfxViWeT7zW0kC+TVo3PY/2c4qPcXvRvtrrpJCIfeXE7fz4x/rpsfLPg1gnZrHiuaX9pMcpHcs2pdcRM2KJPEbS8+2zXwBYFTEyrxjhoWJkMSkwFgVEkAbhp29/5+HAPQbk+XYpAGJ/bdM2aZ203Tox0kVskx5vlZmLrtmTRB4jm2Rb/3GnwXAMSlOc9DUfqLbjIg3oF1ka6MayRXG0Lun5pDjoIg3CP/Gpuw8H7vGc8u1SALRfT5i2Seuk7dJ+V4mRLmKb9HirzFzE61i07zxGAGCbiJF5xQgPFSOL6RsjKQ5ixqBr4N4OjRJdMZIiInfVGImoiO2WvZacCIz8dK3284p9phi55wv3Hi7bBNuOkaGD/xjo5nGxbFDdXj9IA/Z8cL/MvoPxeD6xfh4VJfI463r+7dAo0V5n0WtbNUbiuMV2y15LThyj/HSt9vOKfaYYeeBrZw6XAcA2ECPzihEeKkYWE4PvPgP4OA0qBuWLomBIjKwzM7IoZLrM9xmk2ZTY94d/7/dnn8djpUhJn6eZkVh/E9eLBLViJP+pe5elAGjHRQx2S9vmDh3sxmNsOkbiNKjYX6y3jRiJ45vTPv6lx03bto/fIvN9BunrGvu+90tfmX0ej5UiJX0e98fHWL/vsQWAVREj84oRHipGFhOD7TQA70MpChK1YiTNgEQURED0PYWqvc/0XPJTz+JxYv9hWjePkbTNJmZHasZIeyCbkw9Yc0ox0h5U57TXX4d4jE3HSGLR868VI3F84jnHa4yAiOV9Xmt7n+m55KeexeOkr0FaN//apm2Gfo0AoIQYmVeM8FAxspgYfO9bjOTkobCM9j7jduwzgibfd3qO6Tm1HyOWb2J2ZF9mRtL++lyDkga68bF0/yJjMB2PlQbXy4j103Z9yKOgTRqoL9pXe511YiQnD4VltPeZjlMKmrTv9BzTc2o/Riw3OwJgG4iRecUIDxUji4lB/qZjJPZXMrZN66THSzFSWn+bMZI/j/a+43YeG+3HSNumWFmXXZ4ZyWMiDWwXDeaDFC9DiMda9Bg58Xw2HSPpNbeNbdM66fFSjJTW32aM5M+jve+4ncdG+zHStulrCgCbQozMK0Z4qBhZTAy8Y+AfH/vQHrjn5AP8LtrrpBhpD+zzcAi6HnfdGHn4zJkmroOJz/N9p+eTn4ZVeoy4v+s49GXbMRIDz7vv+fLM0oA5Nw1gw/g8j4o0gC1t12UasK9KPO6icMqJx1jlsdoD95z0Ghftq71OipH2wD4Ph6DrcduhsIh8n3/2538xuw4mPs/3nZ5P/rUrPUbcX3o+ADAEMTKvGOGhYmQxMRB/IcZITr7v0v76LluVbcZIHgXtwXGbVQbFQewvH8xuanAb28d+8sH0IuK1vRBjJCffd2l/fZcBwFDEyLxihIe+0GMkDf7z059WNY+ATcVI6XGWWXrciIE4paq0fsllMVJiE+FRYlv/ccdgPj9VZ1MxEvuJwX/sKwa/+eA6to3HTAPjZcQ6sW6KpmS+fdc6q5jvb1MxUnqcZZYeNx2z0voll8VIib5fWwAYihiZV4zw0Bd6jGyaTcXIonVKdD3uKqHQZ2YkkZ5niphN/PasNtv4jzsGpfEblvLBZylGUlgsGugm0qC5z4xFWnfRoH4sNhUjq762rsddJRT6zIwk0vNMX9u+M00AMAQxMq8Y4aFiBLtKrf+4AQDYNmJkXjHCQ8UIdhUxAgCYCmJkXjHCQ8UIdhUxAgCYCmJkXjHCQ8UIdhUxAgCYCmJkXjHCQ8UIdhUxAgCYCmJkXjHCQ8UIdhUxAgCYCmJkXjHCQ8UIdhUxAgCYCmJkXjHCQ8UIdhUxAgCYCmJk3knFyKlTpxoO8+TJk81NN93UXH/99c0111xz8O0MjIsYAQBMhVrvaTGOi/FcjOtifFca93GzmhkZqJkR7CpiBAAwFcyMzOs0LR4qRrCriBEAwFQQI/OKER4qRrCriBEAwFQQI/OKER4qRrCr3P/AI825c+cObgEAsJ/Ee1m8p9VAjNRXjAxUjGBXeeiRx5qzTz1zcAsAgP0k3sviPa0GYqS+YmSgYgS7ypNnn24ePPOo2REAwN4S72HxXhbvaTUQI/UVIwMVI9hlHnv8ydl/4vFTJVECANgX4j0r3rviPSzey2ohRuorRgYqRrDrxE+TYno7zreNCwBJktx14z0r3rtqzYgkxEh9xchAxQgAAMA0ECP1FSMDFSMAAADTQIzUV4wMVIwAAABMAzFSXzEyUDECAAAwDcRIfcXIQMUIAADANBAj9RUjAxUjAAAA00CM1FeMDFSMAAAATAMxUl8xMlAxAgAAMA3ESH3FyEDFCAAAwDQQI/UVIwMVIwAAANNAjNRXjAxUjAAAAEwDMVJfMTJQMQIAADANxEh9xchAxQgAAMA0ECP1FSMDFSMAAADTQIzUV4wMVIwAAABMAzFSXzEyUDECAAAwDcRIfcXIQMUIAADANBAj9RUjAxUjAAAA00CM1FeMDFSMAAAATAMxUl8xMlAxAgAAMA3ESH3FyEDFCAAAwDQQI/UVIwMVIwAAANNAjPT35MmTzcUXX9xcfvnlxfv7KkYGKkYAAACmgRjp77ox0t5OjAxUjAAAAEwDMXLeFA0XXXTRIC+99NLm9OnTF+xXjGxIMQIAADANxEh/zYzsiGIEAABgGoiR/oqRHVGMAAAATAMx0t9VYyTWK53GJUYGKkYAAACmgRiZ98SJE82RI0fKEdHDiJWIlnyfZkY2rBjBrvPk2aebhx55rLn/gUea+756hiTJnTfes+K9K97DaiJG+rvuaVrHjx+fhcqLXvSi5rLLLhMjQxUj2GUee/zJ5sEzjzZnn3qmOXfu3MFSAAB2m3jPiveueA+L97JaiJH+rhsjF5yuVVqJ/RUj2FXip0nxn7gIAQDsK/EeFu9ltWZIxMh5O6/xWMOYDYl9RsDEr/qNU79i/3EamBgZqBjBrhLT2/FTJQAA9pl4L4v3tBqIkX6mU60uueSSC/6OyCKPHTvWvOxlL3PNyCYVI9hV4nxbsyIAgH0n3sviPa0GYmS56aL2iImY6YggiWXt9SI88lBJ60bIiJENKkawq8QFgAAATIFa72liZLEpRCImIi5iWURHCosw4iOdihXhkWIkrde+1kSMDFSMYFcRIwCAqSBG5h0jRtKpWfk1IGE+O1KKlWScnhX3i5ENK0awq4gRAMBUECPz1o6RCIcUIhEb7dOy8lDJZ0lKipENK0awq4gRAMBUECPz1oqRPDLiNKu4XYqRMO4vzYi0FSMbVoxgVxEjAICpIEbmrREjaTYkPyWrFCOxLF2onuIl36atGNmwYgS7ihgBAEwFMTLvWBew5zESxuft07JSbHTNoIiRDStGsKuIEQDAVBAj844ZI+m0rWV/XyRFR3umRIxsWDGCXUWMAACmghiZd6wYiYBoz4QMVYwMVIxgVxEjAICpIEbmHStGtqEYGagYwa4iRgAAU0GMzCtGeKgYwa4iRgAAU0GMzCtGeKgY2V0+8MEPNTfedEvz+ONPzG7Hx7gdy/vy9NPPNL/4S7/S3H//Vw6WXMin77yrec97f/XgVpm4P38uidjv6TveecHyTTBWjNz31Qebj/3RZ5vHn/jmwZJ5zj71dPPHd93TPPTw1w+WXEis88lP/0nz+XvvO1hSZtlj7Stdr6vvcekitrvzs/ce3AKA/UGMzCtGeKgY2RwRCW88ftVatgMjIuJn3/XuuUiIaLjmbdctDIsSse+u7WJZ3Pe+9//m7DFLpOdSiqB4ThEjpVAZyjb+445B8tBASAPq9joRJ7EsPq4bIzHQ/oOP3bnUZfuN+0vbtc0fO55LaZ1FxjYluo5hflzivk986u6FUdcmjo8YAbCPiJF5xQgPFSPbJw3mw64Bf5sUCTHYT0SYLJvBKJEevx0M6TGWzbTEejfcdKoYM0GasVnnuS1iG/9x333Pl5uPfOKuw8F838F/Mg2+06A6HxjHPmNZ3LdujASxTWkgH6RgiI9xf6zXfo6lbfsM4mOfcWz6xEGsE+um49Gm9LqC/Lg8dObrs8/jOS87TkHpmAPAviBG5hUjPFSMbJ91YiQCIV8/hUNpViU3zYCkxyyts8jSc0wR1Pc5JIfOlmzrP+4Y+MYAeNWBdJsYkMdP9mO9rjAomT9u6bG6Bt0pAEoD90WxkZ5b1+tNxP1DYiQeP553PP/S6wpKkZavu8pxLNn3+QNAbcTIvGKEh4qR7bNqjKT18xmLfFakHSolSvtI5PvKKe03zXqU9rNttvkf92fu/p/Nl+57YKXBbxpol4jBdT74Lg26c1IQtU2D+/S88sF93N8VHO0YSbHQ3n9u/nyDeIwhMZKeY3wM2/sPlh2XRaRjHAoOAPuGGJlXjPBQMbJ9UhgsC4hEnJoVMwspANrXitSMkfZzSXGSnz6Wkx536KxIUOs/7jZdA+ku0gA7H5j3HXQveqy0jxQPi/ZVipFFg/bS48ay9Fh9Lb3mMEIv9n/vl75S3K5kbBf7KJHHTzzn2Hf+2ACw64iReWvHSPqr6WF83r4//hBi+svsyfyvrpc83KZ0J/srRrZPGqAvC4ggrZsCoDQzUYqGNvl+VjHfb/u5JLpiJkincuXrr8um/+OOwXqfgW9poJ5IA+G0n64B8ZAYaUdIbtfzXhYj7dulx41lQ2ZGgrSPuDanvf8gHb/8uS6j9FjpGC36OgLAIuL/oy9++avNs8/+1cGSbmKdWLf9f9oqiJF5dyVGTpw40Rw5cuSCEEmWgiSWza3XXoGrKUa2TxrULwuIIM2CxAXjMaCPwX38at58u1jejohkioD0mKUo6DszkmZF8v0Gsbxr5iM9/zSLM4Rt/ccdgRCD2PjpfWnAv8g0iE6D6hggx/5K63aZD9Jj+3Q7j5CuQXasn/aTD+h3JUYSpf0Habu+ERGvKcVN+zUHaX+lxwKARfzlXz7VfOrOzzd3fe6LC4Mk7ot1Yt3YZl3EyLy7ECNpWQRFzHLk658+fbq59NJLL4iRPETi/lhPjAxUjGyfvjGSZkE++tGPd4ZE0I6GEkNjJD2XCKH2ftJ9pVO1Yr/Lnltfth0jQ36iHgPfGAC3B+PtQfiyx0rrx8f42yXt9eJ2bL9shmVfYiSWR1Qse5x4LbFe/rrTsWgHSZC+HrFN13MCgDYRF598LjI+9/kvFYMklsV9sc6QEAnEyLy7ECNpViRFRXubtnm85JEiRgYqRrZPCoNlg/SYTUh/76MdADmrxEg+a9LHtN+Hz5yZPZcIj/ZzSftuB02KlK7nvSq1YiRuxyB2ke3B8yZiJA3oY/9d6+xjjKT72vsP0vGI8Cq9pvS1KO0XALbBN588O4uNz9/7p81f//XfHCxtZp/Hsrgv1hmKGJl3l2KkPSvS5bFjx4qzKGJkoGJk+6TBexroLyOtv4kYKe2jz8xIoms/cbt9qtYmT9EKasZIVwwE7YF80BUjEQSL9p0iIKb7Y3m60DsN2uP+PIK6bA/0l8VIetz8cdr76PvYubFNTjxe/LrjuHC9vf88rGK7Rce8RNc2cXvZX8QHgEU89vg3mk/88d3NPc/9/3Tu3LmZ8Xksi/s2gRiZd9dO0ypdG5KbTtuKeImIye8TIwMVI9snDeiXBURiUUgEpWhYha4YKdH1XCI42n8IMfY55Hm12beZkTSYj/0lSo+V345t2oP2nFgv1s/3WWJZjPR53Fg2ZGYk3+ey/ZeOXyK95ng9+ev4s68/NlvWfo6xfvyq5r7PHQBKPPrYE83HP/W55p4v3jczPo9lm0KMzLsrF7Dn14C078vt2j4UIwMVI9snDej7DtS7AiARy0unWIWx3b/4V/+6eN8qpljpei7t5Zs+RSvYl5mRNHiOEMmDIGjvux0NpUF7Ttp3nxjJwynNTMRzTvvIB+vLYmEZsU6sm2IibufHqL3/9Bzy19513PPn0d5vENul/eTHM5b3ff4AUGIWJJ/83MxNhkggRubdlRgJ279Rq7SOGNmiYmT7bCNG+u6rxCZmRoJ8JmTTp2gF246RGCjHb2lKv6lpke1BbnyeBuNhrJMG5jkpWrr2kw/a0376Gm+Wsb/4fNEgPF5vPEbMHsS6eRDkxOMv2k9O/vpL5K+rdDtIxyaeX6IdLfE4sU7pOZVCLY8TAFiHJ77x5MxNI0bm3aUYSeazJGFcI5LuEyNbVIxsnzSg7xsQiwIg2JUYycnDZFNsM0bSgD4GySlO2j+hT7QHxGkgHtsv2q4PpUF6TmnAvQoxMM8DIwVA6THjuWwjRhat237MeJ357UXbptfS9RwAYJcQI/PuYowk85mSFCSuGdmiYmQzxGC9dLrTKqYB/67GyDqvsfTrf/uyrf+42wP0VWIkDY5jHykUSgP7vuSD9hLrxkh6nl2vq30MgnguKdL62hUC6XXFx3icRc+/HSBt4rmWHjtc9HUDgF1CjMw7Voz0/TW+KUjy9f02rS0pRnaPXY2R2mzjP+4Y9Mdve8oHvqUYiWWlQW8Yp3Xl6646iI+Bd/ze+nQ7BttdxOOsEiNp/T6BlIIhrZfCoSsKclLsxDYl8mOy6PUlYp0hUQcAu44Ymbd2jKRTsPr+Gt/STEo+Y+LvjGxQMYJdpdZ/3AAAbBsxMm/NGElh0Y6I+Lx02lU6JasUL2l2JL9PjAxUjGBXESMAgKkgRubddozkQZFsn6LVvmC9bSlUwjxIZrZX4GqKEewqYgQAMBXEyLy1Y6Tr9Kx81iR32elcc/svrcD+ihHsKmIEADAVxMi8ta8Z2aZiZKBiBLuKGAEATAUxMq8Y4aFiBLuKGAEATAUxMq8Y4aFiBLuKGAEATAUxMq8Y4aFiBLuKGAEATAUxMq8Y4aFiBLuKGAEATAUxMq8Y4aFiBLuKGAEATAUxMq8Y4aFiBLuKGAEATAUxMq8Y4aFiBLuKGAEATAUxMq8Y4aFiBLvK/Q880pw7d+7gFgAA+0m8l8V7Wg3ESH3FyEDFCHaVhx55rDn71DMHtwAA2E/ivSze02ogRuorRgYqRrCrPHn26ebBM4+aHQEA7C3xHhbvZfGeVgMxUl8xMlAxgl3mscefnP0nHj9VEiUAgH0h3rPivSvew+K9rBZipL5iZKBiBLtO/DQpprfjfNu4AJAkyV033rPivavWjEhCjNRXjAxUjAAAAEwDMVJfMTJQMQIAADANxEh9xchAxQgAAMA0ECP1FSMDFSMAAADTQIzUV4wMVIwAAABMAzFSXzEyUDECAAAwDcRIfcXIQMUIAADANBAj9RUjAxUjAAAA00CMXOjp06ebSy+9dGZ8Xlrn2LFjzcUXX9ycPHmyeP8ixchAxQgAAMA0ECMXeuLEiebIkSOz4CjdH1555ZWzdRYFS24eL2JkoGIEAABgGoiRC7388svnZj0iJC666KLexvb5/tJMS1ouRgYqRgAAAKaBGJm3NCvS95SsdnQkY7vY/vjx47PbYmSgYgQAAGAaiJF5IyTSqVcRIfH50aNH14qR+FiaOREjAxUjAAAA00CMnDfNisQMRgqLITHStUyMDFSMAAAATAMx8rx5fMTnESaXXHLJLECGXDOSTtG64oorDk/VEiMDFSMAAADTQIyct31aVbpuZMg1IxEfse21114rRjalGAEAAJgGYuRC07UiERfpdp8YKRlhEvu64YYbxMimFCMAAADTQIzMm183kpalGHnZy142N3PSZQqZdIpWbJ8+FyMbUIwAAABMAzFy3hQM+WlWYR4j6b5Y1vV5ipEIjwibCBwxskHFCAAAwDQQI+edhUJhluOyyy6bfYzfqrVKjMTn7f3NTA/I9RQjAAAA00CMLDa/KH1RgJRiJO0jNDOyQcUIAADANBAji82v+wiLMx0txciWFSMAAADTQIwsNr+gfdFsyLKZkblTwPI7uLpiBAAAYBqIkQttz4DEjEbMbKwSI6dOnZp9TPuIz82MbEgxAgAAMA3EyPOma0MiHCIoYlk6tapPgLRjxGlaW1SMAAAATAMx0m2ERfrVvOn2shiJj2Jky4oRAACAaSBGyqaZkoiHtCyPjraxPJ2SFeu17xcjG1SMAAAATAMxUkcxskHFCAAAwDQQI/UVIwMVIwAAANNAjNRXjAxUjGDXefLs081DjzzW3P/AI819Xz1DkuTOG+9Z8d4V72E1ESP1FSMDFSPYZR57/MnmwTOPNmefeqY5d+7cwVIAAHabeM+K9654D4v3slqIkfqKkYGKEewq8dOk+E9chAAA9pV4D4v3slozJGKkvmJkoGIEu0pMb8dPlQAA2GfivSze02ogRuorRgYqRrCrxPm2ZkUAAPtOvJfFe1oNxEh9xchAxQh2lbgAEACAKVDrPU2M1FeMDFSMYFcRIwCAqSBG5q0ZI7M/THjw19RX8ciRI82JEyfm9hW3Y/ncuvkKXF0xgl1FjAAApoIYmbd2jJTCYpGrbCNGBipGsKuIEQDAVBAj8+7jzEhxViTMH4yrK0awq4gRAMBUECPz7uPMSIqRuC9fV4wMVIxgVxEjAICpIEbm3eeZkdjfsWPHzq+bPxhXV4xgVxEjAICpIEbm3YWZka7ly+5rK0YGKkawq4gRAMBUECPz1oyRLk+fPt1ceumlzeWXX168f5FmRjaoGMGuIkYAAFNBjMxbI0bSaVWH0bCmF198cXPy5MniY4RiZKBiBLuKGAEATAUxMu8uzIysYppFKcWKGBmoGMGuIkYAAFNBjMxbM0ZiViNmN4ohscBlMyJJMTLQF0KMPP74E82NN93SfOCDHzpY0sw+j2VxX03icX/2Xe9unn76mYMlmyH2F/t9z3t/9WDJ/jNWjNz31Qebj/3RZ5vHn/jmwZIyd3723pldfP7e+5pPfvpPmrNPPX2wZPeJ1xyvPZ57Ij7vczw2zbaOX+wv9rvoawcAm0aMzDtGjMR1HqX7S8a6YqSSuxgjKR7eePyqlS0FxqfvvKu55m3XNfff/5XZ7b4D9yHPI9l+Pn1jZJ1oidcZj5lH1yLS69tEwKz62H3Yxn/cERr5QLtEjRhJg/4/+Nida5n2O2Q/pdcYr/0jn7ireejhr89u9x24D309Yfv59I2RdaIlXmc85rLvBQDYFGJk3n2NkbSvuVmUfAWu7i7GyCLSoDc+9iUG2/nAPqLkhptOHcbJOqw7E7EsMlIghPH82uvF9il0VjUPo/T8Vw2eRcRzy6NvKNv4j/vue748G2ynQWgMstuD4kXGIDaRx0ga3PYxBt1fe/CR2cd8f33pO/hOz2mVx4jXk+87oiSeZ4qTdegbNG2Wvc4UQOn5tdeL7dvHvq+xz3aoAcAQxMi8+3qaVtpX/hu4xMhApx4jaXCfrx8B0R6ol1wUGjHgjoH3KlEUdMVIioN43EX7XBYzfYnH2GQ4BOk1bGKmJdjWf9xpkNo1SI/lfQajeYyUWDSYTgPpeKz0eazfh2WD9MSqMZI/p0S8vnyQ3uWi4xChEAHY93kkul5n3I7l8biL9tn3OAFADcTIvGPNjMTfD8kjI6IiLkyPC9Tbf9Swd4ycPHW64TBvPnnbbMB+3fU3Nldfc+3Bt/NuEoPoZQP2nFgvnxGIwXeaFSmFSl/WjYL2duk59H1NXdu3t01hEOuXaM8WbYp4HpuKnG3+x/2Zu/9n86X7HjgcgLcH1yXbA9shMZKz7mB9GbG/eN599xvr5RGWz4qUQqUv60ZBe7v8a9XneXRt39427o/1Yn0A2BZiZN6aMRJGYOSzHnE7lucxEgGSr1P6+yPFGDl9+x0Nh3nb6dubW26NILm5ufbanz74dt5NYrDbd+CeBuQpRtLt9JP7PjGSx8KqpsfNSTERy/Pn1pfY/vQd75xZesxFpvhIr6kdKnFcIiTu+cK9s3XTduk5puPXXp7Tte91qPUfd5v2oDwnHxDnRpTEdu3lbUvx0me73L4D+7Tf9uC7RBqQp9edbqfn2zWQz+k6Nn0sHe8UE7E8f259ie0/8am7Z5Yec5F9jzEA9EWMzFsrRiIaUlyk6Ej3pV/X27U8bZfPkIiRLTnVGEnrpkFzDJDzAXQaOPeJkbROGpC3B9txOw32g1g/f6xEe71VaW/f9Rq6nmcQ65ZmLyJG4njl98XHuJ0CJD1Oetz2a0yPu4lTtTb9H3cMrPsMNmPA3WfgG/vL42LZdu31EzFoXnWg3YdVYiStm55H+znFx7i9aF/tdVLQtGccUmSk4x/rl15/e71VaW/f9Rq6nicAbBIxMm+NGEnh0I6N9gxImiUpGdGRh4cY2ZJTjJE0KD59+zsPB8wxQM63SwPqNNDOTdukddJ2XYP8sWOk9BrCUozEstJzSzHS3iYtbwdGrBfL21+LWG/Ia0xs6z/uNEiN07RSnPQ1j4lSjJS2yS3FSCwbMujuIj2f9uC7TRqMxwxCioJ4Tvl2aSDffj1h2qY92O8a5LcjIdZP+8hpr7cq7e0XvYaw/TwBYJOIkXlrn6a1KcXIlpxijKRB+0c/+vHiwDtoh0aJ9jopRuI5tM0H4LF+etw0aF/XfKYiva52jLRfQ3qe7bAIumIhlpdmTLqiI26Xlsf6Xcd8FbYdI+sOchOlGCkNqhPt9YM0YC8NjrvMf/XuIuL5xPp5VJRIxyPirOv5t0OjRHudRa8tP/75cYvnUlq/r/mx6YqR9mtIz1OMANgmYmTefY2RkmJkA04xRt73/t+cDapjva6BcddAPqe9Ttcgvx0JXY/bXi/trz3r0EV7+3UQI/OD1D4D4FIAlGKktG1uO0ZWJR5j0zESF/PH/mK9bcRIe5DfPv5dj9teL+2v7zFsbw8AYyJG5hUjnHOq14wEsd4ux0gQ65YioEQEQxjbxHHoY/vxxMiFMbJo0BoD9Rgs94mRrsF80F5/HeIxNh0jiUXPfxdiJIh1+77+dLxjmzwIF7no+wAAhiBG5hUjnFOMjBsjQVcgtIn18seOz7tCJtZdJRY2FSN9X8sy9mVmJO2vzzUoKUbiY+n+RcagOh5rUfDkpEF4fOxDrLfrMRLEsSstb5O+Non4vCtk0tej77ECgFURI/OKEc75Qo+R2F/J2LYrRkrrD4mR9DgxkO+i/VwScTseP22bbpceP4j7S9GxiRhJx2fR6+jLLs+M5DGRBryLBvNBbBMOIR5r0WPkxPPZdIyk19w2tk3rpMeL4xnHtbR+fry7Hrfr65IeZ9GxbD+XRNyOx0/bptulxweATSJG5hUjnNPMSPe+2uukwXYM0HPakdH1uF0xEkQERAx0DeT7vJY4Nl0zJYn0OO3XsIkYSc+jve912HaMxODz7nu+PDMfKJdMP1EP4/N8IJwGvqXtumwPkvsSj7sonHLSQLvvY8V6XYPyrsF9TnudFCMp1hLtyOh63K4YCUpfh5w+ryWOTddMCQBsGjEyrxjhnGJkvBiJ++MPGKYASI/X3jY9bjtU4nHieCQ//Hu/P9s23S69trSv/HkEm4iR+HxZDPVlmzGSR8GiQW8Qg9UYvPYdtMb+8oFwDJi7BsarkAbRXQPwNvHaphQjcX/8+uH0dUiP1942PW77OMXjpK97eO+XvjLbNt1e9NoAYChiZF4xwjl3KUbSYDwNptcxH8jH4Lg9sE+kx2oPsnOGPJ/S46YY+e3f+Q+zdboG7hEGcX+Kj1gnoiX2l+IgbAdFm7SfsH1cNhUNia5gWpdt/ccdg9T8J+KbipHYTwxqY18xOM4HyLFtPGZp0F0iDbTTQDmZb9+1zirm++uKgiA91qIB+5DnU3rc9HVJM1ddsxjx9Yz7U3zEOhEtsb/0NQkXfY2DtJ+w6zgAwLqIkXnFCOfcp5mRVdlUjCxap0TX4+Yh0WefKSZWffxldM2ODCGe4yYDZxv/cccAM//pelCKkXwQu2wgm0Kj/ZP4EmndXfwp/KZiZNXX1vW4+degzz5TTKz6+ABQAzEyrxjhnFOOkV1i0zMHQ4loiHjYxPOJEIloitjaFLX+48bu0XWqFQDsK2JkXjHCOcUIdhExAgCYCmJkXjHCOcUIdhExAgCYCmJkXjHCOcUIdhExAgCYCmJkXjHCOcUIdhExAgCYCmJkXjHCOcUIdhExAgCYCmJkXjHCOcUIdhExAgCYCmJkXjHCOcUIdhExAgCYCmJkXjHCOcUIdhExAgCYCmJkXjHCOcUIdhExAgCYCmJkXjHyAvHULbc1r33djzQvf8XR5sffeHzuvrgdy+P+k6duaa66+q3N8Tf9lBjBziBGAABTQYzMK0ZeIPaNkTe9+armZT/wqub7X/7K5ieeWw7sAmIEADAVxMi8YmTCxulWP3XV1c3V17ytd4zccOPNzWte+0PNS1768ual3//yg29nYFzuf+CR5ty5cwe3AADYT+K9LN7TaiBGznvs2LHmoosuWuqll17aHD16tHhfGPtJ+zxx4kRz5MiR+XXyATbvmEXID7zyB5vXHPuh5sabTvaKkZOnbm2uu/6G5geeu330B19z8O0MjMtDjzzWnH3qmYNbAADsJ/FeFu9pNRAjZSMiLrnkkubkyZPN5ZdfPrO0Xm6se/HFFxdj5Pjx44fLxEjLm0/e0vzga47NguSqt1zTO0ZiRuWnr7veNSPYGZ48+3Tz4JlHzY4AAPaWeA+L97J4T6uBGCkrRir7+jdcOQuNH7niRw9jJJYd/cHXzj5vm64XidO0/uHl//jg2xkYn8cef3L2n3j8VEmUAAD2hXjPiveueA+L97JaiJGym44Rp2kt8S1Xv3V2ytWrjr62+cFXH5sFhxjBvhI/TYrp7TjfNi4AJEly1433rHjvqjUjkhAj500xMRcOBfPYKG3fdX9SjBS86eZTTVzEHhemp5mRH/vxN86uJ/mpq65p3vzcfa957esOY+T1P3plc/xNV81+k1ZECwAAAPYPMXLeFBNxSlVpZuT06dOzi9f7xkjspxQzYmSBESUpOvJrRuLvisRvz0oxcuVP/KQ/eggAALDniJHz5jESxuddMVI8/epAMyNreu1PXzd3WlYeI9e9/YbmlUdfc3jfsdf9yOzCdzECAACwv4iR87ZjJMIjAmRRjMR67e3bMZKWHwZLPgBn/J2R082VP/7G2TUjKTbaMfLG42+eLXvVc7ESvuJVr25OXHudGAEAANhjxMh58xhJARLL+8ZIl+1IESMtr3j9jx0GSETGK58zj5GTt9w6+xsksSyuDwnjAvYrXv8GMQIAALDHiJHzpmiIP2iYh0Z8bJ+GtU6MmBnp8M0/9ZZZaMQ1IT99/dsv+DsjcX/MmsTfIYkL2sO4P5bFRe9iBAAAYD8RI+fNoyGdopXfb2ZkS17/9hubN/zYj88uSD91y21zMRK/Xevoq5+/jiRmR2KWJHz1a183+9W+rzz66tkfSgQAAMD+IUbOm6KhKzD6xEisc9lll83uT8vMjKxgHiNxOtZrX/fDh7MgMUOS1nvTm69qXnbwd0Ze9rJXHHw7AwAAYJ8QI+e9IBo6XBQj7VmQ0jIxssA8Rl79mtfNTs2Kz3/oh6+YXeierxe/UWv2Rw//0UsPvp0BAACwT4iR825iZmRRjBwGTT745rzt07Te8KNXzv4ie5yula932+nbZ6d3xcXuP/jq1x58OwMAAGCfECPn3USMlJabGVnBW2+7vXnr265t4q+ux98WidmQU7fcesF6ESNxjcnbb7ixeduJaw++nQEAALBPiJHzXjCD0WFERVo3/frfZNwXy2+44YZZuJS2FyMbMMWIX+0LAACwv4iR864yMxK3Y71SbHRtnxQjG1CMAAAA7D9ipL5iZAOKEQAAgP1HjNRXjGxAMQIAALD/iJH6ipENKEYAAAD2HzFSXzGyAcUIAADA/iNG6itGNqAYAQAA2H/ESH3FyAYUIwAAAPuPGKmvGNmAYgQAAGD/ESP1FSMbUIwAAADsP2KkvmJkA4oRAACA/UeM1FeMbEAxAgAAsP+IkfqKkQ0oRgAAAPYfMVJfMbIBxQgAAMD+I0bqK0Y2oBgBAADYf8RIfcXIBhQjAAAA+48Yqa8Y2YBiBAAAYP8RI/UVIxtQjAAAAOw/YqS+YmQDihEAAID9R4zU96KTp043HObNJyNEbmmuu/7G5uprrj34dgYAAMA+IUbqe1FpIfubvlHjmza+eeObGAAAAPuHGKmvGBmoGAEAAJgGYqS+YmSgYgQAAGAaiJH6ipGBihEAAIBpIEbqK0YGKkYAAACmgRiprxgZqBgBAACYBmKkvmJkoGIEAABgGoiR+oqRgYoRAACAaSBG6itGBipGAAAApoEYqa8YGagYAQAAmAZipL5iZKBiBAAAYBqIkfqKkYGKEQAAgGkgRuorRgYqRgAAAKaBGKmvGBmoGJk2Tz/9TPOz73p384EPfuhgyXk+feddzY033dI8/vgTB0v6E9ucvuOdzf33f+VgCQAAGBsxUl8xMlAxMm36xkjc/573/urBPcuJCLnhplPVY+Spp77VfP3RJ5r/9dCfN/c/8MjM+DyWxX3bJl7vNW+7bnbsgjhupWNbItZbN/52nWe+9e3mzx/7xuxrcd9Xzxwat2N53L9t0vf6Kt/HJWL7vl9TANg1xEh9xchAxci06RMjD58503zwP//ubJDdd7Ac28b6tWLkW996tnn4kceah8481nzjybPNs8/+1cE9zezzWBb3xTqx7hDiNb3v/b95cGueGKjG8YzjGsRxfePxqw7jpIsUMUMHyrtIxMYDD369eeKbZ5tvf/vZ5ty5c7Pl8TFux/K4P9bbJO3vwU3ESOwjvvY1v7cBYJOIkfqKkYGKkemRBr4xWOsTIyk+2uumgfa6bmrgffapbzX3P3BmFhzLiHVi3dhmXdLrbh+z/LjmxOtc9FrTdu3j02UeO7vOmT/7i9msVAqQLuL+WC/W3wSl8CgtKxFfv9JxX8V9+hoBeGEhRuorRgYqRqZHGpSFERrxsU+M9CXWj+1O3/7OjQVHFzHLEXHx1NP94yLWjW2GzJDE8Wr/dDxea2lgWjId73aIlL4OibT/duzsKjHTEYGxCrH+JmZIUlDkx6pvjLSJ7+ff/p3/++DWhcT9wgPAviBG6itGBipGpkkarH30ox+fDdB++3f+w+xjGhQvc9GAOAZ7sa8YoMXgOn2+DeK0qz4zIm1im9h2XdLANsVaior2a01hVjpe6WuQtkm324PltI9lx32XiGtA4tSrZTMibWL92G7INST58VrVRV+nUsSk74Ntfo8DwCYRI/UVIwMVI9MkDaJ+8Zd+Zfax9BP50k//l5GHSCIN5jY9kI4L0uM6kHWJbYdc1B7HJV7vww+fmb3meI3t194VI+n4twe4+UxJCsX4PEXPvhCzG3EtyDrEdkNmR+KYlo5X1zHvQ3xdSr+QIf6N7NvXBsALGzFSXzEyUDEybdIArRQjMWjrGxFpEJ3iphQxaX+lx1qHOKVnnVmRRGy76mlEJdLrCuO194mRRaRt0j7XGTyPTfyWrLg4fR1iu9h+HeJ7K45Z6XgPiZES6Xt+05ENANtEjNRXjAxUjEybrhhJy5cNhtOArP3T4RiglYIkSAPG9sB9VWLAmv/WrFWJbdcd9Cby2Eiva5ml45Jv2z6W6b6u47mLxK/tXfUUrURsF9uvyrLwWyVG8u//dWz/ewKAXUGM1FeMDFSMTJv0U/324CkN7OJakvjjhfngOEj3Dw2KIcTfEBnKkH3EoDcPhziG7ePRNUCO26sOXtsD5F2Ok3ViImfo9iXWiRFRAWBqiJH6ipGBipHpEoOydOF6e9CVBtrxN0bi/q6fNpdIA7nSNrGsz2CwD2PHSDs+VomRRDpWeZgss/0Yu8iYMZKOeenYLTI/runrIkYATA0xUl8xMlAxMj3ygVZp0JWWpWgoDbITMchOP6GP9cNYLy1vh8c9X7h3NlDcRJCMeZpW6biVjlPfGMn3E8Tx7LpguutrsUtETNQ+TWsZ6Vj3+d5L63Z93QBgXxEj9RUjAxUj0yNFQ1AaDOeBEXQNqNuDu3y/QWwXp3jFfvLBddpfvu46jHkBe7yOOEb5MYljWPqJe9v82JaOf5Afr5x9iZGIvDEuYF9E+/t1EcsiEgD2FTFSXzEyUDEybdqD4a7BcdyOwVkM0hLtaGnHSE6sm2/fNdhehTF/tW/peJRCYdmgNh3vUrR02X6MXWTMX+3bRTrWYgTACxkxUl8xsoZXXfWW5rv//vfMvhHEyLRpx0cM1EqD3fZALg3W8oFd17ZBaaC+Ccb4o4ftY5EYEiPp+Cf2fWZkzD962EXX161EO54BYCqIkfqKkSWePn1785KXvLR55auOHi4TIy8c8sFwDNIWDcBKAZITA+eYKSn9ND/cxk+Zv/WtZ5v7HzjTPPV0/xmOWDe2iW3XIb3O9usRI/PE7Maqp8HF+tuYFQlWiZFYZ1+OMwCsghiprxhZYh4epWViZNqkAVrEQn7KVRdpIN4ePI/J2aeej4s+MySxTqwb26xL10/N45i0A6zLNNDNj39f92mQfObP/mIWGMtmSOL+WC/WX5cUfqVj1tf43v7IRz5WjE0AmAJipL5iZIFpViSMz9NyMYJ9I2Y54rSruA4kgiP/LVvxeSyL+2KddWdElrHOrEWKkb5xt08zI4mY6YhTr+JakLg4PYVJfIzbsTzu39aMyKrErEif2RMA2EfESH3FyAKveP0bmhd/53f18u+++O813/F3Xtz8rb/9HQffzsDuERekx0/Y47cxxd8QCePzWLbuxeoYTlwDErERX4v4tb3JuB3Lt3GNCADgQsRIfcVIh/FFjtmPCJL2fWZGAAAApocYqa8YKXjq1C3N937v911welZSjAAAAEwPMVJfMVIwZkO6QiQUIwAAANNDjNRXjKyhGAEAAJgeYqS+YmSBLmAHAAB44SBG6itG1tDMCAAAwPQQI/UVI2soRgAAAKaHGKmvGFlDMQIAADA9xEh9xcgaihEAAIDpIUbqK0bWUIwAAABMDzFSXzFScJXfopX027QAAAD2GzFSXzEy0PSNamYEAABgvxEj9RUjAxUjAAAA00CM1FeMDFSMAAAATAMxUl8xMlAxAgAAMA3ESH3FyEDFCAAAwDQQI/UVIwMVIwAAANNAjNRXjAxUjAAAAEwDMVJfMTJQMQIAADANxEh9xchAxQgAAMA0ECP1FSMDFSMAAADTQIzUV4wMVIwAAABMAzFSXzEyUDECAAAwDcRIfcXIQMUIAADANBAj9RUjAxUjAAAA00CM1FeMDFSMAAAATAMxUl8xMlAxAgAAMA3ESH3FyEDFCAAAwDQQI/UVIwMVIwAAANNAjNRXjAxUjAAAAEwDMVJfMTJQMQIAADANxEh9xchAxQgAAMA0ECP1FSMDFSMAAADTQIzUV4wMVIwAAABMAzFSXzEyUDECAAAwDcRIfcXIQMUIAADANBAj9RUjAxUjAAAA00CM1FeMDFSMAAAATAMxUt+LTp463XCYN5+8rbnxplua666/sbn6mmsPvp0BAACwT4iR+poZGWj6RjUzAgAAsN+IkfqKkYGKEQAAgGkgRuorRgYqRgAAAKaBGKmvGBmoGAEAAJgGYqS+YmSgYgQAAGAaiJH6ipGBihEAAIBpIEbqK0YGKkYAAACmgRiprxgZqBgBAACYBmKkvmJkoGIEAABgGoiR+oqRgYoRAACAaSBG6itGBipGAAAApoEYqa8YGagYAQAAmAZipL5iZKBiBAAAYBqIkfqKkYGKEQAAgGkgRuorRgYqRgAAAKaBGKmvGBmoGAEAAJgGYqS+YmSgYgQAAGAaiJH6ipGBihEAAIBpIEbqK0YGKkYAAACmgRiprxgZqBgBAACYBmKkvmJkoGIEAABgGoiR+oqRgYoRAACAaSBG6itGBipGAAAApoEYqa8YGagYAQAAmAZipL5iZKBiBAAAYBqIkfqKkYGKEQAAgGkgRuorRgYqRgAAAKaBGKmvGFnDq656S/Pdf/97Zt8IYgQAAGAaiJH6ipElnj59e/OSl7y0eeWrjh4uEyMAAADTQ4zUV4wsMQ+P0jIxAgAAMA3ESH3FyALTrEgYn6flYgQAAGB6iJH6ipEFXvH6NzQv/s7v6uXfffHfa77j77y4+Vt/+zsOvp0BAACwT4iR+oqRDuOLHLMfESTt+8yMAAAATA8xUl8xUvDUqVua7/3e77vg9KykGAEAAJgeYqS+YqRgzIZ0hUgoRgAAAKaHGKmvGFlDMQIAADA9xEh9xcgCXcAOAADwwkGM1FeMrKGZEQAAgOkhRuorRtZQjAAAAEwPMVJfMbKGYgQAAGB6iJH6ipE1FCMAAADTQ4zUV4ysoRgBAACYHmKkvmKk4Cq/RSvpt2kBAADsN2KkvmJkoOkb1cwIAADAfiNG6itGBipGAAAApoEYqa8YGagYAQAAmAZipL5iZKBiBAAAYBqIkfqKkYGKEQAAgGkgRuorRgYqRgAAAKaBGKmvGBmoGAEAAJgGYqS+YmSgYgQAAGAaiJH6ipGBihEAAIBpIEbqK0YGKkYAAACmgRiprxgZqBgBAAzlybNPNw898lhz/wOPNPd99Qw3ZBzPOK5xfLfF79/fNFd/qGle8v6m+Ye/wU0ZxzOOaxzfmoiR+oqRgYoRAMAQHnv8yebBM482Z596pjl37tzBUmyCOJ5xXOP4xnHeNO/546Z5zW+VB9PcjHF84zjXQozUV4wMVIwAANYlfmIfA2URsl3i+MZx3uQMSfzEXojUMY5zrRkSMVJfMTJQMQIAWJc4hSh+co/tE8c5jvemiFOISgNnbsc43jUQI/UVIwMVIwCAdYlrGsyK1CGOcxzvTeEakbrG8a6BGKmvGBmoGAEArEtcZI16bPJ4lwbM3K41ECP1FSMDFSMAgHURI3URI/ttDcRIfcXIQMUIAGBdxEhdxMh+WwMxUl8xMlAxAgBYFzFSFzGy39ZAjNRXjAxUjAAA1kWM1EWM7Lc1ECP1FSMDFSMAgHURI3URI/ttDcRIfcXIQMUIAGBdxEhdxMh+WwMxUl8xMlAxAgBYFzFSFzGy39ZAjNRXjAxUjAAA1kWM1EWM7Lc1ECP1FSMDFSMAgHURI3WZaoy86w+b5qlnm+au515e6f6pWAMxUl8xMlAxAgBYl6nEyHve+6szE/ff/5XmF3/pV5qnn37mYEnTfPrOu5obb7qlefzxJw6WPL8s327bTDVGHnjukEaMRJSU7l/Hf/vZpvnGc1++Te5zqDUQI/UVIwMVIwCAdakVIxEAEQJvPH7V2kY4lIjgiPuuedt1h7Hx8Jkzzek73jkXGu0YSc+pHSjbZB9j5O3/pWkefergQTP+6m+eD4b/90sHCwrEdrF9ab/LjH3HY2w6coZYAzFS34tOnjrdcJg3n7xt9p/pddff2Fx9zbUH384AACym9sxIewYjBUGEQkTFz77r3c0HPvihg3ufJ9aJsIjZjkWk7dP+077T7TxG0rphPnuybfZ9ZiROw8oDIwVDzIzk66Xly07bSqd3rUv7cbdtDcRIfc2MDDR9o5oZAQCsyi7FSBD3tWMkIiRiJNZdlTxA2p/XDpFg32MkBv8pMFJItIMgzaT0CYW0j5hdKd2/yNi/GBlPMcJDxQgAYF3GiJFFp2BFiOSxEmwqHPIYGYt9jpF2OESUnHmyfApXm65oECMXIkbqK0YGKkYAAOuyazMjpfBob9Omb2SIkWG2T9EK0yxImi1p3w7HiIZtWQMxUl8xMlAxAgBYl12LkfYpWenajvapWzmxTawTMyxpvdhfe/aly5qna+1rjKTIyInAGBojsd4Q0kX0pX1vwxqIkfqKkYGKEQDAuuxajJTi5IabTi29eD2IbeI3asW68XmfWZCIFzGy3PQbsyI0IjgiIvIYWca6MyPxOOkxS/fXtgZipL5iZKBiBACwLmPESGl2IsVHEOvkMxzrnFolRjZn/huvumIkzYS0b4eLZkZyY512eIgRMVJDMTJQMQIAWJddmxkJ4vMUCO31+xL7KEVPSTGy2JgViSC45+vnw2DTMZK2a68nRsRIDcXIQMUIAGBddjFG0rLf/p3/0PsUrSCf5TAzsnnzMNh0jKTZl3y7MG53EevHdvn627YGYqS+YmSgYgQAsC67GCNBRMIqsxaxTqyb9i1GNm+EQVeMLGNZjKRrUtq/4jd/zHz5WNZAjNRXjAxUjAAA1mWsGEkR0j5lKiIihUXcjljoQztq4mN7312KkX6WYiRmJr7x3KFLv9Fq3ZmRuD9oh4cYESM1FCMDFSMAgHWpFSNxqlX8pqsUAGnWojQzErES6374935/rd+klW6bGdmsEQY5ERAxk5GfLrVOjKRTtD7+tec/5uuKETFSQzEyUDECAFiX2jMjbfIYSTMi7ajIb3cRAZNHhRjZvKUwaIfGOjGS7zeFSfr7IWJEjNRQjAxUjAAA1mVXYiQuVo/oKIVHBMOiIEn7SNeLBH1jJJ02Vot9jpG2EQsRDfl1HnmMRIAEi/4wYWkfYbqGpA/tbbdpDcRIfcXIQMUIAGBddiVG8lO3SiyaIYn7Yvv4mOiKkbRubr7dtplSjKTgKN3Xx9Isyq5bAzFSXzEyUDECAFiXsWPkhcaUYuSFaA3ESH3FyEDFCABgXcRIXcTIflsDMVJfMTJQMQIAWBcxUhcxst/WQIzUV4wMVIwAANZFjNRFjOy3NRAj9RUjAxUjAIB1ESN1ESP7bQ3ESH3FyEDFCABgXcRIXcTIflsDMVJfMTJQMQIAWBcxUhcxst/WQIzUV4wMVIwAANZFjNRFjOy3NRAj9RUjAxUjAIB1ESN1ESP7bQ3ESH3FyEDFCABgXcRIXcTIflsDMVJfMTJQMQIAWBcxUhcxst/WQIzUV4wMVIwAANZFjNRFjOy3NRAj9RUjAxUjAIB1uf+BR5pz584d3MI2ieMcx3tTvOT95QEzt2Mc7xqIkfqKkRWNL/53//3vaa666i2z21e8/g3NP7ni9WIEALAyDz3yWHP2qWcObmGbxHGO470prv5QedDM7RjHuwZipL5ipGB8gV/zmmPF+175qqPNS17y0ub06dtntyNGXvyd39W86U1vFiMAgJV48uzTzYNnHjU7smXi+MZxjuO9KX7//qZ5zW+VB87crHGc43jXQIzUV4wUTIERH/Pl7VmRML5JX/HKVzU/8IpXihEAwMo89viTs4Fy/ORelGyWOJ5xXOP4xnHeNO/5Y0GybeP4xnGuhRiprxjpMEIkwiP/YsesSERKyb/74r/XfMffeXHzt/72dxx8OwMA0I/4iX2cQhTXNMRF1tyMcTzjuG5yRqRN/MQ+TiFyDclmjeMZx7XWjEhCjNRXjHQYp2HF6Vjf+73f15w6dcvhrEh+ilYY98U6TtMCAADYb8RIfcXIAuMLHbMhN9544yxCYgZEjAAAAEwTMVJfMdLD/PQsMQIAADBNxEh9xcgSU2zERevpwvaSrhkBAADYb8RIfcXIAiNA0jUjcTtixMwIAADANBEj9RUjC2zHhxgBAACYLmKkvmKkwwiOCI8IkLRMjAAAAEwXMVJfMdJhfJHbf+AwYqR0vUjomhEAAID9RozUV4x0GOGRXy+SlpkZAQAAmCZipL5ipGA6RSt+pW++XIwAAABMFzFSXzFSsHSKVihGAAAAposYqa8YKdj+lb5J14wAAABMFzFSXzGygqWZkfSNGt+0ZkYAAAD2FzFSXzEyUDECAAAwDcRIfcXIQMUIAADANBAj9RUjAxUjAAAA00CM1FeMDFSMAAAATAMxUl8xMlAxAgAAMA3ESH3FyEDFCAAAwDQQI/UVIwMVIwAAANNAjNRXjAxUjAAAAEwDMVJfMTJQMQIAADANxEh9xchAxQgAAMA0ECP1FSMDTd+od9xxR3Prrbc2N9xwQ3PfffcdfEsDAABgH4jxW4zjYjwX4zoxUkcxsgFTjNx2223NTTfd1LzrXe9q/vRP//TgWxsAAAC7TIzbYvwW47gYz6UYKY37dkExwjnjm/Ud73jHbEovavrmm29urr/++ubaa69t3vrWtzbXXHPNzKuvvpob8o0/+ebicpLbN/79+TdIcp9NY7MYp8V4LcZtMX6LcVyM52JcJ0bqKEY2ZDtITp48OavrmO6L8w+5Wa++5tricpLbN/79+TdIcgrGOC3GazFu25cQCcUILzC+afMgOX369GyaL76x40Iobtbrrr+xuJzk9o1/f/4NkpyCMU6L8VqM2/IQESP1FCMbNA+SMM43DOObm5v1xpue/00XJOsb//78GyQ5BdNYLY3d9iFEQjHChaZvZG7Pm0/eVlxOcvvGvz//BklO0dK4bhcVI+xt6Rudwz156nRxOcntG//+/BskORVL47ddV4yQIxsDodJykts3xUjpPpLk9hUj5MgaCJHjKUZIclzFCDmyBkLkeIoRkhxXMUKOrIEQOZ5ihCTHVYyQI2sgRI6nGCHJcRUj5MgaCJHjKUZIclzFCDmyBkLkeIoRkhxXMUKOrIEQOZ5ihCTHdVIxkt5USJJcxdKbCkly+04qRk7ffkdD7pMxCCotJ1lHMUKS4ypGyBEVI+S4ihGSHFcxQo6oGCHHVYyQ5LiKEXJExQg5rmKEJMdVjJAjKkbIcRUjJDmuYoQcUTFCjqsYIclxFSPkiIoRclzFCEmOqxghR1SMkOMqRkhyXMUIOaJihBxXMUKS4ypGyBEVI+S4ihGSHFcxQo6oGCHHVYyQ5LiKEXJExQg5rmKEJMdVjJAjKkbIcRUjJDmuYoQcUTFCjqsYIclxFSPkiIoRclzFCEmOqxghR1SMkOMqRkhyXMUIOaJihBxXMUKS4ypGyBEVI+S4ihGSHFcxQo6oGCHHVYyQ5LiKEXJExQg5rmKEJMdVjJAjKkbIcRUjJDmuYoQcUTFCjqsYIclxFSPkiIoRclzFCEmOqxghR1SMkOMqRkhyXMUIOaJihBxXMUKS4ypGyBEVI+S4ihGSHFcxQo6oGCHHVYyQ5LiKEXJExQg5rmKEJMdVjJAjKkbIcRUjJDmuYoQcUTFCjqsYIclxFSPkiIoRclzFCEmOqxghR1SMkOMqRkhyXMUIOaJihBxXMUKS4ypGyBEVI+S4ihGSHFcxQo6oGCHHVYyQ5LiKEXJExQg5rmKEJMdVjJAjKkbIcRUjJDmuYoQcUTFCjqsYIclxFSPkiIoRclzFCEmOqxghR1SMkOMqRkhyXMUIOaJihBxXMUKS4ypGyBEVI+S4ihGSHFcxQo6oGCHHVYyQ5LiKEXJExQg5rmKEJMd1OjHyzub/BwkjUmJ5OarEAAAAAElFTkSuQmCC'
+        }
+      },
+      mounted() {
+        this.tinymceInit()
+      },
+      methods: {
+        handleSizeChange(val) {
+          console.log(`每页 ${val} 条`);
+        },
+        handleCurrentChange(val) {
+          console.log(`当前页: ${val}`);
+        },
+        tinymceInit() {
+          tinymce.init({
+            selector: '#mytextarea',
+            language:'zh_CN',
+            plugins:['advlist anchor autolink autosave code codesample colorpicker colorpicker contextmenu directionality emoticons fullscreen hr image imagetools insertdatetime link lists media nonbreaking noneditable pagebreak paste preview print save searchreplace spellchecker tabfocus table template textcolor textpattern visualblocks visualchars wordcount'],
+            toolbar: ['searchreplace bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat subscript superscript code codesample', 'hr bullist numlist link image charmap preview anchor pagebreak insertdatetime media table emoticons forecolor backcolor fullscreen'],
+            menubar: 'file edit insert view format table',
+            height: 150, //编辑器高度
+            min_height: 100,
+
+          });
+        },
+        open() {
+
+        },
+        
+        handleClick(row, index) {
+          this.form = Object.assign(this.form, row)
+          this.dialogVisible = true
+        },
+        // 编辑
+        edit(row) {
+          this.form = Object.assign(this.form, row)
+          if (this.config && this.config.inlineEdit === '1') {
+            row.edit = true
+          } else {
+            this.dialogVisible = true
+          }
+        },
+        del(id) {
+          this.$confirm('确定删除该项目?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            });
+          }).catch(() => {
+            console.log('cancel')
+          })
+        },
+        getSummaries(param, field) {
+          if (!field) {
+            return false
+          }
+          const { columns, data } = param
+          const sums = []
+          columns.forEach((column, index) => {
+            if (index === 0) {
+              sums[index] = '合计'
+              return
+            }
+            field.forEach((it, i) => {
+              if (data && column.property === it) {
+                const values = data.map(item => Number(item[column.property]))
+                sums[index] = values.reduce((prev, curr) => {
+                  const value = Number(curr)
+                  const prevNum = Number(prev)
+                  if (!isNaN(value)) {
+                    return prevNum + curr
+                  } else {
+                    return prev
+                  }
+                }, 0)
+                sums[index] += ' m'
+              } else {
+                sums[index] = ''
+              }
+            })
+          })
+          return sums
+        },
+        filterField(name, str) {
+          if (name === 'statusFilter') {
+            // 项目状态
+            const statusMap = {
+              1: '综采一队',
+              2: '综采二队',
+              3: '综采三队',
+            }
+            return statusMap[str]
+          }
+        },
+        submitRow(row) {
+          row.edit = false
+        },
+        cancelSubmit(row) {
+          row.edit = false
+        },
+      },
+        
+    })
+  </script>
+</html>

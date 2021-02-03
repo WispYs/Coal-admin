@@ -2,7 +2,7 @@
  * @Author: Wisper 
  * @Date: 2021-01-08 14:12:56 
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-01-19 09:33:28
+ * @Last Modified time: 2021-02-03 14:05:18
  */
 
 #app {
@@ -70,8 +70,9 @@
 
       // menu
       .menu-wrapper {
+        width: calc(100% - 44px);
+        padding: 0 20px;
         float: left;
-        width: 100%;
         height: $sideBarHeight;
         position: relative;
 
@@ -189,12 +190,6 @@
         }
       }
 
-      &.has-logo {
-        .menu-wrapper {
-          width: calc(100% - 44px); // Logo width
-          padding: 0 20px;
-        }
-      }
     }
 
     // 头像

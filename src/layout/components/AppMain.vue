@@ -24,29 +24,15 @@ export default {
 
 <style lang="scss" scoped>
 .app-main {
-  min-height: 100vh;
   width: 100%;
+  min-height: calc(100vh - 34px);
+  padding-top: 34px; /* 34 = tags-view */
   position: relative;
   overflow: hidden;
 }
 
-.hasTagsView {
-  .app-main {
-    /* 34 = tags-view */
-    min-height: calc(100vh - 34px);
-  }
-
-  .fixed-header+.app-main {
-    padding-top: 34px;
-  }
-}
 </style>
 
 <style lang="scss">
-// fix css style bug in open el-dialog
-.el-popup-parent--hidden {
-  .fixed-header {
-    padding-right: 15px;
-  }
-}
+
 </style>

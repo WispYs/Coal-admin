@@ -4,9 +4,9 @@
       <headbar class="headbar-container clearfix" />
       <avatar class="avatar-container" />
     </div>
-    <div :class="{hasTagsView:needTagsView}" class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
-        <tags-view v-if="needTagsView" />
+    <div class="main-container">
+      <div class="tags-wrapper">
+        <tags-view />
       </div>
       <app-main />
     </div>
@@ -27,12 +27,6 @@ export default {
   computed: {
     headbar() {
       return this.$store.state.app.headbar
-    },
-    fixedHeader() {
-      return this.$store.state.settings.fixedHeader
-    },
-    needTagsView() {
-      return this.$store.state.settings.needTagsView
     }
   },
   methods: {
@@ -65,7 +59,7 @@ export default {
     z-index: 999;
   }
 
-  .fixed-header {
+  .tags-wrapper {
     position: fixed;
     top: $sideBarHeight;
     right: 0;
@@ -74,11 +68,4 @@ export default {
     transition: width 0.28s;
   }
 
-  .hideSidebar .fixed-header {
-    width: calc(100% - 54px)
-  }
-
-  .mobile .fixed-header {
-    width: 100%;
-  }
 </style>

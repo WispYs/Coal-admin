@@ -1,6 +1,6 @@
 <template>
-  <div :class="{'has-logo':showLogo}">
-    <logo v-if="showLogo" />
+  <div>
+    <logo />
     <div class="menu-wrapper">
       <menu-wrap :routes="permission_routes" />
       <!-- <menu-wrap :routes="asyncRoutes" /> -->
@@ -24,13 +24,10 @@ export default {
   computed: {
     ...mapGetters([
       'permission_routes' // state 里存储的路由配置
-    ]),
+    ])
     // routes() {
     //   return this.$router.options.routes
     // },
-    showLogo() {
-      return this.$store.state.settings.headbarLogo
-    }
   }
 }
 </script>
