@@ -9,88 +9,19 @@
     >
       <el-table-column
         prop="team"
-        width="100"
+        width="120"
       />
       <el-table-column
         prop="addr"
         label="工作地点"
-        width="120"
       />
-      <el-table-column label="第一班" align="center">
+      <el-table-column v-for="(column,index) in columns" :key="index" :label="column.title" align="center">
         <el-table-column
-          prop="groups[0].monitor"
-          label="跟班班长"
-          width="100"
-          align="center"
-        />
-        <el-table-column
-          prop="groups[0].count"
-          label="出勤人数"
-          width="80"
-          align="center"
-        />
-        <el-table-column
-          prop="groups[0].workload"
-          label="当班工作量"
-          width="100"
-          align="center"
-        />
-        <el-table-column
-          prop="groups[0].workplan"
-          label="当日计划"
-          width="80"
-          align="center"
-        />
-      </el-table-column>
-      <el-table-column label="第二班" align="center">
-        <el-table-column
-          prop="groups[1].monitor"
-          label="跟班班长"
-          width="100"
-          align="center"
-        />
-        <el-table-column
-          prop="groups[1].count"
-          label="出勤人数"
-          width="80"
-          align="center"
-        />
-        <el-table-column
-          prop="groups[1].workload"
-          label="当班工作量"
-          width="100"
-          align="center"
-        />
-        <el-table-column
-          prop="groups[1].workplan"
-          label="当日计划"
-          width="80"
-          align="center"
-        />
-      </el-table-column>
-      <el-table-column label="第三班" align="center">
-        <el-table-column
-          prop="groups[2].monitor"
-          label="跟班班长"
-          width="100"
-          align="center"
-        />
-        <el-table-column
-          prop="groups[2].count"
-          label="出勤人数"
-          width="80"
-          align="center"
-        />
-        <el-table-column
-          prop="groups[2].workload"
-          label="当班工作量"
-          width="100"
-          align="center"
-        />
-        <el-table-column
-          prop="groups[2].workplan"
-          label="当日计划"
-          width="80"
+          v-for="(item,i) in column.childrens"
+          :key="i"
+          :prop="`groups[${index}].${item.field}`"
+          :label="item.name"
+          width="92"
           align="center"
         />
       </el-table-column>
@@ -104,6 +35,61 @@ import { getMultList } from '@/api/table'
 export default {
   data() {
     return {
+      id: 'mult-table',
+      columns: [
+        {
+          title: '第一班',
+          childrens: [
+            {
+              field: 'monitor',
+              name: '跟班班长'
+            }, {
+              field: 'count',
+              name: '出勤人数'
+            }, {
+              field: 'workload',
+              name: '当班工作量'
+            }, {
+              field: 'workplan',
+              name: '当日计划'
+            }
+          ]
+        }, {
+          title: '第二班',
+          childrens: [
+            {
+              field: 'monitor',
+              name: '跟班班长'
+            }, {
+              field: 'count',
+              name: '出勤人数'
+            }, {
+              field: 'workload',
+              name: '当班工作量'
+            }, {
+              field: 'workplan',
+              name: '当日计划'
+            }
+          ]
+        }, {
+          title: '第三班',
+          childrens: [
+            {
+              field: 'monitor',
+              name: '跟班班长'
+            }, {
+              field: 'count',
+              name: '出勤人数'
+            }, {
+              field: 'workload',
+              name: '当班工作量'
+            }, {
+              field: 'workplan',
+              name: '当日计划'
+            }
+          ]
+        }
+      ],
       list: null,
       listLoading: false
     }
@@ -116,6 +102,7 @@ export default {
       getMultList().then(response => {
         this.list = response.data.items
         this.listLoading = false
+        console.log(this.list)
       })
     },
     // 单元格的style回调方法
@@ -129,9 +116,9 @@ export default {
 </script>
 <style lang="scss">
   .mult-table {
-    width: 1340px;
     padding-top: 40px;
     margin: 0 auto;
+
     .el-table {
       .th-slash {
         position: relative;
@@ -140,16 +127,16 @@ export default {
           position: absolute;
           top: 0;
           left: 0;
-          width: 141px;   // 根据勾股定理计算得出长度和旋转角度
+          width: 150px;   // 根据勾股定理计算得出长度和旋转角度
           height: 1px;
           background-color: #EBEEF5;
           display: block;
           text-align: center;
-          transform: rotate(43deg);
+          transform: rotate(38deg);
           transform-origin: top left;
-          -ms-transform: rotate(43deg);
+          -ms-transform: rotate(38deg);
           -ms-transform-origin: top left;
-          -webkit-transform: rotate(43deg);
+          -webkit-transform: rotate(38deg);
           -webkit-transform-origin: top left;
         }
         &:before {

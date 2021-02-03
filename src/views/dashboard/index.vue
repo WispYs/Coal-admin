@@ -20,22 +20,36 @@
       </div>
       <h3>年度统计趋势</h3>
       <line-chart v-loading="loading" :cdata="lineData" />
-    </div>
-    <div class="chart-container">
-      <div class="chart-container__filter">
-        <div class="filter-item">
-          <span>检查时间范围：</span>
-          <el-date-picker
-            v-model="filterTime"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          />
+      <div class="chart-detail">
+        <div class="chart-row">
+          <div class="chart-item chart-title">指标</div>
+          <div v-for="(item, index) in lineData.name" :key="index" class="chart-item">{{ item }}</div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-item chart-title">数量</div>
+          <div v-for="(item, index) in lineData.value" :key="index" class="chart-item">{{ item }}</div>
         </div>
       </div>
-      <h3>按【检查类别】统计</h3>
-      <bar-chart v-loading="loading" :cdata="barData" />
+    </div>
+    <div class="chart-container">
+      <div class="chart-container--left">
+        <h3>按【严重程度】统计</h3>
+        <pie-chart v-loading="loading" :cdata="pieData" />
+      </div>
+      <div class="chart-container--right">
+        <h3>按【检查类别】统计</h3>
+        <bar-chart v-loading="loading" :cdata="barData" />
+      </div>
+      <div class="chart-detail bar-detail">
+        <div class="chart-row">
+          <div class="chart-item chart-title">指标</div>
+          <div v-for="(item, index) in barData.name" :key="index" class="chart-item">{{ item }}</div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-item chart-title">数量</div>
+          <div v-for="(item, index) in barData.value" :key="index" class="chart-item">{{ item }}</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -44,17 +58,26 @@
 import { getLineData } from '@/api/dashboard'
 import LineChart from './components/LineChart'
 import BarChart from './components/BarChart'
+import PieChart from './components/PieChart'
 export default {
   name: 'Dashboard',
   components: {
     LineChart,
-    BarChart
+    BarChart,
+    PieChart
   },
   data() {
     return {
       loading: true,
-      lineData: null,
-      barData: null,
+      lineData: {
+        name: [],
+        value: []
+      },
+      barData: {
+        name: [],
+        value: []
+      },
+      pieData: null,
       years: [
         { value: '2020', label: '2020年' },
         { value: '2019', label: '2019年' },
@@ -82,6 +105,7 @@ export default {
         this.lineCount = response.data.lineCount
         const line = response.data.lineData
         const bar = response.data.barData
+        const pie = response.data.barData
         const lineName = []
         const lineValue = []
         const barName = []
@@ -103,6 +127,7 @@ export default {
           name: barName,
           value: barValue
         }
+        this.pieData = pie
       })
     },
 
@@ -121,6 +146,14 @@ export default {
     margin: 30px;
     .chart-container {
       margin-bottom: 30px;
+      overflow: hidden;
+      &--left {
+        margin-right: 15px;
+      }
+      &--left, &--right {
+        float: left;
+        width: calc(50% - 10px)
+      }
       &__filter {
         display: flex;
         justify-content: center;
@@ -130,6 +163,30 @@ export default {
           display: inline-block;
           &:first-of-type {
             margin-right: 100px;
+          }
+        }
+      }
+      .chart-detail {
+        text-align: center;
+        .chart-row {
+          .chart-item {
+            display: inline-block;
+            width: calc((100% - 146px)/12);
+            height: 22px;
+            line-height: 22px;
+            font-size: 13px;
+            color: #666666;
+            text-align: center;
+            border: 1px solid #dedede;
+            margin: 1px;
+            &.chart-title {
+              width: 120px;
+            }
+          }
+        }
+        &.bar-detail{
+          .chart-item {
+            width: calc((100% - 146px)/5);
           }
         }
       }

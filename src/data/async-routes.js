@@ -137,8 +137,8 @@ export default [
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-5',
                 name: 'Geodesy1-1-5',
-                component: '/demo/index',
-                meta: { title: '矿井煤岩层对比图' }
+                component: '/text-editor/index',
+                meta: { title: '矿井煤岩层对比图', affix: true }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-6',

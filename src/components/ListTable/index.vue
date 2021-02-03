@@ -78,12 +78,19 @@
 
         </template>
         <template v-else>
-          <span v-if="column.filter">
-            {{ filterField(column.filterName, scope.row[column.field]) }}
-          </span>
-          <span v-else>{{ scope.row[column.field] }}</span>
-        </template>
+          <!-- showType 有值表示对表格内样式有特殊要求 -->
+          <template v-if="column.showType === 'colorLump'">
+            <span class="color-lump" :class="lumpClassName(scope.row[column.field])">{{ filterField(column.filterName, scope.row[column.field]) }}</span>
+          </template>
+          <template v-else>
+            <span v-if="column.filter">
+              {{ filterField(column.filterName, scope.row[column.field]) }}
+            </span>
+            <span v-else>{{ scope.row[column.field] }}</span>
 
+          </template>
+
+        </template>
       </template>
     </el-table-column>
     <el-table-column v-if="config.actions && config.actions.length > 0" fixed="right" label="操作" width="160" align="center">
@@ -151,7 +158,18 @@ export default {
         return this.filterMethod(name, field)
       }
     },
+    // 色块样式类名
+    lumpClassName(str) {
+      const classMap = {
+        1: 'green',
+        2: 'blue',
+        3: 'orange',
+        4: 'red'
+      }
+      return classMap[str]
+    },
     handleClick(row, index) {
+      this.$message.success('查看信息')
       console.log(row, index)
     },
     // 编辑
@@ -220,5 +238,21 @@ export default {
 }
 </script>
 <style lang="scss">
-
+@import '~@/assets/styles/variables.scss';
+  .color-lump {
+    padding: 10px 20px;
+    color: #fff;
+    &.green {
+      background: $greenColor;
+    }
+    &.blue {
+      background: $primaryColor;
+    }
+    &.orange {
+      background: $orangeColor;
+    }
+    &.red {
+      background: $redColor;
+    }
+  }
 </style>

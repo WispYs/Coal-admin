@@ -125,7 +125,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success(id)
+        this.$message.success('删除成功')
       })
     },
 
@@ -133,12 +133,12 @@ export default {
     createSubmit(submitData) {
       console.log(submitData)
       this.createDialogVisible = false
-      this.$message.success(JSON.stringify(submitData))
+      this.$message.success('新建成功')
     },
     editSubmit(submitData) {
       console.log(submitData)
       this.editDialogVisible = false
-      this.$message.success(JSON.stringify(submitData))
+      this.$message.success('编辑成功')
     },
 
     // 定义导出Excel表格事件

@@ -12,6 +12,8 @@
       :list-loading="listLoading"
       :config="TableConfig"
       :filter-method="filterMethods"
+      @edit-click="(row) => openDialog('edit', row)"
+      @submit-data="editSubmit"
     />
     <pagination
       v-show="total>0"
@@ -19,6 +21,14 @@
       :page.sync="listQuery.page"
       :limit.sync="listQuery.size"
       @pagination="__fetchData"
+    />
+    <!-- 编辑弹窗 -->
+    <form-dialog
+      ref="editDialog"
+      :config="initEditConfig()"
+      :dialog-visible="editDialogVisible"
+      @close-dialog="editDialogVisible = false"
+      @submit="editSubmit"
     />
   </div>
 </template>
@@ -28,11 +38,12 @@ import { getList } from '@/api/table'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
+import FormDialog from '@/components/FormDialog'
 import { TableConfig, FilterConfig } from '@/data/table2'
 import exportExcel from '@/utils/export-excel'
 
 export default {
-  components: { FilterBar, ListTable, Pagination },
+  components: { FilterBar, ListTable, Pagination, FormDialog },
   data() {
     return {
       id: 'table2',
@@ -45,7 +56,8 @@ export default {
       filter: {}, // 筛选项
       listLoading: true,
       FilterConfig,
-      TableConfig
+      TableConfig,
+      editDialogVisible: false
     }
   },
   created() {
@@ -67,6 +79,30 @@ export default {
       this.__fetchData()
     },
 
+    // 初始化编辑窗口配置
+    initEditConfig() {
+      const editConfig = Object.assign({
+        title: '编辑',
+        width: '500px',
+        form: this.TableConfig.columns
+      })
+      return editConfig
+    },
+    // 打开弹窗
+    openDialog(name, row) {
+      const visible = `${name}DialogVisible`
+      this[visible] = true
+      if (row) {
+        // 如果有数据，更新子组件的 formData
+        this.$refs.editDialog.updataForm(row)
+      }
+    },
+    editSubmit(submitData) {
+      console.log(submitData)
+      this.editDialogVisible = false
+      this.$message.success('编辑成功')
+    },
+
     // 定义导出Excel表格事件
     handelExport() {
       // 第一个参数为 table 的 id
@@ -76,11 +112,16 @@ export default {
 
     // 字段过滤方法
     filterMethods(name, str) {
-      if (name === 'openStatusFilter') {
-        // 设备开启状态
-        return str ? '是' : '否'
+      if (name === 'riskFilter') {
+        // 设备风险等级
+        const riskMap = {
+          1: '没有风险',
+          2: '轻度风险',
+          3: '较大风险',
+          4: '重大风险'
+        }
+        return riskMap[str]
       }
-      // else if ...
     }
   }
 }
