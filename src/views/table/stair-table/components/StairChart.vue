@@ -50,12 +50,12 @@ export default {
             splitLine: { show: true },
             axisLine: {
               lineStyle: {
-                color: '#666'
+                color: '#666666'
               }
             },
             axisLabel: {
               textStyle: {
-                color: '#666'
+                color: '#666666'
               }
             },
             data: newData.name
@@ -65,14 +65,14 @@ export default {
             type: 'value',
             axisLine: {
               lineStyle: {
-                color: '#666'
+                color: '#666666'
               }
             },
             axisLabel: {
               show: true,
               interval: 0,
               textStyle: {
-                color: '#666'
+                color: '#666666'
               },
               formatter: function(value) {
                 const timestamp = new Date(newData.startTime).getTime() + 86400000 * value // 86400000，一天的毫秒数
@@ -86,13 +86,13 @@ export default {
               type: 'bar',
               stack: '总量',
               itemStyle: {
-                barBorderColor: 'rgba(0,0,0,0)',
-                color: 'rgba(0,0,0,0)'
+                barBorderColor: '#ffffff',
+                color: '#ffffff'
               },
               emphasis: {
                 itemStyle: {
-                  barBorderColor: 'rgba(0,0,0,0)',
-                  color: 'rgba(0,0,0,0)'
+                  barBorderColor: '#ffffff',
+                  color: '#ffffff'
                 }
               },
               data: newData.beforeStart

@@ -198,20 +198,22 @@ export default {
       if (this.editableField(row.editable, column.property)) {
         this.clickRowIndex = row.rowIndex
         this.clickField = column.property
-        setTimeout(() => {
+        // 在下次 DOM 更新循环结束之后执行延迟回调
+        this.$nextTick(() => {
           if (cell.querySelectorAll('input').length > 0) cell.querySelectorAll('input')[0].focus()
-        }, 50)
+        })
       }
 
       // 关于 ref 注册时间的重要说明：
       // 因为 ref 本身是作为渲染结果被创建的，在初始渲染的时候你不能访问它们 - 它们还不存在！
       // $refs 也不是响应式的，因此你不应该试图用它在模板中做数据绑定。https://cn.vuejs.org/v2/api/?#ref
       // if (row[column.property]) {
-      //   setTimeout(() => {
+      //   // 在下次 DOM 更新循环结束之后执行延迟回调
+      //   this.$nextTick(() => {
       //     console.log(`${column.property}${row.rowIndex}`)
       //     console.log(this.$refs[`${column.property}${row.rowIndex}`])
       //     this.$refs[`${column.property}${row.rowIndex}`][0].focus()
-      //   }, 50)
+      //   })
       // }
     },
 
@@ -249,6 +251,8 @@ export default {
   .editable-cell {
     background: #fdf5e6;
   }
+
+  // 修改边框颜色
   .el-table td, .el-table th.is-leaf,.el-table--border, .el-table--group{
     border-color: #999;
   }
