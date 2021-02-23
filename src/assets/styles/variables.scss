@@ -1,17 +1,21 @@
+/** ---- theme-blue ---- **/
 // headbar
-$menuText:#bfcbd9;
-$menuActiveText:#409EFF;
-$subMenuActiveText:#f4f4f5;
-
 $menuBg:#304156;
-$menuHover:#263445;
-
-$subMenuBg:#1f2d3d;
-$subMenuHover:#001528;
-
-$sideBarWidth: 210px;
+$menuSecondBg:#263445;
+$menuFourthBg:#001528;
 $sideBarHeight: 60px;
 
+// dropdownMenu
+$dropdownBg: #ecf5ff;
+$dropdownColor: #66b1ff;
+
+// button
+$primaryButtonHover: #66b1ff;
+
+// input
+$inputDateBg: #F2F6FC;
+
+// icon
 $iconColor: #eeeeee;
 
 // color
@@ -31,27 +35,23 @@ $fontSizeMedium: 14px;
 $fontSizeSmall: 13px;
 $fontSizeSmaller: 12px;
 
-// export
-:export {
-  menuText: $menuText;
-  menuActiveText: $menuActiveText;
-  subMenuActiveText: $subMenuActiveText;
-  menuBg: $menuBg;
-  menuHover: $menuHover;
-  subMenuBg: $subMenuBg;
-  subMenuHover: $subMenuHover;
-  sideBarWidth: $sideBarWidth;
-  iconColor: $iconColor;
-  primaryColor: $primaryColor;
-  greenColor: $greenColor;
-  orangeColor: $orangeColor;
-  redColor: $redColor;
-  grayColor: $grayColor;
-  darkblueColor: $darkblueColor;
-  fontSizeLargest: $fontSizeLargest;
-  fontSizeLarger: $fontSizeLarger;
-  fontSizeLarge: $fontSizeLarge;
-  fontSizeMedium: $fontSizeMedium;
-  fontSizeSmall: $fontSizeSmall;
-  fontSizeSmaller: $fontSizeSmaller;
-}
+
+/** ---- theme-green ---- **/
+
+// headbar
+$menuBgGreen: #007e54;
+$menuSecondBgGreen: #005e54;
+$menuFourthBgGreen: #003e54;
+
+// dropdownMenu
+$dropdownBgGreen: #ebffeb;
+$dropdownColorGreen: #03cc1a;
+
+// button
+$primaryButtonHoverGreen: #03cc1a;
+
+// input
+$inputDateBgGreen: #f5fcf2;
+
+// color
+$primaryColorGreen: #04B018;

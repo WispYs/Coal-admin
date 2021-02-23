@@ -2,7 +2,7 @@
   <div class="app-wrapper">
     <div class="nav-container">
       <headbar class="headbar-container clearfix" />
-      <avatar class="avatar-container" />
+      <avatar class="avatar-container" @showThemeDialog="themeDialogVisible = true" />
     </div>
     <div class="main-container">
       <div class="tags-wrapper">
@@ -10,11 +10,16 @@
       </div>
       <app-main />
     </div>
+    <theme-dialog
+      :dialog-visible="themeDialogVisible"
+      @switch-theme="switchTheme"
+      @close-dialog="themeDialogVisible = false"
+    />
   </div>
 </template>
 
 <script>
-import { Headbar, AppMain, Avatar, TagsView } from './components'
+import { Headbar, AppMain, Avatar, TagsView, ThemeDialog } from './components'
 
 export default {
   name: 'Layout',
@@ -22,7 +27,13 @@ export default {
     Headbar,
     AppMain,
     Avatar,
-    TagsView
+    TagsView,
+    ThemeDialog
+  },
+  data() {
+    return {
+      themeDialogVisible: false
+    }
   },
   computed: {
     headbar() {
@@ -30,7 +41,11 @@ export default {
     }
   },
   methods: {
-
+    switchTheme(color) {
+      this.themeDialogVisible = false
+      const themeClass = 'theme-' + color
+      this.$store.dispatch('themeColor/switchTheme', themeClass)
+    }
   }
 }
 </script>
