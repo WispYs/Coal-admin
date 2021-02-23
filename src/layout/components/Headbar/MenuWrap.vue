@@ -70,11 +70,12 @@ export default {
 }
 </script>
 <style lang="scss">
+@import '~@/assets/styles/theme.scss';
 @import '~@/assets/styles/variables.scss';
 .menu-first--wrapper {
   .router-link-active {
     span {
-      color: $menuActiveText;
+      @include primaryColor($primaryColor)
     }
   }
 }

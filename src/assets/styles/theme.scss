@@ -1,0 +1,107 @@
+// primary
+@mixin primaryColor($color) {
+  color: $color;
+
+  [data-theme="theme-green"] & {
+    color: $primaryColorGreen;
+  }
+}
+
+@mixin primaryBg($color) {
+  background-color: $color;
+
+  [data-theme="theme-green"] & {
+    background-color: $primaryColorGreen;
+  }
+}
+
+@mixin primaryBorder($color) {
+  border-color: $color;
+
+  [data-theme="theme-green"] & {
+    border-color: $primaryColorGreen;
+  }
+}
+
+
+// headbar
+@mixin menuBg($color) {
+  background-color: $color;
+
+  [data-theme="theme-green"] & {
+    background-color: $menuBgGreen;
+  }
+}
+
+@mixin menuSecondBg($color) {
+  background-color: $color;
+
+  [data-theme="theme-green"] & {
+    background-color: $menuSecondBgGreen;
+  }
+}
+
+@mixin menuFourthBg($color) {
+  background-color: $color;
+
+  [data-theme="theme-green"] & {
+    background-color: $menuFourthBgGreen;
+  }
+}
+
+// dropdownMenu
+@mixin dropdownColor($bg, $color) {
+  background-color: $bg;
+  color: $color;
+
+  [data-theme="theme-green"] & {
+    background-color: $dropdownBgGreen;
+    color: $dropdownColorGreen;
+  }
+}
+
+
+// button
+
+@mixin primaryButtonHover($color) {
+  background-color: $color;
+  border-color: $color;
+
+  [data-theme="theme-green"] & {
+    background-color: $primaryButtonHoverGreen;
+    border-color: $primaryButtonHoverGreen;
+  }
+}
+
+//button-text
+@mixin primaryButtonTextHover($color) {
+  color: $color;
+
+  [data-theme="theme-green"] & {
+    color: $primaryButtonHoverGreen;
+  }
+}
+
+// input
+
+
+// date-picker
+@mixin inputDateBg($color) {
+  background-color: $color;
+
+  [data-theme="theme-green"] & {
+    background-color: $inputDateBgGreen;
+  }
+}
+
+@mixin inputRadio($color) {
+  background-color: $color;
+  border-color: $color;
+  box-shadow: -1px 0 0 0 $color;
+
+  [data-theme="theme-green"] & {
+    background-color: $primaryColorGreen;
+    border-color: $primaryColorGreen;
+    box-shadow: -1px 0 0 0 $primaryColorGreen;
+  }
+}

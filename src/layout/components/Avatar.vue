@@ -7,11 +7,11 @@
       </div>
       <el-dropdown-menu slot="dropdown" class="user-dropdown">
         <el-dropdown-item>个人资料</el-dropdown-item>
-        <el-dropdown-item @click.native="logout">
-          <span style="display:block;">退出登录</span>
-        </el-dropdown-item>
+        <el-dropdown-item @click.native="showThemeDialog">更换皮肤</el-dropdown-item>
+        <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
+
   </div>
 </template>
 <script>
@@ -20,6 +20,7 @@ export default {
   name: 'Avatar',
   data() {
     return {
+      themeDialogVisible: false
 
     }
   },
@@ -38,7 +39,13 @@ export default {
         await this.$store.dispatch('user/logout')
         this.$router.push(`/login?redirect=${this.$route.fullPath}`)
       })
+    },
+
+    showThemeDialog() {
+      this.$emit('showThemeDialog')
     }
+
   }
 }
 </script>
+

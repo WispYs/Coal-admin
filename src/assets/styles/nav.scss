@@ -2,7 +2,7 @@
  * @Author: Wisper 
  * @Date: 2021-01-08 14:12:56 
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-02-03 14:05:18
+ * @Last Modified time: 2021-02-22 17:47:32
  */
 
 #app {
@@ -19,7 +19,8 @@
     top: 0;
     bottom: 0;
     left: 0;
-    background-color: $menuBg;
+    // background-color: $menuBg;
+    @include menuBg($menuBg);
     width: 100%;
     height: $sideBarHeight;
     z-index: 2001;
@@ -28,7 +29,8 @@
     .headbar-container {
       width: calc(100% - 70px);
       padding: 0 20px;
-      background-color: $menuBg;
+      // background-color: $menuBg;
+      @include menuBg($menuBg);
       height: 100%;
       font-size: 14px;
       color: white;
@@ -40,7 +42,8 @@
         height: 60px;
         line-height: 60px;
 
-        background: $menuBg;
+        // background: $menuBg;
+        @include menuBg($menuBg);
         text-align: center;
         overflow: hidden;
 
@@ -98,7 +101,8 @@
             width: -webkit-fill-available;
             height: auto;
             padding: 10px 0;
-            background-color: $menuHover;
+            // background-color: $menuSecondBg;
+            @include menuSecondBg($menuSecondBg);
             color: white;
             font-size: 13px;
             text-align: left;
@@ -141,8 +145,8 @@
               }
 
               &:hover {
-                background-color: black;
-
+                // background-color: black;
+                @include menuFourthBg($menuFourthBg);
                 // .menu-fourth--wrapper {
                 //   display: block;
                 // }
@@ -161,7 +165,8 @@
               left: 150px;
               width: 1000px;
               padding: 0 10px;
-              background-color: black;
+              // background-color: black;
+              @include menuFourthBg($menuFourthBg);
               z-index: 1002;
               color: white;
               font-size: 13px;
@@ -184,7 +189,7 @@
             display: inline-block;
 
             &:hover {
-              color: $menuActiveText;
+              @include primaryColor($primaryColor)
             }
           }
         }

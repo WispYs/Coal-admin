@@ -196,6 +196,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/assets/styles/variables.scss";
+@import "~@/assets/styles/theme.scss";
 .tags-view-container {
   height: 34px;
   width: 100%;
@@ -233,9 +234,10 @@ export default {
         margin-right: 15px;
       }
       &.active {
-        background-color: $menuActiveText;
         color: #fff;
-        border-color: $menuActiveText;
+        @include primaryBg($primaryColor);
+        @include primaryBorder($primaryColor);
+
         &::before {
           content: '';
           background: #fff;
