@@ -1,7 +1,7 @@
 {
-  "name": "vue-pro",
+  "name": "coal-admin",
   "version": "1.1.0",
-  "description": "A vue project",
+  "description": "",
   "author": "wisper <wisper927@163.com>",
   "scripts": {
     "dev": "vue-cli-service serve",
