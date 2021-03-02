@@ -95,6 +95,10 @@
     </el-table-column>
     <el-table-column v-if="config.actions && config.actions.length > 0" fixed="right" label="操作" width="160" align="center">
       <template slot-scope="scope">
+        <template v-if="config.actions.indexOf('other') > -1">
+          <el-button v-for="item in config.otherActionTitle" :key="item" type="text" size="small" @click="otherClick(scope.row, scope.$index)">{{ item }}</el-button>
+        </template>
+        <el-button v-if="config.actions.indexOf('upload') > -1" type="text" size="small" @click="uploadFile(scope.row, scope.$index)">附件</el-button>
         <el-button v-if="config.actions.indexOf('preview') > -1" type="text" size="small" @click="handleClick(scope.row, scope.$index)">查看</el-button>
         <el-button v-if="config.actions.indexOf('edit') > -1 && !scope.row.edit" type="text" size="small" @click="edit(scope.row)">编辑</el-button>
         <el-button v-if="config.actions.indexOf('edit') > -1 && scope.row.edit" type="text" style="color: #67c23a" size="small" @click="submitRow(scope.row)">提交</el-button>
@@ -168,9 +172,17 @@ export default {
       }
       return classMap[str]
     },
+    // 上传附件
+    uploadFile(row, index) {
+      this.$emit('upload-click', row)
+    },
+    // 查看
     handleClick(row, index) {
       this.$message.success('查看信息')
       console.log(row, index)
+    },
+    otherClick(row, index) {
+      this.$emit('other-click', row)
     },
     // 编辑
     edit(row) {

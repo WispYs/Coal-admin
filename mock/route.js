@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-02 13:56:27
+ * @Last Modified time: 2021-03-02 14:46:32
  */
 
 /**
@@ -1002,7 +1002,7 @@ const asyncRoutes = [
           {
             path: '/demo-excavate/excavate3/excavate3-1',
             name: 'Excavate3-1',
-            component: '/demo/index',
+            component: '/mining-management/production-management/working-lifecycle/index',
             meta: { title: '工作面生命周期管理' }
           },
           {

@@ -56,6 +56,12 @@
         <!-- textarea -->
         <el-input v-if="item.layout === 'Textarea'" v-model="formData[item.field]" type="textarea" :placeholder="item.placeholder" />
 
+        <!-- upload -->
+        <div v-if="item.layout === 'Upload'">
+          <p class="file-title">{{ formData[item.field] }}</p>
+          <el-button type="text" size="small" @click="uploadFile">上传附件</el-button>
+        </div>
+
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -113,6 +119,10 @@ export default {
     onSubmit() {
       this.$emit('submit', this.formData)
     },
+    // 上传附件
+    uploadFile() {
+      this.$emit('upload-click', this.formData)
+    },
     // 更新父组件 xxxxxDialogVisible 的值
     closeDialog() {
       this.$emit('close-dialog')
@@ -121,5 +131,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+.file-title {
+  margin: 0;
+  line-height: 40px;
+}
 </style>

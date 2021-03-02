@@ -5,12 +5,14 @@ const user = require('./user')
 const table = require('./table')
 const route = require('./route')
 const dashboard = require('./dashboard')
+const workingLifecycle = require('./working-lifecycle')
 
 const mocks = [
   ...user,
   ...table,
   ...route,
-  ...dashboard
+  ...dashboard,
+  ...workingLifecycle
 ]
 
 // for front mock
