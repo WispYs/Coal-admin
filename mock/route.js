@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-02-02 13:34:37
+ * @Last Modified time: 2021-03-02 13:56:27
  */
 
 /**
@@ -118,51 +118,44 @@ const asyncRoutes = [
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-1',
                 name: 'Geodesy1-1-1',
-                component: '/table/table1/index',
-                // meta: { title: '矿区构造纲要图', affix: true }
-                meta: { title: '表格 - 行内编辑', affix: true }
+                component: '/demo/index',
+                meta: { title: '矿区构造纲要图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-2',
                 name: 'Geodesy1-1-2',
-                component: '/table/table2/index',
-                // meta: { title: '地质地形图', affix: true }
-                meta: { title: '表格 - 弹窗编辑', affix: true }
+                component: '/demo/index',
+                meta: { title: '地质地形图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-3',
                 name: 'Geodesy1-1-3',
-                component: '/table/report-table/index',
-                // meta: { title: '地层综合柱状图', affix: true }
-                meta: { title: '表格 - 双击单元格编辑', affix: true }
+                component: '/demo/index',
+                meta: { title: '地层综合柱状图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-4',
                 name: 'Geodesy1-1-4',
-                component: '/table/mult-table/index',
-                // meta: { title: '主要地质剖面图', affix: true }
-                meta: { title: '嵌套表格', affix: true }
+                component: '/demo/index',
+                meta: { title: '主要地质剖面图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-5',
                 name: 'Geodesy1-1-5',
-                component: '/table/upload/index',
-                // meta: { title: '矿井煤岩层对比图', affix: true }
-                meta: { title: '上传附件', affix: true }
+                component: '/demo/index',
+                meta: { title: '矿井煤岩层对比图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-6',
                 name: 'Geodesy1-1-6',
-                component: '/text-editor/index',
-                // meta: { title: '煤矿可采煤层底板等高线及资源/储量估算图', affix: true }
-                meta: { title: '富文本编辑器', affix: true }
+                component: '/demo/index',
+                meta: { title: '煤矿可采煤层底板等高线及资源/储量估算图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-7',
                 name: 'Geodesy1-1-7',
-                component: '/table/stair-table/index',
-                // meta: { title: '井巷地质素描图', affix: true }
-                meta: { title: '阶梯图', affix: true }
+                component: '/demo/index',
+                meta: { title: '井巷地质素描图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-8',
@@ -3434,6 +3427,59 @@ const asyncRoutes = [
       }
     ]
   },
+  // 页面模板
+  {
+    path: '/demo-page',
+    name: 'DemoPage',
+    component: 'Layout',
+    redirect: '/demo-page/build1',
+    meta: { title: '页面模板' },
+    children: [
+      {
+        path: '/demo-page/table1',
+        name: 'Table1',
+        component: '/demo/table/table1/index',
+        meta: { title: '表格 - 行内编辑', affix: true }
+      },
+      {
+        path: '/demo-page/table2',
+        name: 'Table2',
+        component: '/demo/table/table2/index',
+        meta: { title: '表格 - 弹窗编辑', affix: true }
+      },
+      {
+        path: '/demo-page/report-table',
+        name: 'ReportTable',
+        component: '/demo/table/report-table/index',
+        meta: { title: '表格 - 双击单元格编辑', affix: true }
+      },
+      {
+        path: '/demo-page/mult-table',
+        name: 'MultTable',
+        component: '/demo/table/mult-table/index',
+        meta: { title: '嵌套表格', affix: true }
+      },
+      {
+        path: '/demo-page/upload',
+        name: 'Upload',
+        component: '/demo/table/upload/index',
+        meta: { title: '上传附件', affix: true }
+      },
+      {
+        path: '/demo-page/text-editor',
+        name: 'TextEditor',
+        component: '/demo/text-editor/index',
+        meta: { title: '富文本编辑器', affix: true }
+      },
+      {
+        path: '/demo-page/stair-table',
+        name: 'StairTable',
+        component: '/demo/table/stair-table/index',
+        meta: { title: '阶梯图', affix: true }
+      }
+    ]
+  },
+
   // 智慧党建
   {
     path: '/demo-party-build',
