@@ -45,6 +45,7 @@ export default {
       this.$emit('switch-theme', this.themeColor)
     },
     closeDialog() {
+      this.themeColor = getThemeColor() ? getThemeColor().split('-')[1] : 'blue'
       this.$emit('close-dialog')
     }
   }

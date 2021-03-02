@@ -2,7 +2,7 @@
  * @Author: Wisper 
  * @Date: 2021-01-08 14:12:56 
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-02-22 17:47:32
+ * @Last Modified time: 2021-03-02 11:18:46
  */
 
 #app {
@@ -27,6 +27,7 @@
 
     // 导航栏
     .headbar-container {
+      // width: 100%;
       width: calc(100% - 70px);
       padding: 0 20px;
       // background-color: $menuBg;
