@@ -2,11 +2,11 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-02 14:46:32
+ * @Last Modified time: 2021-03-03 10:20:15
  */
 
 /**
- * @param {string}  path          路由路径
+ * @param {string}  path          路由路径，如果想直接跳转到外部链接可直接传入外网url链接
  * @param {string}  name          路由名称
  * @param {string}  component     路由所引用的前端页面模板路径
  * @param {string}  redirect      路由重定向路径
@@ -15,6 +15,7 @@
  * @param {boolean} affix         meta参数，true表示永久固定在路由导航tagView中不可删除
  * @param {array}   roles         meta参数，['admin', 'editor']表示该路由仅对admin和editor开放，现权限按角色分配，后可根据项目需求修改
  * @param {boolean} hiddenChild   meta参数，true表示隐藏该路由下所有子路由，仅一级路由显示在headbar菜单中
+ * @param {string}  externalUrl   meta参数，用于内嵌外部链接，例：'https://www.baidu.com/'
  */
 
 const asyncRoutes = [
@@ -3476,6 +3477,12 @@ const asyncRoutes = [
         name: 'StairTable',
         component: '/demo/table/stair-table/index',
         meta: { title: '阶梯图', affix: true }
+      },
+      {
+        path: '/demo-page/external-link',
+        name: 'ExternalLink',
+        component: '/demo/external-link/index',
+        meta: { title: '内嵌外部链接', affix: true, externalUrl: 'https://www.baidu.com/' }
       }
     ]
   },
