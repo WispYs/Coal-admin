@@ -49,7 +49,11 @@
       @upload-submit="uploadSubmit"
     />
 
-    <working-progress :dialog-visible="progressDialogVisible" @close-dialog="progressDialogVisible = false" />
+    <working-progress
+      ref="progressDialog"
+      :dialog-visible="progressDialogVisible"
+      @close-dialog="progressDialogVisible = false"
+    />
   </div>
 </template>
 
@@ -61,7 +65,7 @@ import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import UploadFile from '@/components/UploadFile'
 import { TableConfig, FilterConfig } from '@/data/working-lifecycle'
-import WorkingProgress from './WorkingProgress.vue'
+import WorkingProgress from './WorkingProgress'
 
 export default {
   components: { FilterBar, ListTable, Pagination, FormDialog, UploadFile, WorkingProgress },
@@ -131,8 +135,12 @@ export default {
       }
     },
     // 打开其他按钮弹窗
-    openProgressDialog() {
+    openProgressDialog(row) {
       this.progressDialogVisible = true
+      if (row) {
+        // 更新数据
+        this.$refs.progressDialog.updataForm(row)
+      }
     },
     // 删除
     deleteClick(id) {

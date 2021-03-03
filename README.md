@@ -18,7 +18,6 @@
 运行 `npm run build` 构建命令会生成或更新 dist 文件夹，运行 index.html 文件即可访问项目。
 
 ## 目录结构 ##
-    |---build                                // webpack配置文件
     |---dist                                 // 打包文件
     |---docs                                 // 文档(代码规范、git提交规范...)
     |---mock                                 // mock动态模拟数据

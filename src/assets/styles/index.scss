@@ -14,6 +14,39 @@ body {
   font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
 }
 
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+div,
+p,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+form,
+table,
+th,
+td,
+a,
+img,
+span,
+strong,
+var,
+em,
+input,
+textarea,
+select,
+option {
+  margin: 0;
+  padding: 0;
+}
+
 label {
   font-weight: 400;
 }
