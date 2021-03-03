@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "preview": "node build/index.js --preview",
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
