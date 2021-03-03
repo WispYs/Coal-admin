@@ -129,7 +129,7 @@ export default {
 
 <style lang="scss" scoped>
   .filter-bar {
-    margin: 20px 0;
+    margin-bottom: 10px;
     &__item {
       display: inline-block;
       margin: 0 40px 15px 0;

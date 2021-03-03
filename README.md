@@ -12,7 +12,7 @@
 - 运行 `npm install` 命令，安装 package.json 里指定的依赖项。
 
 ## 本地开发
-运行 `npm run dev` 启动本地服务器，浏览器自动访问 http://localhost:4200
+运行 `npm run dev` 启动本地服务器，浏览器自动访问 http://localhost:8000
 
 ## 构建生产
 运行 `npm run build` 构建命令会生成或更新 dist 文件夹，运行 index.html 文件即可访问项目。
