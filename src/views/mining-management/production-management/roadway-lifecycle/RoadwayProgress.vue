@@ -8,11 +8,6 @@
   >
     <div class="progress-container">
       <div class="progress-item">
-        <p class="progress-item__title">{{ progressData.name }}产量进度</p>
-        <p class="progress-item__info">已采{{ progressData.yields }}万吨 / 资源存储量{{ progressData.yTotal }}万吨</p>
-        <el-progress :text-inside="true" :stroke-width="26" :percentage="progressData.yPercent" />
-      </div>
-      <div class="progress-item">
         <p class="progress-item__title">{{ progressData.name }}推进度</p>
         <p class="progress-item__info">已完成{{ progressData.push }}米 / 工作面总长度{{ progressData.pTotal }}米</p>
         <el-progress :text-inside="true" :stroke-width="26" :percentage="progressData.pPercent" />
@@ -50,7 +45,7 @@ export default {
   data() {
     return {
       progressData: {
-        title: '工作面进度',
+        title: '巷道进度',
         name: ''
       }
     }
@@ -65,7 +60,6 @@ export default {
     updataForm(data) {
       this.progressData = Object.assign(this.progressData, data, {
         title: `${data.name}进度`,
-        yPercent: this.computePercent(data.yields, data.yTotal),
         pPercent: this.computePercent(data.push, data.pTotal)
       })
     },

@@ -6,13 +6,15 @@ const table = require('./table')
 const route = require('./route')
 const dashboard = require('./dashboard')
 const workingLifecycle = require('./working-lifecycle')
+const roadWayLifecycle = require('./roadway-lifecycle')
 
 const mocks = [
   ...user,
   ...table,
   ...route,
   ...dashboard,
-  ...workingLifecycle
+  ...workingLifecycle,
+  ...roadWayLifecycle
 ]
 
 // for front mock

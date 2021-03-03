@@ -65,7 +65,7 @@ import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import UploadFile from '@/components/UploadFile'
 import { TableConfig, FilterConfig } from '@/data/working-lifecycle'
-import WorkingProgress from './WorkingProgress.vue'
+import WorkingProgress from './WorkingProgress'
 
 export default {
   components: { FilterBar, ListTable, Pagination, FormDialog, UploadFile, WorkingProgress },

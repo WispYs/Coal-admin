@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-03 10:20:15
+ * @Last Modified time: 2021-03-03 14:59:41
  */
 
 /**
@@ -1009,7 +1009,7 @@ const asyncRoutes = [
           {
             path: '/demo-excavate/excavate3/excavate3-2',
             name: 'Excavate3-2',
-            component: '/demo/index',
+            component: '/mining-management/production-management/roadway-lifecycle/index',
             meta: { title: '巷道生命周期管理' }
           },
           {
