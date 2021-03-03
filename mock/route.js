@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-03 14:59:41
+ * @Last Modified time: 2021-03-03 16:39:31
  */
 
 /**
@@ -1015,7 +1015,7 @@ const asyncRoutes = [
           {
             path: '/demo-excavate/excavate3/excavate3-3',
             name: 'Excavate3-3',
-            component: '/demo/index',
+            component: '/mining-management/production-management/mining-operation/index',
             meta: { title: '采掘作业规程' }
           }
         ]

@@ -5,7 +5,7 @@
     :width="config.width || '500px'"
     :before-close="closeDialog"
   >
-    <el-form ref="formData" class="dialog-container" :model="formData" label-width="100px">
+    <el-form ref="formData" class="dialog-container" :model="formData" label-width="110px">
       <el-form-item v-for="(item, index) in config.form" :key="index" :label="`${item.label}：`">
         <!-- input -->
         <el-input v-if="item.layout === 'Text'" v-model="formData[item.field]" :placeholder="item.placeholder">

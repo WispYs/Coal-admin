@@ -82,6 +82,9 @@
           <template v-if="column.showType === 'colorLump'">
             <span class="color-lump" :class="lumpClassName(scope.row[column.field])">{{ filterField(column.filterName, scope.row[column.field]) }}</span>
           </template>
+          <template v-if="column.showType === 'underline'">
+            <span class="file-text" @click="fileTextClick">{{ scope.row[column.field] }}</span>
+          </template>
           <template v-else>
             <span v-if="column.filter">
               {{ filterField(column.filterName, scope.row[column.field]) }}
@@ -171,6 +174,10 @@ export default {
         4: 'red'
       }
       return classMap[str]
+    },
+    // 点击上传文件
+    fileTextClick() {
+      this.$emit('file-text-click')
     },
     // 上传附件
     uploadFile(row, index) {
@@ -266,5 +273,10 @@ export default {
     &.red {
       background: $redColor;
     }
+  }
+  .file-text {
+    color: $primaryColor;
+    text-decoration: underline;
+    cursor: pointer;
   }
 </style>
