@@ -1,0 +1,171 @@
+<template>
+  <div class="page-container has-tree">
+    <div class="tree-container">
+      <div class="tree-title">选择风险组织结构</div>
+      <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick" />
+    </div>
+    <div class="form-container">
+      <filter-bar
+        :config="FilterConfig"
+        @search-click="queryData"
+        @create-click="openDialog('create')"
+        @reset-click="queryData"
+      />
+      <list-table
+        :id="id"
+        :list="list"
+        :list-loading="listLoading"
+        :config="TableConfig"
+        @edit-click="(row) => openDialog('edit', row)"
+        @delete-click="deleteClick"
+        @submit-data="editSubmit"
+      />
+      <pagination
+        v-show="total>0"
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.size"
+        @pagination="__fetchData"
+      />
+
+    </div>
+
+    <!-- 新建弹窗 -->
+    <form-dialog
+      :config="initCreateConfig()"
+      :dialog-visible="createDialogVisible"
+      @close-dialog="createDialogVisible = false"
+      @submit="createSubmit"
+    />
+    <!-- 编辑弹窗 -->
+    <form-dialog
+      ref="editDialog"
+      :config="initEditConfig()"
+      :dialog-visible="editDialogVisible"
+      @close-dialog="editDialogVisible = false"
+      @submit="editSubmit"
+    />
+
+  </div>
+</template>
+
+<script>
+import { getList } from '@/api/liability-system'
+import FilterBar from '@/components/FilterBar'
+import ListTable from '@/components/ListTable'
+import Pagination from '@/components/Pagination'
+import FormDialog from '@/components/FormDialog'
+import { TableConfig, FilterConfig } from '@/data/liability-system'
+
+export default {
+  components: { FilterBar, ListTable, Pagination, FormDialog },
+  data() {
+    return {
+      id: 'liability-system',
+      list: null,
+      total: 0,
+      listQuery: {
+        page: 1,
+        size: 10
+      },
+      filter: {}, // 筛选项
+      listLoading: true,
+      FilterConfig,
+      TableConfig,
+      createDialogVisible: false,
+      editDialogVisible: false,
+      treeData: [{
+        label: '顾桥煤矿',
+        children: [{
+          label: '生产部',
+          children: [{
+            label: '生产一部'
+          }]
+        }, {
+          label: '消防部',
+          children: [{
+            label: '消防一部'
+          }]
+        }]
+      }],
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      }
+    }
+  },
+  created() {
+    this.__fetchData()
+  },
+  methods: {
+    __fetchData() {
+      this.listLoading = true
+      const query = Object.assign(this.listQuery, this.filter)
+      getList(query).then(response => {
+        this.listLoading = false
+        this.list = response.data.items
+        this.total = response.data.total
+      })
+    },
+    // 查询数据
+    queryData(filter) {
+      this.filter = Object.assign(this.filter, filter)
+      this.__fetchData()
+    },
+    // 树形控件
+    handleNodeClick(data) {
+      console.log(data)
+    },
+    // 初始化新建窗口配置
+    initCreateConfig() {
+      const createConfig = Object.assign({
+        title: '新建',
+        width: '500px',
+        form: this.TableConfig.columns
+      })
+      return createConfig
+    },
+    // 初始化编辑窗口配置
+    initEditConfig() {
+      const editConfig = Object.assign({
+        title: '编辑',
+        width: '500px',
+        form: this.TableConfig.columns
+      })
+      return editConfig
+    },
+    // 打开弹窗
+    openDialog(name, row) {
+      const visible = `${name}DialogVisible`
+      this[visible] = true
+      if (row) {
+        // 如果有数据，更新子组件的 formData
+        this.$refs.editDialog.updataForm(row)
+      }
+    },
+
+    // 删除
+    deleteClick(id) {
+      this.$confirm('确定删除该条风险?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message.success('删除成功')
+      })
+    },
+    // submit data
+    createSubmit(submitData) {
+      console.log(submitData)
+      this.createDialogVisible = false
+      this.$message.success('新建成功')
+    },
+    editSubmit(submitData) {
+      console.log(submitData)
+      this.editDialogVisible = false
+      this.$message.success('编辑成功')
+    }
+
+  }
+}
+</script>

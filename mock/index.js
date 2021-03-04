@@ -8,6 +8,8 @@ const dashboard = require('./dashboard')
 const workingLifecycle = require('./working-lifecycle')
 const roadWayLifecycle = require('./roadway-lifecycle')
 const miningOperation = require('./mining-operation')
+const organization = require('./organization')
+const liabilitySystem = require('./liability-system')
 
 const mocks = [
   ...user,
@@ -16,7 +18,9 @@ const mocks = [
   ...dashboard,
   ...workingLifecycle,
   ...roadWayLifecycle,
-  ...miningOperation
+  ...miningOperation,
+  ...organization,
+  ...liabilitySystem
 ]
 
 // for front mock
