@@ -27,6 +27,13 @@ export default {
           tooltip: {
             trigger: 'item'
           },
+          grid: {
+            top: 10,
+            left: '2%',
+            right: '2%',
+            bottom: '2%',
+            containLabel: true
+          },
           legend: {
             orient: 'vertical',
             left: 'left'

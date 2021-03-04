@@ -23,6 +23,13 @@ export default {
     cdata: {
       handler(newData) {
         this.options = {
+          grid: {
+            top: 10,
+            left: '2%',
+            right: '2%',
+            bottom: '2%',
+            containLabel: true
+          },
           xAxis: {
             type: 'category',
             data: newData.name

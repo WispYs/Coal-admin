@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-container">
+  <div class="page-container">
     <div class="chart-container">
       <div class="chart-container__filter">
         <div class="filter-item">
@@ -140,58 +140,61 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dashboard {
-  &-container {
-    font-size: 14px;
-    margin: 30px;
-    .chart-container {
-      margin-bottom: 30px;
-      overflow: hidden;
-      &--left {
-        margin-right: 15px;
-      }
-      &--left, &--right {
-        float: left;
-        width: calc(50% - 10px)
-      }
-      &__filter {
-        display: flex;
-        justify-content: center;
-        line-height: 40px;
-        padding-right: 100px;
-        .filter-item {
-          display: inline-block;
-          &:first-of-type {
-            margin-right: 100px;
-          }
-        }
-      }
-      .chart-detail {
-        text-align: center;
-        .chart-row {
-          .chart-item {
-            display: inline-block;
-            width: calc((100% - 146px)/12);
-            height: 22px;
-            line-height: 22px;
-            font-size: 13px;
-            color: #666666;
-            text-align: center;
-            border: 1px solid #dedede;
-            margin: 1px;
-            &.chart-title {
-              width: 120px;
-            }
-          }
-        }
-        &.bar-detail{
-          .chart-item {
-            width: calc((100% - 146px)/5);
-          }
-        }
+@import '~@/assets/styles/variables.scss';
+.chart-container {
+  font-size: 14px;
+  margin-bottom: 50px;
+  padding: 20px;
+  overflow: hidden;
+  h3 {
+    margin: 15px 0;
+  }
+  &--left {
+    margin-right: 15px;
+  }
+  &--left, &--right {
+    float: left;
+    width: calc(50% - 10px)
+  }
+  &__filter {
+    display: flex;
+    justify-content: center;
+    line-height: 40px;
+    padding-right: 100px;
+    .filter-item {
+      display: inline-block;
+      &:first-of-type {
+        margin-right: 100px;
       }
     }
   }
-
+  .chart-detail {
+    text-align: center;
+    margin-top: 10px;
+    .chart-row {
+      .chart-item {
+        display: inline-block;
+        width: calc((100% - 146px) / 12);
+        height: 22px;
+        line-height: 22px;
+        font-size: 13px;
+        color: #666666;
+        text-align: center;
+        border: 1px solid $borderColor;
+        margin: 1px;
+        &.chart-title {
+          width: 120px;
+        }
+      }
+    }
+    &.bar-detail{
+      float: left;
+      width:100%;
+      .chart-item {
+        width: calc((100% - 146px) / 5);
+      }
+    }
+  }
 }
+
 </style>

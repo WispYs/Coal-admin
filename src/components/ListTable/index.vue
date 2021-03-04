@@ -82,7 +82,7 @@
           <template v-if="column.showType === 'colorLump'">
             <span class="color-lump" :class="lumpClassName(scope.row[column.field])">{{ filterField(column.filterName, scope.row[column.field]) }}</span>
           </template>
-          <template v-if="column.showType === 'underline'">
+          <template v-else-if="column.showType === 'underline'">
             <span class="file-text" @click="fileTextClick">{{ scope.row[column.field] }}</span>
           </template>
           <template v-else>
@@ -256,11 +256,11 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import '~@/assets/styles/variables.scss';
   .color-lump {
     padding: 10px 20px;
-    color: #fff;
+    color: $whiteColor;
     &.green {
       background: $greenColor;
     }
