@@ -25,10 +25,9 @@ export default {
 <style lang="scss" scoped>
 .app-main {
   width: 100%;
-  min-height: calc(100vh - 34px);
+  height: 100%;
   padding-top: 34px; /* 34 = tags-view */
   position: relative;
-  overflow: hidden;
 }
 
 </style>

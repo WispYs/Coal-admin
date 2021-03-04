@@ -52,6 +52,7 @@ export default {
 }
 </script>
 <style lang="scss">
+@import '~@/assets/styles/variables.scss';
   .theme-dialog {
     .el-dialog {
       height: auto !important;
@@ -68,7 +69,7 @@ export default {
         overflow: hidden;
         &.active {
           span {
-            border: 3px solid #000;
+            border: 3px solid $blackColor;
           }
         }
         span {
@@ -80,19 +81,19 @@ export default {
 
         }
         &--blue {
-          background: #409EFF;
+          background: $primaryColor;
         }
         &--green {
-          background: #67C23A;
+          background: $greenColor;
         }
         &--orange {
-          background: #E6A23C;
+          background: $orangeColor;
         }
         &--red {
-          background: #F56C6C;
+          background: $redColor;
         }
         &--gray {
-          background: #909399;
+          background: $grayColor;
         }
       }
     }

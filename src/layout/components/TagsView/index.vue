@@ -222,7 +222,7 @@ export default {
       line-height: 26px;
       border: 1px solid #d8dce5;
       color: #495060;
-      background: #fff;
+      background: $whiteColor;
       padding: 0 8px;
       font-size: 12px;
       margin-left: 5px;
@@ -234,13 +234,13 @@ export default {
         margin-right: 15px;
       }
       &.active {
-        color: #fff;
+        color: $whiteColor;
         @include primaryBg($primaryColor);
         @include primaryBorder($primaryColor);
 
         &::before {
           content: '';
-          background: #fff;
+          background: $whiteColor;
           display: inline-block;
           width: 8px;
           height: 8px;
@@ -253,7 +253,7 @@ export default {
   }
   .contextmenu {
     margin: 0;
-    background: #fff;
+    background: $whiteColor;
     z-index: 3000;
     position: absolute;
     list-style-type: none;
@@ -261,7 +261,7 @@ export default {
     border-radius: 4px;
     font-size: 12px;
     font-weight: 400;
-    color: #333;
+    color: $lightBlackColor;
     box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, .3);
     li {
       margin: 0;
@@ -275,7 +275,7 @@ export default {
 }
 </style>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .tags-view-wrapper {
   .tags-view-item {
     .el-icon-close {
@@ -293,7 +293,7 @@ export default {
       }
       &:hover {
         background-color: #b4bccc;
-        color: #fff;
+        color: #ffffff;
       }
     }
   }
