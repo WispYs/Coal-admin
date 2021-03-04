@@ -53,34 +53,20 @@ export default {
 <style lang="scss" scoped>
   @import "~@/assets/styles/mixin.scss";
   @import "~@/assets/styles/variables.scss";
-
   .app-wrapper {
     @include clearfix;
     position: relative;
     height: 100%;
     width: 100%;
-    &.mobile.openSidebar{
-      position: fixed;
-      top: 0;
-    }
-  }
-  .drawer-bg {
-    background: #000;
-    opacity: 0.3;
-    width: 100%;
-    top: 0;
-    height: 100%;
-    position: absolute;
-    z-index: 999;
+    padding-top: $headBarHeight;
   }
 
   .tags-wrapper {
     position: fixed;
-    top: $sideBarHeight;
+    top: $headBarHeight;
     right: 0;
     z-index: 9;
     width: 100%;
     transition: width 0.28s;
   }
-
 </style>

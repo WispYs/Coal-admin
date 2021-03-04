@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-03 16:39:31
+ * @Last Modified time: 2021-03-04 11:23:50
  */
 
 /**
@@ -37,62 +37,62 @@ const asyncRoutes = [
       {
         path: '/demo-gis/gis1',
         name: 'GIS1',
-        component: '/demo/index',
-        meta: { title: '矿山三维场景展示' }
+        component: '/gis/index',
+        meta: { title: '矿山三维场景展示', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
       },
       {
         path: '/demo-gis/gis2',
         name: 'GIS2',
-        component: '/demo/index',
-        meta: { title: '三维地理信息展示' }
+        component: '/gis/index',
+        meta: { title: '三维地理信息展示', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
       },
       {
         path: '/demo-gis/gis3',
         name: 'GIS3',
-        component: '/demo/index',
-        meta: { title: '综合一张图' }
+        component: '/gis/index',
+        meta: { title: '综合一张图', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
       },
       {
         path: '/demo-gis/gis4',
         name: 'GIS4',
-        component: '/demo/index',
-        meta: { title: '地测一张图' }
+        component: '/gis/index',
+        meta: { title: '地测一张图', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
       },
       {
         path: '/demo-gis/gis5',
         name: 'GIS5',
-        component: '/demo/index',
-        meta: { title: '生产一张图' }
+        component: '/gis/index',
+        meta: { title: '生产一张图', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
       },
       {
         path: '/demo-gis/gis6',
         name: 'GIS6',
-        component: '/demo/index',
-        meta: { title: '通防一张图' }
+        component: '/gis/index',
+        meta: { title: '通防一张图', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
       },
       {
         path: '/demo-gis/gis7',
         name: 'GIS7',
-        component: '/demo/index',
-        meta: { title: '机电一张图' }
+        component: '/gis/index',
+        meta: { title: '机电一张图', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
       },
       {
         path: '/demo-gis/gis8',
         name: 'GIS8',
-        component: '/demo/index',
-        meta: { title: '安全一张图' }
+        component: '/gis/index',
+        meta: { title: '安全一张图', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
       },
       {
         path: '/demo-gis/gis9',
         name: 'GIS9',
-        component: '/demo/index',
-        meta: { title: '应急一张图' }
+        component: '/gis/index',
+        meta: { title: '应急一张图', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
       },
       {
         path: '/demo-gis/gis10',
         name: 'GIS10',
-        component: '/demo/index',
-        meta: { title: '监测一张图' }
+        component: '/gis/index',
+        meta: { title: '监测一张图', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
       }
     ]
   },
@@ -1535,13 +1535,13 @@ const asyncRoutes = [
               {
                 path: '/demo-safe/safe2-1/safe2-1-2',
                 name: 'Safe2-1-2',
-                component: '/demo/index',
+                component: '/safe-management/risk-control/management-system/organization/index',
                 meta: { title: '风险组织结构' }
               },
               {
                 path: '/demo-safe/safe2-1/safe2-1-3',
                 name: 'Safe2-1-3',
-                component: '/demo/index',
+                component: '/safe-management/risk-control/management-system/liability-system/index',
                 meta: { title: '风险责任体系' }
               }
             ]

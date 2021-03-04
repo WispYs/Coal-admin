@@ -35,7 +35,7 @@ export default {
             top: 10,
             left: '2%',
             right: '2%',
-            bottom: '3%',
+            bottom: '2%',
             containLabel: true
           },
           xAxis: [{

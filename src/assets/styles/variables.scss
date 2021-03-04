@@ -1,9 +1,39 @@
+/** ---- common ---- **/
+
+// headbar
+$headBarHeight: 60px;
+
+// pageBg
+$pageBg: #f2f2f2;
+
+// borderColor
+$borderColor: #DCDFE6;
+
+// color
+
+$whiteColor: #ffffff;
+$greenColor: #67C23A;
+$orangeColor: #E6A23C;
+$redColor: #F56C6C;
+$lightGrayColor: #F5F7FA;
+$grayColor: #909399;
+$darkBlueColor: #304156;
+$lightBlackColor: #333333;
+$blackColor: #000000;
+
+// icon
+$iconColor: #eeeeee;
+
+
 /** ---- theme-blue ---- **/
+
+// primaryColor
+$primaryColor: #409EFF;
+
 // headbar
 $menuBg:#304156;
 $menuSecondBg:#263445;
 $menuFourthBg:#001528;
-$sideBarHeight: 60px;
 
 // dropdownMenu
 $dropdownBg: #ecf5ff;
@@ -15,28 +45,11 @@ $primaryButtonHover: #66b1ff;
 // input
 $inputDateBg: #F2F6FC;
 
-// icon
-$iconColor: #eeeeee;
-
-// color
-$primaryColor: #409EFF;
-$greenColor: #67C23A;
-$orangeColor: #E6A23C;
-$redColor: #F56C6C;
-$lightGrayColor: #F5F7FA;
-$grayColor: #909399;
-$darkblueColor: #304156;
-
-// font-size
-$fontSizeLargest: 20px;
-$fontSizeLarger: 18px;
-$fontSizeLarge: 16px;
-$fontSizeMedium: 14px;
-$fontSizeSmall: 13px;
-$fontSizeSmaller: 12px;
-
 
 /** ---- theme-green ---- **/
+
+// primaryColor
+$primaryColorGreen: #04B018;
 
 // headbar
 $menuBgGreen: #007e54;
@@ -52,6 +65,3 @@ $primaryButtonHoverGreen: #03cc1a;
 
 // input
 $inputDateBgGreen: #f5fcf2;
-
-// color
-$primaryColorGreen: #04B018;

@@ -90,9 +90,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '~@/assets/styles/variables.scss';
 .pagination-container {
-  background: #fff;
+  background: $whiteColor;
   padding: 32px 16px;
   text-align: right;
 }
