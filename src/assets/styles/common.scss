@@ -2,8 +2,56 @@
  * @Author: Wisper 
  * @Date: 2021-01-14 11:21:49 
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-01-18 10:53:36
+ * @Last Modified time: 2021-03-04 15:16:02
  */
-.dialog-container {
-  padding: 20px 40px;
+
+#app {
+  .main-container {
+    position: relative;
+    height: 100%;
+
+    .page-container {
+      padding: 20px;
+      height: calc(100vh - 94px);
+      overflow: auto;
+    }
+
+    /* 左侧有树形结构控件 */
+    .page-container.has-tree {
+      padding: 0;
+      background: $pageBg;
+
+      .tree-container {
+        float: left;
+        width: 250px;
+        height: 100%;
+        padding: 20px 10px;
+        background: $whiteColor;
+        margin-right: 15px;
+        border-right: 1px solid $borderColor;
+
+        .tree-title {
+          font-size: 20px;
+          line-height: 40px;
+          color: $lightBlackColor;
+
+
+        }
+      }
+
+      .form-container {
+        float: right;
+        width: calc(100% - 265px);
+        height: 100%;
+        padding: 20px;
+        background: $whiteColor;
+        border-left: 1px solid $borderColor;
+
+      }
+    }
+  }
+
+  .dialog-container {
+    padding: 20px 40px;
+  }
 }
