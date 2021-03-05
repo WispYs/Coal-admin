@@ -2,7 +2,7 @@
  * @Author: Wisper 
  * @Date: 2021-01-14 11:21:49 
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-04 15:34:36
+ * @Last Modified time: 2021-03-05 11:27:01
  */
 
 #app {
@@ -23,7 +23,7 @@
 
       .tree-container {
         float: left;
-        width: 250px;
+        width: $treeConWidth;
         height: 100%;
         padding: 20px 10px;
         background: $whiteColor;
@@ -39,7 +39,7 @@
 
       .form-container {
         float: right;
-        width: calc(100% - 265px);
+        width: calc(100% - 15px - #{$treeConWidth});
         height: 100%;
         padding: 20px;
         background: $whiteColor;
