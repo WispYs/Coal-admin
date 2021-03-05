@@ -12,7 +12,6 @@
       :list="list"
       :list-loading="listLoading"
       :config="TableConfig"
-      :filter-method="filterMethods"
       @edit-click="(row) => openDialog('edit', row)"
       @delete-click="deleteClick"
       @submit-data="editSubmit"
@@ -146,24 +145,6 @@ export default {
       // 第一个参数为 table 的 id
       // 第二个参数为导出文件的 name
       exportExcel(this.id, 'excel-table1')
-    },
-
-    // 字段过滤方法
-    filterMethods(name, str) {
-      if (name === 'statusFilter') {
-        // 项目状态
-        const statusMap = {
-          1: '已完成',
-          2: '进行中',
-          3: '未开始',
-          4: '已搁置'
-        }
-        return statusMap[str]
-      } else if (name === 'urgencyFilter') {
-        // 紧急状态
-        return str ? '是' : '否'
-      }
-      // else if ...
     }
 
   }

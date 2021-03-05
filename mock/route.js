@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-04 11:23:50
+ * @Last Modified time: 2021-03-04 15:58:21
  */
 
 /**
@@ -1001,20 +1001,20 @@ const asyncRoutes = [
         meta: { title: '生产管理' },
         children: [
           {
-            path: '/demo-excavate/excavate3/excavate3-1',
-            name: 'Excavate3-1',
+            path: '/mining-management/production-management/working-lifecycle',
+            name: 'WorkingLifecycle',
             component: '/mining-management/production-management/working-lifecycle/index',
             meta: { title: '工作面生命周期管理' }
           },
           {
-            path: '/demo-excavate/excavate3/excavate3-2',
-            name: 'Excavate3-2',
+            path: '/mining-management/production-management/roadway-lifecycle',
+            name: 'RoadwayLifecycle',
             component: '/mining-management/production-management/roadway-lifecycle/index',
             meta: { title: '巷道生命周期管理' }
           },
           {
-            path: '/demo-excavate/excavate3/excavate3-3',
-            name: 'Excavate3-3',
+            path: '/mining-management/production-management/mining-operation',
+            name: 'MiningOperation',
             component: '/mining-management/production-management/mining-operation/index',
             meta: { title: '采掘作业规程' }
           }
@@ -1533,14 +1533,14 @@ const asyncRoutes = [
                 meta: { title: '安全风险分级管理制度' }
               },
               {
-                path: '/demo-safe/safe2-1/safe2-1-2',
-                name: 'Safe2-1-2',
+                path: '/safe-management/risk-control/management-system/organization',
+                name: 'Organization',
                 component: '/safe-management/risk-control/management-system/organization/index',
                 meta: { title: '风险组织结构' }
               },
               {
-                path: '/demo-safe/safe2-1/safe2-1-3',
-                name: 'Safe2-1-3',
+                path: '/safe-management/risk-control/management-system/liability-system',
+                name: 'LiabilitySystem',
                 component: '/safe-management/risk-control/management-system/liability-system/index',
                 meta: { title: '风险责任体系' }
               }
@@ -1559,9 +1559,9 @@ const asyncRoutes = [
                 meta: { title: '年度辨识评估报告' }
               },
               {
-                path: '/demo-safe/safe2/safe2-2/safe2-2-2',
-                name: 'Safe2-2-2',
-                component: '/demo/index',
+                path: '/safe-management/risk-control/assessment/assessment-library',
+                name: 'AssessmentLibrary',
+                component: '/safe-management/risk-control/assessment/assessment-library/index',
                 meta: { title: '风险辨识库' }
               }
             ]

@@ -50,18 +50,18 @@
 </template>
 
 <script>
-import { getList } from '@/api/liability-system'
+import { getList } from '@/api/assessment-library'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
-import { TableConfig, FilterConfig } from '@/data/liability-system'
+import { TableConfig, FilterConfig } from '@/data/assessment-library'
 
 export default {
   components: { FilterBar, ListTable, Pagination, FormDialog },
   data() {
     return {
-      id: 'liability-system',
+      id: 'assessment-library',
       list: null,
       total: 0,
       listQuery: {
@@ -75,19 +75,27 @@ export default {
       createDialogVisible: false,
       editDialogVisible: false,
       treeData: {
-        title: '选择风险组织结构',
+        title: '选择专业',
         list: [{
-          label: '顾桥煤矿',
+          label: '专业',
           children: [{
-            label: '生产部',
-            children: [{
-              label: '生产一部'
-            }]
+            label: '安检'
           }, {
-            label: '消防部',
-            children: [{
-              label: '消防一部'
-            }]
+            label: '采煤'
+          }, {
+            label: '掘进（中央区）'
+          }, {
+            label: '掘进（南区）'
+          }, {
+            label: '机电运输'
+          }, {
+            label: '一通三防'
+          }, {
+            label: '地面设施'
+          }, {
+            label: '维护'
+          }, {
+            label: '地质灾害防治'
           }]
         }]
       },

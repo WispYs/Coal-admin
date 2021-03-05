@@ -10,6 +10,7 @@ const roadWayLifecycle = require('./roadway-lifecycle')
 const miningOperation = require('./mining-operation')
 const organization = require('./organization')
 const liabilitySystem = require('./liability-system')
+const assessmentLibrary = require('./assessment-library')
 
 const mocks = [
   ...user,
@@ -20,7 +21,8 @@ const mocks = [
   ...roadWayLifecycle,
   ...miningOperation,
   ...organization,
-  ...liabilitySystem
+  ...liabilitySystem,
+  ...assessmentLibrary
 ]
 
 // for front mock

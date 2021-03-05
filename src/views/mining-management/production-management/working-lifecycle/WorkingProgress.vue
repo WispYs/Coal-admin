@@ -72,7 +72,6 @@ export default {
 
     // 计算百分比
     computePercent(a, b) {
-      console.log(a, b)
       return Number((a / b * 100).toFixed(2))
     }
   }
