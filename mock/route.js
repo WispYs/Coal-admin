@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-04 15:58:21
+ * @Last Modified time: 2021-03-05 15:50:49
  */
 
 /**
@@ -1573,9 +1573,9 @@ const asyncRoutes = [
             meta: { title: '专项辨识：设计前' },
             children: [
               {
-                path: '/demo-safe/safe2/safe2-3/safe2-3-1',
-                name: 'Safe2-3-1',
-                component: '/demo/index',
+                path: '/safe-management/risk-control/pre-design/pre-design-list',
+                name: 'PreDesignList',
+                component: '/safe-management/risk-control/pre-design/pre-design-list/index',
                 meta: { title: '设计前风险清单' }
               },
               {
@@ -1593,9 +1593,9 @@ const asyncRoutes = [
             meta: { title: '专项辨识：变化后' },
             children: [
               {
-                path: '/demo-safe/safe2/safe2-4/safe2-4-1',
-                name: 'Safe2-4-1',
-                component: '/demo/index',
+                path: '/safe-management/risk-control/after-change/after-change-list',
+                name: 'AfterChangeList',
+                component: '/safe-management/risk-control/after-change/after-change-list/index',
                 meta: { title: '变化后风险清单' }
               },
               {
@@ -1613,9 +1613,9 @@ const asyncRoutes = [
             meta: { title: '专项辨识：施工前' },
             children: [
               {
-                path: '/demo-safe/safe2/safe2-5/safe2-5-1',
-                name: 'Safe2-5-1',
-                component: '/demo/index',
+                path: '/safe-management/risk-control/pre-construct/pre-construct-list',
+                name: 'PreConstructList',
+                component: '/safe-management/risk-control/pre-construct/pre-construct-list/index',
                 meta: { title: '施工前风险清单' }
               },
               {
@@ -1633,9 +1633,9 @@ const asyncRoutes = [
             meta: { title: '专项辨识：事故后' },
             children: [
               {
-                path: '/demo-safe/safe2/safe2-6/safe2-6-1',
-                name: 'Safe2-6-1',
-                component: '/demo/index',
+                path: '/safe-management/risk-control/after-accident/after-accident-list',
+                name: 'AfterAccidentList',
+                component: '/safe-management/risk-control/after-accident/after-accident-list/index',
                 meta: { title: '事故后风险清单' }
               },
               {
@@ -1653,15 +1653,15 @@ const asyncRoutes = [
             meta: { title: '现状风险辨识评估' }
           },
           {
-            path: '/demo-safe/safe2/safe2-8',
-            name: 'Safe2-8',
-            component: '/demo/index',
+            path: '/safe-management/risk-control/control-measure',
+            name: 'ControlMeasure',
+            component: '/safe-management/risk-control/control-measure/index',
             meta: { title: '安全风险管控' }
           },
           {
-            path: '/demo-safe/safe2/safe2-9',
-            name: 'Safe2-9',
-            component: '/demo/index',
+            path: '/safe-management/risk-control/risk-echart',
+            name: 'RiskEchart',
+            component: '/safe-management/risk-control/risk-echart/index',
             meta: { title: '风险分析' }
           }
         ]

@@ -6,10 +6,12 @@ const data = Mock.mock({
     'value|100-1000': 1
   }],
   'lineCount|5000-10000': 5000,
-  'barData|5': [{
-    'name|+1': ['一般隐患A', '一般隐患B', '一般隐患C', '一般隐患D', '重大隐患'],
-    'value|100-1000': 1
-  }]
+  'barData|4': [{
+    'name|+1': ['重大风险', '较大风险', '轻微风险', '一般风险'],
+    'value|+1': [22, 1, 0, 0]
+  }],
+  barCount: 23
+
 })
 
 module.exports = [

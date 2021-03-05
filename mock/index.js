@@ -11,6 +11,7 @@ const miningOperation = require('./mining-operation')
 const organization = require('./organization')
 const liabilitySystem = require('./liability-system')
 const assessmentLibrary = require('./assessment-library')
+const controlMeasure = require('./control-measure')
 
 const mocks = [
   ...user,
@@ -22,7 +23,8 @@ const mocks = [
   ...miningOperation,
   ...organization,
   ...liabilitySystem,
-  ...assessmentLibrary
+  ...assessmentLibrary,
+  ...controlMeasure
 ]
 
 // for front mock
