@@ -53,7 +53,7 @@ import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import TreeBar from '@/components/TreeBar'
-import { TableConfig, FilterConfig } from '@/data/assessment-library'
+import { TableConfig, FilterConfig } from '@/data/pre-design-list'
 
 export default {
   components: { FilterBar, ListTable, Pagination, FormDialog, TreeBar },

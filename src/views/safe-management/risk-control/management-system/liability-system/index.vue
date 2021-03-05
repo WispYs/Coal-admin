@@ -1,6 +1,6 @@
 <template>
-  <div class="page-container has-tree">
-    <tree-bar :tree-data="treeData" />
+  <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
+    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" />
     <div class="tree-form-container">
       <filter-bar
         :config="FilterConfig"
@@ -72,6 +72,7 @@ export default {
       TableConfig,
       createDialogVisible: false,
       editDialogVisible: false,
+      treeExtend: true,
       treeData: {
         title: '选择风险组织结构',
         list: [{
