@@ -2,7 +2,7 @@
  * @Author: Wisper 
  * @Date: 2021-01-14 11:21:49 
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-05 13:12:20
+ * @Last Modified time: 2021-03-05 15:04:48
  */
 
 #app {
@@ -11,6 +11,7 @@
     height: 100%;
 
     .page-container {
+      position: relative;
       padding: 20px;
       height: calc(100vh - 94px);
       overflow: auto;
@@ -22,13 +23,40 @@
       background: $pageBg;
 
       .tree-container {
-        float: left;
+        position: absolute;
+        top: 0;
+        left: 0;
         width: $treeConWidth;
         height: 100%;
         padding: 20px 10px;
+        transition: left .3s;
         background: $whiteColor;
         margin-right: 15px;
         border-right: 1px solid $borderColor;
+
+        .extend-button {
+          position: absolute;
+          top: 50%;
+          right: -15px;
+          transform: translateY(-50%);
+          width: 15px;
+          height: 80px;
+          background: #999;
+          cursor: pointer;
+
+          &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            border-right: 12px solid #fff;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+          }
+        }
 
         .tree-title {
           font-size: 20px;
@@ -38,13 +66,25 @@
       }
 
       .tree-form-container {
-        float: right;
-        width: calc(100% - 15px - #{$treeConWidth});
+        // float: right;
+        // width: calc(100% - 15px - #{$treeConWidth});
+        margin-left: calc(15px + #{$treeConWidth});
         height: 100%;
         padding: 20px;
+        transition: margin-left .3s;
         background: $whiteColor;
         border-left: 1px solid $borderColor;
 
+      }
+
+      &.close-tree {
+        .tree-container {
+          left: -$treeConWidth;
+        }
+
+        .tree-form-container {
+          margin-left: 15px;
+        }
       }
     }
   }
