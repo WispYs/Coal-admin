@@ -28,7 +28,7 @@
     .com-button .com-label {margin-right: 10px;}
     .com-color label,.com-upload label{float:left;}
     .com-upload .upload-demo {float:left;}
-    .com-color .color-lump {float:left;width:80px;height: 30px;margin-right: 15px;border-radius: 4px;text-align: center;color:white;font-size: 13px;} 
+    .com-color .color-lump {float:left;width:80px;height: 30px;margin-right: 15px;border-radius: 4px;text-align: center;color:white;font-size: 13px;}
     .com-input .el-input {width: 150px;}
     .com-table .com-label {width: 100%;}
     .com-table .el-table {width: 701px;margin-left: 20px;}
@@ -80,12 +80,12 @@
               </el-tooltip>
             </div>
             <div class="com-label">
-              
+
               <!-- <label>成功提示：</label>
               <el-tooltip class="item" effect="dark" content="$orangeColor" placement="top">
                 <span class="color-lump orange">#E6A23C</span>
               </el-tooltip> -->
-              
+
               <label>不可用：</label>
               <el-tooltip class="item" effect="dark" content="$lightGrayColor" placement="top">
                 <span class="color-lump gray" style="color: #000">#F5F7FA</span>
@@ -94,7 +94,7 @@
               <el-tooltip class="item" effect="dark" content="$borderColor" placement="top">
                 <span class="color-lump bordercolor" style="color: #000">#EBEEF5</span>
               </el-tooltip>
-              
+
             </div>
             <div class="com-label">
               <label>一级菜单背景：</label>
@@ -172,7 +172,7 @@
               <i class="el-icon-search"></i>
               <label>加载：</label>
               <i class="el-icon-loading"></i>
-              
+
             </div>
             <div class="com-label">
               <label>新增：</label>
@@ -219,7 +219,7 @@
               <el-button type="text">文字按钮</el-button>
             </div>
           </div>
-          
+
         </div>
         <div class="item-right">
           <p>内边距 padding: 10px 20px;</p>
@@ -402,12 +402,12 @@
               <el-radio v-model="config.inlineEdit" label="1">行内编辑</el-radio>
             </div>
             <div class="com-label">
-              <el-table 
-                :data="tableData" 
-                border 
-                fit 
-                show-summary 
-                :summary-method="(param) => getSummaries(param, config.summaryField)" 
+              <el-table
+                :data="tableData"
+                border
+                fit
+                show-summary
+                :summary-method="(param) => getSummaries(param, config.summaryField)"
                 header-cell-class-name="pre-line">
                 <el-table-column
                   v-for="column in config.columns"
@@ -458,12 +458,12 @@
 
                       <!-- radio -->
                       <el-radio-group v-if="column.layout === 'Radio'" v-model="scope.row[column.field]" size="mini">
-                        <el-radio-button v-for="it in column.options" :key="it" :label="it"></el-radio-button>
+                        <el-radio-button v-for="it in column.options" :key="it.value" :label="it.label"></el-radio-button>
                       </el-radio-group>
 
                       <!-- checkbox -->
                       <el-checkbox-group v-if="column.layout === 'Checkbox'" v-model="scope.row[column.field]" size="mini">
-                        <el-checkbox-button v-for="it in column.options" :key="it" :label="it" :name="it"></el-checkbox-button>
+                        <el-checkbox-button v-for="it in column.options" :key="it.value" :label="it.label" :name="it.value"></el-checkbox-button>
                       </el-checkbox-group>
 
                       <!-- textarea -->
@@ -471,8 +471,8 @@
 
                     </template>
                     <template v-else>
-                      <span v-if="column.filter">
-                        {{ filterField(column.filterName, scope.row[column.field]) }}
+                      <span v-if="column.options">
+                        {{ filterField(column.options, scope.row[column.field]) }}
                       </span>
                       <span v-else>{{ scope.row[column.field] }}</span>
                     </template>
@@ -504,9 +504,12 @@
           <p class="pl-80">sortable - 是否需要排序</p>
           <p class="pl-80">layout - 表单类型</p>
           <p class="pl-80">dateFormat - 日期格式</p>
-          <p class="pl-80">filter - 字段值是否需要方法处理</p>
-          
-          <p></p>
+          <p class="pl-80">unit - 字段单位，例如：元、kw/h</p>
+          <p class="pl-80">dateFormat - 日期格式</p>
+          <p class="pl-80">dateFormat - 日期格式</p>
+          <p class="pl-80">options - 选择器配置项</p>
+          <p class="pl-80">showType - 表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump 色块显示</p>
+
         </div>
       </div>
       <div class="component-item">
@@ -514,7 +517,7 @@
           <h3>富文本编辑器 - Tinymce</h3>
           <div class="com-box com-tinymce">
             <div class="com-label">
-              
+
               <textarea id="mytextarea" v-model="tinymceContent"></textarea>
             </div>
           </div>
@@ -530,7 +533,7 @@
         </div>
       </div>
     </div>
-    
+
     <el-dialog
       title="编辑"
       :visible.sync="dialogVisible"
@@ -562,7 +565,6 @@
       </span>
     </el-dialog>
 
-    
   </div>
 </body>
   <!-- import Vue before Element -->
@@ -575,7 +577,7 @@
     new Vue({
       el: '#app',
       data: function() {
-        return { 
+        return {
           radio: '1',
           checkList: ['选项一'],
           input: '',
@@ -599,11 +601,11 @@
             inlineEdit: '0',
             columns: [
               { label: '工作面名称', field: 'title', width: '120', align: 'left', layout: 'Text', placeholder: '请填写工作面名称' },
-              { label: '工作单位', field: 'team', width: '130', layout: 'Select',filter: true, filterName: 'statusFilter', 
+              { label: '工作单位', field: 'team', width: '130', layout: 'Select',
                 options: [{value: 1,label: '综采一队'},{value: 2,label: '综采二队'},{value: 3,label: '综采三队'}],
                 placeholder: '请填写工作单位' },
               { label: '工作面长度(m)', field: 'width', width: '130', layout: 'Text', placeholder: '请填写工作单位' },
-              { label: '状态', field: 'status', width: '140',  layout: 'Radio', options: ['准备','生产'],placeholder: '请选择状态' }
+              { label: '状态', field: 'status', width: '140',  layout: 'Radio', options: [{value: '准备',label: '准备'},{value: '生产',label: '生产'}],placeholder: '请选择状态' }
             ]
           },
           tableData: [
@@ -656,7 +658,7 @@
         open() {
 
         },
-        
+
         handleClick(row, index) {
           this.form = Object.assign(this.form, row)
           this.dialogVisible = true
@@ -715,15 +717,23 @@
           })
           return sums
         },
-        filterField(name, str) {
-          if (name === 'statusFilter') {
-            // 项目状态
-            const statusMap = {
-              1: '综采一队',
-              2: '综采二队',
-              3: '综采三队',
-            }
-            return statusMap[str]
+        // filter 方法
+        /**
+         * @param {array}   options 字段对应配置项
+         * @param {string}  field 过滤值
+         */
+        filterField(options, field) {
+          // 判断值是不是数组
+          // 暂不考虑传值为对象的情况（后续对接）
+          if (field.constructor === Array) {
+            const filters = []
+            field.forEach(f => {
+              filters.push(options.filter(item => item.value === f)[0].label)
+            })
+            return filters
+          } else {
+            const filters = options.filter(item => item.value === field)
+            return filters[0] ? filters[0].label : ''
           }
         },
         submitRow(row) {
@@ -733,7 +743,7 @@
           row.edit = false
         },
       },
-        
+
     })
   </script>
 </html>

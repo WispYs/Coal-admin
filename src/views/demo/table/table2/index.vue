@@ -11,7 +11,6 @@
       :list="list"
       :list-loading="listLoading"
       :config="TableConfig"
-      :filter-method="filterMethods"
       @edit-click="(row) => openDialog('edit', row)"
       @submit-data="editSubmit"
     />
@@ -108,21 +107,8 @@ export default {
       // 第一个参数为 table 的 id
       // 第二个参数为导出文件的 name
       exportExcel(this.id, 'excel-table2')
-    },
-
-    // 字段过滤方法
-    filterMethods(name, str) {
-      if (name === 'riskFilter') {
-        // 设备风险等级
-        const riskMap = {
-          1: '没有风险',
-          2: '轻度风险',
-          3: '较大风险',
-          4: '重大风险'
-        }
-        return riskMap[str]
-      }
     }
+
   }
 }
 </script>

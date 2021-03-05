@@ -46,9 +46,9 @@
             >
               <el-option
                 v-for="it in column.options"
-                :key="it"
-                :label="it"
-                :value="it"
+                :key="it.value"
+                :label="it.label"
+                :value="it.value"
               />
             </el-select>
             <!-- date-picker  -->
@@ -70,12 +70,12 @@
 
             <!-- radio -->
             <el-radio-group v-if="column.layout === 'Radio'" v-model="scope.row[column.field]" size="mini">
-              <el-radio-button v-for="it in column.options" :key="it" :label="it" />
+              <el-radio-button v-for="it in column.options" :key="it.value" :label="it.label" />
             </el-radio-group>
 
             <!-- checkbox -->
             <el-checkbox-group v-if="column.layout === 'Checkbox'" v-model="scope.row[column.field]" size="mini">
-              <el-checkbox-button v-for="it in column.options" :key="it" :label="it" :name="it" />
+              <el-checkbox-button v-for="it in column.options" :key="it.value" :label="it.label" :name="it.label" />
             </el-checkbox-group>
 
             <!-- textarea -->
@@ -83,8 +83,8 @@
 
           </template>
           <template v-else>
-            <span v-if="column.filter">
-              {{ filterField(column.filterName, scope.row[column.field]) }}
+            <span v-if="column.options">
+              {{ filterField(column.options, scope.row[column.field]) }}
             </span>
             <span v-else>{{ scope.row[column.field] }}</span>
 
@@ -156,6 +156,26 @@ export default {
       // 第一个参数为 table 的 id
       // 第二个参数为导出文件的 name
       exportExcel(this.id, 'excel-report-table')
+    },
+
+    // filter 方法
+    /**
+     * @param {array}   options 字段对应配置项
+     * @param {string}  field 过滤值
+     */
+    filterField(options, field) {
+      // 判断值是不是数组
+      // 暂不考虑传值为对象的情况（后续对接）
+      if (field.constructor === Array) {
+        const filters = []
+        field.forEach(f => {
+          filters.push(options.filter(item => item.value === f)[0].label)
+        })
+        return filters
+      } else {
+        const filters = options.filter(item => item.value === field)
+        return filters[0] ? filters[0].label : ''
+      }
     },
 
     // 合并行

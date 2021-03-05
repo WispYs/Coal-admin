@@ -1,8 +1,8 @@
 <template>
   <div class="page-container has-tree">
     <div class="tree-container">
-      <div class="tree-title">选择风险组织结构</div>
-      <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick" />
+      <div class="tree-title">{{ treeData.title }}</div>
+      <el-tree :data="treeData.list" :props="defaultProps" @node-click="handleNodeClick" />
     </div>
     <div class="form-container">
       <filter-bar
@@ -74,20 +74,23 @@ export default {
       TableConfig,
       createDialogVisible: false,
       editDialogVisible: false,
-      treeData: [{
-        label: '顾桥煤矿',
-        children: [{
-          label: '生产部',
+      treeData: {
+        title: '选择风险组织结构',
+        list: [{
+          label: '顾桥煤矿',
           children: [{
-            label: '生产一部'
-          }]
-        }, {
-          label: '消防部',
-          children: [{
-            label: '消防一部'
+            label: '生产部',
+            children: [{
+              label: '生产一部'
+            }]
+          }, {
+            label: '消防部',
+            children: [{
+              label: '消防一部'
+            }]
           }]
         }]
-      }],
+      },
       defaultProps: {
         children: 'children',
         label: 'label'

@@ -15,7 +15,7 @@ const data = Mock.mock({
     title: '@cword(3,10)',
     'status|1': [1, 2, 3, 4],
     person: '@cname',
-    time: '@datetime',
+    time: '@date("yyyy-MM-dd")',
     money: '@integer(1000, 3000)',
     completed: '@integer(0, 100)',
     'urgency|1': true,

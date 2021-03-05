@@ -45,12 +45,12 @@
 
         <!-- radio -->
         <el-radio-group v-if="item.layout === 'Radio'" v-model="formData[item.field]">
-          <el-radio v-for="it in item.options" :key="it" :label="it" />
+          <el-radio v-for="it in item.options" :key="it.value" :label="it.label" />
         </el-radio-group>
 
         <!-- checkbox -->
         <el-checkbox-group v-if="item.layout === 'Checkbox'" v-model="formData[item.field]">
-          <el-checkbox v-for="it in item.options" :key="it" :label="it" :name="it" />
+          <el-checkbox v-for="it in item.options" :key="it.value" :label="it.label" :name="it.value" />
         </el-checkbox-group>
 
         <!-- textarea -->

@@ -3,20 +3,19 @@ export const TableConfig = {
    * 这种表格配置表对整个项目而言耦合性较高，后续每次对表格有特殊要求都需要修改
    * 而且由于某些字段需要前端方法处理，所以这个配置也应由前端定义交给后端，然后再通过接口动态调用
    *
-   * @param {array}   actions         操作按钮，例如：['preview', 'edit', 'delete']
-   * @param {boolean} summary         是否需要合计数据
-   * @param {array}   summaryField    合计字段
-   * @param {boolean} inlineEdit      是否支持在表格行内直接编辑，默认不支持且编辑为弹窗形式
-   * @param {array}   columns         每列参数
-   * @param {boolean} sortable        是否需要排序
-   * @param {string}  align           单元表格对齐方向，默认为'center'
-   * @param {string}  unit            字段单位，例如：元、kw/h
-   * @param {string}  layout          表单类型
-   * @param {string}  dateFormat      日期格式
-   * @param {boolean} filter          字段值是否需要方法处理
-   * @param {string}  filterName      过滤函数方法的名称,由前端定义
-   * @param {array}   options         选择器配置项
-   * @param {string}  showType        表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump 色块显示
+   * @param {array}   actions           操作按钮，例如：['preview', 'edit', 'delete', 'upload', 'other']
+   * @param {string}  otherActionTitle  其他特定操作按钮文本
+   * @param {boolean} summary           是否需要合计数据
+   * @param {array}   summaryField      合计字段
+   * @param {boolean} inlineEdit        是否支持在表格行内直接编辑，默认不支持且编辑为弹窗形式
+   * @param {array}   columns           每列参数
+   * @param {boolean} sortable          是否需要排序
+   * @param {string}  align             单元表格对齐方向，默认为'center'
+   * @param {string}  unit              字段单位，例如：元、kw/h
+   * @param {string}  layout            表单类型
+   * @param {string}  dateFormat        日期格式
+   * @param {array}   options           选择器配置项
+   * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump 色块显示
    */
   actions: ['edit', 'delete', 'other'],
   otherActionTitle: ['工作面进度'],
