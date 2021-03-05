@@ -1,10 +1,7 @@
 <template>
   <div class="page-container has-tree">
-    <div class="tree-container">
-      <div class="tree-title">{{ treeData.title }}</div>
-      <el-tree :data="treeData.list" :props="defaultProps" @node-click="handleNodeClick" />
-    </div>
-    <div class="form-container">
+    <tree-bar :tree-data="treeData" />
+    <div class="tree-form-container">
       <filter-bar
         :config="FilterConfig"
         @search-click="queryData"
@@ -55,10 +52,11 @@ import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
+import TreeBar from '@/components/TreeBar'
 import { TableConfig, FilterConfig } from '@/data/liability-system'
 
 export default {
-  components: { FilterBar, ListTable, Pagination, FormDialog },
+  components: { FilterBar, ListTable, Pagination, FormDialog, TreeBar },
   data() {
     return {
       id: 'liability-system',
@@ -90,10 +88,6 @@ export default {
             }]
           }]
         }]
-      },
-      defaultProps: {
-        children: 'children',
-        label: 'label'
       }
     }
   },
@@ -114,10 +108,6 @@ export default {
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
       this.__fetchData()
-    },
-    // 树形控件
-    handleNodeClick(data) {
-      console.log(data)
     },
     // 初始化新建窗口配置
     initCreateConfig() {

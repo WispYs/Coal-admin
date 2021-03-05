@@ -2,7 +2,7 @@
  * @Author: Wisper 
  * @Date: 2021-01-14 11:21:49 
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-05 11:27:01
+ * @Last Modified time: 2021-03-05 13:12:20
  */
 
 #app {
@@ -37,7 +37,7 @@
         }
       }
 
-      .form-container {
+      .tree-form-container {
         float: right;
         width: calc(100% - 15px - #{$treeConWidth});
         height: 100%;
