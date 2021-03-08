@@ -1,16 +1,18 @@
 /** ---- common ---- **/
 
-// headbar
+// headbar高度
 $headBarHeight: 60px;
 
-// pageBg
+// tree列表宽度
+$treeConWidth: 200px;
+
+// 页面背景
 $pageBg: #f2f2f2;
 
-// borderColor
+// 边框颜色
 $borderColor: #DCDFE6;
 
-// color
-
+// 其他色值
 $whiteColor: #ffffff;
 $greenColor: #67C23A;
 $orangeColor: #E6A23C;
@@ -21,13 +23,13 @@ $darkBlueColor: #304156;
 $lightBlackColor: #333333;
 $blackColor: #000000;
 
-// icon
+// icon默认颜色
 $iconColor: #eeeeee;
 
 
 /** ---- theme-blue ---- **/
 
-// primaryColor
+// 主题色
 $primaryColor: #409EFF;
 
 // headbar
@@ -48,7 +50,7 @@ $inputDateBg: #F2F6FC;
 
 /** ---- theme-green ---- **/
 
-// primaryColor
+// 主题色
 $primaryColorGreen: #04B018;
 
 // headbar

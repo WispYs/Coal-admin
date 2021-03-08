@@ -14,6 +14,7 @@
         :list-loading="listLoading"
         :config="TableConfig"
         @edit-click="(row) => openDialog('edit', row)"
+        @other-click="openDetail"
         @delete-click="deleteClick"
         @submit-data="editSubmit"
       />
@@ -47,19 +48,19 @@
 </template>
 
 <script>
-import { getList } from '@/api/assessment-library'
+import { getList } from '@/api/control-measure'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import TreeBar from '@/components/TreeBar'
-import { TableConfig, FilterConfig } from '@/data/assessment-library'
+import { TableConfig, FilterConfig } from '@/data/control-measure'
 
 export default {
   components: { FilterBar, ListTable, Pagination, FormDialog, TreeBar },
   data() {
     return {
-      id: 'assessment-library',
+      id: 'control-measure',
       list: null,
       total: 0,
       listQuery: {
@@ -74,27 +75,13 @@ export default {
       editDialogVisible: false,
       treeExtend: true,
       treeData: {
-        title: '选择专业',
+        title: '选择风险类别',
         list: [{
-          label: '专业',
+          label: '分类',
           children: [{
-            label: '安检'
+            label: '作业活动'
           }, {
-            label: '采煤'
-          }, {
-            label: '掘进（中央区）'
-          }, {
-            label: '掘进（南区）'
-          }, {
-            label: '机电运输'
-          }, {
-            label: '一通三防'
-          }, {
-            label: '地面设施'
-          }, {
-            label: '维护'
-          }, {
-            label: '地质灾害防治'
+            label: '设备设施'
           }]
         }]
       }
@@ -146,6 +133,11 @@ export default {
         // 如果有数据，更新子组件的 formData
         this.$refs.editDialog.updataForm(row)
       }
+    },
+
+    // 落实情况
+    openDetail() {
+      this.$message.success('落实情况')
     },
 
     // 删除

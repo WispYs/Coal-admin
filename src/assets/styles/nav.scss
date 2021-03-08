@@ -2,7 +2,7 @@
  * @Author: Wisper 
  * @Date: 2021-01-08 14:12:56 
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-04 15:06:18
+ * @Last Modified time: 2021-03-05 16:30:18
  */
 
 #app {
@@ -16,7 +16,7 @@
     @include menuBg($menuBg);
     width: 100%;
     height: $headBarHeight;
-    z-index: 2001;
+    z-index: 1002;
 
     // 导航栏
     .headbar-container {
