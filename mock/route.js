@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-05 15:50:49
+ * @Last Modified time: 2021-03-08 16:32:30
  */
 
 /**
@@ -1679,23 +1679,23 @@ const asyncRoutes = [
             meta: { title: '工作机制' },
             children: [
               {
-                path: '/demo-safe/safe3/safe3-1/safe3-1-1',
-                name: 'Safe3-1-1',
-                component: '/demo/index',
+                path: '/safe-management/hidden-danger/working-mechanism/organization',
+                name: 'DangerOrganization',
+                component: '/safe-management/hidden-danger/working-mechanism/organization/index',
                 meta: { title: '隐患组织结构' }
               },
               {
-                path: '/demo-safe/safe3/safe3-1/safe3-1-2',
-                name: 'Safe3-1-2',
-                component: '/demo/index',
+                path: '/safe-management/hidden-danger/working-mechanism/liability-system',
+                name: 'DangerLiability',
+                component: '/safe-management/hidden-danger/working-mechanism/liability-system/index',
                 meta: { title: '隐患责任体系' }
               }
             ]
           },
           {
-            path: '/demo-safe/safe3/safe3-2',
-            name: 'Safe3-2',
-            component: '/demo/index',
+            path: '/safe-management/hidden-danger/danger-registration',
+            name: 'DangerRegistration',
+            component: '/safe-management/hidden-danger/danger-registration/index',
             meta: { title: '事故隐患登记' }
           },
           {
@@ -1705,47 +1705,47 @@ const asyncRoutes = [
             meta: { title: '隐患监督管理' },
             children: [
               {
-                path: '/demo-safe/safe3/safe3-3/safe3-3-1',
-                name: 'Safe3-3-1',
-                component: '/demo/index',
+                path: '/safe-management/hidden-danger/danger-supervision/reform',
+                name: 'Reform',
+                component: '/safe-management/hidden-danger/danger-supervision/reform/index',
                 meta: { title: '隐患整改' }
               },
               {
-                path: '/demo-safe/safe3/safe3-3/safe3-3-2',
-                name: 'Safe3-3-2',
-                component: '/demo/index',
+                path: '/safe-management/hidden-danger/danger-supervision/delay-approval',
+                name: 'DelayApproval',
+                component: '/safe-management/hidden-danger/danger-supervision/delay-approval/index',
                 meta: { title: '延期审批' }
               },
               {
-                path: '/demo-safe/safe3/safe3-3/safe3-3-3',
-                name: 'Safe3-3-3',
-                component: '/demo/index',
+                path: '/safe-management/hidden-danger/danger-supervision/acceptance',
+                name: 'Acceptance',
+                component: '/safe-management/hidden-danger/danger-supervision/acceptance/index',
                 meta: { title: '隐患验收' }
               },
               {
-                path: '/demo-safe/safe3/safe3-3/safe3-3-4',
-                name: 'Safe3-3-4',
-                component: '/demo/index',
+                path: '/safe-management/hidden-danger/danger-supervision/exceed',
+                name: 'DangerExceed',
+                component: '/safe-management/hidden-danger/danger-supervision/exceed/index',
                 meta: { title: '超期隐患' }
               },
               {
-                path: '/demo-safe/safe3/safe3-3/safe3-3-5',
-                name: 'Safe3-3-5',
-                component: '/demo/index',
+                path: '/safe-management/hidden-danger/danger-supervision/supervision',
+                name: 'DangerSupervision',
+                component: '/safe-management/hidden-danger/danger-supervision/supervision/index',
                 meta: { title: '治理督办' }
               }
             ]
           },
           {
-            path: '/demo-safe/safe3/safe3-4',
-            name: 'Safe3-4',
-            component: '/demo/index',
+            path: '/safe-management/hidden-danger/danger-list',
+            name: 'DangerList',
+            component: '/safe-management/hidden-danger/danger-list/index',
             meta: { title: '隐患清单' }
           },
           {
-            path: '/demo-safe/safe3/safe3-5',
-            name: 'Safe3-5',
-            component: '/demo/index',
+            path: '/safe-management/hidden-danger/danger-echart',
+            name: 'DangerEchart',
+            component: '/safe-management/hidden-danger/danger-echart/index',
             meta: { title: '隐患统计分析' }
           }
         ]
@@ -1757,21 +1757,21 @@ const asyncRoutes = [
         meta: { title: '三违管理' },
         children: [
           {
-            path: '/demo-safe/safe4/safe4-1',
-            name: 'Safe4-1',
-            component: '/demo/index',
+            path: '/safe-management/three-violation/document-management',
+            name: 'ViolationDocument',
+            component: '/safe-management/three-violation/document-management/index',
             meta: { title: '三违文档管理' }
           },
           {
-            path: '/demo-safe/safe4/safe4-2',
-            name: 'Safe4-2',
-            component: '/demo/index',
+            path: '/safe-management/three-violation/register',
+            name: 'ViolationRegister',
+            component: '/safe-management/three-violation/register/index',
             meta: { title: '三违登记' }
           },
           {
-            path: '/demo-safe/safe4/safe4-3',
-            name: 'Safe4-3',
-            component: '/demo/index',
+            path: '/safe-management/three-violation/violation-echart',
+            name: 'ViolationEchart',
+            component: '/safe-management/three-violation/violation-echart/index',
             meta: { title: '三违分析' }
           }
         ]
@@ -1935,21 +1935,21 @@ const asyncRoutes = [
         meta: { title: '应急救援预案' },
         children: [
           {
-            path: '/demo-emergency/emergency2/emergency2-1',
-            name: 'Emergency2-1',
-            component: '/demo/index',
+            path: '/emergency-rescue/rescue-plan/common-plan',
+            name: 'EmergencyCommonPlan',
+            component: '/emergency-rescue/rescue-plan/common-plan/index',
             meta: { title: '综合预案' }
           },
           {
-            path: '/demo-emergency/emergency2/emergency2-2',
-            name: 'Emergency2-2',
-            component: '/demo/index',
+            path: '/emergency-rescue/rescue-plan/special-plan',
+            name: 'EmergencySpecialPlan',
+            component: '/emergency-rescue/rescue-plan/special-plan/index',
             meta: { title: '专项预案' }
           },
           {
-            path: '/demo-emergency/emergency2/emergency2-3',
-            name: 'Emergency2-3',
-            component: '/demo/index',
+            path: '/emergency-rescue/rescue-plan/accident-plan',
+            name: 'EmergencyAccidentPlan',
+            component: '/emergency-rescue/rescue-plan/accident-plan/index',
             meta: { title: '事故处置方案' }
           }
         ]
@@ -2977,33 +2977,33 @@ const asyncRoutes = [
         meta: { title: '运输管理' },
         children: [
           {
-            path: '/demo-mechanical/mechanical2/mechanical2-1',
-            name: 'Mechanical2-1',
-            component: '/demo/index',
+            path: '/mechatronics/transportation-management/equipment-management',
+            name: 'EquipmentManagement',
+            component: '/mechatronics/transportation-management/equipment-management/index',
             meta: { title: '大型设备管理' }
           },
           {
-            path: '/demo-mechanical/mechanical2/mechanical2-2',
-            name: 'Mechanical2-2',
-            component: '/demo/index',
+            path: '/mechatronics/transportation-management/equipment-type',
+            name: 'EquipmentType',
+            component: '/mechatronics/transportation-management/equipment-type/index',
             meta: { title: '大型设备类型' }
           },
           {
-            path: '/demo-mechanical/mechanical2/mechanical2-3',
-            name: 'Mechanical2-3',
-            component: '/demo/index',
+            path: '/mechatronics/transportation-management/typical-fault',
+            name: 'TypicalFault',
+            component: '/mechatronics/transportation-management/typical-fault/index',
             meta: { title: '典型故障知识库' }
           },
           {
-            path: '/demo-mechanical/mechanical2/mechanical2-4',
-            name: 'Mechanical2-4',
-            component: '/demo/index',
+            path: '/mechatronics/transportation-management/history-fault',
+            name: 'HistoryFault',
+            component: '/mechatronics/transportation-management/history-fault/index',
             meta: { title: '历史故障知识库' }
           },
           {
-            path: '/demo-mechanical/mechanical2/mechanical2-5',
-            name: 'Mechanical2-5',
-            component: '/demo/index',
+            path: '/mechatronics/transportation-management/transportation-document',
+            name: 'TransportationDocument',
+            component: '/mechatronics/transportation-management/transportation-document/index',
             meta: { title: '运输数字文档' }
           }
         ]
@@ -3015,33 +3015,33 @@ const asyncRoutes = [
         meta: { title: '检修管理' },
         children: [
           {
-            path: '/demo-mechanical/mechanical3/mechanical3-1',
-            name: 'Mechanical3-1',
-            component: '/demo/index',
+            path: '/mechatronics/service-management/service-plan',
+            name: 'ServicePlan',
+            component: '/mechatronics/service-management/service-plan/index',
             meta: { title: '检修计划' }
           },
           {
-            path: '/demo-mechanical/mechanical3/mechanical3-2',
-            name: 'Mechanical3-2',
-            component: '/demo/index',
+            path: '/mechatronics/service-management/daily-service-management',
+            name: 'DailyServiceManagement',
+            component: '/mechatronics/service-management/daily-service-management/index',
             meta: { title: '日常维检管理' }
           },
           {
-            path: '/demo-mechanical/mechanical3/mechanical3-3',
-            name: 'Mechanical3-3',
-            component: '/demo/index',
+            path: '/mechatronics/service-management/daily-service-calendar',
+            name: 'DailyServiceCalendar',
+            component: '/mechatronics/service-management/daily-service-calendar/index',
             meta: { title: '日常维检日历' }
           },
           {
-            path: '/demo-mechanical/mechanical3/mechanical3-4',
-            name: 'Mechanical3-4',
-            component: '/demo/index',
+            path: '/mechatronics/service-management/equipment-service',
+            name: 'EquipmentService',
+            component: '/mechatronics/service-management/equipment-service/index',
             meta: { title: '设备维修' }
           },
           {
-            path: '/demo-mechanical/mechanical3/mechanical3-5',
-            name: 'Mechanical3-5',
-            component: '/demo/index',
+            path: '/mechatronics/service-management/spare-parts',
+            name: 'SpareParts',
+            component: '/mechatronics/service-management/spare-parts/index',
             meta: { title: '备品备件' }
           }
         ]
