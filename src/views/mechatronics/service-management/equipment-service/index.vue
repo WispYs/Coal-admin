@@ -13,6 +13,8 @@
       </div>
       <div class="filter-bar__item">
         <el-button type="primary" size="medium" @click="search()">搜索</el-button>
+        <el-button type="primary" size="medium" @click="search()"><i class="el-icon-plus el-icon--left" />突发故障</el-button>
+        <el-button type="primary" size="medium" @click="search()"><i class="el-icon-search el-icon--left" />查看备品备件</el-button>
       </div>
     </div>
     <el-table
