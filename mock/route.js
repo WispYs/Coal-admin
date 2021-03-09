@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-08 16:32:30
+ * @Last Modified time: 2021-03-09 13:25:11
  */
 
 /**
@@ -3021,9 +3021,9 @@ const asyncRoutes = [
             meta: { title: '检修计划' }
           },
           {
-            path: '/mechatronics/service-management/daily-service-management',
-            name: 'DailyServiceManagement',
-            component: '/mechatronics/service-management/daily-service-management/index',
+            path: '/mechatronics/service-management/daily-service-manage',
+            name: 'DailyServiceManage',
+            component: '/mechatronics/service-management/daily-service-manage/index',
             meta: { title: '日常维检管理' }
           },
           {
@@ -3053,57 +3053,57 @@ const asyncRoutes = [
         meta: { title: '设备管理' },
         children: [
           {
-            path: '/demo-mechanical/mechanical4/mechanical4-1',
-            name: 'Mechanical4-1',
-            component: '/demo/index',
+            path: '/mechatronics/equipment-management/supplier-manage',
+            name: 'SupplierManage',
+            component: '/mechatronics/equipment-management/supplier-manage/index',
             meta: { title: '供应商管理' }
           },
           {
-            path: '/demo-mechanical/mechanical4/mechanical4-2',
-            name: 'Mechanical4-2',
-            component: '/demo/index',
+            path: '/mechatronics/equipment-management/category-manage',
+            name: 'CategoryManage',
+            component: '/mechatronics/equipment-management/category-manage/index',
             meta: { title: '设备类型管理' }
           },
           {
-            path: '/demo-mechanical/mechanical4/mechanical4-3',
-            name: 'Mechanical4-3',
-            component: '/demo/index',
+            path: '/mechatronics/equipment-management/model-manage',
+            name: 'ModelManage',
+            component: '/mechatronics/equipment-management/model-manage/index',
             meta: { title: '设备型号管理' }
           },
           {
-            path: '/demo-mechanical/mechanical4/mechanical4-4',
-            name: 'Mechanical4-4',
-            component: '/demo/index',
+            path: '/mechatronics/equipment-management/storage-manage',
+            name: 'StorageManage',
+            component: '/mechatronics/equipment-management/storage-manage/index',
             meta: { title: '设备出入库' }
           },
           {
-            path: '/demo-mechanical/mechanical4/mechanical4-5',
-            name: 'Mechanical4-5',
-            component: '/demo/index',
+            path: '/mechatronics/equipment-management/using-equipment',
+            name: 'UsingEquipment',
+            component: '/mechatronics/equipment-management/using-equipment/index',
             meta: { title: '在用设备' }
           },
           {
-            path: '/demo-mechanical/mechanical4/mechanical4-6',
-            name: 'Mechanical4-6',
-            component: '/demo/index',
+            path: '/mechatronics/equipment-management/repair-manage',
+            name: 'RepairManage',
+            component: '/mechatronics/equipment-management/repair-manage/index',
             meta: { title: '设备维修' }
           },
           {
-            path: '/demo-mechanical/mechanical4/mechanical4-7',
-            name: 'Mechanical4-7',
-            component: '/demo/index',
+            path: '/mechatronics/equipment-management/scrap-manage',
+            name: 'ScrapManage',
+            component: '/mechatronics/equipment-management/scrap-manage/index',
             meta: { title: '设备报废' }
           },
           {
-            path: '/demo-mechanical/mechanical4/mechanical4-8',
-            name: 'Mechanical4-8',
-            component: '/demo/index',
+            path: '/mechatronics/equipment-management/standing-book',
+            name: 'StandingBook',
+            component: '/mechatronics/equipment-management/standing-book/index',
             meta: { title: '设备台账' }
           },
           {
-            path: '/demo-mechanical/mechanical4/mechanical4-9',
-            name: 'Mechanical4-9',
-            component: '/demo/index',
+            path: '/mechatronics/equipment-management/certificate-manage',
+            name: 'CertificateManage',
+            component: '/mechatronics/equipment-management/certificate-manage/index',
             meta: { title: '设备证书' }
           },
           {
