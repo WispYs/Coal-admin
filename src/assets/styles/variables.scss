@@ -1,10 +1,13 @@
 /** ---- common ---- **/
 
 // headbar高度
-$headBarHeight: 60px;
+$headBarHeight: 95px;
+
+// 侧边栏宽度
+$sidebarWidth: 200px;
 
 // tree列表宽度
-$treeConWidth: 200px;
+$treeConWidth: 160px;
 
 // 页面背景
 $pageBg: #f2f2f2;
@@ -67,3 +70,9 @@ $primaryButtonHoverGreen: #03cc1a;
 
 // input
 $inputDateBgGreen: #f5fcf2;
+
+
+:export {
+  primaryColor: $primaryColor;
+  lightBlackColor: $lightBlackColor;
+}

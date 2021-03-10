@@ -10,10 +10,10 @@
           placeholder="请输入搜索内容"
           suffix-icon="el-icon-search"
         />
-        <i class="el-icon-menu" />
+        <i class="el-icon-menu headbar-icon" />
       </div>
 
-      <i class="el-icon-bell" />
+      <i class="el-icon-bell headbar-icon" />
 
       <div class="headbar-top__account">
         <img src="@/assets/images/avatar.jpg" class="user_avatar">
@@ -42,7 +42,7 @@ export default {
 .headbar-top {
   @include clearfix;
   height: 28px;
-  margin: 10px auto;
+  margin: 15px auto 2px;
   line-height: 28px;
   &__title {
     float: left;
@@ -59,10 +59,14 @@ export default {
         margin-right: 10px;
       }
     }
+    .headbar-icon {
+      cursor: pointer;
+    }
     .headbar-top__account {
       @include clearfix;
       display: inline-block;
-      margin: 0 20px;
+      margin: 0 30px;
+      cursor: pointer;
       .user_avatar {
         float: left;
         width: 28px;
@@ -72,7 +76,7 @@ export default {
       .user-name {
         float: left;
         margin: 0 6px;
-        font-size: 14px;
+        font-size: 13px;
       }
       .switch-account {
         font-size: 12px;
@@ -80,11 +84,13 @@ export default {
     }
     .headbar-top__setting {
       display: inline-block;
+      cursor: pointer;
       .setting-cion {
         font-size: 13px;
       }
       span {
-        font-size: 13px;
+        font-size: 12px;
+        margin-left: 5px;
       }
     }
   }

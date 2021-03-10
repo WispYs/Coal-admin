@@ -21,6 +21,9 @@ router.beforeEach(async(to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
+      // 初始化侧边栏
+      store.dispatch('headbar/initSidebarRoutes', to.path)
+
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
       if (hasRoles) {
         next()

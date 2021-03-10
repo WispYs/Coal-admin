@@ -5,6 +5,7 @@ import user from './modules/user'
 import permission from './modules/permission'
 import tagsView from './modules/tagsView'
 import themeColor from './modules/themeColor'
+import headbar from './modules/headbar'
 
 Vue.use(Vuex)
 
@@ -13,7 +14,8 @@ const store = new Vuex.Store({
     user,
     permission,
     tagsView,
-    themeColor
+    themeColor,
+    headbar
   },
   getters
 })

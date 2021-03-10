@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-10 14:55:47
+ * @Last Modified time: 2021-03-10 10:12:59
  */
 
 /**
@@ -16,24 +16,23 @@
  * @param {array}   roles         meta参数，['admin', 'editor']表示该路由仅对admin和editor开放，现权限按角色分配，后可根据项目需求修改
  * @param {boolean} hiddenChild   meta参数，true表示隐藏该路由下所有子路由，仅一级路由显示在headbar菜单中
  * @param {string}  externalUrl   meta参数，用于内嵌外部链接，例：'https://www.baidu.com/'
- * @param {string}  important     meta参数，true表示重要的菜单需要在headbar中显示
  */
 
 const asyncRoutes = [
   // 首页
-  {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: '/dashboard/index',
-    meta: { title: '首页', affix: true, important: true }
-  },
+  // {
+  //   path: '/dashboard',
+  //   name: 'Dashboard',
+  //   component: '/dashboard/index',
+  //   meta: { title: '首页', affix: true }
+  // },
   // GIS一张图
   {
     path: '/demo-gis',
     name: 'demoGis',
     component: 'Layout',
     redirect: '/demo-gis/gis1',
-    meta: { title: 'GIS一张图', important: true },
+    meta: { title: 'GIS一张图' },
     children: [
       {
         path: '/demo-gis/gis1',
@@ -103,7 +102,7 @@ const asyncRoutes = [
     name: 'DemoGeodesy',
     component: 'Layout',
     redirect: '/demo-geodesy/geodesy1',
-    meta: { title: '地测防控水', important: true },
+    meta: { title: '地测防控水' },
     children: [
       {
         path: '/demo-geodesy/geodesy1',
@@ -889,11 +888,11 @@ const asyncRoutes = [
   },
   // 采掘管理
   {
-    path: '/mining-management',
+    path: '/demo-excavate',
     name: 'DemoExcavate',
     component: 'Layout',
     redirect: '/demo-excavate/excavate1',
-    meta: { title: '采掘管理', important: true },
+    meta: { title: '采掘管理' },
     children: [
       {
         path: '/demo-excavate/excavate1',
@@ -1123,7 +1122,7 @@ const asyncRoutes = [
     name: 'DemoDispatch',
     component: 'Layout',
     redirect: '/demo-dispatch/dispatch1',
-    meta: { title: '生产调度', important: true },
+    meta: { title: '生产调度' },
     children: [
       {
         path: '/demo-dispatch/dispatch1',
@@ -1359,11 +1358,11 @@ const asyncRoutes = [
   },
   // 安全管理
   {
-    path: '/safe-management',
+    path: '/demo-safe',
     name: 'DemoSafe',
     component: 'Layout',
     redirect: '/demo-safe/safe1',
-    meta: { title: '安全管理', roles: ['admin', 'editor'], important: true },
+    meta: { title: '安全管理', roles: ['admin', 'editor'] },
     children: [
       {
         path: '/demo-safe/safe1',
@@ -1907,7 +1906,7 @@ const asyncRoutes = [
     name: 'DemoEmergency',
     component: 'Layout',
     redirect: '/demo-emergency/emergency1',
-    meta: { title: '应急救援', important: true },
+    meta: { title: '应急救援' },
     children: [
       {
         path: '/demo-emergency/emergency1',
@@ -2045,7 +2044,7 @@ const asyncRoutes = [
     name: 'DemoPrevention',
     component: 'Layout',
     redirect: '/demo-prevention/prevention1',
-    meta: { title: '一通三防', important: true },
+    meta: { title: '一通三防' },
     children: [
       {
         path: '/demo-prevention/prevention1',
@@ -2927,11 +2926,11 @@ const asyncRoutes = [
   },
   // 机电运输
   {
-    path: '/mechatronics',
+    path: '/demo-mechanical',
     name: 'DemoMechanical',
     component: 'Layout',
     redirect: '/demo-mechanical/mechanical1',
-    meta: { title: '机电运输', important: true },
+    meta: { title: '机电运输' },
     children: [
       {
         path: '/demo-mechanical/mechanical1',
@@ -3319,7 +3318,7 @@ const asyncRoutes = [
     name: 'DemoAutomation',
     component: 'Layout',
     redirect: '/demo-automation/automation1',
-    meta: { title: '综合自动化', important: true },
+    meta: { title: '综合自动化' },
     children: [
       {
         path: '/demo-automation/automation1',
@@ -3407,7 +3406,7 @@ const asyncRoutes = [
     name: 'DemoVideo',
     component: 'Layout',
     redirect: '/demo-video/video1',
-    meta: { title: '视频监控', important: true },
+    meta: { title: '视频监控' },
     children: [
       {
         path: '/demo-video/video1',
@@ -3494,7 +3493,7 @@ const asyncRoutes = [
     name: 'DemoPartyBuild',
     component: 'Layout',
     redirect: '/demo-party-build/build1',
-    meta: { title: '智慧党建', important: true },
+    meta: { title: '智慧党建' },
     children: [
       {
         path: '/demo-party-build/build1',
@@ -3574,7 +3573,7 @@ const asyncRoutes = [
     name: 'DemoBigData',
     component: 'Layout',
     redirect: '/demo-big-data/big-data1',
-    meta: { title: '大数据分析', important: true },
+    meta: { title: '大数据分析' },
     children: [
       {
         path: '/demo-big-data/big-data1',

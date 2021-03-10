@@ -2,9 +2,10 @@
   <div class="app-wrapper">
     <div class="nav-container">
       <headbar class="headbar-container clearfix" />
-      <avatar class="avatar-container" @showThemeDialog="themeDialogVisible = true" />
+      <!-- <avatar class="avatar-container" @showThemeDialog="themeDialogVisible = true" /> -->
     </div>
-    <div class="main-container">
+    <sidebar v-if="sidebarRoutes.length > 0" />
+    <div class="main-container" :class="sidebarRoutes.length > 0 ? 'has-sidebar' : ''">
       <div class="tags-wrapper">
         <tags-view />
       </div>
@@ -19,7 +20,7 @@
 </template>
 
 <script>
-import { Headbar, AppMain, Avatar, TagsView, ThemeDialog } from './components'
+import { Headbar, AppMain, Avatar, TagsView, ThemeDialog, Sidebar } from './components'
 
 export default {
   name: 'Layout',
@@ -28,7 +29,8 @@ export default {
     AppMain,
     Avatar,
     TagsView,
-    ThemeDialog
+    ThemeDialog,
+    Sidebar
   },
   data() {
     return {
@@ -36,8 +38,9 @@ export default {
     }
   },
   computed: {
-    headbar() {
-      return this.$store.state.app.headbar
+    sidebarRoutes() {
+      console.log(this.$store.state.headbar.sidebarRoutes)
+      return this.$store.state.headbar.sidebarRoutes
     }
   },
   methods: {
@@ -62,8 +65,8 @@ export default {
   }
 
   .tags-wrapper {
-    position: fixed;
-    top: $headBarHeight;
+    position: absolute;
+    top: 0;
     right: 0;
     z-index: 9;
     width: 100%;

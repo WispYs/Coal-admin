@@ -23,11 +23,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~@/assets/styles/variables.scss';
 .app-main {
   width: 100%;
   height: 100%;
-  padding-top: 34px; /* 34 = tags-view */
   position: relative;
+  background: $pageBg;
 }
 
 </style>
