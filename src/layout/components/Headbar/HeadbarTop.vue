@@ -1,6 +1,7 @@
 <template>
   <div class="headbar-top">
-    <h1 class="headbar-top__title">合肥院综合信息化平台</h1>
+    <!-- <img src="@/assets/images/logo.png" class="headbar-top__logo"> -->
+    <h1 class="headbar-top__title">矿井综合信息化平台</h1>
     <div class="headbar-top__right">
       <div class="headbar-top__search">
         <el-input
@@ -100,6 +101,10 @@ export default {
   height: 28px;
   margin: 15px auto 2px;
   line-height: 28px;
+  &__logo {
+    float: left;
+    height: 28px;
+  }
   &__title {
     float: left;
     font-size: 18px;
