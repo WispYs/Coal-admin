@@ -236,8 +236,9 @@ export default {
     text-align: center;
     margin-top: 10px;
     .chart-row {
+      overflow: hidden;
       .chart-item {
-        display: inline-block;
+        float: left;
         width: calc((100% - 146px) / 4);
         height: 22px;
         line-height: 22px;
@@ -253,6 +254,9 @@ export default {
           padding-left: 20px;
           text-align: left;
           width: calc(100% - 140px);
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
         }
         &.tip {
           background: rgb(253, 245, 230);

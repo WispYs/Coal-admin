@@ -12,8 +12,19 @@
         />
         <i class="el-icon-menu headbar-icon" />
       </div>
-
-      <i class="el-icon-bell headbar-icon" />
+      <el-badge :is-dot="isWarning" class="bell-badge" @click="showWarning">
+        <i class="el-icon-bell headbar-icon" />
+        <div class="warning-content">
+          <div class="warning-list">
+            <i class="el-icon-warning" />
+            <p>预警信息内容，内容可展示为两行文字提示，可同时出现多条提示。</p>
+          </div>
+          <div class="warning-list">
+            <i class="el-icon-warning" />
+            <p>预警信息内容，内容可展示为两行文字提示，可同时出现多条提示。</p>
+          </div>
+        </div>
+      </el-badge>
 
       <div class="headbar-top__account">
         <img src="@/assets/images/avatar.jpg" class="user_avatar">
@@ -32,13 +43,21 @@
 export default {
   data() {
     return {
-      search: ''
+      search: '',
+      isWarning: true
+    }
+  },
+  methods: {
+    showWarning() {
+
     }
   }
 }
 </script>
+
 <style lang="scss" scoped>
 @import '@/assets/styles/mixin.scss';
+@import '@/assets/styles/variables.scss';
 .headbar-top {
   @include clearfix;
   height: 28px;
@@ -60,8 +79,74 @@ export default {
       }
     }
     .headbar-icon {
+      font-size: 16px;
       cursor: pointer;
     }
+    .bell-badge {
+      position: relative;
+      // &:hover {
+      //   .warning-content {
+      //     display: block;
+      //   }
+      // }
+      .warning-content {
+        display: none;
+        position: absolute;
+        top: 140%;
+        left: 50%;
+        width: 300px;
+        height: 120px;
+        padding: 12px;
+        transform: translateX(-80%);
+        z-index: 2000;
+        background: #fff;
+        border-radius: 4px;
+        border: 1px solid #ebeef5;
+        color: #606266;
+        line-height: 1.4;
+        text-align: justify;
+        font-size: 14px;
+        box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+        word-break: break-all;
+        &::after {
+          content: '';
+          position: absolute;
+          top: -8px;
+          right: calc(20% - 16px);
+          width: 0;
+          height: 0;
+          border-bottom: 8px solid #fff;
+          border-right: 8px solid transparent;
+          border-left: 8px solid transparent;
+        }
+        &.active {
+          display: block;
+        }
+
+        .warning-list {
+          @include clearfix;
+          border-bottom: 1px solid $borderColor;
+          padding: 10px 0;
+          i {
+            float: left;
+            margin-right: 10px;
+            margin-top: 2px;
+            font-size: 16px;
+          }
+          i.tip {
+            color: $grayColor;
+          }
+          i.warn {
+            color: $redColor;
+          }
+          p {
+            font-size: 12px;
+            margin-left: 26px;
+          }
+        }
+      }
+    }
+
     .headbar-top__account {
       @include clearfix;
       display: inline-block;
@@ -93,6 +178,16 @@ export default {
         margin-left: 5px;
       }
     }
+  }
+}
+</style>
+<style lang="scss">
+.bell-badge {
+  .el-badge__content.is-fixed.is-dot {
+    right: 7px;
+    top: 8px;
+    width: 7px;
+    height: 7px;
   }
 }
 </style>

@@ -11,11 +11,12 @@
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
+              style="width: 300px;"
             />
           </div>
           <div class="filter-item">
             <span>风险专业：</span>
-            <el-select v-model="riskProfession" placeholder="请选择" @change="selectRisk">
+            <el-select v-model="riskProfession" placeholder="请选择" style="width: 150px;" @change="selectRisk">
               <el-option
                 v-for="item in professionData"
                 :key="item.value"
@@ -158,8 +159,9 @@ export default {
     text-align: center;
     margin-top: 10px;
     .chart-row {
+      overflow: hidden;
       .chart-item {
-        display: inline-block;
+        float: left;
         width: calc((100% - 146px) / 4);
         height: 22px;
         line-height: 22px;
@@ -175,6 +177,9 @@ export default {
           padding-left: 20px;
           text-align: left;
           width: calc(100% - 140px);
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
         }
         &.tip {
           background: rgb(253, 245, 230);
