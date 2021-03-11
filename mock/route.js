@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-11 13:24:41
+ * @Last Modified time: 2021-03-11 16:03:03
  */
 
 /**
@@ -3434,7 +3434,7 @@ const asyncRoutes = [
     path: '/demo-page',
     name: 'DemoPage',
     component: 'Layout',
-    redirect: '/demo-page/build1',
+    redirect: '/demo-page/table1',
     meta: { title: '页面模板' },
     children: [
       {
