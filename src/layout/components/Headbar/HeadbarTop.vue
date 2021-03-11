@@ -25,12 +25,22 @@
           </div>
         </div>
       </el-badge>
-
-      <div class="headbar-top__account">
-        <img src="@/assets/images/avatar.jpg" class="user_avatar">
-        <span class="user-name">用户名</span>
-        <icon class="switch-account" icon-class="fa-exchange" />
-      </div>
+      <el-dropdown class="account-wrapper" trigger="click">
+        <!-- <div class="avatar-content">
+          <img src="@/assets/images/avatar.jpg" class="user-avatar">
+          <i class="el-icon-caret-bottom" />
+        </div> -->
+        <div class="headbar-top__account">
+          <img src="@/assets/images/avatar.jpg" class="user_avatar">
+          <span class="user-name">用户名</span>
+          <icon class="switch-account" icon-class="fa-exchange" />
+        </div>
+        <el-dropdown-menu slot="dropdown" class="user-dropdown">
+          <el-dropdown-item>个人资料</el-dropdown-item>
+          <el-dropdown-item @click.native="showThemeDialog">更换皮肤</el-dropdown-item>
+          <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
 
       <div class="headbar-top__setting">
         <i class="el-icon-setting setting-cion" />
@@ -50,6 +60,19 @@ export default {
   methods: {
     showWarning() {
 
+    },
+    showThemeDialog() {
+      this.$emit('showThemeDialog')
+    },
+    logout() {
+      this.$confirm('确定退出登录?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        await this.$store.dispatch('user/logout')
+        this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      })
     }
   }
 }
@@ -151,6 +174,7 @@ export default {
       @include clearfix;
       display: inline-block;
       margin: 0 30px;
+      color: $whiteColor;
       cursor: pointer;
       .user_avatar {
         float: left;

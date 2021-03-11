@@ -1,6 +1,6 @@
 <template>
   <div class="headbar-wrapper">
-    <headbar-top />
+    <headbar-top @showThemeDialog="showThemeDialog" />
     <headbar-menu :routes="permission_routes" />
   </div>
 </template>
@@ -17,6 +17,11 @@ export default {
     ...mapGetters([
       'permission_routes' // state 里存储的路由配置
     ])
+  },
+  methods: {
+    showThemeDialog() {
+      this.$emit('showThemeDialog')
+    }
   }
 }
 </script>

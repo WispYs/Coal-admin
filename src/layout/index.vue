@@ -1,7 +1,7 @@
 <template>
   <div class="app-wrapper">
     <div class="nav-container">
-      <headbar class="headbar-container clearfix" />
+      <headbar class="headbar-container clearfix" @showThemeDialog="themeDialogVisible = true" />
       <!-- <avatar class="avatar-container" @showThemeDialog="themeDialogVisible = true" /> -->
     </div>
     <sidebar v-if="sidebarRoutes.length > 0" />

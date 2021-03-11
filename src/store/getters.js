@@ -6,7 +6,7 @@ const getters = {
   permission_routes: state => state.permission.routes,
   visitedViews: state => state.tagsView.visitedViews,
   cachedViews: state => state.tagsView.cachedViews,
-  theme_class: state => state.themeColor.themeClass,
+  theme_class: state => state.themeColor.themeColor,
   sidebar_routes: state => state.headbar.sidebarRoutes
 }
 export default getters
