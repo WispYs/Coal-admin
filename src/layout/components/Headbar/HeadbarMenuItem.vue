@@ -1,7 +1,7 @@
 <template>
   <div @click="handelHeadbar(index)">
     <item-link :to="path">
-      <span>{{ title }}</span>
+      <span :class="isCurrentMenu(path) ? 'active' : ''">{{ title }}</span>
     </item-link>
   </div>
 </template>
@@ -30,21 +30,31 @@ export default {
       'permission_routes' // state 里存储的路由配置
     ])
   },
+  mounted() {
+    console.log('path=' + this.path)
+    console.log(this.$route.path)
+  },
   methods: {
     handelHeadbar(index) {
       console.log(index)
       // const sidebarRoutes = this.permission_routes[index].children || []
       // this.$store.dispatch('headbar/initSidebarRoutes', sidebarRoutes)
+    },
+    isCurrentMenu(path) {
+      const routePath = this.$route.path
+      return routePath.includes(path)
     }
   }
 
 }
 </script>
-
-<style scoped>
-.sub-el-icon {
-  color: currentColor;
-  width: 1em;
-  height: 1em;
+<style lang="scss">
+@import '~@/assets/styles/theme.scss';
+@import '~@/assets/styles/variables.scss';
+.router-link-active {
+  span {
+    @include primaryColor($primaryColor)
+  }
 }
+
 </style>

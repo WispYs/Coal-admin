@@ -12,9 +12,9 @@
         />
         <i class="el-icon-menu headbar-icon" />
       </div>
-      <el-badge :is-dot="isWarning" class="bell-badge" @click="showWarning">
-        <i class="el-icon-bell headbar-icon" />
-        <div class="warning-content">
+      <el-badge :is-dot="isWarning" class="bell-badge">
+        <i class="el-icon-bell headbar-icon" @click="warningVisible = !warningVisible" />
+        <div class="warning-content" :class="warningVisible ? 'active' : ''">
           <div class="warning-list">
             <i class="el-icon-warning" />
             <p>预警信息内容，内容可展示为两行文字提示，可同时出现多条提示。</p>
@@ -25,11 +25,8 @@
           </div>
         </div>
       </el-badge>
+
       <el-dropdown class="account-wrapper" trigger="click">
-        <!-- <div class="avatar-content">
-          <img src="@/assets/images/avatar.jpg" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
-        </div> -->
         <div class="headbar-top__account">
           <img src="@/assets/images/avatar.jpg" class="user_avatar">
           <span class="user-name">用户名</span>
@@ -54,13 +51,30 @@ export default {
   data() {
     return {
       search: '',
-      isWarning: true
+      isWarning: true,
+      warningVisible: false
+    }
+  },
+  watch: {
+    warningVisible(value) {
+      if (value) {
+        this.showWarning()
+      }
     }
   },
   methods: {
+    // 报警弹窗
     showWarning() {
-
+      window.addEventListener('click', this.closeWarning)
     },
+    closeWarning(event) {
+      const parent = event.target.closest('.bell-badge')
+      if (!parent) {
+        this.warningVisible = false
+        window.removeEventListener('click', this.closeWarning)
+      }
+    },
+    // 主题色弹窗
     showThemeDialog() {
       this.$emit('showThemeDialog')
     },
@@ -118,7 +132,7 @@ export default {
         top: 140%;
         left: 50%;
         width: 300px;
-        height: 120px;
+        height: auto;
         padding: 12px;
         transform: translateX(-80%);
         z-index: 2000;
@@ -150,6 +164,10 @@ export default {
           @include clearfix;
           border-bottom: 1px solid $borderColor;
           padding: 10px 0;
+          cursor: pointer;
+          &:last-of-type {
+            border-bottom: 0;
+          }
           i {
             float: left;
             margin-right: 10px;
