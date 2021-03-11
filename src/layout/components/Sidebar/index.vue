@@ -5,7 +5,7 @@
       :default-active="currentPath"
       :text-color="variables.lightBlackColor"
       :unique-opened="true"
-      :active-text-color="variables.primaryColor"
+
       :collapse-transition="false"
     >
       <sidebar-item v-for="route in sidebar_routes" :key="route.path" :item="route" />

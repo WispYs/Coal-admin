@@ -49,6 +49,16 @@
   }
 }
 
+@mixin sideMenuActiveBg($bg, $color) {
+  background-color: $bg;
+  color: $color;
+
+  [data-theme="theme-green"] & {
+    background-color: $dropdownBgGreen;
+    color: $dropdownColorGreen;
+  }
+}
+
 // dropdownMenu
 @mixin dropdownColor($bg, $color) {
   background-color: $bg;
@@ -79,6 +89,19 @@
 
   [data-theme="theme-green"] & {
     color: $primaryButtonHoverGreen;
+  }
+}
+
+// button-initial
+@mixin initialButtonHover($color, $bg, $border) {
+  background-color: $bg;
+  border-color: $border;
+  color: $color;
+
+  [data-theme="theme-green"] & {
+    background-color: $dropdownBgGreen;
+    border-color: $initialButtonHoverBorderGreen;
+    color: $primaryColorGreen;
   }
 }
 

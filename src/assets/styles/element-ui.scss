@@ -15,6 +15,11 @@
   @include primaryButtonHover($primaryButtonHover)
 }
 
+.el-button:focus,
+.el-button:hover {
+  @include initialButtonHover($primaryColor, $dropdownBg, $initialButtonHoverBorder)
+}
+
 // button-text
 .el-button--text {
   @include primaryColor($primaryColor)
@@ -146,6 +151,13 @@
 
 .el-upload-dragger .el-upload__text em {
   @include primaryColor($primaryColor)
+}
+
+// menu 
+.el-menu-item:focus,
+.el-menu-item:hover,
+.el-submenu__title:hover {
+  @include sideMenuActiveBg($dropdownBg, $dropdownColor)
 }
 
 .app-wrapper {
