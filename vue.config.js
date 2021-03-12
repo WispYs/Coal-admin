@@ -5,7 +5,7 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = 'Vue Project' // page title
+const name = '矿井综合信息化平台' // page title
 
 const port = process.env.port || process.env.npm_config_port || 8000 // dev port
 
