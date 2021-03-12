@@ -4,18 +4,31 @@
     <h1 class="headbar-top__title">矿井综合信息化平台</h1>
     <div class="headbar-top__right">
       <div class="headbar-top__search">
-        <el-input
-          v-model="search"
+        <el-autocomplete
+          ref="searchInput"
+          v-model="keywords"
           class="search-input"
           size="mini"
           placeholder="请输入搜索内容"
           suffix-icon="el-icon-search"
+          :debounce="0"
+          :fetch-suggestions="querySearchAsync"
+          @select="handleSelect"
         />
-        <i class="el-icon-menu headbar-icon" />
+        <div class="history-extend">
+          <i class="el-icon-menu headbar-icon" @click="historyVisible = !historyVisible" />
+          <div class="popUpBox history-content" :class="historyVisible ? 'active' : ''">
+            <div class="history-title">搜索历史</div>
+            <div v-for="item in historySearch" :key="item" class="history-item">
+              <el-button size="small" @click="search(item)">{{ item }}</el-button>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <el-badge :is-dot="isWarning" class="bell-badge">
+      <el-badge :is-dot="isWarning" class="warning-extend">
         <i class="el-icon-bell headbar-icon" @click="warningVisible = !warningVisible" />
-        <div class="warning-content" :class="warningVisible ? 'active' : ''">
+        <div class="popUpBox warning-content" :class="warningVisible ? 'active' : ''">
           <div class="warning-list">
             <i class="el-icon-warning" />
             <p>预警信息内容，内容可展示为两行文字提示，可同时出现多条提示。</p>
@@ -51,25 +64,76 @@
 export default {
   data() {
     return {
-      search: '',
+      keywords: '',
       isWarning: true,
-      warningVisible: false
+      warningVisible: false,
+      historyVisible: false,
+      timeout: null,
+      historySearch: ['生产计划', '采掘作业规程', '储量管理', '矿井储量', '设备管理', '综合自动化'],
+      searchList: ['【功能菜单】生产计划', '【表单】生产计划', '生产计划表', '矿场生产计划']
     }
   },
   watch: {
+    historyVisible(value) {
+      if (value) {
+        this.showHistory()
+      }
+    },
     warningVisible(value) {
       if (value) {
         this.showWarning()
       }
     }
   },
+  mounted() {
+    const searchListValue = []
+    this.searchList.forEach(it => {
+      searchListValue.push({ value: it })
+    })
+    this.searchList = searchListValue
+  },
   methods: {
+
+    querySearchAsync(queryString, cb) {
+      var searchList = this.searchList
+      var results = this.keywords ? searchList.filter(this.createStateFilter(this.keywords)) : searchList
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => {
+        cb(results)
+      }, 500 * Math.random())
+    },
+    createStateFilter(queryString) {
+      return (keywords) => {
+        return keywords.value.toLowerCase().includes(queryString.toLowerCase())
+      }
+    },
+    handleSelect(item) {
+      console.log(item)
+    },
+    // 历史记录弹窗
+    showHistory() {
+      window.addEventListener('click', this.closeHistory)
+    },
+    closeHistory(event) {
+      console.log(event.target)
+      const parent = event.target.closest('.history-extend')
+      const parentHistory = event.target.closest('.history-content')
+
+      if (!parent || parentHistory) {
+        this.historyVisible = false
+        window.removeEventListener('click', this.closeHistory)
+      }
+    },
+    search(value) {
+      this.keywords = value
+      this.$refs.searchInput.focus()
+    },
     // 报警弹窗
     showWarning() {
       window.addEventListener('click', this.closeWarning)
     },
     closeWarning(event) {
-      const parent = event.target.closest('.bell-badge')
+      const parent = event.target.closest('.warning-extend')
       if (!parent) {
         this.warningVisible = false
         window.removeEventListener('click', this.closeWarning)
@@ -115,6 +179,7 @@ export default {
     .headbar-top__search {
       display: inline-block;
       margin-right: 20px;
+      position: relative;
       .search-input {
         width: 250px;
         margin-right: 10px;
@@ -124,47 +189,63 @@ export default {
       font-size: 16px;
       cursor: pointer;
     }
-    .bell-badge {
-      position: relative;
-      // &:hover {
-      //   .warning-content {
-      //     display: block;
-      //   }
-      // }
-      .warning-content {
-        display: none;
+    .popUpBox {
+      display: none;
+      position: absolute;
+      top: 140%;
+      left: 50%;
+      width: 300px;
+      height: auto;
+      padding: 12px;
+      transform: translateX(-80%);
+      z-index: 2000;
+      background: #fff;
+      border-radius: 4px;
+      border: 1px solid #ebeef5;
+      color: #606266;
+      line-height: 1.4;
+      text-align: justify;
+      font-size: 14px;
+      box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+      word-break: break-all;
+      &::after {
+        content: '';
         position: absolute;
-        top: 140%;
-        left: 50%;
-        width: 300px;
-        height: auto;
-        padding: 12px;
-        transform: translateX(-80%);
-        z-index: 2000;
-        background: #fff;
-        border-radius: 4px;
-        border: 1px solid #ebeef5;
-        color: #606266;
-        line-height: 1.4;
-        text-align: justify;
-        font-size: 14px;
-        box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
-        word-break: break-all;
-        &::after {
-          content: '';
-          position: absolute;
-          top: -8px;
-          right: calc(20% - 16px);
-          width: 0;
-          height: 0;
-          border-bottom: 8px solid #fff;
-          border-right: 8px solid transparent;
-          border-left: 8px solid transparent;
+        top: -8px;
+        right: calc(20% - 16px);
+        width: 0;
+        height: 0;
+        border-bottom: 8px solid #fff;
+        border-right: 8px solid transparent;
+        border-left: 8px solid transparent;
+      }
+      &.active {
+        display: block;
+      }
+    }
+    .history-extend {
+      display: inline-block;
+      .history-content {
+        @include clearfix;
+        width: 330px;
+        left: 92%;
+        .history-title {
+          color: $lightBlackColor;
+          font-size: 13px;
+          margin-bottom: 4px;
         }
-        &.active {
-          display: block;
+        .history-item {
+          float: left;
+          color: #333;
+          line-height: 28px;
+          margin: 5px;
         }
+      }
+    }
+    .warning-extend {
+      position: relative;
 
+      .warning-content {
         .warning-list {
           @include clearfix;
           border-bottom: 1px solid $borderColor;
@@ -229,12 +310,25 @@ export default {
 }
 </style>
 <style lang="scss">
-.bell-badge {
+@import '@/assets/styles/variables.scss';
+.warning-extend {
   .el-badge__content.is-fixed.is-dot {
     right: 7px;
     top: 8px;
     width: 7px;
     height: 7px;
   }
+}
+.el-autocomplete-suggestion {
+  li {
+    font-size: 12px !important;
+    padding: 0 !important;
+    margin: 0 20px !important;
+    border-bottom: 1px solid $borderColor;
+    &:last-of-type {
+      border-bottom: 0;
+    }
+  }
+
 }
 </style>

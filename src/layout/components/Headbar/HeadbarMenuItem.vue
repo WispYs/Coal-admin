@@ -30,10 +30,6 @@ export default {
       'permission_routes' // state 里存储的路由配置
     ])
   },
-  mounted() {
-    console.log('path=' + this.path)
-    console.log(this.$route.path)
-  },
   methods: {
     handelHeadbar(index) {
       console.log(index)

@@ -74,7 +74,7 @@ export default {
       editDialogVisible: false,
       treeExtend: true,
       treeData: {
-        title: '选择风险组织结构',
+        title: '风险组织结构',
         list: [{
           label: '顾桥煤矿',
           children: [{

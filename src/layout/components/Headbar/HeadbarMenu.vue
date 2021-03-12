@@ -5,11 +5,11 @@
         <headbar-menu-item :title="item.meta.title" :path="item.path" :index="index" />
       </div>
     </template>
-    <div class="expand-menu">
-      <i class="el-icon-menu expand-menu__icon" @click="expandMenuVisible = !expandMenuVisible" />
-      <div class="expand-menu__content" :class="expandMenuVisible ? 'active' : ''">
+    <div class="extend-menu">
+      <i class="el-icon-menu extend-menu__icon" @click="expandMenuVisible = !expandMenuVisible" />
+      <div class="extend-menu__content" :class="expandMenuVisible ? 'active' : ''">
         <template v-for="item in routes">
-          <div v-if="!item.hidden && item.meta && !item.meta.important" :key="item.path" class="expand-menu__item">
+          <div v-if="!item.hidden && item.meta && !item.meta.important" :key="item.path" class="extend-menu__item">
             <item-link :to="item.path">
               <el-button size="small">{{ item.meta.title }}</el-button>
             </item-link>
@@ -39,20 +39,20 @@ export default {
   watch: {
     expandMenuVisible(value) {
       if (value) {
-        this.showExpandMenu()
+        this.showExtendMenu()
       }
     }
   },
   methods: {
-    showExpandMenu() {
-      window.addEventListener('click', this.closeExpandMenu)
+    showExtendMenu() {
+      window.addEventListener('click', this.closeExtendMenu)
     },
-    closeExpandMenu(event) {
-      const parent = event.target.closest('.expand-menu')
-      const parentItem = event.target.closest('.expand-menu__item')
+    closeExtendMenu(event) {
+      const parent = event.target.closest('.extend-menu')
+      const parentItem = event.target.closest('.extend-menu__item')
       if (!parent || parentItem) {
         this.expandMenuVisible = false
-        window.removeEventListener('click', this.closeExpandMenu)
+        window.removeEventListener('click', this.closeExtendMenu)
       }
     }
   }
@@ -77,7 +77,7 @@ export default {
       @include primaryColor($primaryColor);
     }
   }
-  .expand-menu {
+  .extend-menu {
     &__icon {
       position: absolute;
       top: 50%;
