@@ -1,0 +1,49 @@
+/*
+ * @Author: Wisper 
+ * @Date: 2021-03-12 13:55:12 
+ * @Last Modified by: Wisper
+ * @Last Modified time: 2021-03-12 16:45:42
+ */
+.dashboard-wrapper {
+  .content {
+    padding: 20px;
+    height: 350px;
+    background: $whiteColor;
+
+    &-title {
+      font-size: 14px;
+      overflow: hidden;
+      line-height: 40px;
+      margin-bottom: 20px;
+
+      span {
+        float: left;
+        font-weight: bold;
+      }
+
+      .title-select {
+        float: right;
+        width: 150px;
+      }
+
+      .right-btn {
+        float: right;
+        color: $grayColor;
+        margin-left: 10px;
+        font-size: 13px;
+        cursor: pointer;
+
+        i {
+          margin-right: 4px;
+        }
+      }
+    }
+
+    &-box {
+      height: calc(100% - 60px);
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+  }
+}

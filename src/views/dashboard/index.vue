@@ -1,70 +1,50 @@
 <template>
-  <div class="page-container">
-    <div class="chart-container">
-      <div class="chart-container__filter">
-        <div class="filter-item">
-          <span>年度：</span>
-          <el-select v-model="filterYear" placeholder="请选择" @change="selectYear">
-            <el-option
-              v-for="item in years"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
+  <div class="page-container dashboard-wrapper">
+    <el-row :gutter="20">
+      <el-col :span="19">
+        <div class="chart-wrapper">
+          <el-row :gutter="15" style="margin-bottom: 20px;">
+            <el-col :span="16">
+              <safe-content />
+            </el-col>
+            <el-col :span="8">
+              <work-sheep-content />
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="10">
+              <product-content />
+            </el-col>
+            <el-col :span="14">
+              <working-content />
+            </el-col>
+          </el-row>
+
         </div>
-        <div class="filter-item">
-          <span>总数量：</span>
-          <span style="color: red">{{ lineCount }}</span>
-        </div>
-      </div>
-      <h3>年度统计趋势</h3>
-      <line-chart v-loading="loading" :cdata="lineData" />
-      <div class="chart-detail">
-        <div class="chart-row">
-          <div class="chart-item chart-title">指标</div>
-          <div v-for="(item, index) in lineData.name" :key="index" class="chart-item">{{ item }}</div>
-        </div>
-        <div class="chart-row">
-          <div class="chart-item chart-title">数量</div>
-          <div v-for="(item, index) in lineData.value" :key="index" class="chart-item">{{ item }}</div>
-        </div>
-      </div>
-    </div>
-    <div class="chart-container">
-      <div class="chart-container--left">
-        <h3>按【严重程度】统计</h3>
-        <pie-chart v-loading="loading" :cdata="pieData" />
-      </div>
-      <div class="chart-container--right">
-        <h3>按【检查类别】统计</h3>
-        <bar-chart v-loading="loading" :cdata="barData" />
-      </div>
-      <div class="chart-detail bar-detail">
-        <div class="chart-row">
-          <div class="chart-item chart-title">指标</div>
-          <div v-for="(item, index) in barData.name" :key="index" class="chart-item">{{ item }}</div>
-        </div>
-        <div class="chart-row">
-          <div class="chart-item chart-title">数量</div>
-          <div v-for="(item, index) in barData.value" :key="index" class="chart-item">{{ item }}</div>
-        </div>
-      </div>
-    </div>
+      </el-col>
+      <el-col :span="5">
+        <aside-content />
+      </el-col>
+    </el-row>
+
   </div>
 </template>
 
 <script>
 import { getLineData } from '@/api/dashboard'
-import LineChart from './components/LineChart'
-import BarChart from './components/BarChart'
-import PieChart from './components/PieChart'
+import SafeContent from './components/SafeContent'
+import WorkSheepContent from './components/WorkSheepContent'
+import ProductContent from './components/ProductContent'
+import WorkingContent from './components/WorkingContent'
+import AsideContent from './components/AsideContent'
 export default {
   name: 'Dashboard',
   components: {
-    LineChart,
-    BarChart,
-    PieChart
+    SafeContent,
+    WorkSheepContent,
+    ProductContent,
+    WorkingContent,
+    AsideContent
   },
   data() {
     return {
@@ -88,13 +68,10 @@ export default {
       filterYear: '2020',
       lineCount: 0,
       filterTime: []
+
     }
   },
   mounted() {
-    // this.lineData = {
-    //   name: [],
-    //   value: []
-    // }
     this.__fetchLineData()
   },
   methods: {
@@ -129,72 +106,18 @@ export default {
         }
         this.pieData = pie
       })
-    },
-
-    // 改变筛选年份
-    selectYear(val) {
-      this.__fetchLineData()
     }
+
   }
 }
 </script>
 
 <style lang="scss" scoped>
 @import '~@/assets/styles/variables.scss';
-.chart-container {
-  font-size: 14px;
-  margin-bottom: 50px;
-  padding: 20px;
-  overflow: hidden;
-  h3 {
-    margin: 15px 0;
-  }
-  &--left {
-    margin-right: 15px;
-  }
-  &--left, &--right {
-    float: left;
-    width: calc(50% - 10px)
-  }
-  &__filter {
-    display: flex;
-    justify-content: center;
-    line-height: 40px;
-    padding-right: 100px;
-    .filter-item {
-      display: inline-block;
-      &:first-of-type {
-        margin-right: 100px;
-      }
-    }
-  }
-  .chart-detail {
-    text-align: center;
-    margin-top: 10px;
-    .chart-row {
-      .chart-item {
-        display: inline-block;
-        width: calc((100% - 146px) / 12);
-        height: 22px;
-        line-height: 22px;
-        font-size: 13px;
-        color: #666666;
-        text-align: center;
-        border: 1px solid $borderColor;
-        margin: 1px;
-        &.chart-title {
-          width: 120px;
-        }
-      }
-    }
-    &.bar-detail{
-      float: left;
-      width:100%;
-      .chart-item {
-        width: calc((100% - 146px) / 5);
-      }
-    }
-  }
+@import '~@/assets/styles/mixin.scss';
+.dashboard-wrapper {
+  @include clearfix;
+  background: $pageBg !important;
 }
 
 </style>
