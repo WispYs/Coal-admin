@@ -1,0 +1,29 @@
+.top {
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.title {
+  text-align: center;
+  margin: 20px auto;
+}
+.data-picker {
+  margin: 0 10px;
+}
+.table-row {
+  margin: 0 auto;
+  text-align: center;
+}
+::v-deep .el-table th > .cell,
+::v-deep .el-table td > .cell {
+  text-align: center !important;
+}
+
+.total-score {
+  margin-top: 10px;
+  text-align: right;
+}
+.total-score b {
+  border-bottom: 2px solid #000;
+}
