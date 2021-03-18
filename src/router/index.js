@@ -31,6 +31,12 @@ export const constantRoutes = [
         name: 'Dashboard',
         component: () => import('@/views/dashboard/index'),
         meta: { title: '首页', affix: true }
+      },
+      {
+        path: '/ureport',
+        name: 'Ureport',
+        component: () => import('@/views/ureport/designer/index'),
+        meta: { title: 'ureport', affix: true }
       }
     ]
   },

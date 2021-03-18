@@ -24,11 +24,37 @@ module.exports = {
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
   devServer: {
+    host: '0.0.0.0',
     port: port,
     open: true,
     overlay: {
       warnings: false,
       errors: true
+    },
+    proxy: {
+      // [process.env.VUE_APP_BASE_API]: {
+      //   target: `http://localhost:8080`,
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     ['^' + process.env.VUE_APP_BASE_API]: ''
+      //   }
+      // },
+      '/ureport': {
+        target: 'http://192.168.1.8:18050',
+        ws: false,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/ureport': '/ureport'
+        }
+      },
+      '/workflow': {
+        target: 'http://192.168.1.8:18060',
+        ws: false,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/workflow': '/workflow'
+        }
+      }
     },
     before: require('./mock/mock-server.js')
   },
