@@ -6,7 +6,7 @@
         <div class="right-btn">更多</div>
       </div>
       <div class="content-box">
-        <div v-for="item in Backlog" :key="item.name" class="backlog-list">
+        <div v-for="(item,index) in Backlog" :key="index" class="backlog-list">
           <p>{{ item.name }}</p>
           <span :class="item.status ? 'active' : ''">{{ item.status ? '待办' : '已办' }}</span>
         </div>
@@ -30,7 +30,7 @@
         <div class="right-btn">更多</div>
       </div>
       <div class="content-box">
-        <div v-for="item in newsList" :key="item.title" class="news-list">
+        <div v-for="(item,index) in newsList" :key="index" class="news-list">
           <img src="@/assets/images/news.jpg" :alt="item.title">
           <p>{{ item.title }}</p>
         </div>
@@ -43,7 +43,7 @@
         <div class="right-btn"><i class="el-icon-plus" />添加</div>
       </div>
       <div class="content-box">
-        <div v-for="item in QuickFunction" :key="item.name" class="quick-function-list">
+        <div v-for="(item,index) in QuickFunction" :key="index" class="quick-function-list">
           <div class="quick-icon"><i :class="item.icon" /></div>
           <p>{{ item.name }}</p>
         </div>
