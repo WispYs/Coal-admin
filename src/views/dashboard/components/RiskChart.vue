@@ -23,7 +23,6 @@ export default {
   watch: {
     cdata: {
       handler(newData) {
-        console.log(newData)
         this.options = {
           title: {
             text: newData.name,

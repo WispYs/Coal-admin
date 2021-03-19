@@ -4318,7 +4318,7 @@ module.exports = [
     type: 'get',
     response: config => {
       return {
-        code: 20000,
+        code: 200,
         data: asyncRoutes
       }
     }

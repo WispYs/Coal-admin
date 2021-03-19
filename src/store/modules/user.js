@@ -38,10 +38,12 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+        console.log(data)
+        commit('SET_TOKEN', data)
+        setToken(data)
         resolve()
       }).catch(error => {
+        console.log(error)
         reject(error)
       })
     })
@@ -52,18 +54,18 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
         if (!data) {
           return reject('获取用户信息失败，请重新登陆')
         }
-
-        const { roles, name, avatar } = data
-
+        data.roles = ['admin']
+        const name = data.userName
+        // const avatar = data.avatar
+        // const roles = ['admin']
+        const { roles, avatar } = data
         // roles 必须为非空数组
-        if (!roles || roles.length <= 0) {
-          reject('获取用户角色失败，请重新登陆')
-        }
-
+        // if (!roles || roles.length <= 0) {
+        //   reject('获取用户角色失败，请重新登陆')
+        // }
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_ROLES', roles)

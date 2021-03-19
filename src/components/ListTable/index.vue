@@ -46,6 +46,17 @@
             />
           </el-select>
 
+          <!-- tree-select  -->
+          <tree-select
+            v-if="column.layout === 'TreeSelect'"
+            :value="scope.row[column.field]"
+            :placeholder="column.placeholder"
+            :options="column.options"
+            :clearable="true"
+            :accordion="false"
+            @getTreeSelect="getTreeSelect"
+          />
+
           <!-- date-picker  -->
           <el-date-picker
             v-if="column.layout === 'DateTime'"
@@ -113,7 +124,10 @@
 </template>
 
 <script>
+import TreeSelect from '@/components/TreeSelect'
+
 export default {
+  components: { TreeSelect },
   props: {
     id: {
       type: String,
@@ -221,6 +235,11 @@ export default {
     // 删除
     del(id) {
       this.$emit('delete-click', id)
+    },
+
+    // treeSelect 值改变
+    getTreeSelect(value) {
+      console.log(value)
     },
     // 计算合计总工时
     getSummaries(param, field) {

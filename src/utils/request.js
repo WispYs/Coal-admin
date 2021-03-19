@@ -12,6 +12,7 @@ const service = axios.create({
 // 拦截器
 service.interceptors.request.use(
   config => {
+    // config.headers['Content-Type'] = 'multipart/form-data'
     if (store.getters.token) {
       config.headers['Authorization'] = getToken()
     }
@@ -27,15 +28,15 @@ service.interceptors.response.use(
 
   response => {
     const res = response.data
-
-    if (res.code !== 20000) {
+    console.log(res)
+    if (res.code !== 200) {
       Message({
-        message: res.message || 'Error',
+        message: res.msg || 'Error',
         type: 'error',
         duration: 5 * 1000
       })
 
-      return Promise.reject(new Error(res.message || 'Error'))
+      return Promise.reject(new Error(res.msg || 'Error'))
     } else {
       return res
     }
@@ -43,7 +44,7 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error)
     Message({
-      message: error.message,
+      message: error.msg,
       type: 'error',
       duration: 5 * 1000
     })

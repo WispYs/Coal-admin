@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-14 13:54:47
+ * @Last Modified time: 2021-03-19 13:20:28
  */
 
 /**
@@ -3966,46 +3966,46 @@ const asyncRoutes = [
   },
   // 统一权限管理
   {
-    path: '/demo-authority',
+    path: '/authority-management',
     name: 'DemoAuthority',
     component: 'Layout',
-    redirect: '/demo-authority/authority1',
+    redirect: '/authority-management/application-manage',
     meta: { title: '统一权限管理' },
     children: [
       {
-        path: '/demo-authority/authority1',
+        path: '/authority-management/application-manage',
         name: 'Authority1',
-        component: '/demo/index',
+        component: '/authority-management/application-manage/index',
         meta: { title: '应用系统管理' }
       },
       {
-        path: '/demo-authority/authority2',
+        path: '/authority-management/user-manage',
         name: 'Authority2',
-        component: '/demo/index',
+        component: '/authority-management/user-manage/index',
         meta: { title: '用户管理' }
       },
       {
-        path: '/demo-authority/authority3',
+        path: '/authority-management/organization-manage',
         name: 'Authority3',
-        component: '/demo/index',
+        component: '/authority-management/organization-manage/index',
         meta: { title: '组织机构管理' }
       },
       {
-        path: '/demo-authority/authority4',
+        path: '/authority-management/role-manage',
         name: 'Authority4',
-        component: '/demo/index',
+        component: '/authority-management/role-manage/index',
         meta: { title: '角色管理' }
       },
       {
-        path: '/demo-authority/authority5',
+        path: '/authority-management/menu-manage',
         name: 'Authority5',
-        component: '/demo/index',
+        component: '/authority-management/menu-manage/index',
         meta: { title: '菜单资源管理' }
       },
       {
-        path: '/demo-authority/authority6',
+        path: '/authority-management/resource-manage',
         name: 'Authority6',
-        component: '/demo/index',
+        component: '/authority-management/resource-manage/index',
         meta: { title: '资源权限管理' }
       }
     ]
@@ -4319,7 +4319,7 @@ module.exports = [
     type: 'get',
     response: config => {
       return {
-        code: 20000,
+        code: 200,
         data: asyncRoutes
       }
     }

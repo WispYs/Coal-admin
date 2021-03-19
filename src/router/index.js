@@ -36,7 +36,7 @@ export const constantRoutes = [
         path: '/ureport',
         name: 'Ureport',
         component: () => import('@/views/ureport/designer/index'),
-        meta: { title: 'ureport', affix: true }
+        meta: { title: 'ureport' }
       }
     ]
   },

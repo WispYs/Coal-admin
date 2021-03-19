@@ -12,6 +12,7 @@ const organization = require('./organization')
 const liabilitySystem = require('./liability-system')
 const assessmentLibrary = require('./assessment-library')
 const controlMeasure = require('./control-measure')
+const authorityManagement = require('./authority-management')
 
 const mocks = [
   ...user,
@@ -24,7 +25,8 @@ const mocks = [
   ...organization,
   ...liabilitySystem,
   ...assessmentLibrary,
-  ...controlMeasure
+  ...controlMeasure,
+  ...authorityManagement
 ]
 
 // for front mock

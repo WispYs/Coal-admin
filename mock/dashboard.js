@@ -38,7 +38,7 @@ module.exports = [
       const barCount3 = data.barCount3
       const lineCount = data.lineCount
       return {
-        code: 20000,
+        code: 200,
         data: {
           lineCount: lineCount,
           lineData: lineData,

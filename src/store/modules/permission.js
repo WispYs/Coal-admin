@@ -65,6 +65,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       getRoutes(token).then(response => {
         const asyncRoutes = response.data
+
         const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
         commit('SET_ROUTES', accessedRoutes)
         resolve(accessedRoutes)
