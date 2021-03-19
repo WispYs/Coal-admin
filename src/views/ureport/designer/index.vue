@@ -8,7 +8,7 @@ export default {
   name: 'Ureport',
   data() {
     return {
-      src: '/ureport/designer',
+      src: 'http://192.168.1.8:18050/ureport/designer',
       // src: '/workflow/toWorkFlowModel',
       height: document.documentElement.clientHeight - 95 - 34 + 'px;',
       loading: true

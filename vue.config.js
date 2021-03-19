@@ -46,15 +46,8 @@ module.exports = {
         pathRewrite: {
           '^/ureport': '/ureport'
         }
-      },
-      '/workflow': {
-        target: 'http://192.168.1.8:18060',
-        ws: false,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/workflow': '/workflow'
-        }
       }
+
     },
     before: require('./mock/mock-server.js')
   },
