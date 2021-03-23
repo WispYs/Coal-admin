@@ -27,6 +27,17 @@
           />
         </el-select>
 
+        <!-- tree-select  -->
+        <tree-select
+          v-if="item.layout === 'TreeSelect'"
+          :value="formData[item.field]"
+          :placeholder="item.placeholder"
+          :options="item.options"
+          :clearable="true"
+          :accordion="false"
+          @getTreeSelect="value => getTreeSelect(value,item.field)"
+        />
+
         <!-- date-picker  -->
         <el-date-picker
           v-if="item.layout === 'DateTime'"
@@ -71,8 +82,10 @@
   </el-dialog>
 </template>
 <script>
+import TreeSelect from '@/components/TreeSelect'
 
 export default {
+  components: { TreeSelect },
   props: {
     dialogVisible: {
       type: Boolean,
@@ -126,6 +139,10 @@ export default {
     // 更新父组件 xxxxxDialogVisible 的值
     closeDialog() {
       this.$emit('close-dialog')
+    },
+    // treeSelect 值改变
+    getTreeSelect(value, field) {
+      this.formData[field] = value
     }
   }
 }

@@ -31,8 +31,8 @@ export default {
       type: Object,
       default: () => {
         return {
-          value: 'id', // ID字段名
-          label: 'name', // 显示名称
+          value: 'value', // ID字段名
+          label: 'label', // 显示名称
           children: 'children' // 子级字段名
         }
       }
