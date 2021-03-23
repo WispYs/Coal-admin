@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-19 13:20:28
+ * @Last Modified time: 2021-03-22 15:42:36
  */
 
 /**
@@ -3778,38 +3778,82 @@ const asyncRoutes = [
   },
   // 系统管理
   {
-    path: '/demo-system',
+    path: '/system-management',
     name: 'DemoSystem',
     component: 'Layout',
-    redirect: '/demo-system/system1',
+    redirect: '/system-management/authority-manage/application-manage',
     meta: { title: '系统管理' },
     children: [
       {
-        path: '/demo-system/system1',
+        path: '/system-management/authority-manage',
+        name: 'DemoAuthority',
+        component: '/demo/index',
+        meta: { title: '统一权限管理' },
+        children: [
+          {
+            path: '/system-management/authority-manage/application-manage',
+            name: 'Authority1',
+            component: '/system-management/authority-manage/application-manage/index',
+            meta: { title: '应用系统管理' }
+          },
+          {
+            path: '/system-management/authority-manage/user-manage',
+            name: 'Authority2',
+            component: '/system-management/authority-manage/user-manage/index',
+            meta: { title: '用户管理' }
+          },
+          {
+            path: '/system-management/authority-manage/organization-manage',
+            name: 'Authority3',
+            component: '/system-management/authority-manage/organization-manage/index',
+            meta: { title: '组织机构管理' }
+          },
+          {
+            path: '/system-management/authority-manage/role-manage',
+            name: 'Authority4',
+            component: '/system-management/authority-manage/role-manage/index',
+            meta: { title: '角色管理' }
+          },
+          {
+            path: '/system-management/authority-manage/menu-manage',
+            name: 'Authority5',
+            component: '/system-management/authority-manage/menu-manage/index',
+            meta: { title: '菜单资源管理' }
+          },
+          {
+            path: '/system-management/authority-manage/resource-manage',
+            name: 'Authority6',
+            component: '/system-management/authority-manage/resource-manage/index',
+            meta: { title: '资源权限管理' }
+          }
+        ]
+      },
+      {
+        path: '/system-management/system1',
         name: 'System1',
         component: '/demo/index',
         meta: { title: '门户设置管理' },
         children: [
           {
-            path: '/demo-system/system1/system1-1',
+            path: '/system-management/system1/system1-1',
             name: 'System1-1',
             component: '/demo/index',
             meta: { title: '门户资源设置' }
           },
           {
-            path: '/demo-system/system1/system1-2',
+            path: '/system-management/system1/system1-2',
             name: 'System1-2',
             component: '/demo/index',
             meta: { title: '门户布局设置' }
           },
           {
-            path: '/demo-system/system1/system1-3',
+            path: '/system-management/system1/system1-3',
             name: 'System1-3',
             component: '/demo/index',
             meta: { title: '门户内容设置' }
           },
           {
-            path: '/demo-system/system1/system1-4',
+            path: '/system-management/system1/system1-4',
             name: 'System1-4',
             component: '/demo/index',
             meta: { title: '门户权限设置' }
@@ -3817,19 +3861,19 @@ const asyncRoutes = [
         ]
       },
       {
-        path: '/demo-system/system2',
+        path: '/system-management/system2',
         name: 'System2',
         component: '/demo/index',
         meta: { title: '页面视图配置管理' },
         children: [
           {
-            path: '/demo-system/system2/system2-1',
+            path: '/system-management/system2/system2-1',
             name: 'System2-1',
             component: '/demo/index',
             meta: { title: '页面资源管理' }
           },
           {
-            path: '/demo-system/system2/system2-2',
+            path: '/system-management/system2/system2-2',
             name: 'System2-2',
             component: '/demo/index',
             meta: { title: '页面布局设置' }
@@ -3837,25 +3881,57 @@ const asyncRoutes = [
         ]
       },
       {
-        path: '/demo-system/system3',
+        path: '/system-management/message-manage',
+        name: 'DemoMessage',
+        component: '/demo/index',
+        meta: { title: '消息管理' },
+        children: [
+          {
+            path: '/system-management/message-manage/message-template',
+            name: 'Message1',
+            component: '/system-management/message-manage/message-template/index',
+            meta: { title: '消息模板配置' }
+          },
+          {
+            path: '/system-management/message-manage/message-log',
+            name: 'Message2',
+            component: '/system-management/message-manage/message-log/index',
+            meta: { title: '消息日志' }
+          },
+          {
+            path: '/system-management/message-manage/message3',
+            name: 'Message3',
+            component: '/demo/index',
+            meta: { title: '消息统计分析' }
+          },
+          {
+            path: '/system-management/message-manage/message4',
+            name: 'Message4',
+            component: '/demo/index',
+            meta: { title: '发送策略配置' }
+          }
+        ]
+      },
+      {
+        path: '/system-management/system3',
         name: 'System3',
         component: '/demo/index',
         meta: { title: '系统日志' },
         children: [
           {
-            path: '/demo-system/system3/system3-1',
+            path: '/system-management/system3/system3-1',
             name: 'System3-1',
             component: '/demo/index',
             meta: { title: '登录日志' }
           },
           {
-            path: '/demo-system/system3/system3-2',
+            path: '/system-management/system3/system3-2',
             name: 'System3-2',
             component: '/demo/index',
             meta: { title: '操作日志' }
           },
           {
-            path: '/demo-system/system3/system3-3',
+            path: '/system-management/system3/system3-3',
             name: 'System3-3',
             component: '/demo/index',
             meta: { title: '系统日志' }
@@ -3863,153 +3939,79 @@ const asyncRoutes = [
         ]
       },
       {
-        path: '/demo-system/system4',
-        name: 'System4',
+        path: '/system-management/flow-manage',
+        name: 'DemoFlow',
         component: '/demo/index',
-        meta: { title: '问题反馈' }
+        redirect: '/system-management/flow-manage/flow1',
+        meta: { title: '流程管理' },
+        children: [
+          {
+            path: '/system-management/flow-manage/flow1',
+            name: 'Flow1',
+            component: '/demo/index',
+            meta: { title: '流程配置' }
+          },
+          {
+            path: '/system-management/flow-manage/flow2',
+            name: 'Flow2',
+            component: '/demo/index',
+            meta: { title: '流程统计分析' }
+          },
+          {
+            path: '/system-management/flow-manage/flow3',
+            name: 'Flow3',
+            component: '/demo/index',
+            meta: { title: '流程管理' }
+          }
+        ]
       },
       {
-        path: '/demo-system/system5',
+        path: '/system-management/document-manage',
+        name: 'System4',
+        component: '/demo/index',
+        meta: { title: '文档管理' }
+      },
+      {
+        path: '/system-management/system5',
         name: 'System5',
         component: '/demo/index',
         meta: { title: '一张图设置' },
         children: [
           {
-            path: '/demo-system/system5/system5-1',
+            path: '/system-management/system5/system5-1',
             name: 'System5-1',
             component: '/demo/index',
             meta: { title: '实体分类' }
           },
           {
-            path: '/demo-system/system5/system5-2',
+            path: '/system-management/system5/system5-2',
             name: 'System5-2',
             component: '/demo/index',
             meta: { title: '避灾路线绘制' }
           },
           {
-            path: '/demo-system/system5/system5-3',
+            path: '/system-management/system5/system5-3',
             name: 'System5-3',
             component: '/demo/index',
             meta: { title: '实体设置' }
           },
           {
-            path: '/demo-system/system5/system5-4',
+            path: '/system-management/system5/system5-4',
             name: 'System5-4',
             component: '/demo/index',
             meta: { title: '属性设置' }
           }
         ]
+      },
+      {
+        path: '/system-management/feedback',
+        name: 'System6',
+        component: '/demo/index',
+        meta: { title: '问题反馈' }
       }
     ]
   },
-  // 消息管理
-  {
-    path: '/demo-message',
-    name: 'DemoMessage',
-    component: 'Layout',
-    redirect: '/demo-message/message1',
-    meta: { title: '消息管理' },
-    children: [
-      {
-        path: '/demo-message/message1',
-        name: 'Message1',
-        component: '/demo/index',
-        meta: { title: '消息模板配置' }
-      },
-      {
-        path: '/demo-message/message2',
-        name: 'Message2',
-        component: '/demo/index',
-        meta: { title: '消息日志' }
-      },
-      {
-        path: '/demo-message/message3',
-        name: 'Message3',
-        component: '/demo/index',
-        meta: { title: '消息统计分析' }
-      },
-      {
-        path: '/demo-message/message4',
-        name: 'Message4',
-        component: '/demo/index',
-        meta: { title: '发送策略配置' }
-      }
-    ]
-  },
-  // 流程管理
-  {
-    path: '/demo-flow',
-    name: 'DemoFlow',
-    component: 'Layout',
-    redirect: '/demo-flow/flow1',
-    meta: { title: '流程管理' },
-    children: [
-      {
-        path: '/demo-flow/flow1',
-        name: 'Flow1',
-        component: '/demo/index',
-        meta: { title: '流程配置' }
-      },
-      {
-        path: '/demo-flow/flow2',
-        name: 'Flow2',
-        component: '/demo/index',
-        meta: { title: '流程统计分析' }
-      },
-      {
-        path: '/demo-flow/flow3',
-        name: 'Flow3',
-        component: '/demo/index',
-        meta: { title: '流程管理' }
-      }
-    ]
-  },
-  // 统一权限管理
-  {
-    path: '/authority-management',
-    name: 'DemoAuthority',
-    component: 'Layout',
-    redirect: '/authority-management/application-manage',
-    meta: { title: '统一权限管理' },
-    children: [
-      {
-        path: '/authority-management/application-manage',
-        name: 'Authority1',
-        component: '/authority-management/application-manage/index',
-        meta: { title: '应用系统管理' }
-      },
-      {
-        path: '/authority-management/user-manage',
-        name: 'Authority2',
-        component: '/authority-management/user-manage/index',
-        meta: { title: '用户管理' }
-      },
-      {
-        path: '/authority-management/organization-manage',
-        name: 'Authority3',
-        component: '/authority-management/organization-manage/index',
-        meta: { title: '组织机构管理' }
-      },
-      {
-        path: '/authority-management/role-manage',
-        name: 'Authority4',
-        component: '/authority-management/role-manage/index',
-        meta: { title: '角色管理' }
-      },
-      {
-        path: '/authority-management/menu-manage',
-        name: 'Authority5',
-        component: '/authority-management/menu-manage/index',
-        meta: { title: '菜单资源管理' }
-      },
-      {
-        path: '/authority-management/resource-manage',
-        name: 'Authority6',
-        component: '/authority-management/resource-manage/index',
-        meta: { title: '资源权限管理' }
-      }
-    ]
-  },
+
   // 预告警管理
   {
     path: '/demo-alarm',
@@ -4113,22 +4115,6 @@ const asyncRoutes = [
         name: 'Api',
         component: '/demo/index',
         meta: { title: 'API' }
-      }
-    ]
-  },
-  // 文档管理
-  {
-    path: '/demo-docs',
-    name: 'DemoDocs',
-    component: 'Layout',
-    redirect: '/demo-docs/docs',
-    meta: { title: '文档管理', hiddenChild: true },
-    children: [
-      {
-        path: '/demo-docs/docs',
-        name: 'Docs',
-        component: '/demo/index',
-        meta: { title: '文档' }
       }
     ]
   },
