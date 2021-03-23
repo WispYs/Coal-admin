@@ -5,6 +5,7 @@
       @search-click="queryData"
       @create-click="openDialog('create')"
       @reset-click="queryData"
+      @export-click="handelExport"
     />
     <list-table
       :id="id"
@@ -49,6 +50,7 @@ import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import { OrganTableConfig, OrganFilterConfig } from '@/data/authority-management'
+import exportExcel from '@/utils/export-excel'
 
 export default {
   components: { FilterBar, ListTable, Pagination, FormDialog },
@@ -159,6 +161,12 @@ export default {
       console.log(submitData)
       this.editDialogVisible = false
       this.$message.success('编辑成功')
+    },
+    // 定义导出Excel表格事件
+    handelExport() {
+      // 第一个参数为 table 的 id
+      // 第二个参数为导出文件的 name
+      exportExcel(this.id, '组织机构管理')
     }
 
   }

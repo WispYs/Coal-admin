@@ -38,7 +38,7 @@ const organData = Mock.mock({
     'sort|+1': [1, 18142],
     'createDate|+1': ['2020.07.21', '2020.12.19'],
     remark: '',
-    'hasChildren|+1': [true, true]
+    'hasChildren|+1': [true, false]
   }]
 })
 

@@ -124,7 +124,7 @@ export const OrganTableConfig = {
 }
 
 export const OrganFilterConfig = {
-  actions: ['search', 'reset', 'create'],
+  actions: ['search', 'reset', 'create', 'export'],
   filters: [
     { label: '关键字', field: 'name', width: '220', layout: 'Text', placeholder: '名称、简称' }
   ]
