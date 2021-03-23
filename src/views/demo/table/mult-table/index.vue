@@ -90,7 +90,7 @@ export default {
           ]
         }
       ],
-      list: null,
+      list: [],
       listLoading: false
     }
   },

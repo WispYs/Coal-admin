@@ -72,7 +72,7 @@ export default {
   data() {
     return {
       id: 'roadway-lifecycle',
-      list: null,
+      list: [],
       total: 0,
       listQuery: {
         page: 1,

@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       id: 'mining-operation',
-      list: null,
+      list: [],
       total: 0,
       listQuery: {
         page: 1,

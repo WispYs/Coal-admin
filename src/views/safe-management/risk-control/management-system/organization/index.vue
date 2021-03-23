@@ -54,7 +54,7 @@ export default {
   data() {
     return {
       id: 'organization',
-      list: null,
+      list: [],
       total: 0,
       listQuery: {
         page: 1,

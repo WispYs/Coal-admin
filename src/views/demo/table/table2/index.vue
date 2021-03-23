@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       id: 'table2',
-      list: null,
+      list: [],
       total: 0,
       listQuery: {
         page: 1,

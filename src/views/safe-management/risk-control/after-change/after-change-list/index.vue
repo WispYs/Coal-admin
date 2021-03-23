@@ -60,7 +60,7 @@ export default {
   data() {
     return {
       id: 'assessment-library',
-      list: null,
+      list: [],
       total: 0,
       listQuery: {
         page: 1,

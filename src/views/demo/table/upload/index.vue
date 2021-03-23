@@ -91,7 +91,7 @@ export default {
         note: ''
       },
       dialogVisible: false,
-      list: null,
+      list: [],
       listLoading: true,
       total: 0,
       listQuery: {
