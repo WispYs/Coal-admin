@@ -1,7 +1,7 @@
 <template>
   <div class="tree-container">
     <div class="tree-title">{{ treeData.title }}</div>
-    <el-tree :data="treeData.list" :props="defaultProps" @node-click="handleNodeClick" />
+    <el-tree :data="treeData.list" :props="defaultProps" default-expand-all @node-click="handleNodeClick" />
     <div class="extend-button" @click="handleExtend" />
   </div>
 </template>
@@ -34,6 +34,4 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
 
-</style>

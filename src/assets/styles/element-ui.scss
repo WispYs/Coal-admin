@@ -178,6 +178,7 @@
   .el-table {
     .pre-line {
       background: #f5f7fa;
+      font-size: 14px;
 
       .cell {
         white-space: pre-line;
@@ -230,6 +231,18 @@
   .el-dropdown-menu {
     a {
       display: block
+    }
+  }
+
+  .tree-container {
+    .el-tree {
+      .el-tree-node__label {
+        font-size: 13px;
+        width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
   }
 
