@@ -87,9 +87,12 @@ export default {
     // 初始化值
     initHandle() {
       if (this.valueId) {
-        this.valueTitle = this.$refs.selectTree.getNode(this.valueId).data[this.props.label] // 初始化显示
-        this.$refs.selectTree.setCurrentKey(this.valueId) // 设置默认选中
-        this.defaultExpandedKey = [this.valueId] // 设置默认展开
+        // 初始化显示
+        this.valueTitle = this.$refs.selectTree.getNode(this.valueId).data[this.props.label]
+        // 设置默认选中
+        this.$refs.selectTree.setCurrentKey(this.valueId)
+        // 设置默认展开
+        this.defaultExpandedKey = [this.valueId]
       }
       this.initScroll()
     },
@@ -124,7 +127,7 @@ export default {
     },
     filterNode(value, data) {
       if (!value) return true
-      return data.name.indexOf(value) !== -1
+      return data.label.indexOf(value) !== -1
     }
   }
 }
