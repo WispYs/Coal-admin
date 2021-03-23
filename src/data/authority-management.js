@@ -16,6 +16,7 @@ export const AppTableConfig = {
    * @param {string}  layout            表单类型
    * @param {string}  dateFormat        日期格式
    * @param {array}   options           选择器配置项
+   * @param {boolean} hidden            是否在表格中隐藏，默认false，值为true时只在新建、编辑中显示该字段
    * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump 色块显示
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
   */
@@ -63,33 +64,20 @@ export const UserTableConfig = {
   columns: [
     { label: '登录名', field: 'loginName', width: '90', layout: 'Text', placeholder: '请填写登录名' },
     { label: '姓名', field: 'userName', width: '90', layout: 'Text', placeholder: '请填写姓名' },
+    { label: '工号', field: 'jobNum', width: '100', layout: 'Text', hidden: true, placeholder: '请填写工号' },
     { label: '手机', field: 'mobile', width: '110', layout: 'Text', placeholder: '请填写手机号码' },
     { label: '部门', field: 'department', layout: 'Text', placeholder: '请填写部门' },
-    { label: '职务', field: 'position', width: '90', layout: 'Select',
-      options: [
-        { value: '技术员', label: '技术员' },
-        { value: '班长', label: '班长' },
-        { value: '科长', label: '科长' },
-        { value: '副科长', label: '副科长' },
-        { value: '副班长', label: '副班长' }
-      ], placeholder: '请选择职务' },
-    { label: '岗位工种', field: 'workType', layout: 'Select',
-      options: [
-        { value: 'G203工程师', label: 'G203工程师' },
-        { value: 'Z0324副科长', label: 'Z0324副科长' },
-        { value: 'G031科长', label: 'G031科长' },
-        { value: 'T0321班长', label: 'T0321班长' },
-        { value: 'Z0630副班长', label: 'Z0630副班长' }
-      ], placeholder: '请选择职务' },
+    { label: '职务', field: 'position', width: '90', layout: 'Text', placeholder: '请填写职务' },
+    { label: '岗位工种', field: 'workType', layout: 'Text', placeholder: '请填写职务' },
     { label: '角色', field: 'role', layout: 'Select',
       options: [
         { value: '影响单位审核', label: '影响单位审核' },
         { value: '科技创新', label: '科技创新' }
       ], placeholder: '请选择角色' },
-    { label: '状态', field: 'status', width: '70', layout: 'Switch',
+    { label: '状态', field: 'status', width: '70', layout: 'Radio',
       options: [
-        { value: true, label: '已审核' },
-        { value: false, label: '待审核' }
+        { value: 1, label: '正常' },
+        { value: 2, label: '锁定' }
       ], placeholder: '请选择状态' }
 
   ]
@@ -101,6 +89,40 @@ export const UserFilterConfig = {
     { label: '关键字', field: 'name', width: '220', layout: 'Text', placeholder: '工号、姓名、登录名' }
   ]
 }
+
+export const OrganizationTree = [
+  {
+    label: '顾桥煤矿',
+    children: [
+      {
+        label: '机关',
+        children: [
+          {
+            label: '矿领导'
+          },
+          {
+            label: '办公室',
+            children: [
+              {
+                label: '部门'
+              },
+              {
+                label: '办公室科直（中央区）'
+              },
+              {
+                label: '办公室职员（中央区）'
+              },
+              {
+                label: '办公室小车班'
+              }
+            ]
+          }
+        ]
+      }
+
+    ]
+  }
+]
 
 // 组织机构管理
 export const OrganTableConfig = {

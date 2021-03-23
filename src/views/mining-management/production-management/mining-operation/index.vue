@@ -11,7 +11,7 @@
       :list="list"
       :list-loading="listLoading"
       :config="TableConfig"
-      @file-text-click="fileDialogVisible = true"
+      @text-click="fileDialogVisible = true"
       @edit-click="(row) => openDialog('edit', row)"
       @delete-click="deleteClick"
       @submit-data="editSubmit"

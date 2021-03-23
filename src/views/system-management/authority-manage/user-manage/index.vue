@@ -52,7 +52,7 @@ import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
-import { UserTableConfig, UserFilterConfig } from '@/data/authority-management'
+import { UserTableConfig, UserFilterConfig, OrganizationTree } from '@/data/authority-management'
 
 export default {
   components: { TreeBar, FilterBar, ListTable, Pagination, FormDialog },
@@ -74,39 +74,7 @@ export default {
       treeExtend: true,
       treeData: {
         title: '',
-        list: [
-          {
-            label: '顾桥煤矿',
-            children: [
-              {
-                label: '机关',
-                children: [
-                  {
-                    label: '矿领导'
-                  },
-                  {
-                    label: '办公室',
-                    children: [
-                      {
-                        label: '部门'
-                      },
-                      {
-                        label: '办公室科直（中央区）'
-                      },
-                      {
-                        label: '办公室职员（中央区）'
-                      },
-                      {
-                        label: '办公室小车班'
-                      }
-                    ]
-                  }
-                ]
-              }
-
-            ]
-          }
-        ]
+        list: OrganizationTree
       }
 
     }

@@ -56,7 +56,7 @@
 
         <!-- radio -->
         <el-radio-group v-if="item.layout === 'Radio'" v-model="formData[item.field]">
-          <el-radio v-for="it in item.options" :key="it.value" :label="it.label" />
+          <el-radio v-for="it in item.options" :key="it.value" :label="it.value">{{ it.label }}</el-radio>
         </el-radio-group>
 
         <!-- checkbox -->

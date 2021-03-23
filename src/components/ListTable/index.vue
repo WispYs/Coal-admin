@@ -21,97 +21,99 @@
         {{ scope.$index+1 }}
       </template>
     </el-table-column>
-    <el-table-column
-      v-for="column in config.columns"
-      :key="column.field"
-      :label="column.label"
-      :width="column.width"
-      :align="column.align || 'center'"
-      :prop="column.field"
-      :sortable="column.sortable"
-    >
-      <template slot-scope="scope">
-        <template v-if="config.inlineEdit && scope.row.edit">
-          <!-- input -->
-          <el-input v-if="column.layout === 'Text'" v-model="scope.row[column.field]" size="small" :placeholder="column.placeholder" />
+    <template v-for="column in config.columns">
+      <el-table-column
+        v-if="!column.hidden"
+        :key="column.field"
+        :label="column.label"
+        :width="column.width"
+        :align="column.align || 'center'"
+        :prop="column.field"
+        :sortable="column.sortable"
+      >
+        <template slot-scope="scope">
+          <template v-if="config.inlineEdit && scope.row.edit">
+            <!-- input -->
+            <el-input v-if="column.layout === 'Text'" v-model="scope.row[column.field]" size="small" :placeholder="column.placeholder" />
 
-          <!-- select  -->
-          <el-select
-            v-if="column.layout === 'Select'"
-            v-model="scope.row[column.field]"
-            :placeholder="column.placeholder"
-            style="width: 100%;"
-            size="small"
-          >
-            <el-option
-              v-for="it in column.options"
-              :key="it.value"
-              :label="it.label"
-              :value="it.value"
+            <!-- select  -->
+            <el-select
+              v-if="column.layout === 'Select'"
+              v-model="scope.row[column.field]"
+              :placeholder="column.placeholder"
+              style="width: 100%;"
+              size="small"
+            >
+              <el-option
+                v-for="it in column.options"
+                :key="it.value"
+                :label="it.label"
+                :value="it.value"
+              />
+            </el-select>
+
+            <!-- tree-select  -->
+            <tree-select
+              v-if="column.layout === 'TreeSelect'"
+              :value="scope.row[column.field]"
+              :placeholder="column.placeholder"
+              :options="column.options"
+              :clearable="true"
+              :accordion="false"
+              @getTreeSelect="getTreeSelect"
             />
-          </el-select>
 
-          <!-- tree-select  -->
-          <tree-select
-            v-if="column.layout === 'TreeSelect'"
-            :value="scope.row[column.field]"
-            :placeholder="column.placeholder"
-            :options="column.options"
-            :clearable="true"
-            :accordion="false"
-            @getTreeSelect="getTreeSelect"
-          />
+            <!-- date-picker  -->
+            <el-date-picker
+              v-if="column.layout === 'DateTime'"
+              v-model="scope.row[column.field]"
+              :value-format="column.dateFormat || 'yyyy-MM-dd'"
+              type="date"
+              :placeholder="column.placeholder"
+              style="width: 100%;"
+              size="small"
+            />
 
-          <!-- date-picker  -->
-          <el-date-picker
-            v-if="column.layout === 'DateTime'"
-            v-model="scope.row[column.field]"
-            :value-format="column.dateFormat || 'yyyy-MM-dd'"
-            type="date"
-            :placeholder="column.placeholder"
-            style="width: 100%;"
-            size="small"
-          />
+            <!-- slider  -->
+            <el-slider v-if="column.layout === 'Slider'" v-model="scope.row[column.field]" />
 
-          <!-- slider  -->
-          <el-slider v-if="column.layout === 'Slider'" v-model="scope.row[column.field]" />
+            <!-- switch -->
+            <el-switch v-if="column.layout === 'Switch'" v-model="scope.row[column.field]" />
 
-          <!-- switch -->
-          <el-switch v-if="column.layout === 'Switch'" v-model="scope.row[column.field]" />
+            <!-- radio -->
+            <el-radio-group v-if="column.layout === 'Radio'" v-model="scope.row[column.field]" size="mini">
+              <el-radio-button v-for="it in column.options" :key="it.value" :label="it.label" />
+            </el-radio-group>
 
-          <!-- radio -->
-          <el-radio-group v-if="column.layout === 'Radio'" v-model="scope.row[column.field]" size="mini">
-            <el-radio-button v-for="it in column.options" :key="it.value" :label="it.label" />
-          </el-radio-group>
+            <!-- checkbox -->
+            <el-checkbox-group v-if="column.layout === 'Checkbox'" v-model="scope.row[column.field]" size="mini">
+              <el-checkbox-button v-for="it in column.options" :key="it.value" :label="it.label" :name="it.value" />
+            </el-checkbox-group>
 
-          <!-- checkbox -->
-          <el-checkbox-group v-if="column.layout === 'Checkbox'" v-model="scope.row[column.field]" size="mini">
-            <el-checkbox-button v-for="it in column.options" :key="it.value" :label="it.label" :name="it.value" />
-          </el-checkbox-group>
+            <!-- textarea -->
+            <el-input v-if="column.layout === 'Textarea'" v-model="scope.row[column.field]" type="textarea" :placeholder="column.placeholder" />
 
-          <!-- textarea -->
-          <el-input v-if="column.layout === 'Textarea'" v-model="scope.row[column.field]" type="textarea" :placeholder="column.placeholder" />
-
-        </template>
-        <template v-else>
-          <!-- showType 有值表示对表格内样式有特殊要求 -->
-          <template v-if="column.showType === 'colorLump'">
-            <span class="color-lump" :class="lumpClassName(scope.row[column.field])">{{ filterField(column.options, scope.row[column.field]) }}</span>
-          </template>
-          <template v-else-if="column.showType === 'underline'">
-            <span class="file-text" @click="fileTextClick">{{ scope.row[column.field] }}</span>
           </template>
           <template v-else>
-            <span v-if="column.options">
-              {{ filterField(column.options, scope.row[column.field]) }}
-            </span>
-            <span v-else>{{ scope.row[column.field] }}</span>
+            <!-- showType 有值表示对表格内样式有特殊要求 -->
+            <template v-if="column.showType === 'colorLump'">
+              <span class="color-lump" :class="lumpClassName(scope.row[column.field])">{{ filterField(column.options, scope.row[column.field]) }}</span>
+            </template>
+            <template v-else-if="column.showType === 'underline'">
+              <span class="underline-text" @click="textClick">{{ scope.row[column.field] }}</span>
+            </template>
+            <template v-else>
+              <span v-if="column.options">
+                {{ filterField(column.options, scope.row[column.field]) }}
+              </span>
+              <span v-else>{{ scope.row[column.field] }}</span>
+            </template>
 
           </template>
-
         </template>
-      </template>
-    </el-table-column>
+      </el-table-column>
+    </template>
+
     <el-table-column v-if="config.actions && config.actions.length > 0" fixed="right" label="操作" width="160" align="center">
       <template slot-scope="scope">
         <template v-if="config.actions.indexOf('other') > -1">
@@ -217,9 +219,9 @@ export default {
       }
       return classMap[str]
     },
-    // 点击上传文件
-    fileTextClick() {
-      this.$emit('file-text-click')
+    // 表格文本点击
+    textClick() {
+      this.$emit('text-click')
     },
     // 上传附件
     uploadFile(row, index) {
@@ -310,6 +312,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import '~@/assets/styles/theme.scss';
 @import '~@/assets/styles/variables.scss';
   .color-lump {
     padding: 10px 20px;
@@ -327,8 +330,8 @@ export default {
       background: $redColor;
     }
   }
-  .file-text {
-    color: $primaryColor;
+  .underline-text {
+    @include primaryColor($primaryColor);
     text-decoration: underline;
     cursor: pointer;
   }
