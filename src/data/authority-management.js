@@ -66,9 +66,18 @@ export const UserTableConfig = {
     { label: '姓名', field: 'userName', width: '90', layout: 'Text', placeholder: '请填写姓名' },
     { label: '工号', field: 'jobNum', width: '100', layout: 'Text', hidden: true, placeholder: '请填写工号' },
     { label: '手机', field: 'mobile', width: '110', layout: 'Text', placeholder: '请填写手机号码' },
+    { label: '电话', field: 'phone', width: '100', layout: 'Text', hidden: true, placeholder: '请填写电话' },
+    { label: '邮箱', field: 'email', width: '100', layout: 'Text', hidden: true, placeholder: '请填写邮箱' },
+    { label: '入职时间', field: 'enterTime', width: '100', layout: 'DateTime', hidden: true, placeholder: '请选择入职时间' },
+    { label: '性别', field: 'gender', width: '70', layout: 'Radio', hidden: true,
+      options: [
+        { value: 1, label: '男' },
+        { value: 2, label: '女' }
+      ], placeholder: '请选择状态' },
     { label: '部门', field: 'department', layout: 'Text', placeholder: '请填写部门' },
     { label: '职务', field: 'position', width: '90', layout: 'Text', placeholder: '请填写职务' },
     { label: '岗位工种', field: 'workType', layout: 'Text', placeholder: '请填写职务' },
+    { label: '排序', field: 'sort', width: '60', layout: 'Text', hidden: true, placeholder: '请填写排序' },
     { label: '角色', field: 'role', layout: 'Select',
       options: [
         { value: '影响单位审核', label: '影响单位审核' },
@@ -78,7 +87,9 @@ export const UserTableConfig = {
       options: [
         { value: 1, label: '正常' },
         { value: 2, label: '锁定' }
-      ], placeholder: '请选择状态' }
+      ], placeholder: '请选择状态' },
+    { label: '人员定位卡号', field: 'card', width: '100', layout: 'Text', hidden: true, placeholder: '请填写人员定位卡号' },
+    { label: '备注信息', field: 'remark', width: '100', layout: 'Textarea', hidden: true, placeholder: '请填写备注信息' }
 
   ]
 }

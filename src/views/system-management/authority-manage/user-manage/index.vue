@@ -102,7 +102,7 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '500px',
+        width: '800px',
         form: this.UserTableConfig.columns
       })
       return createConfig
@@ -111,7 +111,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '500px',
+        width: '800px',
         form: this.UserTableConfig.columns
       })
       return editConfig
