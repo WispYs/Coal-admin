@@ -16,6 +16,7 @@ export const TableConfig = {
    * @param {string}  dateFormat        日期格式
    * @param {array}   options           选择器配置项
    * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump 色块显示
+   * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
    */
   actions: ['other'],
   otherActionTitle: ['落实情况'],

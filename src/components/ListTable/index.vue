@@ -4,12 +4,17 @@
     v-loading="listLoading"
     :data="normalizedList"
     element-loading-text="Loading"
+    size="small"
     border
     fit
     :show-summary="config.summary"
     :summary-method="(param) => getSummaries(param, config.summaryField)"
     :cell-style="cellStyle"
     header-cell-class-name="pre-line"
+    lazy
+    :load="loadTreeData"
+    :row-key="config.rowKey"
+    :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
   >
     <el-table-column align="center" label="序号" width="95" fixed>
       <template slot-scope="scope">
@@ -165,22 +170,40 @@ export default {
     }
   },
   methods: {
+    // 重构 options 数据
+    /**
+     * @param {array} options 字段对应配置项
+     */
+    refactorOptions(options = [], newOptions = []) {
+      options.forEach(o => {
+        newOptions.push({
+          value: o.value,
+          label: o.label
+        })
+        if (o.children && o.children.length > 0) {
+          this.refactorOptions(o.children, newOptions)
+        }
+      })
+    },
     // filter 方法
     /**
      * @param {array}   options 字段对应配置项
      * @param {string}  field 过滤值
      */
     filterField(options, field) {
+      // 对于树形结构，需要重新构造 options
+      const newOptions = []
+      this.refactorOptions(options, newOptions)
       // 判断值是不是数组
       // 暂不考虑传值为对象的情况（后续对接）
       if (field.constructor === Array) {
         const filters = []
         field.forEach(f => {
-          filters.push(options.filter(item => item.value === f)[0].label)
+          filters.push(newOptions.filter(item => item.value === f)[0].label)
         })
         return filters
       } else {
-        const filters = options.filter(item => item.value === field)
+        const filters = newOptions.filter(item => item.value === field)
         return filters[0] ? filters[0].label : ''
       }
     },
@@ -241,6 +264,12 @@ export default {
     getTreeSelect(value) {
       console.log(value)
     },
+
+    // 加载树形结构数据
+    loadTreeData(tree, treeNode, resolve) {
+      this.$emit('load-tree-data', tree, treeNode, resolve)
+    },
+
     // 计算合计总工时
     getSummaries(param, field) {
       if (!field) {
