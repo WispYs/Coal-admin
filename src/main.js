@@ -5,6 +5,11 @@ import store from './store'
 import router from './router'
 import '@/permission'
 
+// 引入kform
+import KFormDesign from './components/k-form-design/packages'
+import './components/k-form-design/styles/form-design.less'
+Vue.use(KFormDesign)
+
 import 'normalize.css/normalize.css' // 标准化css样式
 import '@/assets/styles/index.scss'
 import 'font-awesome/css/font-awesome.min.css'
