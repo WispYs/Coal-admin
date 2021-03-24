@@ -5,12 +5,13 @@
     :width="config.width || '500px'"
     :before-close="closeDialog"
   >
-    <el-form ref="formData" class="dialog-container" :model="formData" label-width="110px" size="small" :inline="true">
+    <el-form ref="formData" class="dialog-container" :model="formData" :rules="formRules" label-width="110px" size="small" :inline="true">
       <template v-for="(item, index) in config.form">
         <el-form-item
           :key="index"
           :class="item.layout === 'Textarea' || item.layout === 'Upload' ? 'block-form' : ''"
           :label="`${item.label}：`"
+          :prop="item.field"
         >
           <!-- input -->
           <el-input v-if="item.layout === 'Text'" v-model="formData[item.field]" class="form-item" :placeholder="item.placeholder">
@@ -97,6 +98,7 @@
 </template>
 <script>
 import TreeSelect from '@/components/TreeSelect'
+import { getType } from '@/utils'
 
 export default {
   components: { TreeSelect },
@@ -118,20 +120,49 @@ export default {
   },
   data() {
     return {
-      formData: {} // 弹窗表单
+      formData: {}, // 弹窗表单
+      formRules: {}
+
     }
+  },
+  computed: {
+
   },
   created() {
     const { form } = { ...this.config }
     const obj = {}
+    const rules = {}
     form.forEach(item => {
+      // 初始化表单数据类型
+      // 方案一：获取options中的实例数据，判断数据类型
+      // 方案二：直接在config表中添加type字段标记数据类型
+      // 暂时采用方案一，尽量不在配置表中加字段，后续有问题修改
       if (item.options) {
-        obj[item.field] = []
+        // 获取options中的实例数据
+        const exampleValue = item.options[0].value
+        const type = getType(exampleValue)
+        const typeMap = {
+          'string': '',
+          'array': [],
+          'number': 0,
+          'boolean': false,
+          'null': null,
+          'undefined': undefined
+        }
+        obj[item.field] = typeMap[type]
       } else {
         obj[item.field] = ''
       }
+
+      if (item.requeire) {
+        rules[item.field] = [
+          { required: item.requeire, message: item.placeholder, trigger: 'blur' }
+        ]
+      }
     })
     this.formData = Object.assign({}, obj)
+    console.log(this.formData)
+    this.formRules = Object.assign({}, rules)
 
     // eventHub.$on('open-dialog', dialogVisible => {
     //   this.dialogVisible = dialogVisible
@@ -144,7 +175,14 @@ export default {
       console.log(this.formData)
     },
     onSubmit() {
-      this.$emit('submit', this.formData)
+      this.$refs.formData.validate((valid) => {
+        if (valid) {
+          this.$emit('submit', this.formData)
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     },
     // 上传附件
     uploadFile() {
@@ -152,6 +190,7 @@ export default {
     },
     // 更新父组件 xxxxxDialogVisible 的值
     closeDialog() {
+      this.$refs.formData.clearValidate()
       this.$emit('close-dialog')
     },
     // treeSelect 值改变

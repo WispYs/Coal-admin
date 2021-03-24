@@ -169,3 +169,12 @@ export function deepClone(source) {
   return targetObj
 }
 
+/**
+ * @param   {all}     data
+ * @returns {string}
+ */
+export function getType(data) {
+  var str = Object.prototype.toString.call(data)
+  return str.match(/\[object (.*?)\]/)[1].toLowerCase()
+}
+

@@ -13,10 +13,11 @@ export const TableConfig = {
    * @param {string}  align             单元表格对齐方向，默认为'center'
    * @param {string}  unit              字段单位，例如：元、kw/h
    * @param {string}  layout            表单类型
+   * @param {boolean} require           是否为必填字段，默认false为非必填
    * @param {string}  dateFormat        日期格式
    * @param {array}   options           选择器配置项
    * @param {boolean} hidden            是否在表格中隐藏，默认false，值为true时只在新建、编辑中显示该字段
-   * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump 色块显示
+   * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump-有背景色块;underline-下划线可点击
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
    */
   actions: ['edit', 'delete'],

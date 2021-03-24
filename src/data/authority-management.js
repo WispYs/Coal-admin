@@ -14,6 +14,7 @@ export const AppTableConfig = {
    * @param {string}  align             单元表格对齐方向，默认为'center'
    * @param {string}  unit              字段单位，例如：元、kw/h
    * @param {string}  layout            表单类型
+   * @param {boolean} require           是否为必填字段，默认false为非必填
    * @param {string}  dateFormat        日期格式
    * @param {array}   options           选择器配置项
    * @param {boolean} hidden            是否在表格中隐藏，默认false，值为true时只在新建、编辑中显示该字段
@@ -60,11 +61,13 @@ export const AppFilterConfig = {
 
 // 用户管理
 export const UserTableConfig = {
-  actions: ['edit', 'delete'],
+  actions: ['edit', 'delete', 'other'],
+  otherActionTitle: ['修改密码'],
   columns: [
-    { label: '登录名', field: 'loginName', width: '90', layout: 'Text', placeholder: '请填写登录名' },
-    { label: '姓名', field: 'userName', width: '90', layout: 'Text', placeholder: '请填写姓名' },
-    { label: '工号', field: 'jobNum', width: '100', layout: 'Text', hidden: true, placeholder: '请填写工号' },
+    { label: '登录名', field: 'loginName', width: '90', layout: 'Text', requeire: true, placeholder: '请填写登录名' },
+    { label: '姓名', field: 'userName', width: '90', layout: 'Text', requeire: true, placeholder: '请填写姓名' },
+    { label: '工号', field: 'jobNum', width: '100', layout: 'Text', requeire: true, hidden: true, placeholder: '请填写工号' },
+    { label: '密码', field: 'password', width: '100', layout: 'Text', requeire: true, hidden: true, placeholder: '请填写密码' },
     { label: '手机', field: 'mobile', width: '110', layout: 'Text', placeholder: '请填写手机号码' },
     { label: '电话', field: 'phone', width: '100', layout: 'Text', hidden: true, placeholder: '请填写电话' },
     { label: '邮箱', field: 'email', width: '100', layout: 'Text', hidden: true, placeholder: '请填写邮箱' },
@@ -74,7 +77,7 @@ export const UserTableConfig = {
         { value: 1, label: '男' },
         { value: 2, label: '女' }
       ], placeholder: '请选择状态' },
-    { label: '部门', field: 'department', layout: 'TreeSelect',
+    { label: '部门', field: 'department', layout: 'TreeSelect', requeire: true,
       options: [
         {
           value: 1,

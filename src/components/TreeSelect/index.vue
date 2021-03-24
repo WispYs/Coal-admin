@@ -1,7 +1,7 @@
 <template>
   <el-select
     ref="treeSelect"
-    :value="valueTitle"
+    v-model="valueTitle"
     :clearable="clearable"
     class="tree-select"
     popper-class="tree-select-popper"
