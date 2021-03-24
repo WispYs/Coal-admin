@@ -16,6 +16,7 @@
         :config="UserTableConfig"
         @edit-click="(row) => openDialog('edit', row)"
         @delete-click="deleteClick"
+        @other-click="openPasswordDialog"
         @submit-data="editSubmit"
       />
       <pagination
@@ -40,6 +41,13 @@
         @close-dialog="editDialogVisible = false"
         @submit="editSubmit"
       />
+
+      <!-- 重置密码 -->
+      <reset-password
+        ref="resetPasswordDialog"
+        :dialog-visible="passwordDialogVisible"
+        @close-dialog="passwordDialogVisible = false"
+      />
     </div>
 
   </div>
@@ -52,10 +60,11 @@ import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
+import ResetPassword from '@/components/ResetPassword'
 import { UserTableConfig, UserFilterConfig, OrganizationTree } from '@/data/authority-management'
 
 export default {
-  components: { TreeBar, FilterBar, ListTable, Pagination, FormDialog },
+  components: { TreeBar, FilterBar, ListTable, Pagination, FormDialog, ResetPassword },
   data() {
     return {
       id: 'user-manage',
@@ -71,6 +80,7 @@ export default {
       UserTableConfig,
       createDialogVisible: false,
       editDialogVisible: false,
+      passwordDialogVisible: false,
       treeExtend: true,
       treeData: {
         title: '',
@@ -145,6 +155,15 @@ export default {
       console.log(submitData)
       this.editDialogVisible = false
       this.$message.success('编辑成功')
+    },
+
+    // 打开弹窗
+    openPasswordDialog(row) {
+      this.passwordDialogVisible = true
+      if (row) {
+        // 如果有数据，更新子组件的 formData
+        this.$refs.resetPasswordDialog.updataForm(row)
+      }
     }
 
   }
