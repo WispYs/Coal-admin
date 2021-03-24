@@ -74,7 +74,34 @@ export const UserTableConfig = {
         { value: 1, label: '男' },
         { value: 2, label: '女' }
       ], placeholder: '请选择状态' },
-    { label: '部门', field: 'department', layout: 'Text', placeholder: '请填写部门' },
+    { label: '部门', field: 'department', layout: 'TreeSelect',
+      options: [
+        {
+          value: 1,
+          label: '顾桥矿',
+          children: [
+            { value: 2, label: '机关', children: [
+              { value: 3, label: '矿领导' },
+              { value: 4, label: '办公室', children: [
+                { value: 5, label: '部门', children: [
+                  { value: 6, label: '安全部门' },
+                  { value: 7, label: '监管部门' },
+                  { value: 8, label: '采掘部门' },
+                  { value: 9, label: '生产部门' },
+                  { value: 10, label: '调度部门' },
+                  { value: 11, label: '防控部门' },
+                  { value: 12, label: '应急部门' }
+                ] },
+                { value: 13, label: '办公室科室（中央区）' },
+                { value: 14, label: '办公室科室（南区）' },
+                { value: 15, label: '办公室科室（西区）' },
+                { value: 16, label: '办公室科室（东区）' }
+              ] },
+              { value: 17, label: '人力资源部' }
+            ] }
+          ]
+        }
+      ], placeholder: '请选择部门' },
     { label: '职务', field: 'position', width: '90', layout: 'Text', placeholder: '请填写职务' },
     { label: '岗位工种', field: 'workType', layout: 'Text', placeholder: '请填写职务' },
     { label: '排序', field: 'sort', width: '60', layout: 'Text', hidden: true, placeholder: '请填写排序' },

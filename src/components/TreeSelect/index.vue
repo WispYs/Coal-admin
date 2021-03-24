@@ -1,9 +1,19 @@
 <template>
-  <el-select :value="valueTitle" :clearable="clearable" class="tree-select" popper-class="tree-select-popper" @clear="clearHandle">
+  <el-select
+    ref="treeSelect"
+    :value="valueTitle"
+    :clearable="clearable"
+    class="tree-select"
+    popper-class="tree-select-popper"
+    :placeholder="placeholder"
+    @clear="clearHandle"
+    @visible-change="dropdownShow"
+  >
     <el-input
+      v-if="hasSearch"
       v-model="filterText"
       class="selectInput"
-      :placeholder="placeholder"
+      placeholder="检索关键字"
     />
 
     <el-option :value="valueTitle" :label="valueTitle" class="options">
@@ -16,6 +26,8 @@
         :node-key="props.value"
         :default-expanded-keys="defaultExpandedKey"
         :filter-node-method="filterNode"
+        default-expand-all
+        :expand-on-click-node="false"
         @node-click="handleNodeClick"
       />
     </el-option>
@@ -57,10 +69,17 @@ export default {
       type: Boolean,
       default: () => false
     },
+    /* 占位符 */
     placeholder: {
       type: String,
-      default: () => '检索关键字'
+      default: () => '请选择'
+    },
+    /* 搜索框 */
+    hasSearch: {
+      type: Boolean,
+      default: () => false
     }
+
   },
   data() {
     return {
@@ -99,9 +118,7 @@ export default {
     // 初始化滚动条
     initScroll() {
       this.$nextTick(() => {
-        const scrollWrap = document.querySelectorAll('.el-scrollbar .el-select-dropdown__wrap')[0]
         const scrollBar = document.querySelectorAll('.el-scrollbar .el-scrollbar__bar')
-        scrollWrap.style.cssText = 'margin: 0px; max-height: none; overflow: hidden;'
         scrollBar.forEach(ele => { ele.style.width = 0 })
       })
     },
@@ -111,6 +128,11 @@ export default {
       this.valueId = node[this.props.value]
       this.$emit('getTreeSelect', this.valueId)
       this.defaultExpandedKey = []
+      this.$refs.treeSelect.blur()
+    },
+    // 下拉框出现/隐藏
+    dropdownShow(dropdown) {
+      console.log(dropdown)
     },
     // 清除选中
     clearHandle() {
@@ -139,15 +161,18 @@ export default {
     .el-tree .is-current .el-tree-node__label{
       @include primaryColor($primaryColor);
     }
+    .el-select-dropdown__wrap {
+      margin: 0!important;
+      overflow: hidden;
+    }
   }
 </style>
 <style scoped>
-
 .el-scrollbar .el-scrollbar__view .el-select-dropdown__item{
   height: auto;
   max-height: 274px;
   padding: 0;
-  overflow: hidden;
+  overflow-x: hidden;
   overflow-y: auto;
 }
 .el-select-dropdown__item.selected{
