@@ -89,10 +89,12 @@
 </template>
 
 <script>
+import { TableUtils } from "@/utils/tableUtils";
 export default {
   // name: "工作面接续年计划表",
   data() {
     return {
+      tbUtils: new TableUtils(),
       value: "",
       options: [
         {
@@ -430,57 +432,33 @@ export default {
           _11yearYield: "",
           _12dayYield: "",
           _12yearYield: ""
-        },
-        {
-          db: "说明",
-          gzm: "",
-          startTime: "",
-          endTime: "",
-          _1dayYield: "3.03",
-          _1yearYield: "75.7",
-          _2dayYield: "3.03",
-          _2yearYield: "68",
-          _3dayYield: "",
-          _3yearYield: "",
-          _4dayYield: "",
-          _4yearYield: "",
-          _5dayYield: "",
-          _5yearYield: "",
-          _6dayYield: "3.02",
-          _6yearYield: "85.5",
-          _7dayYield: "",
-          _7yearYield: "",
-          _8dayYield: "",
-          _8yearYield: "",
-          _9dayYield: "",
-          _9yearYield: "",
-          _10dayYield: "",
-          _10yearYield: "",
-          _11dayYield: "",
-          _11yearYield: "",
-          _12dayYield: "",
-          _12yearYield: ""
         }
       ]
     };
+  },
+  created() {
+    this.tbUtils.getSpanArr(this.tableData);
   },
   mounted() {
     // console.log(this.tableData.length);
   },
   methods: {
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex === 0 && rowIndex > 2) {
-        if (rowIndex % 2 === 1) {
-          return {
-            rowspan: 2,
-            colspan: 1
-          };
-        } else {
-          return {
-            rowspan: 0,
-            colspan: 0
-          };
+      if (rowIndex % 10 === 0 || rowIndex % 9 === 0) {
+        if (columnIndex === 0) {
+          return [1, 2];
+        } else if (columnIndex === 1) {
+          return [0, 0];
         }
+      }
+
+      if (columnIndex === 0) {
+        const _row = this.tbUtils.spanArr[rowIndex];
+        const _col = _row > 0 ? 1 : 0;
+        return {
+          rowspan: _row,
+          colspan: _col
+        };
       }
     },
     cell({ row, column, rowIndex, columnIndex }) {

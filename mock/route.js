@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-22 15:42:36
+ * @Last Modified time: 2021-03-24 14:41:19
  */
 
 /**
@@ -51,49 +51,81 @@ const asyncRoutes = [
         path: '/demo-gis/gis3',
         name: 'GIS3',
         component: '/gis/index',
-        meta: { title: '综合一张图', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
+        meta: {
+          title: '综合一张图',
+          externalUrl:
+            'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
+        }
       },
       {
         path: '/demo-gis/gis4',
         name: 'GIS4',
         component: '/gis/index',
-        meta: { title: '地测一张图', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
+        meta: {
+          title: '地测一张图',
+          externalUrl:
+            'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
+        }
       },
       {
         path: '/demo-gis/gis5',
         name: 'GIS5',
         component: '/gis/index',
-        meta: { title: '生产一张图', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
+        meta: {
+          title: '生产一张图',
+          externalUrl:
+            'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
+        }
       },
       {
         path: '/demo-gis/gis6',
         name: 'GIS6',
         component: '/gis/index',
-        meta: { title: '通防一张图', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
+        meta: {
+          title: '通防一张图',
+          externalUrl:
+            'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
+        }
       },
       {
         path: '/demo-gis/gis7',
         name: 'GIS7',
         component: '/gis/index',
-        meta: { title: '机电一张图', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
+        meta: {
+          title: '机电一张图',
+          externalUrl:
+            'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
+        }
       },
       {
         path: '/demo-gis/gis8',
         name: 'GIS8',
         component: '/gis/index',
-        meta: { title: '安全一张图', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
+        meta: {
+          title: '安全一张图',
+          externalUrl:
+            'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
+        }
       },
       {
         path: '/demo-gis/gis9',
         name: 'GIS9',
         component: '/gis/index',
-        meta: { title: '应急一张图', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
+        meta: {
+          title: '应急一张图',
+          externalUrl:
+            'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
+        }
       },
       {
         path: '/demo-gis/gis10',
         name: 'GIS10',
         component: '/gis/index',
-        meta: { title: '监测一张图', externalUrl: 'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver=' }
+        meta: {
+          title: '监测一张图',
+          externalUrl:
+            'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
+        }
       }
     ]
   },
@@ -671,7 +703,9 @@ const asyncRoutes = [
                 path: '/demo-geodesy/geodesy3/geodesy3-3/geodesy3-3-7',
                 name: 'Geodesy3-3-7',
                 component: '/demo/index',
-                meta: { title: '水文地质情况评价报告和水害隐患治理情况分析报告' }
+                meta: {
+                  title: '水文地质情况评价报告和水害隐患治理情况分析报告'
+                }
               }
             ]
           },
@@ -1004,19 +1038,22 @@ const asyncRoutes = [
           {
             path: '/mining-management/production-management/working-lifecycle',
             name: 'WorkingLifecycle',
-            component: '/mining-management/production-management/working-lifecycle/index',
+            component:
+              '/mining-management/production-management/working-lifecycle/index',
             meta: { title: '工作面生命周期管理' }
           },
           {
             path: '/mining-management/production-management/roadway-lifecycle',
             name: 'RoadwayLifecycle',
-            component: '/mining-management/production-management/roadway-lifecycle/index',
+            component:
+              '/mining-management/production-management/roadway-lifecycle/index',
             meta: { title: '巷道生命周期管理' }
           },
           {
             path: '/mining-management/production-management/mining-operation',
             name: 'MiningOperation',
-            component: '/mining-management/production-management/mining-operation/index',
+            component:
+              '/mining-management/production-management/mining-operation/index',
             meta: { title: '采掘作业规程' }
           }
         ]
@@ -1170,7 +1207,8 @@ const asyncRoutes = [
           {
             path: '/product-dispatch/dispatch-parameter/hcgzmqdzhbjl',
             name: 'Dispatch1-7',
-            component: '/product-dispatch/dispatch-parameter/hcgzmqdzhbjl/index',
+            component:
+              '/product-dispatch/dispatch-parameter/hcgzmqdzhbjl/index',
             meta: { title: '回采工作面区队长汇报记录' }
           },
           {
@@ -1404,93 +1442,121 @@ const asyncRoutes = [
             meta: { title: '标准化评分管理' },
             children: [
               {
-                path: '/safe-management/standard-scoring-manager/security-commitment',
+                path:
+                  '/safe-management/standard-scoring-manager/security-commitment',
                 name: 'Safe1-2-1',
-                component: '/safe-management/standard-scoring-manager/security-commitment/index',
+                component:
+                  '/safe-management/standard-scoring-manager/security-commitment/index',
                 meta: { title: '理念目标和矿长安全承诺' }
               },
               {
                 path: '/safe-management/standard-scoring-manager/organization',
                 name: 'Safe1-2-2',
-                component: '/safe-management/standard-scoring-manager/organization/index',
+                component:
+                  '/safe-management/standard-scoring-manager/organization/index',
                 meta: { title: '组织机构' }
               },
               {
-                path: '/safe-management/standard-scoring-manager/security-manager-system',
+                path:
+                  '/safe-management/standard-scoring-manager/security-manager-system',
                 name: 'Safe1-2-3',
-                component: '/safe-management/standard-scoring-manager/security-manager-system/index',
+                component:
+                  '/safe-management/standard-scoring-manager/security-manager-system/index',
                 meta: { title: '安全生产责任制及安全管理制度' }
               },
               {
-                path: '/safe-management/standard-scoring-manager/person-quality',
+                path:
+                  '/safe-management/standard-scoring-manager/person-quality',
                 name: 'Safe1-2-4',
-                component: '/safe-management/standard-scoring-manager/person-quality/index',
+                component:
+                  '/safe-management/standard-scoring-manager/person-quality/index',
                 meta: { title: '从业人员素质' }
               },
               {
                 path: '/safe-management/standard-scoring-manager/safe-risk',
                 name: 'Safe1-2-5',
-                component: '/safe-management/standard-scoring-manager/safe-risk/index',
+                component:
+                  '/safe-management/standard-scoring-manager/safe-risk/index',
                 meta: { title: '安全风险分级管控' }
               },
               {
-                path: '/safe-management/standard-scoring-manager/investigation-government',
+                path:
+                  '/safe-management/standard-scoring-manager/investigation-government',
                 name: 'Safe1-2-6',
-                component: '/safe-management/standard-scoring-manager/investigation-government/index',
+                component:
+                  '/safe-management/standard-scoring-manager/investigation-government/index',
                 meta: { title: '事故隐患排查治理' }
               },
               {
-                path: '/safe-management/standard-scoring-manager/quality-control-air',
+                path:
+                  '/safe-management/standard-scoring-manager/quality-control-air',
                 name: 'Safe1-2-7',
-                component: '/safe-management/standard-scoring-manager/quality-control-air/index',
+                component:
+                  '/safe-management/standard-scoring-manager/quality-control-air/index',
                 meta: { title: '质量控制_通风' }
               },
               {
-                path: '/safe-management/standard-scoring-manager/quailty-control-measure',
+                path:
+                  '/safe-management/standard-scoring-manager/quailty-control-measure',
                 name: 'Safe1-2-8',
-                component: '/safe-management/standard-scoring-manager/quailty-control-measure/index',
+                component:
+                  '/safe-management/standard-scoring-manager/quailty-control-measure/index',
                 meta: { title: '质量控制_地质灾害防治与测量' }
               },
               {
-                path: '/safe-management/standard-scoring-manager/quality-control-coalMining',
+                path:
+                  '/safe-management/standard-scoring-manager/quality-control-coalMining',
                 name: 'Safe1-2-9',
-                component: '/safe-management/standard-scoring-manager/quality-control-coalMining/index',
+                component:
+                  '/safe-management/standard-scoring-manager/quality-control-coalMining/index',
                 meta: { title: '质量控制_采煤' }
               },
               {
-                path: '/safe-management/standard-scoring-manager/quality-control-driving',
+                path:
+                  '/safe-management/standard-scoring-manager/quality-control-driving',
                 name: 'Safe1-2-10',
-                component: '/safe-management/standard-scoring-manager/quality-control-driving/index',
+                component:
+                  '/safe-management/standard-scoring-manager/quality-control-driving/index',
                 meta: { title: '质量控制_掘进' }
               },
               {
-                path: '/safe-management/standard-scoring-manager/quality-control-electromechanical',
+                path:
+                  '/safe-management/standard-scoring-manager/quality-control-electromechanical',
                 name: 'Safe1-2-11',
-                component: '/safe-management/standard-scoring-manager/quality-control-electromechanical/index',
+                component:
+                  '/safe-management/standard-scoring-manager/quality-control-electromechanical/index',
                 meta: { title: '质量控制_机电' }
               },
               {
-                path: '/safe-management/standard-scoring-manager/quality-control-transport',
+                path:
+                  '/safe-management/standard-scoring-manager/quality-control-transport',
                 name: 'Safe1-2-12',
-                component: '/safe-management/standard-scoring-manager/quality-control-transport/index',
+                component:
+                  '/safe-management/standard-scoring-manager/quality-control-transport/index',
                 meta: { title: '质量控制_运输' }
               },
               {
-                path: '/safe-management/standard-scoring-manager/dispatch-emergency-manager',
+                path:
+                  '/safe-management/standard-scoring-manager/dispatch-emergency-manager',
                 name: 'Safe1-2-13',
-                component: '/safe-management/standard-scoring-manager/dispatch-emergency-manager/index',
+                component:
+                  '/safe-management/standard-scoring-manager/dispatch-emergency-manager/index',
                 meta: { title: '质量控制_调度和应急管理' }
               },
               {
-                path: '/safe-management/standard-scoring-manager/occupational-diseases-facilities',
+                path:
+                  '/safe-management/standard-scoring-manager/occupational-diseases-facilities',
                 name: 'Safe1-2-14',
-                component: '/safe-management/standard-scoring-manager/occupational-diseases-facilities/index',
+                component:
+                  '/safe-management/standard-scoring-manager/occupational-diseases-facilities/index',
                 meta: { title: '质量控制_职业病危害防治和地面设施' }
               },
               {
-                path: '/safe-management/standard-scoring-manager/continued-improve',
+                path:
+                  '/safe-management/standard-scoring-manager/continued-improve',
                 name: 'Safe1-2-15',
-                component: '/safe-management/standard-scoring-manager/continued-improve/index',
+                component:
+                  '/safe-management/standard-scoring-manager/continued-improve/index',
                 meta: { title: '持续改进' }
               }
             ]
@@ -1534,15 +1600,19 @@ const asyncRoutes = [
                 meta: { title: '安全风险分级管理制度' }
               },
               {
-                path: '/safe-management/risk-control/management-system/organization',
+                path:
+                  '/safe-management/risk-control/management-system/organization',
                 name: 'Organization',
-                component: '/safe-management/risk-control/management-system/organization/index',
+                component:
+                  '/safe-management/risk-control/management-system/organization/index',
                 meta: { title: '风险组织结构' }
               },
               {
-                path: '/safe-management/risk-control/management-system/liability-system',
+                path:
+                  '/safe-management/risk-control/management-system/liability-system',
                 name: 'LiabilitySystem',
-                component: '/safe-management/risk-control/management-system/liability-system/index',
+                component:
+                  '/safe-management/risk-control/management-system/liability-system/index',
                 meta: { title: '风险责任体系' }
               }
             ]
@@ -1560,9 +1630,11 @@ const asyncRoutes = [
                 meta: { title: '年度辨识评估报告' }
               },
               {
-                path: '/safe-management/risk-control/assessment/assessment-library',
+                path:
+                  '/safe-management/risk-control/assessment/assessment-library',
                 name: 'AssessmentLibrary',
-                component: '/safe-management/risk-control/assessment/assessment-library/index',
+                component:
+                  '/safe-management/risk-control/assessment/assessment-library/index',
                 meta: { title: '风险辨识库' }
               }
             ]
@@ -1574,9 +1646,11 @@ const asyncRoutes = [
             meta: { title: '专项辨识：设计前' },
             children: [
               {
-                path: '/safe-management/risk-control/pre-design/pre-design-list',
+                path:
+                  '/safe-management/risk-control/pre-design/pre-design-list',
                 name: 'PreDesignList',
-                component: '/safe-management/risk-control/pre-design/pre-design-list/index',
+                component:
+                  '/safe-management/risk-control/pre-design/pre-design-list/index',
                 meta: { title: '设计前风险清单' }
               },
               {
@@ -1594,9 +1668,11 @@ const asyncRoutes = [
             meta: { title: '专项辨识：变化后' },
             children: [
               {
-                path: '/safe-management/risk-control/after-change/after-change-list',
+                path:
+                  '/safe-management/risk-control/after-change/after-change-list',
                 name: 'AfterChangeList',
-                component: '/safe-management/risk-control/after-change/after-change-list/index',
+                component:
+                  '/safe-management/risk-control/after-change/after-change-list/index',
                 meta: { title: '变化后风险清单' }
               },
               {
@@ -1614,9 +1690,11 @@ const asyncRoutes = [
             meta: { title: '专项辨识：施工前' },
             children: [
               {
-                path: '/safe-management/risk-control/pre-construct/pre-construct-list',
+                path:
+                  '/safe-management/risk-control/pre-construct/pre-construct-list',
                 name: 'PreConstructList',
-                component: '/safe-management/risk-control/pre-construct/pre-construct-list/index',
+                component:
+                  '/safe-management/risk-control/pre-construct/pre-construct-list/index',
                 meta: { title: '施工前风险清单' }
               },
               {
@@ -1634,9 +1712,11 @@ const asyncRoutes = [
             meta: { title: '专项辨识：事故后' },
             children: [
               {
-                path: '/safe-management/risk-control/after-accident/after-accident-list',
+                path:
+                  '/safe-management/risk-control/after-accident/after-accident-list',
                 name: 'AfterAccidentList',
-                component: '/safe-management/risk-control/after-accident/after-accident-list/index',
+                component:
+                  '/safe-management/risk-control/after-accident/after-accident-list/index',
                 meta: { title: '事故后风险清单' }
               },
               {
@@ -1680,15 +1760,19 @@ const asyncRoutes = [
             meta: { title: '工作机制' },
             children: [
               {
-                path: '/safe-management/hidden-danger/working-mechanism/organization',
+                path:
+                  '/safe-management/hidden-danger/working-mechanism/organization',
                 name: 'DangerOrganization',
-                component: '/safe-management/hidden-danger/working-mechanism/organization/index',
+                component:
+                  '/safe-management/hidden-danger/working-mechanism/organization/index',
                 meta: { title: '隐患组织结构' }
               },
               {
-                path: '/safe-management/hidden-danger/working-mechanism/liability-system',
+                path:
+                  '/safe-management/hidden-danger/working-mechanism/liability-system',
                 name: 'DangerLiability',
-                component: '/safe-management/hidden-danger/working-mechanism/liability-system/index',
+                component:
+                  '/safe-management/hidden-danger/working-mechanism/liability-system/index',
                 meta: { title: '隐患责任体系' }
               }
             ]
@@ -1696,7 +1780,8 @@ const asyncRoutes = [
           {
             path: '/safe-management/hidden-danger/danger-registration',
             name: 'DangerRegistration',
-            component: '/safe-management/hidden-danger/danger-registration/index',
+            component:
+              '/safe-management/hidden-danger/danger-registration/index',
             meta: { title: '事故隐患登记' }
           },
           {
@@ -1706,33 +1791,43 @@ const asyncRoutes = [
             meta: { title: '隐患监督管理' },
             children: [
               {
-                path: '/safe-management/hidden-danger/danger-supervision/reform',
+                path:
+                  '/safe-management/hidden-danger/danger-supervision/reform',
                 name: 'Reform',
-                component: '/safe-management/hidden-danger/danger-supervision/reform/index',
+                component:
+                  '/safe-management/hidden-danger/danger-supervision/reform/index',
                 meta: { title: '隐患整改' }
               },
               {
-                path: '/safe-management/hidden-danger/danger-supervision/delay-approval',
+                path:
+                  '/safe-management/hidden-danger/danger-supervision/delay-approval',
                 name: 'DelayApproval',
-                component: '/safe-management/hidden-danger/danger-supervision/delay-approval/index',
+                component:
+                  '/safe-management/hidden-danger/danger-supervision/delay-approval/index',
                 meta: { title: '延期审批' }
               },
               {
-                path: '/safe-management/hidden-danger/danger-supervision/acceptance',
+                path:
+                  '/safe-management/hidden-danger/danger-supervision/acceptance',
                 name: 'Acceptance',
-                component: '/safe-management/hidden-danger/danger-supervision/acceptance/index',
+                component:
+                  '/safe-management/hidden-danger/danger-supervision/acceptance/index',
                 meta: { title: '隐患验收' }
               },
               {
-                path: '/safe-management/hidden-danger/danger-supervision/exceed',
+                path:
+                  '/safe-management/hidden-danger/danger-supervision/exceed',
                 name: 'DangerExceed',
-                component: '/safe-management/hidden-danger/danger-supervision/exceed/index',
+                component:
+                  '/safe-management/hidden-danger/danger-supervision/exceed/index',
                 meta: { title: '超期隐患' }
               },
               {
-                path: '/safe-management/hidden-danger/danger-supervision/supervision',
+                path:
+                  '/safe-management/hidden-danger/danger-supervision/supervision',
                 name: 'DangerSupervision',
-                component: '/safe-management/hidden-danger/danger-supervision/supervision/index',
+                component:
+                  '/safe-management/hidden-danger/danger-supervision/supervision/index',
                 meta: { title: '治理督办' }
               }
             ]
@@ -1772,7 +1867,8 @@ const asyncRoutes = [
           {
             path: '/safe-management/three-violation/violation-echart',
             name: 'ViolationEchart',
-            component: '/safe-management/three-violation/violation-echart/index',
+            component:
+              '/safe-management/three-violation/violation-echart/index',
             meta: { title: '三违分析' }
           }
         ]
@@ -2068,7 +2164,8 @@ const asyncRoutes = [
           {
             path: '/prevention-management/ventilate-manage/gas-daily',
             name: 'Prevention1-3',
-            component: '/prevention-management/ventilate-manage/gas-daily/index',
+            component:
+              '/prevention-management/ventilate-manage/gas-daily/index',
             meta: { title: '瓦斯日报' }
           },
           {
@@ -2078,27 +2175,33 @@ const asyncRoutes = [
             meta: { title: '通风设施' },
             children: [
               {
-                path: '/prevention-management/ventilate-manage/ventilation/wind-bridge-parameter',
+                path:
+                  '/prevention-management/ventilate-manage/ventilation/wind-bridge-parameter',
                 name: 'Prevention1-4-1',
-                component: '/prevention-management/ventilate-manage/ventilation/wind-bridge-parameter/index',
+                component:
+                  '/prevention-management/ventilate-manage/ventilation/wind-bridge-parameter/index',
                 meta: { title: '风门台账' }
               },
               {
-                path: '/prevention-management/prevention1/prevention1-4/prevention1-4-2',
+                path:
+                  '/prevention-management/prevention1/prevention1-4/prevention1-4-2',
                 name: 'Prevention1-4-2',
                 component: '/demo/table/upload/index',
                 meta: { title: '密闭台账' }
               },
               {
-                path: '/prevention-management/prevention1/prevention1-4/prevention1-4-3',
+                path:
+                  '/prevention-management/prevention1/prevention1-4/prevention1-4-3',
                 name: 'Prevention1-4-3',
                 component: '/demo/table/upload/index',
                 meta: { title: '挡风墙台账' }
               },
               {
-                path: '/prevention-management/ventilate-manage/ventilation/inspection-record',
+                path:
+                  '/prevention-management/ventilate-manage/ventilation/inspection-record',
                 name: 'Prevention1-4-4',
-                component: '/prevention-management/ventilate-manage/ventilation/inspection-record/index',
+                component:
+                  '/prevention-management/ventilate-manage/ventilation/inspection-record/index',
                 meta: { title: '通风设施验收记录' }
               }
             ]
@@ -2136,7 +2239,8 @@ const asyncRoutes = [
           {
             path: '/prevention-management/ventilate-manage/anti-wind-record',
             name: 'Prevention1-10',
-            component: '/prevention-management/ventilate-manage/anti-wind-record/index',
+            component:
+              '/prevention-management/ventilate-manage/anti-wind-record/index',
             meta: { title: '反风设施检查记录' }
           },
           {
@@ -2164,15 +2268,19 @@ const asyncRoutes = [
             meta: { title: '通风月报' },
             children: [
               {
-                path: '/prevention-management/ventilate-manage/ventilate-monthly/submit',
+                path:
+                  '/prevention-management/ventilate-manage/ventilate-monthly/submit',
                 name: 'Prevention1-14-1',
-                component: '/prevention-management/ventilate-manage/ventilate-monthly/submit/index',
+                component:
+                  '/prevention-management/ventilate-manage/ventilate-monthly/submit/index',
                 meta: { title: '填报' }
               },
               {
-                path: '/prevention-management/ventilate-manage/ventilate-monthly/preview',
+                path:
+                  '/prevention-management/ventilate-manage/ventilate-monthly/preview',
                 name: 'Prevention1-14-2',
-                component: '/prevention-management/ventilate-manage/ventilate-monthly/preview/index',
+                component:
+                  '/prevention-management/ventilate-manage/ventilate-monthly/preview/index',
                 meta: { title: '预览' }
               }
             ]
@@ -2184,15 +2292,19 @@ const asyncRoutes = [
             meta: { title: '突出煤层掘进工作面防突月报' },
             children: [
               {
-                path: '/prevention-management/ventilate-manage/outburst-prevention-monthly/submit',
+                path:
+                  '/prevention-management/ventilate-manage/outburst-prevention-monthly/submit',
                 name: 'Prevention1-15-1',
-                component: '/prevention-management/ventilate-manage/outburst-prevention-monthly/submit/index',
+                component:
+                  '/prevention-management/ventilate-manage/outburst-prevention-monthly/submit/index',
                 meta: { title: '填报' }
               },
               {
-                path: '/prevention-management/ventilate-manage/outburst-prevention-monthly/preview',
+                path:
+                  '/prevention-management/ventilate-manage/outburst-prevention-monthly/preview',
                 name: 'Prevention1-15-2',
-                component: '/prevention-management/ventilate-manage/outburst-prevention-monthly/preview/index',
+                component:
+                  '/prevention-management/ventilate-manage/outburst-prevention-monthly/preview/index',
                 meta: { title: '预览' }
               }
             ]
@@ -2204,15 +2316,19 @@ const asyncRoutes = [
             meta: { title: '钻孔施工日报' },
             children: [
               {
-                path: '/prevention-management/ventilate-manage/drill-daily/submit',
+                path:
+                  '/prevention-management/ventilate-manage/drill-daily/submit',
                 name: 'Prevention1-16-1',
-                component: '/prevention-management/ventilate-manage/drill-daily/submit/index',
+                component:
+                  '/prevention-management/ventilate-manage/drill-daily/submit/index',
                 meta: { title: '填报' }
               },
               {
-                path: '/prevention-management/ventilate-manage/drill-daily/preview',
+                path:
+                  '/prevention-management/ventilate-manage/drill-daily/preview',
                 name: 'Prevention1-16-2',
-                component: '/prevention-management/ventilate-manage/drill-daily/preview/index',
+                component:
+                  '/prevention-management/ventilate-manage/drill-daily/preview/index',
                 meta: { title: '预览' }
               }
             ]
@@ -2224,27 +2340,35 @@ const asyncRoutes = [
             meta: { title: '通风旬报' },
             children: [
               {
-                path: '/prevention-management/ventilate-manage/ventilate-ten-day/ventilate-info',
+                path:
+                  '/prevention-management/ventilate-manage/ventilate-ten-day/ventilate-info',
                 name: 'Prevention1-17-1',
-                component: '/prevention-management/ventilate-manage/ventilate-ten-day/ventilate-info/index',
+                component:
+                  '/prevention-management/ventilate-manage/ventilate-ten-day/ventilate-info/index',
                 meta: { title: '通风信息旬报' }
               },
               {
-                path: '/prevention-management/ventilate-manage/ventilate-ten-day/mrtn-report',
+                path:
+                  '/prevention-management/ventilate-manage/ventilate-ten-day/mrtn-report',
                 name: 'Prevention1-17-2',
-                component: '/prevention-management/ventilate-manage/ventilate-ten-day/mrtn-report/index',
+                component:
+                  '/prevention-management/ventilate-manage/ventilate-ten-day/mrtn-report/index',
                 meta: { title: '回风量旬报表' }
               },
               {
-                path: '/prevention-management/ventilate-manage/ventilate-ten-day/coalface-report',
+                path:
+                  '/prevention-management/ventilate-manage/ventilate-ten-day/coalface-report',
                 name: 'Prevention1-17-3',
-                component: '/prevention-management/ventilate-manage/ventilate-ten-day/coalface-report/index',
+                component:
+                  '/prevention-management/ventilate-manage/ventilate-ten-day/coalface-report/index',
                 meta: { title: '掘进面旬报表' }
               },
               {
-                path: '/prevention-management/ventilate-manage/ventilate-ten-day/working-situation-report',
+                path:
+                  '/prevention-management/ventilate-manage/ventilate-ten-day/working-situation-report',
                 name: 'Prevention1-17-4',
-                component: '/prevention-management/ventilate-manage/ventilate-ten-day/working-situation-report/index',
+                component:
+                  '/prevention-management/ventilate-manage/ventilate-ten-day/working-situation-report/index',
                 meta: { title: '采煤工作面通风情况旬报表' }
               }
             ]
@@ -2264,9 +2388,11 @@ const asyncRoutes = [
             meta: { title: '瓦斯鉴定报告' },
             children: [
               {
-                path: '/prevention-management/gas-manage/survey-report/ventilate',
+                path:
+                  '/prevention-management/gas-manage/survey-report/ventilate',
                 name: 'Prevention2-1-1',
-                component: '/prevention-management/gas-manage/survey-report/ventilate/index',
+                component:
+                  '/prevention-management/gas-manage/survey-report/ventilate/index',
                 meta: { title: '通风旬报' }
               }
             ]
@@ -2476,7 +2602,8 @@ const asyncRoutes = [
               {
                 path: '/prevention-management/gas-manage/use-gas-daily/submit',
                 name: 'Prevention2-13-1',
-                component: '/prevention-management/gas-manage/use-gas-daily/submit/index',
+                component:
+                  '/prevention-management/gas-manage/use-gas-daily/submit/index',
                 meta: { title: '填报' }
               },
               {
@@ -2514,15 +2641,19 @@ const asyncRoutes = [
             meta: { title: '重点瓦斯日报' },
             children: [
               {
-                path: '/prevention-management/gas-manage/focus-gas-daily/submit',
+                path:
+                  '/prevention-management/gas-manage/focus-gas-daily/submit',
                 name: 'Prevention2-15-1',
-                component: '/prevention-management/gas-manage/focus-gas-daily/submit/index',
+                component:
+                  '/prevention-management/gas-manage/focus-gas-daily/submit/index',
                 meta: { title: '填报' }
               },
               {
-                path: '/prevention-management/gas-manage/focus-gas-daily/preview',
+                path:
+                  '/prevention-management/gas-manage/focus-gas-daily/preview',
                 name: 'Prevention2-15-2',
-                component: '/prevention-management/gas-manage/focus-gas-daily/preview/index',
+                component:
+                  '/prevention-management/gas-manage/focus-gas-daily/preview/index',
                 meta: { title: '预览' }
               }
             ]
@@ -2548,7 +2679,8 @@ const asyncRoutes = [
             meta: { title: '煤层自燃倾向性鉴定报告' },
             children: [
               {
-                path: '/prevention-management/prevention3/prevention3-2/prevention3-2-1',
+                path:
+                  '/prevention-management/prevention3/prevention3-2/prevention3-2-1',
                 name: 'Prevention3-2-1',
                 component: '/demo/index',
                 meta: { title: '预览' }
@@ -2582,13 +2714,15 @@ const asyncRoutes = [
               {
                 path: '/prevention-management/fire-manage/fire-monthly/submit',
                 name: 'Prevention3-6-1',
-                component: '/prevention-management/fire-manage/fire-monthly/submit/index',
+                component:
+                  '/prevention-management/fire-manage/fire-monthly/submit/index',
                 meta: { title: '填报' }
               },
               {
                 path: '/prevention-management/fire-manage/fire-monthly/preview',
                 name: 'Prevention3-6-2',
-                component: '/prevention-management/fire-manage/fire-monthly/preview/index',
+                component:
+                  '/prevention-management/fire-manage/fire-monthly/preview/index',
                 meta: { title: '预览' }
               }
             ]
@@ -2638,31 +2772,36 @@ const asyncRoutes = [
             meta: { title: '防尘月报' },
             children: [
               {
-                path: '/prevention-management/prevention4/prevention4-6/prevention4-6-1',
+                path:
+                  '/prevention-management/prevention4/prevention4-6/prevention4-6-1',
                 name: 'Prevention4-6-1',
                 component: '/demo/index',
                 meta: { title: '采掘面防尘情况月报' }
               },
               {
-                path: '/prevention-management/prevention4/prevention4-6/prevention4-6-2',
+                path:
+                  '/prevention-management/prevention4/prevention4-6/prevention4-6-2',
                 name: 'Prevention4-6-2',
                 component: '/demo/index',
                 meta: { title: '防治高尘措施场所月报' }
               },
               {
-                path: '/prevention-management/prevention4/prevention4-6/prevention4-6-3',
+                path:
+                  '/prevention-management/prevention4/prevention4-6/prevention4-6-3',
                 name: 'Prevention4-6-3',
                 component: '/demo/index',
                 meta: { title: '粉尘浓度情况与测尘仪型号月报表' }
               },
               {
-                path: '/prevention-management/prevention4/prevention4-6/prevention4-6-4',
+                path:
+                  '/prevention-management/prevention4/prevention4-6/prevention4-6-4',
                 name: 'Prevention4-6-4',
                 component: '/demo/index',
                 meta: { title: '采掘面粉尘浓度检测月报' }
               },
               {
-                path: '/prevention-management/prevention4/prevention4-6/prevention4-6-5',
+                path:
+                  '/prevention-management/prevention4/prevention4-6/prevention4-6-5',
                 name: 'Prevention4-6-5',
                 component: '/demo/index',
                 meta: { title: '防尘月报' }
@@ -2680,7 +2819,8 @@ const asyncRoutes = [
           {
             path: '/prevention-management/safety-manage/equipment-ledger',
             name: 'Prevention5-1',
-            component: '/prevention-management/safety-manage/equipment-ledger/index',
+            component:
+              '/prevention-management/safety-manage/equipment-ledger/index',
             meta: { title: '监控设备管理台账' }
           },
           {
@@ -2690,25 +2830,29 @@ const asyncRoutes = [
             meta: { title: '安全监控设备检查、测试记录' },
             children: [
               {
-                path: '/prevention-management/prevention5/prevention5-2/prevention5-2-1',
+                path:
+                  '/prevention-management/prevention5/prevention5-2/prevention5-2-1',
                 name: 'Prevention5-2-1',
                 component: '/demo/index',
                 meta: { title: '三分闭锁测试记录' }
               },
               {
-                path: '/prevention-management/prevention5/prevention5-2/prevention5-2-2',
+                path:
+                  '/prevention-management/prevention5/prevention5-2/prevention5-2-2',
                 name: 'Prevention5-2-2',
                 component: '/demo/index',
                 meta: { title: '井下巡检记录' }
               },
               {
-                path: '/prevention-management/prevention5/prevention5-2/prevention5-2-3',
+                path:
+                  '/prevention-management/prevention5/prevention5-2/prevention5-2-3',
                 name: 'Prevention5-2-3',
                 component: '/demo/index',
                 meta: { title: '避雷设施检查记录' }
               },
               {
-                path: '/prevention-management/prevention5/prevention5-2/prevention5-2-4',
+                path:
+                  '/prevention-management/prevention5/prevention5-2/prevention5-2-4',
                 name: 'Prevention5-2-4',
                 component: '/demo/index',
                 meta: { title: '监控机房UPS电源测试记录' }
@@ -2718,7 +2862,8 @@ const asyncRoutes = [
           {
             path: '/prevention-management/safety-manage/monitoring-record',
             name: 'Prevention5-3',
-            component: '/prevention-management/safety-manage/monitoring-record/index',
+            component:
+              '/prevention-management/safety-manage/monitoring-record/index',
             meta: { title: '监控传感器校验记录' }
           },
           {
@@ -2740,37 +2885,43 @@ const asyncRoutes = [
             meta: { title: '监控月报' },
             children: [
               {
-                path: '/prevention-management/prevention5/prevention5-6/prevention5-6-1',
+                path:
+                  '/prevention-management/prevention5/prevention5-6/prevention5-6-1',
                 name: 'Prevention5-6-1',
                 component: '/demo/index',
                 meta: { title: '安全监控系统故障统计表' }
               },
               {
-                path: '/prevention-management/prevention5/prevention5-6/prevention5-6-2',
+                path:
+                  '/prevention-management/prevention5/prevention5-6/prevention5-6-2',
                 name: 'Prevention5-6-2',
                 component: '/demo/index',
                 meta: { title: '安全监控系统装备情况表' }
               },
               {
-                path: '/prevention-management/prevention5/prevention5-6/prevention5-6-3',
+                path:
+                  '/prevention-management/prevention5/prevention5-6/prevention5-6-3',
                 name: 'Prevention5-6-3',
                 component: '/demo/index',
                 meta: { title: '抽采自动计量装备情况表' }
               },
               {
-                path: '/prevention-management/prevention5/prevention5-6/prevention5-6-4',
+                path:
+                  '/prevention-management/prevention5/prevention5-6/prevention5-6-4',
                 name: 'Prevention5-6-4',
                 component: '/demo/index',
                 meta: { title: '设备使用情况表' }
               },
               {
-                path: '/prevention-management/prevention5/prevention5-6/prevention5-6-5',
+                path:
+                  '/prevention-management/prevention5/prevention5-6/prevention5-6-5',
                 name: 'Prevention5-6-5',
                 component: '/demo/index',
                 meta: { title: '采掘开等场所各类传感器安设情况表' }
               },
               {
-                path: '/prevention-management/prevention5/prevention5-6/prevention5-6-6',
+                path:
+                  '/prevention-management/prevention5/prevention5-6/prevention5-6-6',
                 name: 'Prevention5-6-6',
                 component: '/demo/index',
                 meta: { title: '监控月报' }
@@ -2902,19 +3053,22 @@ const asyncRoutes = [
             meta: { title: '通防任务计划提醒' },
             children: [
               {
-                path: '/prevention-management/prevention7/prevention7-8/prevention7-8-1',
+                path:
+                  '/prevention-management/prevention7/prevention7-8/prevention7-8-1',
                 name: 'Prevention7-8-1',
                 component: '/demo/index',
                 meta: { title: '任务计划提醒' }
               },
               {
-                path: '/prevention-management/prevention7/prevention7-8/prevention7-8-2',
+                path:
+                  '/prevention-management/prevention7/prevention7-8/prevention7-8-2',
                 name: 'Prevention7-8-2',
                 component: '/demo/index',
                 meta: { title: '通防提醒日历' }
               },
               {
-                path: '/prevention-management/prevention7/prevention7-8/prevention7-8-3',
+                path:
+                  '/prevention-management/prevention7/prevention7-8/prevention7-8-3',
                 name: 'Prevention7-8-3',
                 component: '/demo/index',
                 meta: { title: '通防任务计划执行' }
@@ -2978,33 +3132,40 @@ const asyncRoutes = [
         meta: { title: '运输管理' },
         children: [
           {
-            path: '/mechatronics/transportation-management/equipment-management',
+            path:
+              '/mechatronics/transportation-management/equipment-management',
             name: 'EquipmentManagement',
-            component: '/mechatronics/transportation-management/equipment-management/index',
+            component:
+              '/mechatronics/transportation-management/equipment-management/index',
             meta: { title: '大型设备管理' }
           },
           {
             path: '/mechatronics/transportation-management/equipment-type',
             name: 'EquipmentType',
-            component: '/mechatronics/transportation-management/equipment-type/index',
+            component:
+              '/mechatronics/transportation-management/equipment-type/index',
             meta: { title: '大型设备类型' }
           },
           {
             path: '/mechatronics/transportation-management/typical-fault',
             name: 'TypicalFault',
-            component: '/mechatronics/transportation-management/typical-fault/index',
+            component:
+              '/mechatronics/transportation-management/typical-fault/index',
             meta: { title: '典型故障知识库' }
           },
           {
             path: '/mechatronics/transportation-management/history-fault',
             name: 'HistoryFault',
-            component: '/mechatronics/transportation-management/history-fault/index',
+            component:
+              '/mechatronics/transportation-management/history-fault/index',
             meta: { title: '历史故障知识库' }
           },
           {
-            path: '/mechatronics/transportation-management/transportation-document',
+            path:
+              '/mechatronics/transportation-management/transportation-document',
             name: 'TransportationDocument',
-            component: '/mechatronics/transportation-management/transportation-document/index',
+            component:
+              '/mechatronics/transportation-management/transportation-document/index',
             meta: { title: '运输数字文档' }
           }
         ]
@@ -3024,19 +3185,22 @@ const asyncRoutes = [
           {
             path: '/mechatronics/service-management/daily-service-manage',
             name: 'DailyServiceManage',
-            component: '/mechatronics/service-management/daily-service-manage/index',
+            component:
+              '/mechatronics/service-management/daily-service-manage/index',
             meta: { title: '日常维检管理' }
           },
           {
             path: '/mechatronics/service-management/daily-service-calendar',
             name: 'DailyServiceCalendar',
-            component: '/mechatronics/service-management/daily-service-calendar/index',
+            component:
+              '/mechatronics/service-management/daily-service-calendar/index',
             meta: { title: '日常维检日历' }
           },
           {
             path: '/mechatronics/service-management/equipment-service',
             name: 'EquipmentService',
-            component: '/mechatronics/service-management/equipment-service/index',
+            component:
+              '/mechatronics/service-management/equipment-service/index',
             meta: { title: '设备维修' }
           },
           {
@@ -3056,13 +3220,15 @@ const asyncRoutes = [
           {
             path: '/mechatronics/equipment-management/supplier-manage',
             name: 'SupplierManage',
-            component: '/mechatronics/equipment-management/supplier-manage/index',
+            component:
+              '/mechatronics/equipment-management/supplier-manage/index',
             meta: { title: '供应商管理' }
           },
           {
             path: '/mechatronics/equipment-management/category-manage',
             name: 'CategoryManage',
-            component: '/mechatronics/equipment-management/category-manage/index',
+            component:
+              '/mechatronics/equipment-management/category-manage/index',
             meta: { title: '设备类型管理' }
           },
           {
@@ -3074,13 +3240,15 @@ const asyncRoutes = [
           {
             path: '/mechatronics/equipment-management/storage-manage',
             name: 'StorageManage',
-            component: '/mechatronics/equipment-management/storage-manage/index',
+            component:
+              '/mechatronics/equipment-management/storage-manage/index',
             meta: { title: '设备出入库' }
           },
           {
             path: '/mechatronics/equipment-management/using-equipment',
             name: 'UsingEquipment',
-            component: '/mechatronics/equipment-management/using-equipment/index',
+            component:
+              '/mechatronics/equipment-management/using-equipment/index',
             meta: { title: '在用设备' }
           },
           {
@@ -3104,7 +3272,8 @@ const asyncRoutes = [
           {
             path: '/mechatronics/equipment-management/certificate-manage',
             name: 'CertificateManage',
-            component: '/mechatronics/equipment-management/certificate-manage/index',
+            component:
+              '/mechatronics/equipment-management/certificate-manage/index',
             meta: { title: '设备证书' }
           },
           {
@@ -3793,7 +3962,8 @@ const asyncRoutes = [
           {
             path: '/system-management/authority-manage/application-manage',
             name: 'Authority1',
-            component: '/system-management/authority-manage/application-manage/index',
+            component:
+              '/system-management/authority-manage/application-manage/index',
             meta: { title: '应用系统管理' }
           },
           {
@@ -3805,7 +3975,8 @@ const asyncRoutes = [
           {
             path: '/system-management/authority-manage/organization-manage',
             name: 'Authority3',
-            component: '/system-management/authority-manage/organization-manage/index',
+            component:
+              '/system-management/authority-manage/organization-manage/index',
             meta: { title: '组织机构管理' }
           },
           {
@@ -3823,7 +3994,8 @@ const asyncRoutes = [
           {
             path: '/system-management/authority-manage/resource-manage',
             name: 'Authority6',
-            component: '/system-management/authority-manage/resource-manage/index',
+            component:
+              '/system-management/authority-manage/resource-manage/index',
             meta: { title: '资源权限管理' }
           }
         ]
@@ -3889,7 +4061,8 @@ const asyncRoutes = [
           {
             path: '/system-management/message-manage/message-template',
             name: 'Message1',
-            component: '/system-management/message-manage/message-template/index',
+            component:
+              '/system-management/message-manage/message-template/index',
             meta: { title: '消息模板配置' }
           },
           {
@@ -4000,6 +4173,26 @@ const asyncRoutes = [
             name: 'System5-4',
             component: '/demo/index',
             meta: { title: '属性设置' }
+          }
+        ]
+      },
+      {
+        path: '/system-management/report',
+        name: 'System7',
+        component: '/demo/index',
+        meta: { title: '报表管理' },
+        children: [
+          {
+            path: '/system-management/report/ureport',
+            name: 'System5-1',
+            component: '/ureport/designer/index',
+            meta: { title: 'urport' }
+          },
+          {
+            path: '/system-management/report/kForm',
+            name: 'kForm',
+            component: '/demo/k-form/index',
+            meta: { title: 'kForm' }
           }
         ]
       },

@@ -209,7 +209,9 @@ export default {
   // name: "工作面接续年计划表",
   data() {
     return {
-      clickRowIndex: null, // 点击单元格的行序号
+      tbUtils: new TableUtils(),
+      clickRowIndex: null,
+      // 点击单元格的行序号
       clickField: null, // 点击单元格的字段
       value: "2021",
       idx: 1,
@@ -661,7 +663,7 @@ export default {
     };
   },
   created() {
-    TableUtils.getSpanArr(this.tableData);
+    this.tbUtils.getSpanArr(this.tableData, "db");
   },
   mounted() {
     // console.log(this.tableData.length);
@@ -751,7 +753,7 @@ export default {
       }
 
       if (columnIndex === 0) {
-        const _row = TableUtils.spanArr[rowIndex];
+        const _row = this.tbUtils.spanArr[rowIndex];
         const _col = _row > 0 ? 1 : 0;
         return {
           rowspan: _row,
