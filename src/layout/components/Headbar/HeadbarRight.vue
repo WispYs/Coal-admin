@@ -100,8 +100,8 @@ export default {
   .headbar-dropdown {
     float: right;
     margin-left: 10px;
-    line-height: 50px;
-    height: 50px;
+    line-height: $headBarHeight;
+    height: $headBarHeight;
     color: #fff;
     &__title {
       font-size: 13px;

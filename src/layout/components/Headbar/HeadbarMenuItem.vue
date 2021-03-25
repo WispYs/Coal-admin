@@ -47,10 +47,10 @@ export default {
 <style lang="scss">
 @import '~@/assets/styles/theme.scss';
 @import '~@/assets/styles/variables.scss';
-.router-link-active {
-  span {
-    @include primaryColor($primaryColor)
-  }
-}
+// .router-link-active {
+//   span {
+//     @include primaryColor($primaryColor)
+//   }
+// }
 
 </style>

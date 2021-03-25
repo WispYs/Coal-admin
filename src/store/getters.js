@@ -7,6 +7,7 @@ const getters = {
   visitedViews: state => state.tagsView.visitedViews,
   cachedViews: state => state.tagsView.cachedViews,
   theme_class: state => state.themeColor.themeColor,
-  sidebar_routes: state => state.headbar.sidebarRoutes
+  sidebar_routes: state => state.headbar.sidebarRoutes,
+  sidebar_status: state => state.sidebar.sidebarStatus
 }
 export default getters

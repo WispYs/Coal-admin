@@ -1,11 +1,10 @@
 <template>
-  <div class="app-wrapper">
+  <div class="app-wrapper" :class="sidebar_status ? '' : 'hidden-sidebar'">
     <div class="nav-container">
       <headbar class="headbar-container clearfix" @showThemeDialog="themeDialogVisible = true" />
-      <!-- <avatar class="avatar-container" @showThemeDialog="themeDialogVisible = true" /> -->
     </div>
-    <sidebar v-if="sidebarRoutes.length > 0" />
-    <div class="main-container" :class="sidebarRoutes.length > 0 ? 'has-sidebar' : ''">
+    <sidebar v-if="sidebar_routes.length > 0" />
+    <div class="main-container" :class="sidebar_routes.length > 0 ? 'has-sidebar' : ''">
       <div class="tags-wrapper">
         <tags-view />
       </div>
@@ -20,14 +19,14 @@
 </template>
 
 <script>
-import { Headbar, AppMain, Avatar, TagsView, ThemeDialog, Sidebar } from './components'
+import { mapGetters } from 'vuex'
+import { Headbar, AppMain, TagsView, ThemeDialog, Sidebar } from './components'
 
 export default {
   name: 'Layout',
   components: {
     Headbar,
     AppMain,
-    Avatar,
     TagsView,
     ThemeDialog,
     Sidebar
@@ -38,10 +37,11 @@ export default {
     }
   },
   computed: {
-    sidebarRoutes() {
-      console.log(this.$store.state.headbar.sidebarRoutes)
-      return this.$store.state.headbar.sidebarRoutes
-    }
+    ...mapGetters([
+      'sidebar_routes',
+      'sidebar_status'
+    ])
+
   },
   methods: {
     switchTheme(color) {
@@ -70,6 +70,6 @@ export default {
     right: 0;
     z-index: 9;
     width: 100%;
-    transition: width 0.28s;
+    transition: width 0.3s;
   }
 </style>

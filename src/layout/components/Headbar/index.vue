@@ -33,11 +33,10 @@ export default {
   float: left;
   width: calc(#{$sidebarWidth} - 20px);
   font-size: 18px;
-  height: 50px;
-  line-height: 50px;
+  height: $headBarHeight;
+  line-height: $headBarHeight;
   margin: 0;
   color: #fff;
-
 }
 
 </style>

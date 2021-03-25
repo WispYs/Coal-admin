@@ -74,20 +74,28 @@
 // button
 
 @mixin primaryButtonHover($color) {
-  background-color: $color;
+  background: $color;
   border-color: $color;
+  color: #fff;
 
   [data-theme="theme-green"] & {
-    background-color: $primaryButtonHoverGreen;
+    // opacity: .8;
+    // filter: alpha(opacity=80);
+    background: $primaryButtonHoverGreen;
     border-color: $primaryButtonHoverGreen;
+    color: #fff;
   }
 }
 
 //button-text
 @mixin primaryButtonTextHover($color) {
+  background: none;
+  border-color: transparent;
   color: $color;
 
   [data-theme="theme-green"] & {
+    background: none;
+    border-color: transparent;
     color: $primaryButtonHoverGreen;
   }
 }
@@ -126,5 +134,13 @@
     background-color: $primaryColorGreen;
     border-color: $primaryColorGreen;
     box-shadow: -1px 0 0 0 $primaryColorGreen;
+  }
+}
+
+@mixin sideBarItemHover($color) {
+  background-color: $color !important;
+
+  [data-theme="theme-green"] & {
+    background-color: $primaryColorGreen !important;
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="headbar-menu">
-    <i class="el-icon-s-fold headbar-menu__icon" />
+    <i class="el-icon-s-fold headbar-menu__icon" :class="sidebar_status ? 'reverse' : ''" @click="toggleSideBar" />
     <template v-for="(item,index) in routes">
       <div v-if="!item.hidden && item.meta && item.meta.important" :key="item.path" class="headbar-menu__item">
         <headbar-menu-item :title="item.meta.title" :path="item.path" :index="index" />
@@ -10,9 +10,9 @@
 </template>
 <script>
 import HeadbarMenuItem from './HeadbarMenuItem'
-import ItemLink from './Link'
+import { mapGetters } from 'vuex'
 export default {
-  components: { HeadbarMenuItem, ItemLink },
+  components: { HeadbarMenuItem },
   props: {
     routes: {
       type: Array,
@@ -23,6 +23,11 @@ export default {
     return {
       expandMenuVisible: false
     }
+  },
+  computed: {
+    ...mapGetters([
+      'sidebar_status'
+    ])
   },
   watch: {
     expandMenuVisible(value) {
@@ -42,6 +47,9 @@ export default {
         this.expandMenuVisible = false
         window.removeEventListener('click', this.closeExtendMenu)
       }
+    },
+    toggleSideBar() {
+      this.$store.dispatch('sidebar/toggleSideBar')
     }
   }
 }
@@ -68,10 +76,15 @@ export default {
     margin-top: calc((#{$headBarHeight} - 20px)/2);
     text-align: center;
     cursor: pointer;
+    transition: transform 0.3s;
+    &.reverse {
+      transform: rotate(180deg);
+    }
   }
   &__item {
     float: left;
     padding: 0 20px;
+
     &:hover {
       @include primaryColor($primaryColor);
     }
@@ -91,4 +104,26 @@ export default {
     }
   }
 }
+</style>
+<style lang="scss">
+@import '~@/assets/styles/theme.scss';
+@import '@/assets/styles/variables.scss';
+.headbar-menu__item {
+  a {
+    display: block;
+    position: relative;
+    &.router-link-active {
+      &::after {
+        content: '';
+        width: calc(100% + 40px);
+        height: 5px;
+        position: absolute;
+        bottom: 0;
+        left: -20px;
+        @include primaryBg($primaryColor);
+      }
+    }
+  }
+}
+
 </style>

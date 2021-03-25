@@ -10,15 +10,20 @@
   @include primaryBorder($primaryColor)
 }
 
+.el-button:focus,
+.el-button:hover {
+  @include initialButtonHover($primaryColor, $dropdownBg, $initialButtonHoverBorder)
+}
+
 .el-button--primary:focus,
 .el-button--primary:hover {
   @include primaryButtonHover($primaryButtonHover)
 }
 
-.el-button:focus,
-.el-button:hover {
-  @include initialButtonHover($primaryColor, $dropdownBg, $initialButtonHoverBorder)
-}
+// .el-button--primary:focus,
+// .el-button--primary:hover {
+//   @include primaryButtonHover($primaryColor)
+// }
 
 // button-text
 .el-button--text {
@@ -184,8 +189,6 @@
         white-space: pre-line;
       }
     }
-
-
   }
 
   // dialog 弹窗css
@@ -249,5 +252,37 @@
   // .el-tree-node__label {
   //   font-size: 13px;
   // }
+
+  // sidebar
+  .el-menu {
+
+    .el-submenu__title,
+    .el-menu-item {
+      height: 40px;
+      line-height: 40px;
+    }
+
+    .el-menu-item {
+      &.is-active {
+        color: #fff;
+        @include sideBarItemHover($primaryColor);
+      }
+    }
+  }
+
+  .el-menu--collapse {
+    .el-submenu {
+      &>.el-submenu__title {
+        &>span {
+          height: 0;
+          width: 0;
+          overflow: hidden;
+          visibility: hidden;
+          display: inline-block;
+        }
+      }
+    }
+  }
+
 
 }

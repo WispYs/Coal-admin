@@ -1,7 +1,7 @@
 /** ---- common ---- **/
 
 // headbar高度
-$headBarHeight: 50px;
+$headBarHeight: 60px;
 
 // 侧边栏宽度
 $sidebarWidth: 200px;
@@ -53,23 +53,23 @@ $initialButtonHoverBorder: #c6e2ff;
 $inputDateBg: #F2F6FC;
 
 
+
 /** ---- theme-green ---- **/
 
 // 主题色
-$primaryColorGreen: #04B018;
-$primaryColorGreen: #5ab364;
+$primaryColorGreen: #009688;
 
 // headbar
-$menuBgGreen: #007e54;
+$menuBgGreen: #23262E;
 $menuSecondBgGreen: #005e54;
 $menuFourthBgGreen: #003e54;
 
 // dropdownMenu
-$dropdownBgGreen: #ebffeb;
-$dropdownColorGreen: #03cc1a;
+$dropdownBgGreen: #e7f6f3;
+$dropdownColorGreen: #41ba9c;
 
 // button
-$primaryButtonHoverGreen: #03cc1a;
+$primaryButtonHoverGreen: #33ABA0;
 $initialButtonHoverBorderGreen: #5ab364;
 
 // input
@@ -78,5 +78,8 @@ $inputDateBgGreen: #f5fcf2;
 
 :export {
   primaryColor: $primaryColor;
+  primaryColorGreen: $primaryColorGreen;
+  menuBg: $menuBg;
+  menuBgGreen: $menuBgGreen;
   lightBlackColor: $lightBlackColor;
 }
