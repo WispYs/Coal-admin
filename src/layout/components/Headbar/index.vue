@@ -1,17 +1,19 @@
 <template>
   <div class="headbar-wrapper">
-    <headbar-top @showThemeDialog="showThemeDialog" />
+    <!-- <headbar-top @showThemeDialog="showThemeDialog" /> -->
+    <h1 class="headbar-title">矿井综合信息化平台</h1>
     <headbar-menu :routes="permission_routes" />
+    <headbar-right @showThemeDialog="showThemeDialog" />
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import HeadbarTop from './HeadbarTop'
 import HeadbarMenu from './HeadbarMenu'
+import HeadbarRight from './HeadbarRight'
 export default {
   components: {
-    HeadbarTop,
-    HeadbarMenu
+    HeadbarMenu,
+    HeadbarRight
   },
   computed: {
     ...mapGetters([
@@ -25,3 +27,17 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+@import '@/assets/styles/variables.scss';
+.headbar-title {
+  float: left;
+  width: calc(#{$sidebarWidth} - 20px);
+  font-size: 18px;
+  height: 50px;
+  line-height: 50px;
+  margin: 0;
+  color: #fff;
+
+}
+
+</style>

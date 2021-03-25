@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-24 14:41:19
+ * @Last Modified time: 2021-03-25 10:07:06
  */
 
 /**
@@ -3576,7 +3576,7 @@ const asyncRoutes = [
     name: 'DemoVideo',
     component: 'Layout',
     redirect: '/demo-video/video1',
-    meta: { title: '视频监控', important: true },
+    meta: { title: '视频监控' },
     children: [
       {
         path: '/demo-video/video1',
@@ -3663,7 +3663,7 @@ const asyncRoutes = [
     name: 'DemoPartyBuild',
     component: 'Layout',
     redirect: '/demo-party-build/build1',
-    meta: { title: '智慧党建', important: true },
+    meta: { title: '智慧党建' },
     children: [
       {
         path: '/demo-party-build/build1',
@@ -3743,7 +3743,7 @@ const asyncRoutes = [
     name: 'DemoBigData',
     component: 'Layout',
     redirect: '/demo-big-data/big-data1',
-    meta: { title: '大数据分析', important: true },
+    meta: { title: '大数据分析' },
     children: [
       {
         path: '/demo-big-data/big-data1',

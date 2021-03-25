@@ -1,11 +1,23 @@
 <template>
   <div class="headbar-menu">
-    <i class="el-icon-s-fold headbar-menu__icon" />
     <template v-for="(item,index) in routes">
       <div v-if="!item.hidden && item.meta && item.meta.important" :key="item.path" class="headbar-menu__item">
         <headbar-menu-item :title="item.meta.title" :path="item.path" :index="index" />
       </div>
     </template>
+    <div class="extend-menu">
+      <i class="el-icon-menu extend-menu__icon" @click="expandMenuVisible = !expandMenuVisible" />
+      <div class="extend-menu__content" :class="expandMenuVisible ? 'active' : ''">
+        <template v-for="item in routes">
+          <div v-if="!item.hidden && item.meta && !item.meta.important" :key="item.path" class="extend-menu__item">
+            <item-link :to="item.path">
+              <el-button size="small">{{ item.meta.title }}</el-button>
+            </item-link>
+          </div>
+        </template>
+      </div>
+    </div>
+
   </div>
 </template>
 <script>
@@ -51,27 +63,13 @@ export default {
 @import '@/assets/styles/variables.scss';
 @import '@/assets/styles/mixin.scss';
 .headbar-menu {
-  @include clearfix;
   position: relative;
-  float: left;
-  height: $headBarHeight;
-  line-height: $headBarHeight;
-  width: calc(100% - 500px);
-  overflow: hidden;
-  // display: flex;
-  // justify-content: space-between;
-  &__icon {
-    float: left;
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-    margin-top: calc((#{$headBarHeight} - 20px)/2);
-    text-align: center;
-    cursor: pointer;
-  }
+  height: 50px;
+  line-height: 50px;
+  padding-right: 100px;
+  display: flex;
+  justify-content: space-between;
   &__item {
-    float: left;
-    padding: 0 20px;
     &:hover {
       @include primaryColor($primaryColor);
     }
@@ -79,15 +77,34 @@ export default {
       @include primaryColor($primaryColor);
     }
   }
-
-}
-@media screen and (max-width: 1680px) {
-  .headbar-menu {
-    display: flex;
-    justify-content: space-between;
+  .extend-menu {
+    &__icon {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+    &__content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: -20px;
+      width: 480px;
+      height: auto;
+      padding: 10px;
+      background: #fff;
+      border: 1px solid $borderColor;
+      &.active {
+        display: block;
+      }
+    }
     &__item {
-      float: none;
-      padding: 0;
+      float: left;
+      color:#333;
+      font-size: 13px;
+      line-height: 28px;
+      margin: 5px;
     }
   }
 }
