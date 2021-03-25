@@ -195,7 +195,7 @@ export const OrganFilterConfig = {
 
 // 角色管理
 export const RoleTableConfig = {
-  actions: ['edit', 'delete', 'other'],
+  actions: ['edit', 'delete', 'other','managingMember','power'],
   otherActionTitle: ['管理成员', '编辑权限'],
   rowKey: 'num',
   columns: [
@@ -221,5 +221,32 @@ export const RoleFilterConfig = {
       { value: 2, label: '安全管理专业' },
       { value: 3, label: '调度专业' }
     ], placeholder: '请选择角色类型' }
+  ]
+}
+
+
+export const memberConfig = {
+  actions: [],
+  otherActionTitle: [],
+  rowKey: 'num',
+  checkbox: true,
+  columns: [
+    { label: '姓名', field: 'name', layout: 'Text', placeholder: '请填写姓名' },
+    { label: '登录名', field: 'loginName', layout: 'Select', placeholder: '请选择登录名' },
+    { label: '所在部门', field: 'department', layout: 'Text', placeholder: '请填写所在部门' },
+    { label: '添加日期', field: 'addDate', layout: 'Text', placeholder: '请填写添加日期' }
+  ]
+}
+
+export const AddMemberConfig = {
+  actions: [],
+  otherActionTitle: [],
+  rowKey: 'num',
+  checkbox: true,
+  columns: [
+
+    { label: '登录名', field: 'loginName', layout: 'Select', placeholder: '请选择登录名' },
+    { label: '姓名', field: 'name', layout: 'Text', placeholder: '请填写姓名' },
+    { label: '部门', field: 'department', layout: 'Text', placeholder: '请填写所在部门' }
   ]
 }

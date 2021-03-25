@@ -173,6 +173,7 @@ export default {
     float: left;
     font-size: 18px;
     margin: 0;
+    color: #fff;
   }
   &__right {
     float: right;

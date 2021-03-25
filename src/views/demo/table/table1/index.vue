@@ -81,6 +81,7 @@ export default {
       getList(query).then(response => {
         this.listLoading = false
         this.list = response.data.items
+        console.log(this.list);
         this.total = response.data.total
       })
     },

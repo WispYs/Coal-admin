@@ -1,7 +1,7 @@
 <template>
   <div class="tree-container">
     <div class="tree-title">{{ treeData.title }}</div>
-    <el-tree :data="treeData.list" :props="defaultProps" default-expand-all @node-click="handleNodeClick" />
+    <el-tree class="trees" show-checkbox :data="treeData.list" :props="defaultProps" default-expand-all @node-click="handleNodeClick" />
     <div class="extend-button" @click="handleExtend" />
   </div>
 </template>
@@ -26,6 +26,7 @@ export default {
     // 树形控件
     handleNodeClick(data) {
       console.log(data)
+      this.$emit("handleNodeClick",data);
     },
 
     handleExtend() {
@@ -34,4 +35,3 @@ export default {
   }
 }
 </script>
-

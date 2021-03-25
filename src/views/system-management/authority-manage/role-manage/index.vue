@@ -14,6 +14,7 @@
       @edit-click="(row) => openDialog('edit', row)"
       @delete-click="deleteClick"
       @submit-data="editSubmit"
+      @other-click='otherClick'
     />
     <pagination
       v-show="total>0"
@@ -29,6 +30,7 @@
       @close-dialog="createDialogVisible = false"
       @submit="createSubmit"
     />
+
     <!-- 编辑弹窗 -->
     <form-dialog
       ref="editDialog"
@@ -38,6 +40,32 @@
       @submit="editSubmit"
     />
 
+    <!-- 人员管理弹窗 -->
+    <member-dialog
+      :config="initTableConfig()"
+      :dialog-visible="tableDialogVisible"
+      @closeDialog="tableDialogVisible = false"
+      @membersVisible="membersVisible"
+      @removeMember= "removeMember"
+      @synchro="synchro"
+      @search="search"
+    />
+    <!-- 添加人员弹窗 -->
+    <add-member-dialog
+      :config="initAddMemberConfig()"
+      :dialog-visible="addMembersVisible"
+      @closeDialog="addMembersClose"
+      @membersVisible="membersVisible"
+      @keywordSearch="keywordSearch"
+      @contentSearch="contentSearch"
+    />
+
+    <role-permission-dialog
+      :config="initAuthorityConfig()"
+      :dialog-visible="authorityVisible"
+      @closeDialog="authorityVisible = false"
+      @membersVisible="membersVisible"
+    />
   </div>
 </template>
 
@@ -47,10 +75,13 @@ import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
-import { RoleTableConfig, RoleFilterConfig } from '@/data/authority-management'
+import MemberDialog from '@/components/MemberDialog'
+import AddMemberDialog from '@/components/AddMemberDialog'
+import RolePermissionDialog from '@/components/RolePermissionDialog/index.vue'
+import { UserTableConfig,RoleTableConfig, RoleFilterConfig } from '@/data/authority-management'
 
 export default {
-  components: { FilterBar, ListTable, Pagination, FormDialog },
+  components: { FilterBar, ListTable, Pagination, FormDialog, MemberDialog,AddMemberDialog,RolePermissionDialog },
   data() {
     return {
       id: 'application-manage',
@@ -64,9 +95,12 @@ export default {
       listLoading: true,
       RoleFilterConfig,
       RoleTableConfig,
+      UserTableConfig,
       createDialogVisible: false,
-      editDialogVisible: false
-
+      editDialogVisible: false,
+      tableDialogVisible: false,
+      addMembersVisible:false,
+      authorityVisible: false,
     }
   },
 
@@ -87,6 +121,35 @@ export default {
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
       this.__fetchData()
+    },
+    // 初始化表格窗口配置
+    initTableConfig() {
+      const createConfig = Object.assign({
+        title: '【通用菜单】成员管理',
+        width: '900px',
+        type: 'member',
+        form: this.RoleTableConfig.columns
+      })
+      return createConfig
+    },
+    // 初始化表格窗口配置
+    initAddMemberConfig() {
+      const createConfig = Object.assign({
+        title: '选择用户',
+        width: '900px',
+        type: 'addMember',
+        form: this.RoleTableConfig.columns
+      })
+      return createConfig
+    },
+    initAuthorityConfig(){
+      const createConfig = Object.assign({
+        title: '设置角色权限',
+        width: '900px',
+        type: 'authority',
+        form: this.RoleTableConfig.columns
+      })
+      return createConfig
     },
     // 初始化新建窗口配置
     initCreateConfig() {
@@ -135,8 +198,44 @@ export default {
       console.log(submitData)
       this.editDialogVisible = false
       this.$message.success('编辑成功')
+    },
+    otherClick(row,index,item){
+      // console.log(row,index,item);
+      console.log(item);
+      if(item == '管理成员'){
+        this.tableDialogVisible= true;
+      }else if(item == '编辑权限'){
+        this.authorityVisible= true;
+      }
+    },
+    membersVisible(){
+      this.tableDialogVisible = false;
+      this.addMembersVisible = true;
+    },
+    addMembersClose(){
+      this.tableDialogVisible = true;
+      this.addMembersVisible = false;
+    },
+    // 移除成员
+    removeMember(){
+      console.log("iiiiiiiiiiiiiiiiiiiiiiii");
+    },
+    // 同步
+    synchro(val){
+      console.log(val);
+    },
+    // 搜索
+    search(val){
+      console.log(val);
+      this.__fetchData();
+    },
+    // 通过关键字搜索
+    keywordSearch(val){
+      console.log(val);
+    },
+    contentSearch(val){
+      console.log(val);
     }
-
   }
 }
 </script>

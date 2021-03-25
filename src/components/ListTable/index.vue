@@ -15,7 +15,13 @@
     :load="loadTreeData"
     :row-key="config.rowKey"
     :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+    @selection-change="selectionChange"
   >
+    <el-table-column v-if="config.checkbox==true"
+          type="selection"
+          width="55"
+          align="center">
+        </el-table-column>
     <el-table-column align="center" label="序号" width="95" fixed>
       <template slot-scope="scope">
         {{ scope.$index+1 }}
@@ -117,7 +123,7 @@
     <el-table-column v-if="config.actions && config.actions.length > 0" fixed="right" label="操作" width="160" align="center">
       <template slot-scope="scope">
         <template v-if="config.actions.indexOf('other') > -1">
-          <el-button v-for="item in config.otherActionTitle" :key="item" type="text" size="small" @click="otherClick(scope.row, scope.$index)">{{ item }}</el-button>
+          <el-button v-for="item in config.otherActionTitle" :key="item" type="text" size="small" @click="otherClick(scope.row, scope.$index,item)">{{ item }}</el-button>
         </template>
         <el-button v-if="config.actions.indexOf('upload') > -1" type="text" size="small" @click="uploadFile(scope.row, scope.$index)">附件</el-button>
         <el-button v-if="config.actions.indexOf('preview') > -1" type="text" size="small" @click="handleClick(scope.row, scope.$index)">查看</el-button>
@@ -232,8 +238,8 @@ export default {
       this.$message.success('查看信息')
       console.log(row, index)
     },
-    otherClick(row, index) {
-      this.$emit('other-click', row)
+    otherClick(row, index,item) {
+      this.$emit('other-click', row, index,item)
     },
     // 编辑
     edit(row) {
@@ -307,6 +313,9 @@ export default {
     // 表格单元格样式
     cellStyle() {
       return 'font-size: 13px'
+    },
+    selectionChange(val){
+      this.$emit('selectionChange',val)
     }
   }
 }
