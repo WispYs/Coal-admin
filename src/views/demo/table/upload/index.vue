@@ -4,7 +4,7 @@
     <div class="tree-form-container">
       <div class="upload-button">
         <el-button type="primary" size="medium" @click="openDailog"><i class="el-icon-plus el-icon--left" />新建文件</el-button>
-        <el-button type="success" size="medium" plain @click="uploadDialogVisible = true"><i class="el-icon-upload el-icon--left" />上传</el-button>
+        <el-button type="primary" size="medium" @click="uploadDialogVisible = true"><i class="el-icon-upload el-icon--left" />上传</el-button>
         <el-button type="danger" size="medium" plain @click="deleteBatches"><i class="el-icon-delete el-icon--left" />批量删除</el-button>
       </div>
       <el-table

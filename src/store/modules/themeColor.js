@@ -1,7 +1,7 @@
 import { getThemeColor, setThemeColor, removeThemeColor } from '@/utils/theme-color'
 
 const state = {
-  themeColor: 'theme-blue'
+  themeColor: 'theme-green'
 }
 
 const mutations = {
@@ -11,7 +11,7 @@ const mutations = {
 }
 const actions = {
   initThemeColor({ commit }) {
-    const themeColor = getThemeColor() || 'theme-blue'
+    const themeColor = getThemeColor() || 'theme-green'
     window.document.documentElement.setAttribute('data-theme', themeColor)
     commit('SET_ThemeColor', themeColor)
     setThemeColor(themeColor)

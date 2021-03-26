@@ -7,6 +7,7 @@
         v-if="item.layout === 'Text'"
         v-model="filterForm[item.field]"
         class="filter-item"
+        size="medium"
         :style="`width:${item.width}px`"
         :placeholder="item.placeholder"
       />
@@ -15,6 +16,7 @@
       <el-select
         v-if="item.layout === 'Select'"
         v-model="filterForm[item.field]"
+        size="medium"
         :style="`width:${item.width}px`"
         :placeholder="item.placeholder"
       >
@@ -30,6 +32,7 @@
       <el-date-picker
         v-if="item.layout === 'DateTime'"
         v-model="filterForm[item.field]"
+        size="medium"
         class="filter-item"
         type="daterange"
         align="right"
@@ -44,16 +47,23 @@
       <el-date-picker
         v-if="item.layout === 'date'"
         v-model="filterForm[item.field]"
+        size="medium"
         type="datetime"
-        placeholder="选择日期时间">
-      </el-date-picker>
+        placeholder="选择日期时间"
+      />
 
     </div>
     <div v-if="config.actions && config.actions.length > 0" class="filter-bar__item">
-      <el-button v-if="config.actions.indexOf('search') > -1" type="primary" size="medium" @click="search()">搜索</el-button>
-      <el-button v-if="config.actions.indexOf('reset') > -1" type="primary" size="medium" @click="reset()">重置</el-button>
-      <el-button v-if="config.actions.indexOf('create') > -1" type="primary" size="medium" @click="create()">新建</el-button>
-      <el-button v-if="config.actions.indexOf('export') > -1" type="primary" size="medium" @click="exportExcel()">导出</el-button>
+      <el-button v-if="config.actions.indexOf('search') > -1" type="primary" size="medium" icon="el-icon-search" @click="search()" />
+      <!-- <el-button v-if="config.actions.indexOf('search') > -1" type="primary" size="medium" @click="search()">搜索</el-button> -->
+      <!-- <el-button v-if="config.actions.indexOf('reset') > -1" type="primary" size="medium" @click="reset()">重置</el-button> -->
+      <!-- <el-button v-if="config.actions.indexOf('create') > -1" type="primary" size="medium" @click="create()">新建</el-button> -->
+    </div>
+    <div v-if="config.actions && config.actions.length > 0" class="filter-bar__item" style="display:block;">
+      <el-button v-if="config.actions.indexOf('delete') > -1" type="danger" size="medium" plain @click="deleteBatches()">批量删除</el-button>
+      <el-button v-if="config.actions.indexOf('create') > -1" type="primary" size="medium" icon="el-icon-plus" @click="create()">新建</el-button>
+      <el-button v-if="config.actions.indexOf('export') > -1" type="primary" size="medium" icon="el-icon-download" @click="exportExcel()">导出</el-button>
+
     </div>
 
   </div>
@@ -119,7 +129,7 @@ export default {
 
     search() {
       // console.log(this.filterForm);
-      this.$emit('search-click', this.__getFilter(),this.filterForm)
+      this.$emit('search-click', this.__getFilter(), this.filterForm)
     },
     reset() {
       this.__initFilter()
@@ -130,6 +140,17 @@ export default {
     },
     exportExcel() {
       this.$emit('export-click')
+    },
+    deleteBatches() {
+      // this.$emit('delete-batch')
+      // 没时间调用每个页面删除方法，后续添加
+      this.$confirm('确定删除所选中项?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message.success('删除成功')
+      })
     }
   }
 }
@@ -140,7 +161,7 @@ export default {
     margin-bottom: 10px;
     &__item {
       display: inline-block;
-      margin: 0 40px 15px 0;
+      margin: 0 20px 15px 0;
       font-size: 14px;
       label {
         font-weight: normal;

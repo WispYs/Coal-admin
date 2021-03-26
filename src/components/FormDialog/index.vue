@@ -5,7 +5,7 @@
     :width="config.width || '500px'"
     :before-close="closeDialog"
   >
-    <el-form ref="formData" class="dialog-container" :model="formData" :rules="formRules" label-width="110px" size="small" :inline="true">
+    <el-form ref="formData" class="dialog-container" :model="formData" :rules="formRules" label-width="110px" size="medium" :inline="true">
       <template v-for="(item, index) in config.form">
         <el-form-item
           :key="index"
@@ -14,7 +14,7 @@
           :prop="item.field"
         >
           <!-- input -->
-          <el-input v-if="item.layout === 'Text'" v-model="formData[item.field]" class="form-item" :placeholder="item.placeholder">
+          <el-input style="200px;" v-if="item.layout === 'Text'" v-model="formData[item.field]" class="form-item" :placeholder="item.placeholder">
             <template v-if="item.unit" slot="append">{{ item.unit }}</template>
           </el-input>
 
@@ -83,7 +83,7 @@
           <!-- upload -->
           <div v-if="item.layout === 'Upload'">
             <p class="file-title">{{ formData[item.field] }}</p>
-            <el-button type="primary" size="small" @click="uploadFile">上传附件</el-button>
+            <el-button type="primary" size="medium" @click="uploadFile">上传附件</el-button>
           </div>
 
         </el-form-item>
@@ -91,8 +91,8 @@
 
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button size="small" @click="closeDialog">取消</el-button>
-      <el-button type="primary" size="small" @click="onSubmit">{{ config.title }}</el-button>
+      <el-button size="medium" @click="closeDialog">取消</el-button>
+      <el-button type="primary" size="medium" @click="onSubmit">{{ config.title }}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -115,7 +115,7 @@ export default {
     selectUpdateData: {
       type: Object,
       default: () => ({})
-    },
+    }
     // 弹窗表单
     // formData: {
     //   type: Object,
@@ -133,7 +133,7 @@ export default {
 
   },
   created() {
-    this.formData = this.selectUpdateData;
+    this.formData = this.selectUpdateData
     const { form } = { ...this.config }
     const obj = {}
     const rules = {}
@@ -159,9 +159,9 @@ export default {
         obj[item.field] = ''
       }
 
-      if (item.requeire) {
+      if (item.require) {
         rules[item.field] = [
-          { required: item.requeire, message: item.placeholder, trigger: 'blur' }
+          { required: item.require, message: item.placeholder, trigger: 'blur' }
         ]
       }
     })
@@ -177,6 +177,7 @@ export default {
     // 更新组件内 form 数据
     updataForm(form) {
       this.formData = Object.assign(this.formData, form)
+      console.log(this.formData)
     },
     onSubmit() {
       this.$refs.formData.validate((valid) => {
@@ -194,7 +195,7 @@ export default {
     },
     // 更新父组件 xxxxxDialogVisible 的值
     closeDialog() {
-      this.$refs.formData.clearValidate()
+      this.$refs.formData.resetFields()
       this.$emit('close-dialog')
     },
     // treeSelect 值改变

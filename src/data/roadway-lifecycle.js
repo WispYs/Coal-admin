@@ -24,10 +24,11 @@ export const TableConfig = {
   otherActionTitle: ['巷道进度'],
   summary: false,
   summaryField: [],
+  checkbox: true,
   columns: [
-    { label: '巷道名称', field: 'name', width: '200', layout: 'Text', placeholder: '请填写工作面名称' },
-    { label: '事件名称', field: 'eventName', width: '150', layout: 'Text', placeholder: '请填写事件名称' },
-    { label: '日期', field: 'date', width: '200', sortable: true, layout: 'DateTime', placeholder: '请选择日期' },
+    { label: '巷道名称', field: 'name', width: '200', layout: 'Text', require: true, placeholder: '请填写工作面名称' },
+    { label: '事件名称', field: 'eventName', width: '150', layout: 'Text', require: true, placeholder: '请填写事件名称' },
+    { label: '日期', field: 'date', width: '200', sortable: true, layout: 'DateTime', require: true, placeholder: '请选择日期' },
     { label: '说明', field: 'describe', width: '', layout: 'Textarea', placeholder: '请填写说明' },
     { label: '附件', field: 'files', width: '250', layout: 'Upload', placeholder: '请上传附件' }
   ]
@@ -39,7 +40,7 @@ export const FilterConfig = {
    * @param {array} filters   筛选项
    * @param {array} options   选择器配置项
    */
-  actions: ['search', 'reset', 'create'],
+  actions: ['search', 'reset', 'create', 'delete'],
   filters: [
     { label: '巷道名称', field: 'name', width: '220', layout: 'Text', placeholder: '巷道名称、事件名称' }
   ]

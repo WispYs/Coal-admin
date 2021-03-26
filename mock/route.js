@@ -3997,6 +3997,13 @@ const asyncRoutes = [
             component:
               '/system-management/authority-manage/resource-manage/index',
             meta: { title: '资源权限管理' }
+          },
+          {
+            path: '/system-management/authority-manage/personnel-manage',
+            name: 'Authority7',
+            component:
+              '/system-management/authority-manage/personnel-manage/index',
+            meta: { title: '人员管理' }
           }
         ]
       },

@@ -5,8 +5,9 @@
     </div>
     <sidebar v-if="sidebar_routes.length > 0" />
     <div class="main-container" :class="sidebar_routes.length > 0 ? 'has-sidebar' : ''">
-      <div class="tags-wrapper">
+      <div class="nav-wrapper">
         <tags-view />
+        <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
       </div>
       <app-main />
     </div>
@@ -20,7 +21,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { Headbar, AppMain, TagsView, ThemeDialog, Sidebar } from './components'
+import { Headbar, AppMain, TagsView, ThemeDialog, Sidebar, Breadcrumb } from './components'
 
 export default {
   name: 'Layout',
@@ -29,7 +30,8 @@ export default {
     AppMain,
     TagsView,
     ThemeDialog,
-    Sidebar
+    Sidebar,
+    Breadcrumb
   },
   data() {
     return {
@@ -64,12 +66,15 @@ export default {
     padding-top: $headBarHeight;
   }
 
-  .tags-wrapper {
+  .nav-wrapper {
     position: absolute;
+    height: $navHeight;
     top: 0;
     right: 0;
     z-index: 9;
     width: 100%;
     transition: width 0.3s;
+    border-bottom: 1px solid #ededed;
+
   }
 </style>

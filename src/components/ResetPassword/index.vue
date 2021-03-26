@@ -6,11 +6,11 @@
     class="reset-password-dialog"
     :before-close="closeDialog"
   >
-    <el-form class="reset-password-container" :model="passwordData">
-      <el-form-item label="新密码" label-width="70px">
+    <el-form ref="resetPassword" class="reset-password-container" :model="passwordData" :rules="rules">
+      <el-form-item label="新密码" label-width="80px" prop="password1">
         <el-input v-model="passwordData.password1" placeholder="请输入密码" />
       </el-form-item>
-      <el-form-item label="确认密码" label-width="70px">
+      <el-form-item label="确认密码" label-width="80px" prop="password2">
         <el-input v-model="passwordData.password2" placeholder="请再次确认密码" />
       </el-form-item>
     </el-form>
@@ -30,16 +30,37 @@ export default {
     }
   },
   data() {
+    const validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.passwordData.password1) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
       passwordData: {
         password1: '',
         password2: ''
+      },
+      rules: {
+        password1: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
+        ],
+        password2: [
+          { required: true, message: '请再次输入密码', trigger: 'blur' },
+          { validator: validatePass2, trigger: 'blur' },
+          { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
+        ]
       }
     }
   },
   methods: {
     // 更新父组件 xxxxxDialogVisible 的值
     closeDialog() {
+      this.$refs.resetPassword.resetFields()
       this.$emit('close-dialog')
     },
 
@@ -50,7 +71,16 @@ export default {
     },
 
     onSubmit() {
-      console.log(this.passwordData)
+      this.$refs.resetPassword.validate((valid) => {
+        if (valid) {
+          console.log(this.passwordData)
+          this.$message.success('修改成功')
+          this.$emit('close-dialog')
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     }
 
   }

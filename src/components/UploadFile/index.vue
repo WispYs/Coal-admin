@@ -24,9 +24,9 @@
       <div slot="tip" class="el-upload__tip">只能上传 {{ accept | filterAccept }} 文件，且不超过5M</div>
     </el-upload>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="closeDialog">取 消</el-button>
-      <el-button v-if="!uploadStatus && preloadNum > 0" :loading="true" type="primary" @click="submitUpload">上传中</el-button>
-      <el-button v-else type="primary" @click="submitUpload">确 定</el-button>
+      <el-button size="medium" @click="closeDialog">取 消</el-button>
+      <el-button v-if="!uploadStatus && preloadNum > 0" :loading="true" type="primary" size="medium" @click="submitUpload">上传中</el-button>
+      <el-button v-else type="primary" size="medium" @click="submitUpload">确 定</el-button>
     </span>
   </el-dialog>
 </template>

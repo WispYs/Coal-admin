@@ -32,9 +32,9 @@
   import ListTable from '@/components/ListTable'
   import Pagination from '@/components/Pagination'
   import FormDialog from '@/components/FormDialog'
-  import MemberDialog from '@/components/MemberDialog'
-  import AddMemberDialog from '@/components/AddMemberDialog'
-  import RolePermissionDialog from '@/components/RolePermissionDialog/index.vue'
+  import MemberDialog from './conponments/MemberDialog/index.vue'
+  import AddMemberDialog from './conponments/AddMemberDialog/index.vue'
+  import RolePermissionDialog from './conponments/RolePermissionDialog/index.vue'
   import {
     UserTableConfig,
     RoleTableConfig,

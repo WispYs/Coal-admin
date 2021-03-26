@@ -185,6 +185,7 @@
         }],
         treeData: {
           title: '授权机构',
+          checkbox: true,
           list: [{
             label: '顾桥煤矿',
             children: [{
@@ -230,6 +231,7 @@
         },
         treeData1: {
           title: '',
+          checkbox: true,
           list: [{
             label: '门户页面子系统权限'
           }, {

@@ -22,10 +22,11 @@ export const AppTableConfig = {
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
   */
   actions: ['edit', 'delete'],
+  checkbox: true,
   columns: [
-    { label: '站点名称', field: 'name', width: '200', layout: 'Text', placeholder: '请填写站点名称' },
+    { label: '站点名称', field: 'name', width: '200', layout: 'Text', require: true, placeholder: '请填写站点名称' },
     { label: '站点地址', field: 'url', width: '200', layout: 'Text', placeholder: '请填写站点地址' },
-    { label: '所属部门', field: 'department', width: '200', layout: 'TreeSelect',
+    { label: '所属部门', field: 'department', width: '200', layout: 'TreeSelect', require: true,
       options: [
         {
           value: 1,
@@ -53,7 +54,7 @@ export const AppFilterConfig = {
    * @param {array} filters   筛选项
    * @param {array} options   选择器配置项
    */
-  actions: ['search', 'reset', 'create'],
+  actions: ['search', 'reset', 'create', 'delete'],
   filters: [
     { label: '站点名称', field: 'name', width: '220', layout: 'Text', placeholder: '请输入站点名称' }
   ]
@@ -63,11 +64,12 @@ export const AppFilterConfig = {
 export const UserTableConfig = {
   actions: ['edit', 'delete', 'other'],
   otherActionTitle: ['修改密码'],
+  checkbox: true,
   columns: [
-    { label: '登录名', field: 'loginName', width: '90', layout: 'Text', requeire: true, placeholder: '请填写登录名' },
-    { label: '姓名', field: 'userName', width: '90', layout: 'Text', requeire: true, placeholder: '请填写姓名' },
-    { label: '工号', field: 'jobNum', width: '100', layout: 'Text', requeire: true, hidden: true, placeholder: '请填写工号' },
-    { label: '密码', field: 'password', width: '100', layout: 'Text', requeire: true, hidden: true, placeholder: '请填写密码' },
+    { label: '登录名', field: 'loginName', width: '90', layout: 'Text', require: true, placeholder: '请填写登录名' },
+    { label: '姓名', field: 'userName', width: '90', layout: 'Text', require: true, placeholder: '请填写姓名' },
+    { label: '工号', field: 'jobNum', width: '100', layout: 'Text', require: true, hidden: true, placeholder: '请填写工号' },
+    { label: '密码', field: 'password', width: '100', layout: 'Text', require: true, hidden: true, placeholder: '请填写密码' },
     { label: '手机', field: 'mobile', width: '110', layout: 'Text', placeholder: '请填写手机号码' },
     { label: '电话', field: 'phone', width: '100', layout: 'Text', hidden: true, placeholder: '请填写电话' },
     { label: '邮箱', field: 'email', width: '100', layout: 'Text', hidden: true, placeholder: '请填写邮箱' },
@@ -77,7 +79,7 @@ export const UserTableConfig = {
         { value: 1, label: '男' },
         { value: 2, label: '女' }
       ], placeholder: '请选择状态' },
-    { label: '部门', field: 'department', layout: 'TreeSelect', requeire: true,
+    { label: '部门', field: 'department', layout: 'TreeSelect', require: true,
       options: [
         {
           value: 1,
@@ -124,8 +126,56 @@ export const UserTableConfig = {
   ]
 }
 
+// 人员管理
+export const personnelConfig = {
+  // actions: ['other'],
+  otherActionTitle: [],
+  checkbox: true,
+  columns: [
+    { label: '部门名称', field: 'deptName', width: '160', layout: 'Text', requeire: true, placeholder: '请填写部门名称' },
+    { label: '人员编号', field: 'identifier', width: '90', layout: 'Text', requeire: true, placeholder: '请填写人员编号' },
+    { label: '人员姓名', field: 'personalName', width: '100', layout: 'Text', requeire: true, placeholder: '请填写人员姓名' },
+    { label: '身份证号', field: 'IDNumber', width: '160', layout: 'Text', requeire: true, placeholder: '请填写身份证号' },
+    { label: '人员性别', field: 'personalSex', width: '90', layout: 'Radio', requeire: true,
+      options: [
+        { value: 1, label: '男' },
+        { value: 2, label: '女' }
+      ], placeholder: '请选择人员性别' },
+    { label: '人员生日', field: 'personalBirthdy', width: '100', layout: 'DateTime', requeire: true, placeholder: '请填写人员生日' },
+    { label: '定位卡号', field: 'locationCardNumber', width: '150', layout: 'Text', placeholder: '请填写定位卡号' },
+    { label: '人员学历', field: 'personnelEducation', width: '100', layout: 'Select',
+      options: [
+        { value: 1, label: '博士' },
+        { value: 2, label: '硕士' },
+        { value: 3, label: '研究生' },
+        { value: 4, label: '本科' },
+        { value: 5, label: '专科' }
+      ], placeholder: '请选择人员学历' },
+    { label: '联系电话', field: 'phone', width: '110', layout: 'Text', placeholder: '请选择联系电话' },
+    { label: '电子邮箱', field: 'email', width: '150', layout: 'Text', placeholder: '请填写电子邮箱' },
+    { label: '人员职务', field: 'post', width: '100', layout: 'Text', placeholder: '请填写人员职务' },
+    { label: '人员岗位', field: 'station', width: '100', layout: 'Text', placeholder: '请选择人员岗位' },
+    { label: '入职日期', field: 'entryDate', width: '110', layout: 'DateTime', placeholder: '请填写入职日期' },
+    { label: '用工性质', field: 'nature', width: '100', layout: 'Select',
+      options: [
+        { value: 1, label: '全合' },
+        { value: 2, label: '协议用工' },
+        { value: 3, label: '临时' }
+      ], placeholder: '请选择用工性质' },
+    { label: '人员级别', field: 'level', width: '100', layout: 'Select',
+      options: [
+        { value: 1, label: '组长' },
+        { value: 2, label: '科直' },
+        { value: 3, label: '队直' }
+      ], placeholder: '请选择人员级别' },
+    { label: '排序', field: 'sort', width: '110', layout: 'Text', placeholder: '请填写排序' },
+    { label: '家庭住址', field: 'address', width: '200', layout: 'Text', placeholder: '请填写家庭住址' },
+    { label: '备注', field: 'remarks', width: '100', layout: 'Textarea', placeholder: '请选择备注' }
+  ]
+}
+
 export const UserFilterConfig = {
-  actions: ['search', 'reset', 'create'],
+  actions: ['search', 'reset', 'create', 'delete'],
   filters: [
     { label: '关键字', field: 'name', width: '220', layout: 'Text', placeholder: '工号、姓名、登录名' }
   ]
@@ -167,19 +217,20 @@ export const OrganizationTree = [
 
 // 组织机构管理
 export const OrganTableConfig = {
-  actions: ['edit', 'delete'],
+  actions: ['addIco', 'editIco', 'deleteIco', 'moveUpIco', 'moveDownIco'],
   rowKey: 'num',
+  checkbox: true,
   columns: [
-    { label: '名称', field: 'name', layout: 'Text', placeholder: '请填写名称' },
-    { label: '编号', field: 'num', layout: 'Text', placeholder: '请填写编号' },
+    { label: '名称', field: 'name', layout: 'Text', require: true, placeholder: '请填写名称' },
+    { label: '编号', field: 'num', layout: 'Text', require: true, placeholder: '请填写编号' },
     { label: '简称', field: 'abbreviation', layout: 'Text', placeholder: '请填写简称' },
-    { label: '类型', field: 'type', layout: 'Select',
+    { label: '类型', field: 'type', layout: 'Select', require: true,
       options: [
         { value: 1, label: '井工矿' },
         { value: 2, label: '矿机构' },
         { value: 3, label: '职务' }
       ], placeholder: '请填写部门' },
-    { label: '排序', field: 'sort', layout: 'Text', placeholder: '请填写排序' },
+    { label: '排序', field: 'sort', layout: 'Text', requeire: true, placeholder: '请填写排序' },
     { label: '创建日期', field: 'createDate', layout: 'DateTime', placeholder: '请选择创建日期' },
     { label: '备注', field: 'remark', layout: 'Textarea', placeholder: '请填写备注' }
 
@@ -187,7 +238,7 @@ export const OrganTableConfig = {
 }
 
 export const OrganFilterConfig = {
-  actions: ['search', 'reset', 'create', 'export'],
+  actions: ['search', 'reset', 'create', 'export', 'delete'],
   filters: [
     { label: '关键字', field: 'name', width: '220', layout: 'Text', placeholder: '名称、简称' }
   ]
@@ -195,7 +246,7 @@ export const OrganFilterConfig = {
 
 // 角色管理
 export const RoleTableConfig = {
-  actions: ['edit', 'delete', 'other','managingMember','power'],
+  actions: ['edit', 'delete', 'other', 'managingMember', 'power'],
   otherActionTitle: ['管理成员', '编辑权限'],
   rowKey: 'num',
   columns: [
@@ -223,7 +274,6 @@ export const RoleFilterConfig = {
     ], placeholder: '请选择角色类型' }
   ]
 }
-
 
 export const memberConfig = {
   actions: [],

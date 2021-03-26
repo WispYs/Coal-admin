@@ -144,3 +144,11 @@
     background-color: $primaryColorGreen !important;
   }
 }
+
+@mixin loadingIcon($color) {
+  stroke: $color;
+
+  [data-theme="theme-green"] & {
+    stroke: $primaryColorGreen;
+  }
+}

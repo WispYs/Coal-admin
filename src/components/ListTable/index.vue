@@ -17,11 +17,12 @@
     :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     @selection-change="selectionChange"
   >
-    <el-table-column v-if="config.checkbox==true"
-          type="selection"
-          width="55"
-          align="center">
-        </el-table-column>
+    <el-table-column
+      v-if="config.checkbox==true"
+      type="selection"
+      width="55"
+      align="center"
+    />
     <el-table-column align="center" label="序号" width="95" fixed>
       <template slot-scope="scope">
         {{ scope.$index+1 }}
@@ -37,7 +38,7 @@
         :prop="column.field"
         :sortable="column.sortable"
       >
-      <!-- <el-table-column type="expand" v-if="column.layout === 'Develop'">
+        <!-- <el-table-column type="expand" v-if="column.layout === 'Develop'">
         <template slot-scope="props">
           <el-form inline class="demo-table-expand">
             <el-form-item label="问题明细">
@@ -252,8 +253,8 @@ export default {
       this.$message.success('查看信息')
       console.log(row, index)
     },
-    otherClick(row, index,item) {
-      this.$emit('other-click', row, index,item)
+    otherClick(row, index, item) {
+      this.$emit('other-click', row, index, item)
     },
     // 编辑
     edit(row) {
@@ -328,8 +329,8 @@ export default {
     cellStyle() {
       return 'font-size: 13px'
     },
-    selectionChange(val){
-      this.$emit('selectionChange',val)
+    selectionChange(val) {
+      this.$emit('selectionChange', val)
     }
   }
 }

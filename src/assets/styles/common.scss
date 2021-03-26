@@ -2,7 +2,7 @@
  * @Author: Wisper 
  * @Date: 2021-01-14 11:21:49 
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-25 16:18:45
+ * @Last Modified time: 2021-03-26 13:58:14
  */
 
 #app {
@@ -17,7 +17,7 @@
 
     .main-container {
       position: relative;
-      padding-top: 34px; // 34 = tags-view
+      padding-top: $navHeight;
       height: 100%;
       transition: margin-left .3s;
 
@@ -25,10 +25,10 @@
         margin-left: $sidebarWidth;
 
         .app-main {
-          padding: 20px;
+          // padding: 20px;
 
           .page-container {
-            height: calc(100vh - 34px - #{$headBarHeight} - 40px); // 34 = tags-view  40 = padding
+            height: calc(100vh - #{$navHeight} - #{$headBarHeight});
           }
         }
       }
@@ -36,7 +36,7 @@
       .page-container {
         position: relative;
         padding: 20px;
-        height: calc(100vh - 34px - #{$headBarHeight}); // 34 = tags-view 
+        height: calc(100vh - #{$navHeight} - #{$headBarHeight});
         overflow: auto;
         background: $whiteColor;
       }

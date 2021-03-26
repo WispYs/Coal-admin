@@ -10,7 +10,7 @@ export default {
     return {
       src: 'http://192.168.1.8:18050/ureport/designer',
       // src: '/workflow/toWorkFlowModel',
-      height: document.documentElement.clientHeight - 95 - 34 + 'px;',
+      height: document.documentElement.clientHeight - 60 - 80 + 'px;',
       loading: true
     }
   },
@@ -20,7 +20,7 @@ export default {
     }, 230)
     const that = this
     window.onresize = function temp() {
-      that.height = document.documentElement.clientHeight - 95 - 34 + 'px;'
+      that.height = document.documentElement.clientHeight - 60 - 80 + 'px;'
     }
   }
 }

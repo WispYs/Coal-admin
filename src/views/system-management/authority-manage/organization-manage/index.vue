@@ -1,12 +1,31 @@
 <template>
   <div class="page-container">
-    <filter-bar
+    <!-- <filter-bar
       :config="OrganFilterConfig"
       @search-click="queryData"
       @create-click="openDialog('create')"
       @reset-click="queryData"
       @export-click="handelExport"
-    />
+    /> -->
+    <div class="buttons">
+      <div class="buttons_item">
+        <el-button type="primary" size="medium" @click="openDialog('create')"><i class="el-icon-plus el-icon--left" />新建
+        </el-button>
+        <el-button type="primary" size="medium" plain :disabled="updateDisabled" @click="editClick('edit')"><i class="el-icon-edit el-icon--left" />编辑
+        </el-button>
+        <el-button type="danger" size="medium" plain :disabled="deleteDisabled" @click="deletePersonnel"><i class="el-icon-delete el-icon--left" />删除
+        </el-button>
+        <el-button type="warning" size="medium" plain :disabled="moveUpDisabled" @click="moveUpClick"><i class="el-icon-top el-icon--left" />上移</el-button>
+        <el-button type="info" size="medium" plain :disabled="moveDownDisabled" @click="moveDownClick"><i class="el-icon-top el-icon--left" />下移</el-button>
+        <el-button type="danger" size="medium" plain @click="handelExport"><i class="el-icon-top el-icon--left" />导出</el-button>
+        <el-button size="medium" plain @click="synchroClick"><i class="el-icon-refresh el-icon--left" />同步</el-button>
+
+      </div>
+      <div class="search">
+        <el-input v-model="institutionSearch" size="medium" placeholder="名称、简称"></el-input>
+        <el-button type="primary" size="medium" @click="queryData">搜索</el-button>
+      </div>
+    </div>
     <list-table
       :id="id"
       :list="list"
@@ -16,6 +35,7 @@
       @edit-click="(row) => openDialog('edit', row)"
       @delete-click="deleteClick"
       @submit-data="editSubmit"
+      @selectionChange="selectionChange"
     />
     <pagination
       v-show="total>0"
@@ -68,7 +88,13 @@ export default {
       OrganFilterConfig,
       OrganTableConfig,
       createDialogVisible: false,
-      editDialogVisible: false
+      editDialogVisible: false,
+      updateDisabled: true,
+      deleteDisabled: true,
+      institutionSearch:'',
+      moveUpDisabled: true,
+      moveDownDisabled: true,
+      selectData:[]
     }
   },
 
@@ -143,7 +169,7 @@ export default {
     },
     // 删除
     deleteClick(id) {
-      this.$confirm('确定删除该站点?', '提示', {
+      this.$ceditClickonfirm('确定删除该站点?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -167,8 +193,67 @@ export default {
       // 第一个参数为 table 的 id
       // 第二个参数为导出文件的 name
       exportExcel(this.id, '组织机构管理')
-    }
+    },
+    editClick(){
 
+    },
+    deletePersonnel(){
+      this.$message.success('删除成功')
+    },
+    synchroClick(){
+
+    },
+    moveUpClick(){
+
+    },
+    moveDownClick(){
+
+    },
+    selectionChange(_data){
+      this.selectData = _data;
+      console.log(_data);
+      if(this.selectData.length > 0){
+        this.deleteDisabled= false;
+        if(this.selectData.length == 1){
+          this.updateDisabled = false;
+          this.moveDownDisabled = false;
+          this.moveUpDisabled = false;
+        }else{
+          this.updateDisabled = true;
+          this.moveDownDisabled = true;
+          this.moveUpDisabled = true;
+        }
+      }else{
+        this.deleteDisabled = true;
+        this.updateDisabled = true;
+        this.moveDownDisabled = true;
+        this.moveUpDisabled = true;
+      }
+    }
   }
 }
 </script>
+<style lang="scss" scoped>
+  .buttons {
+    margin-bottom: 16px;
+
+    .buttons_item {
+      display: inline-block;
+    }
+
+    .search {
+      display: inline-block;
+      float: right;
+
+      .el-input {
+        display: inline-block;
+        width: 200px;
+      }
+
+      .el-button {
+        display: inline-block;
+        margin-left: 20px;
+      }
+    }
+  }
+</style>

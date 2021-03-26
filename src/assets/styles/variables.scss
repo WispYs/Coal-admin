@@ -3,6 +3,9 @@
 // headbar高度
 $headBarHeight: 60px;
 
+// nav-wrapper 高度
+$navHeight: 80px;
+
 // 侧边栏宽度
 $sidebarWidth: 200px;
 
@@ -77,6 +80,8 @@ $inputDateBgGreen: #f5fcf2;
 
 
 :export {
+  headBarHeight: $headBarHeight;
+  navHeight: $navHeight;
   primaryColor: $primaryColor;
   primaryColorGreen: $primaryColorGreen;
   menuBg: $menuBg;

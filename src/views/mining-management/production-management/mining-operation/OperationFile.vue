@@ -9,7 +9,7 @@
     <div class="operation-file-container">
       <div class="upload-button">
         <el-button type="primary" size="medium" @click="uploadFile"><i class="el-icon-upload el-icon--right" />上传附件</el-button>
-        <el-button type="primary" size="medium" @click="deleteBatches"><i class="el-icon-delete el-icon--right" />批量删除</el-button>
+        <el-button type="danger" size="medium" plain @click="deleteBatches"><i class="el-icon-delete el-icon--right" />批量删除</el-button>
       </div>
       <el-table
         ref="multipleTable"

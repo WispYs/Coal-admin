@@ -4,10 +4,17 @@
   </div>
 </template>
 <script>
+import variables from '@/assets/styles/variables.scss'
+
 export default {
   data() {
     return {
       externalUrl: ''
+    }
+  },
+  computed: {
+    variables() {
+      return variables
     }
   },
   mounted() {
@@ -19,7 +26,7 @@ export default {
     changeIframeHeight() {
       const iframe = document.getElementById('iframe')
       const deviceHeight = document.body.clientHeight
-      iframe.style.height = (Number(deviceHeight) - 94) + 'px' // 94 = 60(headbar) + 34(tagsView)
+      iframe.style.height = (Number(deviceHeight) - 140) + 'px' // 94 = 60(headbar) + 80(nav)
     }
   }
 }

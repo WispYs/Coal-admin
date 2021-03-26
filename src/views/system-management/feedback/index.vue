@@ -37,7 +37,8 @@
   import Pagination from '@/components/Pagination'
   import FormDialog from '@/components/FormDialog'
   import UploadFile from '@/components/UploadFile'
-  import ProblemHandlingDialog from '@/components/ProblemHandlingDialog'
+  import ProblemHandlingDialog from './components/ProblemHandlingDialog/index.vue'
+  // '@/feedback/components/ProblemHandlingDialog/index.vue'
   import {
     FeedbackConfig,
     CreateFeedbackConfig

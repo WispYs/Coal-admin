@@ -10,6 +10,7 @@
   @include primaryBorder($primaryColor)
 }
 
+
 .el-button:focus,
 .el-button:hover {
   @include initialButtonHover($primaryColor, $dropdownBg, $initialButtonHoverBorder)
@@ -27,7 +28,8 @@
 
 // button-text
 .el-button--text {
-  @include primaryColor($primaryColor)
+  @include primaryColor($primaryColor);
+  border: 0;
 }
 
 .el-button--text:focus,
@@ -74,6 +76,10 @@
 .el-year-table td.today .cell,
 .el-month-table td.current:not(.disabled) .cell,
 .el-month-table td .cell:hover {
+  @include primaryColor($primaryColor)
+}
+
+.el-month-table td.today .cell {
   @include primaryColor($primaryColor)
 }
 
@@ -165,6 +171,37 @@
   @include sideMenuActiveBg($dropdownBg, $dropdownColor)
 }
 
+// breadcrumb
+.el-breadcrumb__inner a:hover,
+.el-breadcrumb__inner.is-link:hover {
+  @include primaryColor($primaryColor)
+}
+
+// dialog close
+.el-dialog__headerbtn:focus .el-dialog__close,
+.el-dialog__headerbtn:hover .el-dialog__close {
+  @include primaryColor($primaryColor)
+}
+
+// message-box close
+.el-message-box__headerbtn:focus .el-message-box__close,
+.el-message-box__headerbtn:hover .el-message-box__close {
+  @include primaryColor($primaryColor)
+}
+
+// loading
+.el-loading-spinner .el-loading-text {
+  @include primaryColor($primaryColor)
+}
+
+.el-loading-spinner .path {
+  @include loadingIcon($primaryColor)
+}
+
+.el-progress-bar__inner {
+  @include primaryBg($primaryColor)
+}
+
 .app-wrapper {
 
   // 解决 el-date-picker 样式问题
@@ -197,6 +234,7 @@
 
     .el-dialog__header {
       border-bottom: 1px solid #ededed;
+      background: #f8f8f8;
     }
 
     .el-dialog__footer {
@@ -282,6 +320,12 @@
         }
       }
     }
+  }
+
+  // breadcrumb 面包屑导航
+  .el-breadcrumb__inner,
+  .el-breadcrumb__inner a {
+    font-weight: 400 !important;
   }
 
 
