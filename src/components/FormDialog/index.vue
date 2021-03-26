@@ -178,6 +178,7 @@ export default {
   methods: {
     // 更新组件内 form 数据
     updataForm(form) {
+      console.log(form);
       this.formData = Object.assign(this.formData, form)
       console.log(this.formData)
     },

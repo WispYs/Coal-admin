@@ -228,6 +228,11 @@
     }
   }
 
+  .el-table td,
+  .el-table th.is-leaf {
+    border-bottom: .5px solid #EBEEF5
+  }
+
   // dialog 弹窗css
   .el-dialog {
     height: calc(85vh - 50px);

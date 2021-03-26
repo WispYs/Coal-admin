@@ -1,7 +1,7 @@
 <template>
   <div class="tree-container">
     <div class="tree-title">{{ treeData.title }}</div>
-    <el-input v-if="treeData.search" v-model="nodeContent" placeholder="请输入内容" prefix-icon="el-icon-search" />
+    <el-input class="treeInpt" v-if="treeData.search" v-model="nodeContent" placeholder="请输入内容" prefix-icon="el-icon-search" />
     <el-tree class="trees" :title="treeData.list" :show-checkbox="treeData.checkbox" :data="treeData.list" :props="defaultProps" default-expand-all @node-click="handleNodeClick">
       <span slot-scope="{ node, data }" class="span-ellipsis">
         <span :title="node.label">{{ node.label }}</span>
@@ -57,5 +57,10 @@ export default {
       text-overflow: ellipsis;
       overflow: hidden;
     }
+  }
+  .treeInpt{
+    height: 37px;
+    line-height: 37px;
+    margin-bottom: 8px;
   }
 </style>

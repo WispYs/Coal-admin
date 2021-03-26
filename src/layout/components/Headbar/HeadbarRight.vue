@@ -29,7 +29,8 @@
         admin<i class="el-icon-caret-bottom el-icon--right headbar-dropdown__icon" />
       </span>
       <el-dropdown-menu slot="dropdown" class="headbar-dropdown__menu">
-        <el-dropdown-item>个人资料</el-dropdown-item>
+        <!-- <el-dropdown-item>个人资料</el-dropdown-item> -->
+        <el-dropdown-item @click.native="toggleFullScreen">{{ exitFullscreen ? '退出全屏' : '全屏' }}</el-dropdown-item>
         <el-dropdown-item @click.native="showThemeDialog">更换皮肤</el-dropdown-item>
         <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
       </el-dropdown-menu>
@@ -45,7 +46,7 @@ export default {
   components: { ItemLink },
   data() {
     return {
-
+      exitFullscreen: false
     }
   },
   computed: {
@@ -71,6 +72,33 @@ export default {
         await this.$store.dispatch('user/logout')
         this.$router.push(`/login?redirect=${this.$route.fullPath}`)
       })
+    },
+
+    toggleFullScreen() {
+      const element = document.documentElement
+      if (this.exitFullscreen) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen()
+        } else if (document.webkitCancelFullScreen) {
+          document.webkitCancelFullScreen()
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen()
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen()
+        }
+      } else {
+        if (element.requestFullscreen) {
+          element.requestFullscreen()
+        } else if (element.webkitRequestFullScreen) {
+          element.webkitRequestFullScreen()
+        } else if (element.mozRequestFullScreen) {
+          element.mozRequestFullScreen()
+        } else if (element.msRequestFullscreen) {
+          // IE11
+          element.msRequestFullscreen()
+        }
+      }
+      this.exitFullscreen = !this.exitFullscreen
     }
   }
 
@@ -132,6 +160,9 @@ export default {
 .headbar-dropdown__menu {
   .el-dropdown-menu__item {
     font-size: 13px;
+    a {
+      display: block;
+    }
   }
 }
 

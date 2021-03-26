@@ -9,7 +9,7 @@
       :collapse-transition="true"
       :collapse="!sidebar_status"
     >
-      <sidebar-item v-for="route in sidebar_routes" :key="route.path" :item="route" />
+      <sidebar-item v-for="route in sidebarRoutes" :key="route.path" :item="route" />
     </el-menu>
   </div>
 
@@ -43,11 +43,16 @@ export default {
         'theme-blue': variables.menuBg,
         'theme-green': variables.menuBgGreen
       }
-      console.log(themeMap[this.theme_class])
-      console.log(variables)
       return themeMap[this.theme_class]
+    },
+    sidebarRoutes() {
+      this.sidebar_routes.forEach(it => {
+        it.hasIcon = true
+      })
+      return this.sidebar_routes
     }
   }
+
 }
 </script>
 <style scoped>

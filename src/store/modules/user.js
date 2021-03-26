@@ -84,6 +84,7 @@ const actions = {
         removeToken() // 清空token
         resetRouter()
         commit('RESET_STATE')
+        window.document.documentElement.removeAttribute('data-theme')
         resolve()
       }).catch(error => {
         reject(error)

@@ -74,7 +74,7 @@ Vue.use(TimePicker)
 Vue.use(Upload)
 // Vue.use(notification)
 
-Vue.prototype.$confirm = Modal.confirm
+Vue.prototype.$antConfirm = Modal.confirm
 Vue.prototype.$message = message
 // Vue.prototype.$notification = notification
 // Vue.prototype.$info = Modal.info

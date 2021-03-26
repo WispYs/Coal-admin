@@ -1,20 +1,19 @@
 <template>
   <a-config-provider :locale="locale">
     <div class="form-designer-container-9136076486841527">
-      <k-header v-if="showHead" :title="title" />
+      <k-header v-if="showHead"
+                :title="title" />
       <!-- 操作区域 start -->
-      <operatingArea
-        v-if="toolbarsTop"
-        :showToolbarsText="showToolbarsText"
-        :toolbars="toolbars"
-        @handleSave="handleSave"
-        @handlePreview="handlePreview"
-        @handleOpenImportJsonModal="handleOpenImportJsonModal"
-        @handleOpenCodeModal="handleOpenCodeModal"
-        @handleOpenJsonModal="handleOpenJsonModal"
-        @handleReset="handleReset"
-        @handleClose="handleClose"
-      >
+      <operatingArea v-if="toolbarsTop"
+                     :showToolbarsText="showToolbarsText"
+                     :toolbars="toolbars"
+                     @handleSave="handleSave"
+                     @handlePreview="handlePreview"
+                     @handleOpenImportJsonModal="handleOpenImportJsonModal"
+                     @handleOpenCodeModal="handleOpenCodeModal"
+                     @handleOpenJsonModal="handleOpenJsonModal"
+                     @handleReset="handleReset"
+                     @handleClose="handleClose">
         <template slot="left-action">
           <slot name="left-action"></slot>
         </template>
@@ -24,61 +23,45 @@
         </template>
       </operatingArea>
       <!-- 操作区域 end -->
-      <div
-        class="content"
-        :class="{
+      <div class="content"
+           :class="{
           'show-head': showHead,
           'toolbars-top': toolbarsTop,
           'show-head-and-toolbars-top': toolbarsTop && showHead
-        }"
-      >
+        }">
         <!-- 左侧控件区域 start -->
         <aside class="left">
-          <a-collapse
-            @change="collapseChange"
-            :defaultActiveKey="collapseDefaultActiveKey"
-          >
+          <a-collapse @change="collapseChange"
+                      :defaultActiveKey="collapseDefaultActiveKey">
             <!-- 基础控件 start -->
-            <a-collapse-panel
-              v-if="basicsArray.length > 0"
-              header="基础控件"
-              key="1"
-            >
-              <collapseItem
-                :list="basicsArray"
-                @generateKey="generateKey"
-                @handleListPush="handleListPush"
-                @start="handleStart"
-              />
+            <a-collapse-panel v-if="basicsArray.length > 0"
+                              header="基础控件"
+                              key="1">
+              <collapseItem :list="basicsArray"
+                            @generateKey="generateKey"
+                            @handleListPush="handleListPush"
+                            @start="handleStart" />
             </a-collapse-panel>
             <!-- 基础控件 end -->
             <!-- 自定义控件 start -->
-            <a-collapse-panel
-              v-if="customComponents.list.length > 0"
-              :header="customComponents.title"
-              key="3"
-            >
-              <collapseItem
-                :list="customComponents.list"
-                @generateKey="generateKey"
-                @handleListPush="handleListPush"
-                @start="handleStart"
-              />
+            <a-collapse-panel v-if="customComponents.list.length > 0"
+                              :header="customComponents.title"
+                              key="3">
+              <collapseItem :list="customComponents.list"
+                            @generateKey="generateKey"
+                            @handleListPush="handleListPush"
+                            @start="handleStart" />
             </a-collapse-panel>
             <!-- 自定义控件 end -->
 
             <!-- 布局控件 start -->
-            <a-collapse-panel
-              v-if="layoutArray.length > 0"
-              header="布局控件"
-              key="4"
-            >
-              <collapseItem
-                :list="layoutArray"
-                @generateKey="generateKey"
-                @handleListPush="handleListPush"
-                @start="handleStart"
-              />
+            <a-collapse-panel v-if="layoutArray.length > 0"
+                              header="布局控件"
+                              key="4">
+              <collapseItem :list="layoutArray"
+                            @generateKey="generateKey"
+                            @handleListPush="handleListPush"
+                            @start="handleStart" />
             </a-collapse-panel>
             <!-- 布局控件 end -->
           </a-collapse>
@@ -88,18 +71,16 @@
         <!-- 中间面板区域 start -->
         <section>
           <!-- 操作区域 start -->
-          <operatingArea
-            v-if="!toolbarsTop"
-            :showToolbarsText="showToolbarsText"
-            :toolbars="toolbars"
-            @handleSave="handleSave"
-            @handlePreview="handlePreview"
-            @handleOpenImportJsonModal="handleOpenImportJsonModal"
-            @handleOpenCodeModal="handleOpenCodeModal"
-            @handleOpenJsonModal="handleOpenJsonModal"
-            @handleReset="handleReset"
-            @handleClose="handleClose"
-          >
+          <operatingArea v-if="!toolbarsTop"
+                         :showToolbarsText="showToolbarsText"
+                         :toolbars="toolbars"
+                         @handleSave="handleSave"
+                         @handlePreview="handlePreview"
+                         @handleOpenImportJsonModal="handleOpenImportJsonModal"
+                         @handleOpenCodeModal="handleOpenCodeModal"
+                         @handleOpenJsonModal="handleOpenJsonModal"
+                         @handleReset="handleReset"
+                         @handleClose="handleClose">
             <template slot="left-action">
               <slot name="left-action"></slot>
             </template>
@@ -109,16 +90,14 @@
             </template>
           </operatingArea>
           <!-- 操作区域 end -->
-          <k-form-component-panel
-            :class="{ 'no-toolbars-top': !toolbarsTop }"
-            :data="data"
-            :selectItem="selectItem"
-            :noModel="noModel"
-            :hideModel="hideModel"
-            :startType="startType"
-            ref="KFCP"
-            @handleSetSelectItem="handleSetSelectItem"
-          />
+          <k-form-component-panel :class="{ 'no-toolbars-top': !toolbarsTop }"
+                                  :data="data"
+                                  :selectItem="selectItem"
+                                  :noModel="noModel"
+                                  :hideModel="hideModel"
+                                  :startType="startType"
+                                  ref="KFCP"
+                                  @handleSetSelectItem="handleSetSelectItem" />
           <!-- 操作区域 start -->
           <k-json-modal ref="jsonModal" />
           <k-code-modal ref="codeModal" />
@@ -129,17 +108,13 @@
 
         <!-- 右侧控件属性区域 start -->
         <aside class="right">
-          <formProperties
-            :config="data.config"
-            :previewOptions="previewOptions"
-          />
-          <formItemProperties
-            :class="{ 'show-properties': showPropertie }"
-            class="form-item-properties"
-            :selectItem="selectItem"
-            :hideModel="hideModel"
-            @handleHide="showPropertie = false"
-          />
+          <formProperties :config="data.config"
+                          :previewOptions="previewOptions" />
+          <formItemProperties :class="{ 'show-properties': showPropertie }"
+                              class="form-item-properties"
+                              :selectItem="selectItem"
+                              :hideModel="hideModel"
+                              @handleHide="showPropertie = false" />
         </aside>
         <!-- 右侧控件属性区域 end -->
       </div>
@@ -153,97 +128,97 @@
  * date 2019-11-20
  * description 表单设计器
  */
-import kHeader from "./module/header";
-import operatingArea from "./module/operatingArea";
+import kHeader from './module/header'
+import operatingArea from './module/operatingArea'
 
 // import kFooter from "./module/footer";
-import kFormComponentPanel from "./module/formComponentPanel";
-import kJsonModal from "./module/jsonModal";
-import kCodeModal from "./module/codeModal";
-import collapseItem from "./module/collapseItem";
-import importJsonModal from "./module/importJsonModal";
-import previewModal from "../KFormPreview/index.vue";
+import kFormComponentPanel from './module/formComponentPanel'
+import kJsonModal from './module/jsonModal'
+import kCodeModal from './module/codeModal'
+import collapseItem from './module/collapseItem'
+import importJsonModal from './module/importJsonModal'
+import previewModal from '../KFormPreview/index.vue'
 // import draggable from "vuedraggable";
-import zhCN from "ant-design-vue/lib/locale-provider/zh_CN";
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 import {
   basicsList,
   // highList,
   layoutList,
-  customComponents
-} from "./config/formItemsConfig";
-import formItemProperties from "./module/formItemProperties";
-import formProperties from "./module/formProperties";
+  customComponents,
+} from './config/formItemsConfig'
+import formItemProperties from './module/formItemProperties'
+import formProperties from './module/formProperties'
 export default {
-  name: "KFormDesign",
+  name: 'KFormDesign',
   props: {
     title: {
       type: String,
-      default: "表单设计器 --by kcz"
+      default: '表单设计器 --by kcz',
     },
     showHead: {
       type: Boolean,
-      default: true
+      default: true,
     },
     hideResetHint: {
       type: Boolean,
-      default: false
+      default: false,
     },
     toolbarsTop: {
       type: Boolean,
-      default: false
+      default: false,
     },
     toolbars: {
       type: Array,
       default: () => [
-        "save",
-        "preview",
-        "importJson",
-        "exportJson",
-        "exportCode",
-        "reset",
-        "close"
-      ]
+        'save',
+        'preview',
+        'importJson',
+        'exportJson',
+        'exportCode',
+        'reset',
+        'close',
+      ],
     },
     showToolbarsText: {
       type: Boolean,
-      default: false
+      default: false,
     },
     fields: {
       type: Array,
       default: () => [
-        "input",
-        "textarea",
-        "number",
-        "select",
-        "checkbox",
-        "radio",
-        "date",
-        "time",
-        "rate",
-        "slider",
-        "uploadFile",
-        "uploadImg",
-        "cascader",
-        "treeSelect",
-        "batch",
-        "editor",
-        "switch",
-        "button",
-        "alert",
-        "text",
-        "html",
-        "divider",
-        "card",
-        "tabs",
-        "grid",
-        "table"
-      ]
+        'input',
+        'textarea',
+        'number',
+        'select',
+        'checkbox',
+        'radio',
+        'date',
+        'time',
+        'rate',
+        'slider',
+        'uploadFile',
+        'uploadImg',
+        'cascader',
+        'treeSelect',
+        'batch',
+        'editor',
+        'switch',
+        'button',
+        'alert',
+        'text',
+        'html',
+        'divider',
+        'card',
+        'tabs',
+        'grid',
+        'table',
+      ],
     },
     hideModel: {
       // 隐藏数据字段
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -252,34 +227,34 @@ export default {
       updateTime: 0,
       updateRecordTime: 0,
       showPropertie: false,
-      startType: "",
+      startType: '',
       noModel: [
-        "button",
-        "divider",
-        "card",
-        "grid",
-        "table",
-        "alert",
-        "text",
-        "html"
+        'button',
+        'divider',
+        'card',
+        'grid',
+        'table',
+        'alert',
+        'text',
+        'html',
       ],
       data: {
         list: [],
         config: {
-          layout: "horizontal",
+          layout: 'horizontal',
           labelCol: { xs: 4, sm: 4, md: 4, lg: 4, xl: 4, xxl: 4 },
           wrapperCol: { xs: 18, sm: 18, md: 18, lg: 18, xl: 18, xxl: 18 },
           hideRequiredMark: false,
-          customStyle: ""
-        }
+          customStyle: '',
+        },
       },
       previewOptions: {
-        width: 850
+        width: 850,
       },
       selectItem: {
-        key: ""
-      }
-    };
+        key: '',
+      },
+    }
   },
   components: {
     kHeader,
@@ -292,42 +267,42 @@ export default {
     previewModal,
     kFormComponentPanel,
     formItemProperties,
-    formProperties
+    formProperties,
     // draggable
   },
   computed: {
     basicsArray() {
       // 计算需要显示的基础字段
-      return basicsList.filter(item => this.fields.includes(item.type));
+      return basicsList.filter((item) => this.fields.includes(item.type))
     },
     layoutArray() {
       // 计算需要显示的布局字段
-      return layoutList.filter(item => this.fields.includes(item.type));
+      return layoutList.filter((item) => this.fields.includes(item.type))
     },
     collapseDefaultActiveKey() {
       // 计算当前展开的控件列表
       let defaultActiveKey = window.localStorage.getItem(
-        "collapseDefaultActiveKey"
-      );
+        'collapseDefaultActiveKey'
+      )
       if (defaultActiveKey) {
-        return defaultActiveKey.split(",");
+        return defaultActiveKey.split(',')
       } else {
-        return ["1"];
+        return ['1']
       }
-    }
+    },
   },
   methods: {
     generateKey(list, index) {
       // 生成key值
-      const key = list[index].type + "_" + new Date().getTime();
+      const key = list[index].type + '_' + new Date().getTime()
       this.$set(list, index, {
         ...list[index],
         key,
-        model: key
-      });
+        model: key,
+      })
       if (this.noModel.includes(list[index].type)) {
         // 删除不需要的model属性
-        delete list[index].model;
+        delete list[index].model
       }
     },
     handleListPush(item) {
@@ -335,137 +310,136 @@ export default {
       // 生成key值
       if (!this.selectItem.key) {
         // 在没有选择表单时，将数据push到this.data.list
-        const key = item.type + "_" + new Date().getTime();
+        const key = item.type + '_' + new Date().getTime()
         item = {
           ...item,
           key,
-          model: key
-        };
+          model: key,
+        }
         if (this.noModel.includes(item.type)) {
           // 删除不需要的model属性
-          delete item.model;
+          delete item.model
         }
-        const itemString = JSON.stringify(item);
-        const record = JSON.parse(itemString);
+        const itemString = JSON.stringify(item)
+        const record = JSON.parse(itemString)
         // 删除icon及compoent属性
-        delete record.icon;
-        delete record.component;
-        this.data.list.push(record);
-        this.handleSetSelectItem(record);
-        return false;
+        delete record.icon
+        delete record.component
+        this.data.list.push(record)
+        this.handleSetSelectItem(record)
+        return false
       }
-      this.$refs.KFCP.handleCopy(false, item);
+      this.$refs.KFCP.handleCopy(false, item)
     },
     handleOpenJsonModal() {
       // 打开json预览模态框
-      this.$refs.jsonModal.jsonData = this.data;
-      this.$refs.jsonModal.visible = true;
+      this.$refs.jsonModal.jsonData = this.data
+      this.$refs.jsonModal.visible = true
     },
     handleOpenCodeModal() {
       // 打开代码预览模态框
-      this.$refs.codeModal.jsonData = this.data;
-      this.$refs.codeModal.visible = true;
+      this.$refs.codeModal.jsonData = this.data
+      this.$refs.codeModal.visible = true
     },
     handleOpenImportJsonModal() {
       // 打开json预览模态框
-      this.$refs.importJsonModal.jsonData = this.data;
-      this.$refs.importJsonModal.handleSetSelectItem = this.handleSetSelectItem;
-      this.$refs.importJsonModal.visible = true;
+      this.$refs.importJsonModal.jsonData = this.data
+      this.$refs.importJsonModal.handleSetSelectItem = this.handleSetSelectItem
+      this.$refs.importJsonModal.visible = true
     },
     handlePreview() {
       // 打开预览模态框
-      this.$refs.previewModal.jsonData = this.data;
-      this.$refs.previewModal.previewWidth = this.previewOptions.width;
-      this.$refs.previewModal.visible = true;
+      this.$refs.previewModal.jsonData = this.data
+      this.$refs.previewModal.previewWidth = this.previewOptions.width
+      this.$refs.previewModal.visible = true
     },
     handleReset() {
       // 清空
       if (this.hideResetHint) {
         // 不显示提示直接清空
-        this.resetData();
-        return;
+        this.resetData()
+        return
       }
 
-      this.$confirm({
-        title: "警告",
-        content: "是否确认清空内容?",
-        okText: "是",
-        okType: "danger",
-        cancelText: "否",
+      this.$antConfirm({
+        title: '警告',
+        content: '是否确认清空内容?',
+        okText: '是',
+        cancelText: '否',
         onOk: () => {
-          this.resetData();
-        }
-      });
+          this.resetData()
+        },
+      })
     },
     resetData() {
       this.data = {
         list: [],
         config: {
-          layout: "horizontal",
+          layout: 'horizontal',
           labelCol: { xs: 4, sm: 4, md: 4, lg: 4, xl: 4, xxl: 4 },
           wrapperCol: { xs: 18, sm: 18, md: 18, lg: 18, xl: 18, xxl: 18 },
           hideRequiredMark: false,
-          customStyle: ""
-        }
-      };
-      this.handleSetSelectItem({ key: "" });
-      this.$message.success("已清空");
+          customStyle: '',
+        },
+      }
+      this.handleSetSelectItem({ key: '' })
+      this.$message.success('已清空')
     },
     handleSetSelectItem(record) {
       // 操作间隔不能低于100毫秒
-      let newTime = new Date().getTime();
+      let newTime = new Date().getTime()
       if (newTime - this.updateTime < 100) {
-        return false;
+        return false
       }
 
-      this.updateTime = newTime;
+      this.updateTime = newTime
 
       // 设置selectItem的值
-      this.selectItem = record;
+      this.selectItem = record
 
       // 判断是否选中控件，如果选中则弹出属性面板，否则关闭属性面板
       if (record.key) {
-        this.startType = record.type;
-        this.showPropertie = true;
+        this.startType = record.type
+        this.showPropertie = true
       } else {
-        this.showPropertie = false;
+        this.showPropertie = false
       }
     },
     handleSetData(data) {
       // 用于父组件赋值
       try {
-        if (typeof data !== "object") {
-          return false;
+        if (typeof data !== 'object') {
+          return false
         } else {
-          this.data = data;
+          this.data = data
           // 导入json数据后，需要清除已选择key
-          this.handleSetSelectItem({ key: "" });
+          this.handleSetSelectItem({ key: '' })
         }
-        return true;
+        return true
       } catch (error) {
-        console.error(error);
-        return false;
+        console.error(error)
+        return false
       }
     },
     collapseChange(val) {
       // 点击collapse时，保存当前collapse状态
-      window.localStorage.setItem("collapseDefaultActiveKey", val);
+      window.localStorage.setItem('collapseDefaultActiveKey', val)
     },
     handleStart(type) {
-      this.startType = type;
+      this.startType = type
     },
     handleSave() {
-      console.log(this.data);
+      console.log(this.data)
       // 保存函数
-      this.$emit("save", JSON.stringify(this.data));
+      this.$emit('save', JSON.stringify(this.data))
     },
     getValue() {
       // 获取数据
-      return this.data;
+      return this.data
     },
     handleClose() {
-      this.$emit("close");
-    }
-  }
-};
+      this.$emit('close')
+    },
+  },
+}
 </script>

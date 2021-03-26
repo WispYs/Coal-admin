@@ -3,7 +3,7 @@
     <template v-if="!hasShowChild(item.children)">
       <app-link v-if="item.meta" :to="item.path">
         <el-menu-item :index="item.path">
-          <i class="el-icon-menu" />
+          <i v-if="item.hasIcon" class="el-icon-menu" />
           <!-- <el-tooltip :content="item.meta.title" placement="top-start"> -->
           <span slot="title" :title="item.meta.title">{{ item.meta.title }}</span>
           <!-- </el-tooltip> -->
@@ -13,7 +13,7 @@
 
     <el-submenu v-else ref="subMenu" :index="item.path" popper-append-to-body>
       <template slot="title">
-        <i class="el-icon-menu" />
+        <i v-if="item.hasIcon" class="el-icon-menu" />
         <span slot="title" :title="item.meta.title">{{ item.meta.title }}</span>
       </template>
       <sidebar-item

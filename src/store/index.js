@@ -7,6 +7,7 @@ import tagsView from './modules/tagsView'
 import themeColor from './modules/themeColor'
 import headbar from './modules/headbar'
 import sidebar from './modules/sidebar'
+import globalSetting from './modules/globalSetting'
 
 Vue.use(Vuex)
 
@@ -17,7 +18,8 @@ const store = new Vuex.Store({
     tagsView,
     themeColor,
     headbar,
-    sidebar
+    sidebar,
+    globalSetting
   },
   getters
 })
