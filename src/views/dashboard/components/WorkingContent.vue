@@ -11,8 +11,8 @@
         />
       </el-select>
     </div>
-    <div class="content-box" style="margin-top: 50px;">
-
+    <div class="content-box">
+      <div style="height: 60px;margin: 0 10px 20px;" />
       <working-chart :cdata="workingData" />
     </div>
   </div>

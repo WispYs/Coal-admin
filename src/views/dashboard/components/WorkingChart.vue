@@ -1,5 +1,5 @@
 <template>
-  <Echart id="workingChart" :options="options" height="350px" />
+  <Echart id="workingChart" :options="options" height="287px" />
 </template>
 
 <script>
