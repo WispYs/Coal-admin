@@ -66,10 +66,10 @@ export const UserTableConfig = {
   otherActionTitle: ['修改密码'],
   checkbox: true,
   columns: [
-    { label: '登录名', field: 'loginName', width: '90', layout: 'Text', require: true, placeholder: '请填写登录名' },
+    { label: '登录名', field: 'loginName', width: '90', layout: 'Text', require: true, placeholder: '请填写登录名', message: '唯一的登录名' },
     { label: '姓名', field: 'userName', width: '90', layout: 'Text', require: true, placeholder: '请填写姓名' },
     { label: '工号', field: 'jobNum', width: '100', layout: 'Text', require: true, hidden: true, placeholder: '请填写工号' },
-    { label: '密码', field: 'password', width: '100', layout: 'Text', require: true, hidden: true, placeholder: '请填写密码' },
+    { label: '密码', field: 'password', width: '100', layout: 'Text', require: true, hidden: true, placeholder: '请填写密码', message: '6到18个字符' },
     { label: '手机', field: 'mobile', width: '110', layout: 'Text', placeholder: '请填写手机号码' },
     { label: '电话', field: 'phone', width: '100', layout: 'Text', hidden: true, placeholder: '请填写电话' },
     { label: '邮箱', field: 'email', width: '100', layout: 'Text', hidden: true, placeholder: '请填写邮箱' },
@@ -249,6 +249,7 @@ export const RoleTableConfig = {
   actions: ['edit', 'delete', 'other', 'managingMember', 'power'],
   otherActionTitle: ['管理成员', '编辑权限'],
   rowKey: 'num',
+  checkbox: true,
   columns: [
     { label: '角色名称', field: 'name', layout: 'Text', placeholder: '请填写角色名称' },
     { label: '角色类型', field: 'type', layout: 'Select', options: [
@@ -265,7 +266,7 @@ export const RoleTableConfig = {
 }
 
 export const RoleFilterConfig = {
-  actions: ['search', 'reset', 'create'],
+  actions: ['search', 'reset', 'create', 'delete'],
   filters: [
     { label: '角色类型', field: 'name', width: '220', layout: 'Select', options: [
       { value: 1, label: '基础通用' },

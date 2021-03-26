@@ -76,7 +76,11 @@ export default {
     .content-title {
       margin-bottom: 5px
     }
-    margin-bottom: 15px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eeeeee;
+    &:last-of-type {
+      border-bottom: 0;
+    }
   }
   .backlog-list {
     line-height: 20px;

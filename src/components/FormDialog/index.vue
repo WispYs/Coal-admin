@@ -14,7 +14,7 @@
           :prop="item.field"
         >
           <!-- input -->
-          <el-input style="200px;" v-if="item.layout === 'Text'" v-model="formData[item.field]" class="form-item" :placeholder="item.placeholder">
+          <el-input v-if="item.layout === 'Text'" v-model="formData[item.field]" style="200px;" class="form-item" :placeholder="item.placeholder">
             <template v-if="item.unit" slot="append">{{ item.unit }}</template>
           </el-input>
 
@@ -85,6 +85,8 @@
             <p class="file-title">{{ formData[item.field] }}</p>
             <el-button type="primary" size="medium" @click="uploadFile">上传附件</el-button>
           </div>
+
+          <span v-if="item.message" class="naozhewan">{{ item.message }}</span>
 
         </el-form-item>
       </template>
@@ -227,5 +229,13 @@ export default {
 }
 .form-item {
   width: 200px;
+}
+.naozhewan {
+  color: #999;
+  font-size: 12px;
+  margin-left: 10px;
+  display: inline-block;
+  width: 80px;
+  white-space: nowrap;
 }
 </style>

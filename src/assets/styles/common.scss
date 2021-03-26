@@ -2,7 +2,7 @@
  * @Author: Wisper 
  * @Date: 2021-01-14 11:21:49 
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-26 13:58:14
+ * @Last Modified time: 2021-03-26 16:27:32
  */
 
 #app {
@@ -128,11 +128,7 @@
         // overflow: hidden;
 
         &>.el-submenu__title {
-          // padding: 0 !important;
-
-          // .sub-el-icon {
-          //   margin-left: 19px;
-          // }
+          text-overflow: initial;
 
           .el-submenu__icon-arrow {
             display: none;

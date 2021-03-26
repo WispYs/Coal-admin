@@ -77,6 +77,16 @@ export default {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+    .el-submenu__title {
+      padding-right: 30px;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .el-submenu__icon-arrow {
+      color: #fff;
+    }
   }
 
 }

@@ -5,7 +5,7 @@
         <el-menu-item :index="item.path">
           <i class="el-icon-menu" />
           <!-- <el-tooltip :content="item.meta.title" placement="top-start"> -->
-          <span slot="title">{{ item.meta.title }}</span>
+          <span slot="title" :title="item.meta.title">{{ item.meta.title }}</span>
           <!-- </el-tooltip> -->
         </el-menu-item>
       </app-link>
@@ -14,7 +14,7 @@
     <el-submenu v-else ref="subMenu" :index="item.path" popper-append-to-body>
       <template slot="title">
         <i class="el-icon-menu" />
-        <span slot="title">{{ item.meta.title }}</span>
+        <span slot="title" :title="item.meta.title">{{ item.meta.title }}</span>
       </template>
       <sidebar-item
         v-for="child in item.children"

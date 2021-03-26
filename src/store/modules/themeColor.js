@@ -5,7 +5,7 @@ const state = {
 }
 
 const mutations = {
-  SET_ThemeColor: (state, cls) => {
+  SET_THEMECOLOR: (state, cls) => {
     state.themeColor = cls
   }
 }
@@ -13,13 +13,13 @@ const actions = {
   initThemeColor({ commit }) {
     const themeColor = getThemeColor() || 'theme-green'
     window.document.documentElement.setAttribute('data-theme', themeColor)
-    commit('SET_ThemeColor', themeColor)
+    commit('SET_THEMECOLOR', themeColor)
     setThemeColor(themeColor)
   },
   switchTheme({ commit }, color) {
     return new Promise(resolve => {
       window.document.documentElement.setAttribute('data-theme', color)
-      commit('SET_ThemeColor', color)
+      commit('SET_THEMECOLOR', color)
       setThemeColor(color)
       resolve()
     })
