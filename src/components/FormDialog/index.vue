@@ -83,7 +83,7 @@
           <!-- upload -->
           <div v-if="item.layout === 'Upload'">
             <p class="file-title">{{ formData[item.field] }}</p>
-            <el-button type="text" size="small" @click="uploadFile">上传附件</el-button>
+            <el-button type="primary" size="small" @click="uploadFile">上传附件</el-button>
           </div>
 
         </el-form-item>
@@ -111,7 +111,11 @@ export default {
     config: {
       type: Object,
       default: () => ({})
-    }
+    },
+    selectUpdateData: {
+      type: Object,
+      default: () => ({})
+    },
     // 弹窗表单
     // formData: {
     //   type: Object,
@@ -129,6 +133,7 @@ export default {
 
   },
   created() {
+    this.formData = this.selectUpdateData;
     const { form } = { ...this.config }
     const obj = {}
     const rules = {}
@@ -172,7 +177,6 @@ export default {
     // 更新组件内 form 数据
     updataForm(form) {
       this.formData = Object.assign(this.formData, form)
-      console.log(this.formData)
     },
     onSubmit() {
       this.$refs.formData.validate((valid) => {

@@ -12,13 +12,16 @@
       <span class="headbar-dropdown__title">
         更多菜单<i class="el-icon-caret-bottom el-icon--right headbar-dropdown__icon" />
       </span>
-      <el-dropdown-menu slot="dropdown" class="headbar-dropdown__menu">
-        <el-dropdown-item>菜单标题</el-dropdown-item>
-        <el-dropdown-item>菜单标题</el-dropdown-item>
-        <el-dropdown-item>菜单标题</el-dropdown-item>
-        <el-dropdown-item>菜单标题</el-dropdown-item>
-        <el-dropdown-item>菜单标题</el-dropdown-item>
-        <el-dropdown-item>菜单标题</el-dropdown-item>
+      <el-dropdown-menu slot="dropdown" class="headbar-dropdown__menu" style="height: 200px;overflow-y: auto">
+        <el-dropdown-item v-for="item in extendRoutes" :key="item.path">
+          <!-- <span v-if="!item.hidden && item.meta && !item.meta.important" :key="item.path">
+            {{ item.meta.title }}
+          </span> -->
+          <item-link :to="item.path">
+            <span>{{ item.meta.title }}</span>
+          </item-link>
+
+        </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
     <el-dropdown class="headbar-dropdown" trigger="click">
@@ -35,10 +38,22 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
+import ItemLink from './Link'
+
 export default {
+  components: { ItemLink },
   data() {
     return {
 
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'permission_routes'
+    ]),
+    extendRoutes() {
+      return this.permission_routes.filter(item => !item.hidden && item.meta && !item.meta.important)
     }
   },
   methods: {

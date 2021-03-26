@@ -6,24 +6,29 @@
         </el-button>
         <el-button type="primary" size="medium" plain :disabled="updateDisabled" @click="editSchool('edit')"><i class="el-icon-edit el-icon--left" />编高校
         </el-button>
-        <el-button type="danger" size="medium" plain :disabled="deleteDisabled" @click="deleteFeedback"><i
-            class="el-icon-delete el-icon--left" />删除
+        <el-button type="danger" size="medium" plain :disabled="deleteDisabled" @click="deleteFeedback"><i class="el-icon-delete el-icon--left" />删除
         </el-button>
-        <el-button type="primary" size="medium" plain :disabled="doDisabled" @click="handleFeedback"><i
-            class="el-icon-edit-outline el-icon--left" />处理</el-button>
+        <el-button type="primary" size="medium" plain :disabled="doDisabled" @click="handleFeedback"><i class="el-icon-edit-outline el-icon--left" />处理</el-button>
       </div>
       <div class="search">
         <el-input v-model="feedbackSearch" size="medium" placeholder="问题名称所属专业创建人终身"></el-input>
         <el-button type="primary" size="medium" @click="startSearch">搜索</el-button>
       </div>
     </div>
-    <list-table :id="id" :list="list" :list-loading="listLoading" :config="FeedbackConfig" @selectionChange="selectionChange"/>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size"
-      @pagination="__fetchData" />
+    <list-table :id="id" :list="list" :list-loading="listLoading" :config="FeedbackConfig" @selectionChange="selectionChange" />
+
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="__fetchData" />
 
     <!-- 新建弹窗 -->
-    <form-dialog ref="editDialog" :config="initCreateConfig()" :dialog-visible="createDialogVisible"
-      @close-dialog="createDialogVisible = false" @submit="createSubmit" />
+    <form-dialog ref="editDialog" :config="initCreateConfig()" :selectUpdateData="selectUpdateData" :dialog-visible="createDialogVisible"
+      @close-dialog="createDialogVisible = false" @submit="createSubmit" @upload-click="uploadClick" />
+
+    <!-- 上传附件弹窗-->
+    <upload-file :dialog-visible="uploadDialogVisible" :multiple="false" @close-dialog="uploadDialogVisible = false"
+      @upload-submit="uploadSubmit" />
+    <!-- 问题处理弹窗 -->
+    <problem-handling-dialog ref="handlingDialog" :config="initHanglingConfig()" :dialog-visible="handlingDialogVisible"
+      @close-dialog="handlingDialogVisible = false" @submit="problemSubmit" />
   </div>
 </template>
 
@@ -31,6 +36,8 @@
   import ListTable from '@/components/ListTable'
   import Pagination from '@/components/Pagination'
   import FormDialog from '@/components/FormDialog'
+  import UploadFile from '@/components/UploadFile'
+  import ProblemHandlingDialog from '@/components/ProblemHandlingDialog'
   import {
     FeedbackConfig,
     CreateFeedbackConfig
@@ -40,7 +47,9 @@
     components: {
       ListTable,
       Pagination,
-      FormDialog
+      FormDialog,
+      UploadFile,
+      ProblemHandlingDialog
     },
     data() {
       return {
@@ -60,42 +69,43 @@
         updateDisabled: true,
         deleteDisabled: true,
         doDisabled: true,
-        selectData:[],
+        selectData: [],
+        selectUpdateData: {},
         list: [{
-          questionName: '123',
-          major: '顾桥煤矿',
-          creater: '费宇翔',
+          questionName: '页面是否存在问题',
+          major: '机电一体化',
+          creater: '张三',
           createTime: '2021-3-22 16:40',
           isHandled: '否',
-          premier: '费宇翔',
-          detailed: 'pc端',
+          premier: '李四',
+          detailed: '',
           feedbackAttachment: '无附件'
         }, {
-          questionName: '145',
-          major: '顾桥煤矿',
-          creater: '费宇翔',
+          questionName: '按钮大小是否合适',
+          major: '煤矿专业',
+          creater: '王武',
           createTime: '2021-3-22 16:40',
           isHandled: '否',
-          premier: '费宇翔',
-          detailed: 'pc端',
+          premier: '李四',
+          detailed: '',
           feedbackAttachment: '无附件'
         }, {
-          questionName: '234',
-          major: '顾桥煤矿',
-          creater: '费宇翔',
+          questionName: '字体大小是否统一',
+          major: '计算机应用',
+          creater: '赵思',
           createTime: '2021-3-22 16:40',
           isHandled: '否',
-          premier: '费宇翔',
-          detailed: 'pc端',
+          premier: '李四',
+          detailed: '',
           feedbackAttachment: '无附件'
         }, {
-          questionName: '532',
-          major: '顾桥煤矿',
-          creater: '费宇翔',
+          questionName: '布局是否需要调整',
+          major: '物联网',
+          creater: '张思',
           createTime: '2021-3-22 16:40',
           isHandled: '否',
-          premier: '费宇翔',
-          detailed: 'pc端',
+          premier: '李四',
+          detailed: '',
           feedbackAttachment: '无附件'
         }],
         total: 0,
@@ -109,6 +119,8 @@
         FeedbackConfig,
         CreateFeedbackConfig,
         createDialogVisible: false,
+        uploadDialogVisible: false,
+        handlingDialogVisible: false
       }
     },
     created() {
@@ -140,17 +152,22 @@
       editSchool() {
         // const visible = `${name}DialogVisible`
         // this[visible] = true
+        // this.uploadDialogVisible= true;
         if (this.selectData.length == 1) {
           // 如果有数据，更新子组件的 formData
-          this.$refs.editDialog.updataForm(this.selectData)
+          console.log(this.selectData);
+          this.$refs.editDialog.updataForm(this.selectData[0]);
         }
         this.createDialogVisible = true;
       },
       deleteFeedback() {
-
+        this.$message({
+          message: '恭喜你，删除成功',
+          type: 'success'
+        });
       },
       handleFeedback() {
-
+        this.handlingDialogVisible = true;
       },
       // 初始化新建窗口配置
       initCreateConfig() {
@@ -161,6 +178,14 @@
         })
         return createConfig
       },
+      initHanglingConfig() {
+        const createConfig = Object.assign({
+          title: '问题处理',
+          width: '700px',
+          height: '400px'
+        })
+        return createConfig
+      },
       // submit data
       createSubmit(submitData) {
         console.log(submitData)
@@ -168,24 +193,53 @@
         this.$message.success('新建成功')
       },
       // 搜索
-      startSearch(){
-        if(!!this.feedbackSearch){
+      startSearch() {
+        if (!!this.feedbackSearch) {
+          this.$message({
+            message: '恭喜你，搜索成功',
+            type: 'success'
+          });
           this.__fetchData();
         }
       },
-      selectionChange(row){
+      selectionChange(row) {
         console.log(row);
-        this.selectData= row;
-        if(row.length > 0){
+        this.selectData = row;
+        if (row.length > 0) {
           this.deleteDisabled = false;
-          if(row.length == 1){
+          if (row.length == 1) {
             this.updateDisabled = false;
             this.doDisabled = false;
-          }else{
+            this.selectUpdateData = row[0];
+          } else {
             this.updateDisabled = true;
             this.doDisabled = true;
           }
+        } else {
+          this.updateDisabled = true;
+          this.doDisabled = true;
         }
+      },
+      uploadClick(_data) {
+        console.log(_data);
+        this.uploadDialogVisible = true;
+      },
+      problemSubmit(implementer,implementationDails) {
+        console.log(implementer,implementationDails);
+        if(!implementer){
+          this.$message.error('请输入落实人');
+        }else if(!implementationDails){
+          this.$message.error('请输入落实明细');
+        }else{
+          this.$message({
+            message: '恭喜你，问题处理成功',
+            type: 'success'
+          });
+          this.handlingDialogVisible = false;
+        }
+      },
+      uploadSubmit() {
+
       }
     }
   }
@@ -194,9 +248,11 @@
   .page-container {
     .buttons {
       margin-bottom: 16px;
-      .buttons_item{
+
+      .buttons_item {
         display: inline-block;
       }
+
       .search {
         display: inline-block;
         float: right;

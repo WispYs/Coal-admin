@@ -4092,15 +4092,15 @@ const asyncRoutes = [
         meta: { title: '系统日志' },
         children: [
           {
-            path: '/system-management/system3/system3-1',
+            path: '/system-management/system-log/login-log',
             name: 'System3-1',
-            component: '/demo/index',
+            component: '/system-management/system-log/login-log/index',
             meta: { title: '登录日志' }
           },
           {
-            path: '/system-management/system3/system3-2',
+            path: '/system-management/system-log/action-log',
             name: 'System3-2',
-            component: '/demo/index',
+            component: '/system-management/system-log/action-log/index',
             meta: { title: '操作日志' }
           },
           {
@@ -4141,7 +4141,7 @@ const asyncRoutes = [
       {
         path: '/system-management/document-manage',
         name: 'System4',
-        component: '/demo/index',
+        component: '/system-management/document-manage/index',
         meta: { title: '文档管理' }
       },
       {
@@ -4199,7 +4199,7 @@ const asyncRoutes = [
       {
         path: '/system-management/feedback',
         name: 'System6',
-        component: '/demo/index',
+        component: '/system-management/feedback/index',
         meta: { title: '问题反馈' }
       }
     ]

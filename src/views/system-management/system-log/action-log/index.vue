@@ -29,28 +29,28 @@
       return {
         id: 'table1',
         list: [{
-          department: '费宇翔',
-          operationUser: '顾桥煤矿',
-          operationModule: 'feiyuxiag',
-          operationContent: '192.168.1.1',
+          department: '顾桥煤矿',
+          operationUser: '张三',
+          operationModule: '角色管理',
+          operationContent: '添加角色',
           operationTime: '2021-3-22 16:40'
         }, {
-          department: '费宇翔',
-          operationUser: '顾桥煤矿',
-          operationModule: 'feiyuxiag',
-          operationContent: '192.168.1.1',
+          department: '调度一所科直',
+          operationUser: '赵四',
+          operationModule: '角色管理',
+          operationContent: '删除1个角色',
           operationTime: '2021-3-22 16:40'
         }, {
-          department: '费宇翔',
-          operationUser: '顾桥煤矿',
-          operationModule: 'feiyuxiag',
-          operationContent: '192.168.1.1',
+          department: '调度一所队直',
+          operationUser: '王武',
+          operationModule: '角色管理',
+          operationContent: '修改角色',
           operationTime: '2021-3-22 16:40'
         }, {
-          department: '费宇翔',
-          operationUser: '顾桥煤矿',
-          operationModule: 'feiyuxiag',
-          operationContent: '192.168.1.1',
+          department: '顾桥煤矿',
+          operationUser: '李三',
+          operationModule: '角色管理',
+          operationContent: '查看角色详情',
           operationTime: '2021-3-22 16:40'
         }],
         total: 0,
@@ -83,8 +83,17 @@
         this.total = this.list.length;
       },
       // 查询数据
-      queryData(filter) {
+      queryData(data_time,filter) {
         this.filter = Object.assign(this.filter, filter)
+        console.log(this.filter);
+        if(!!this.filter.department || this.filter.user || this.filter.endDate || this.filter.startDate){
+          this.$message({
+            message: '恭喜你，搜索成功',
+            type: 'success'
+          });
+        }else{
+          this.$message.error('请输入搜索内容');
+        }
         // console.log(this.filter);
       }
     }

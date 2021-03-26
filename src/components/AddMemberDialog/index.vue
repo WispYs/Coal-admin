@@ -45,7 +45,7 @@
           <div class="selectMember">
             <div v-if="selectMember.length > 0">
               <div v-for="(item,index) in selectMember" :key="index">
-                <span>{{item.department}}-{{item.department}}</span>
+                <span>{{item.loginName}}-{{item.department}}</span>
               </div>
             </div>
             <span v-else class="nullData">暂无数据</span>
@@ -55,7 +55,7 @@
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeDialog">取 消</el-button>
-      <el-button type="primary" @click="closeDialog">确 定</el-button>
+      <el-button type="primary" @click="AddMember">确 定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -98,24 +98,24 @@
         id: 'member',
         selectMember:[],
         list: [{
-          name: '123',
-          loginName: '顾桥煤矿',
-          department: '费宇翔',
+          name: '李四',
+          loginName: '李四',
+          department: '软件部',
           addDate: '2021-3-22 16:40'
         }, {
-          name: '123',
-          loginName: '顾桥煤矿',
-          department: '费宇翔',
+          name: '王菲',
+          loginName: '王菲',
+          department: '实施部',
           addDate: '2021-3-22 16:40'
         }, {
-          name: '123',
-          loginName: '顾桥煤矿',
-          department: '费宇翔',
+          name: '赵四',
+          loginName: '赵四',
+          department: '实施部',
           addDate: '2021-3-22 16:40'
         }, {
-          name: '123',
-          loginName: '顾桥煤矿',
-          department: '费宇翔',
+          name: '王五',
+          loginName: '王五',
+          department: '软件部',
           addDate: '2021-3-22 16:40'
         }],
         treeData: {
@@ -133,10 +133,10 @@
                         label: '部门'
                       },
                       {
-                        label: '办公室科直（中央区）'
+                        label: '办公室科直'
                       },
                       {
-                        label: '办公室职员（中央区）'
+                        label: '办公室职员'
                       },
                       {
                         label: '办公室小车班'
@@ -200,7 +200,9 @@
       },
       // 关键字搜索
       keywordSearch(val) {
-        this.$emit("keywordSearch", val)
+        if(!!val){
+          this.$emit("keywordSearch", val)
+        }
       },
       // 工号、姓名、登录名搜索
       contentSearch() {
@@ -217,6 +219,13 @@
       },
       handleNodeClick(data) {
         console.log(data);
+      },
+      AddMember(){
+        // this.$message({
+        //   message: '恭喜你，添加成功',
+        //   type: 'success'
+        // });
+        this.$emit('closeDialog');
       }
     }
   }
@@ -241,7 +250,7 @@
     }
   }
   .selectMember{
-    text-indent: 1em;
+    text-indent: 2em;
     .nullData{
       display: inline-block;
     }

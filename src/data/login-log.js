@@ -19,13 +19,13 @@ export const TableConfig = {
    */
   // actions: ['preview', 'edit', 'delete'],
   columns: [
-    { label: '姓名', field: 'uesr', width: '150', align: 'left', layout: 'Text', placeholder: '请填写姓名' },
-    { label: '部门', field: 'department', width: '100', layout: 'Text', placeholder: '请填写部门' },
-    { label: '登录名', field: 'loginaNme', width: '180', layout: 'Text', placeholder: '请选择登录名' },
-    { label: '来源ip地址', field: 'ipSource', width: '120', layout: 'Text', placeholder: '请填写来源ip地址' },
-    { label: '登录开始时间', field: 'loginStart', width: '120', layout: 'DateTime', placeholder: '请填写登录开始时间' },
-    { label: '登录结束时间', field: 'loginEnd', width: '120', layout: 'DateTime', placeholder: '请填写登录结束时间' },
-    { label: '登录方式', field: 'loginMode', width: '200', layout: 'Text', placeholder: '请填写登录方式' }
+    { label: '姓名', field: 'uesr', width: 'auto', align: 'center', layout: 'Text', placeholder: '请填写姓名' },
+    { label: '部门', field: 'department', width: 'auto', layout: 'Text', placeholder: '请填写部门' },
+    { label: '登录名', field: 'loginaNme', width: 'auto', layout: 'Text', placeholder: '请选择登录名' },
+    { label: '来源ip地址', field: 'ipSource', width: 'auto', layout: 'Text', placeholder: '请填写来源ip地址' },
+    { label: '登录开始时间', field: 'loginStart', width: 'auto', layout: 'DateTime', placeholder: '请填写登录开始时间' },
+    { label: '登录结束时间', field: 'loginEnd', width: 'auto', layout: 'DateTime', placeholder: '请填写登录结束时间' },
+    { label: '登录方式', field: 'loginMode', width: 'auto', layout: 'Text', placeholder: '请填写登录方式' }
 
   ]
 }
@@ -50,9 +50,10 @@ export const FilterConfig = {
           value: 3,
           label: '通风一队队直'
         }
-      ], placeholder: '请选择项目状态' },
+      ], placeholder: '请选择部门' },
     { label: '姓名', field: 'user', width: '150', layout: 'Text', placeholder: '请输入姓名' },
-    { label: '登录区间', field: 'date', width: '150', layout: 'DateTime', placeholder: '请选择开始时间' }
+    { label: '开始时间', field: 'startDate', width: '150', layout: 'date', placeholder: '请选择开始时间' },
+    { label: '结束时间', field: 'endDate', width: '150', layout: 'date', placeholder: '请输入结束时间' },
   ]
 }
 
@@ -77,11 +78,11 @@ export const ActionTableConfig = {
    */
   // actions: ['preview', 'edit', 'delete'],
   columns: [
-    { label: '部门', field: 'department', width: '150', align: 'center', layout: 'Text', placeholder: '请填写姓名' },
-    { label: '操作用户', field: 'operationUser', width: '150', layout: 'Text', placeholder: '请填写操作用户' },
-    { label: '操作模块', field: 'operationModule', width: '180', layout: 'Text', placeholder: '请选择操作模块' },
-    { label: '操作内容', field: 'operationContent', width: '360', layout: 'Text', placeholder: '请填写操作内容' },
-    { label: '操作时间', field: 'operationTime', width: '150', layout: 'DateTime', placeholder: '请填写操作时间' }
+    { label: '部门', field: 'department', width: 'auto', align: 'center', layout: 'Text', placeholder: '请填写部门' },
+    { label: '操作用户', field: 'operationUser', width: 'auto', layout: 'Text', placeholder: '请填写操作用户' },
+    { label: '操作模块', field: 'operationModule', width: 'auto', layout: 'Text', placeholder: '请选择操作模块' },
+    { label: '操作内容', field: 'operationContent', width: 'auto', layout: 'Text', placeholder: '请填写操作内容' },
+    { label: '操作时间', field: 'operationTime', width: 'auto', layout: 'DateTime', placeholder: '请填写操作时间' }
   ]
 }
 
@@ -93,7 +94,7 @@ export const ActionFilterConfig = {
    */
   actions: ['search'],
   filters: [
-    { label: '部门', field: 'department', width: '150', layout: 'Select',
+    { label: '部门', field: 'department', width: '130', layout: 'Select',
       options: [
         {
           value: 1,
@@ -105,9 +106,10 @@ export const ActionFilterConfig = {
           value: 3,
           label: '通风一队队直'
         }
-      ], placeholder: '请选择项目状态' },
-    { label: '操作用户', field: 'user', width: '150', layout: 'Text', placeholder: '请输入姓名' },
-    { label: '登录区间', field: 'date', width: '150', layout: 'DateTime', placeholder: '请选择开始时间' }
+      ], placeholder: '请选择部门' },
+    { label: '操作用户', field: 'user', width: '130', layout: 'Text', placeholder: '请输入操作用户' },
+    { label: '开始时间', field: 'startDate', width: '130', layout: 'date', placeholder: '请选择开始时间' },
+    { label: '结束时间', field: 'endDate', width: '130', layout: 'date', placeholder: '请选择结束时间' }
   ]
 }
 
@@ -116,14 +118,14 @@ export const FeedbackConfig = {
   // actions: ['preview', 'edit', 'delete'],
   checkbox: true,
   columns: [
-    { label: '问题名称', field: 'questionName', width: '150', align: 'center', layout: 'Text', placeholder: '请填写问题名称' },
-    { label: '所属专业', field: 'major', width: '150', layout: 'Text', placeholder: '请填写所属专业' },
-    { label: '创建人', field: 'creater', width: '180', layout: 'Text', placeholder: '请选择创建人' },
-    { label: '创建时间', field: 'createTime', width: '360', layout: 'Text', placeholder: '请填写创建时间' },
-    { label: '是否处理', field: 'isHandled', width: '150', layout: 'DateTime', placeholder: '请填写是否处理' },
-    { label: '总理人', field: 'premier', width: '180', layout: 'Text', placeholder: '请选择总理人' },
-    { label: '明细', field: 'detailed', width: '360', layout: 'Text', placeholder: '请填写明细' },
-    { label: '问题反馈附件', field: 'feedbackAttachment', width: '150', layout: 'DateTime', placeholder: '请填写问题反馈附件' }
+    { label: '问题名称', field: 'questionName', width: 'auto', align: 'center', layout: 'Text', placeholder: '请填写问题名称' },
+    { label: '所属专业', field: 'major', width: 'auto', layout: 'Text', placeholder: '请填写所属专业' },
+    { label: '创建人', field: 'creater', width: 'auto', layout: 'Text', placeholder: '请选择创建人' },
+    { label: '创建时间', field: 'createTime', width: 'auto', layout: 'Text', placeholder: '请填写创建时间' },
+    { label: '是否处理', field: 'isHandled', width: 'auto', layout: 'Select', placeholder: '请填写是否处理' },
+    { label: '总理人', field: 'premier', width: 'auto', layout: 'Text', placeholder: '请选择总理人' },
+    { label: '明细', field: 'detailed', width: 'auto', layout: 'Develop', placeholder: '请填写明细' },
+    { label: '问题反馈附件', field: 'feedbackAttachment', width: 'auto', layout: 'DateTime', placeholder: '请填写问题反馈附件' }
   ]
 }
 
@@ -136,13 +138,13 @@ export const CreateFeedbackConfig = {
     { label: '所属专业', field: 'major', width: '150', layout: 'Select',
       options: [
         {
-          value: 1,
+          value: 0,
           label: '计算机应用'
         }, {
-          value: 2,
+          value: 1,
           label: '机电一体化'
         }, {
-          value: 3,
+          value: 2,
           label: '物联网'
         }
       ], placeholder: '请选择所属专业' },

@@ -2,8 +2,7 @@
   <div class="page-container">
     <filter-bar :config="FilterConfig" @search-click="queryData" />
     <list-table :id="id" :list="list" :list-loading="listLoading" :config="TableConfig" />
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size"
-      @pagination="__fetchData" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="__fetchData" />
   </div>
 </template>
 
@@ -43,7 +42,7 @@
           ipSource: '192.168.1.1',
           loginStart: '2021-3-22 16:40',
           loginEnd: '2021-3-22 17:40',
-          loginMode: 'pc端'
+          loginMode: '移动端'
         }, {
           uesr: '超级管理员',
           department: '顾桥煤矿',
@@ -51,7 +50,7 @@
           ipSource: '192.168.1.1',
           loginStart: '2021-3-22 16:40',
           loginEnd: '2021-3-22 17:40',
-          loginMode: 'pc端'
+          loginMode: '移动端'
         }, {
           uesr: '刘泽如',
           department: '顾桥煤矿',
@@ -91,9 +90,21 @@
         this.total = this.list.length;
       },
       // 查询数据
-      queryData(filter) {
+      queryData(date_time, filter) {
+        // var d = new Date(filter.startDate);
+        // var datetime=d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+        console.log(filter);
         this.filter = Object.assign(this.filter, filter)
-        // console.log(this.filter);
+        console.log(this.filter);
+        if(!!this.filter.department || !!this.filter.user || !!this.filter.startDate || !!this.filter.endDate){
+          this.$message({
+            message: '恭喜你，搜索成功',
+            type: 'success'
+          });
+        }else{
+          this.$message.error('请输入搜索内容');
+        }
+
       }
     }
   }

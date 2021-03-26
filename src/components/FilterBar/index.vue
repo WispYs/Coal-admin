@@ -9,7 +9,6 @@
         class="filter-item"
         :style="`width:${item.width}px`"
         :placeholder="item.placeholder"
-        suffix-icon="el-icon-search"
       />
 
       <!-- select  -->
@@ -41,6 +40,14 @@
         :picker-options="pickerOptions"
         value-format="yyyy-MM-dd"
       />
+
+      <el-date-picker
+        v-if="item.layout === 'date'"
+        v-model="filterForm[item.field]"
+        type="datetime"
+        placeholder="选择日期时间">
+      </el-date-picker>
+
     </div>
     <div v-if="config.actions && config.actions.length > 0" class="filter-bar__item">
       <el-button v-if="config.actions.indexOf('search') > -1" type="primary" size="medium" @click="search()">搜索</el-button>
@@ -111,7 +118,8 @@ export default {
     },
 
     search() {
-      this.$emit('search-click', this.__getFilter())
+      // console.log(this.filterForm);
+      this.$emit('search-click', this.__getFilter(),this.filterForm)
     },
     reset() {
       this.__initFilter()

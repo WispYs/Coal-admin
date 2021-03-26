@@ -35,3 +35,14 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+	.trees{
+		.el-tree-node{
+			.el-tree-node__content{
+				.el-tree-node__label{
+					width: 160px;
+				}
+			}
+		}
+	}
+</style>

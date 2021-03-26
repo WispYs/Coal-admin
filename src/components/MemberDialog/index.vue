@@ -14,10 +14,6 @@
         </el-button>
       </div>
       <list-table :id="id" :list="list" :list-loading="listLoading" :config="memberConfig" @selectionChange="selectionChange"/>
-
-
-
-
     </div>
     <div slot="footer" class="dialog-footer">
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size"
@@ -59,54 +55,39 @@
         id: 'member',
         deleteDisabled: true,
         list: [{
-          name: '123',
-          loginName: '顾桥煤矿',
-          department: '费宇翔',
+          name: '李四',
+          loginName: '李四',
+          department: '软件部',
           addDate: '2021-3-22 16:40'
         }, {
-          name: '123',
-          loginName: '顾桥煤矿',
-          department: '费宇翔',
+          name: '王五',
+          loginName: '王五',
+          department: '测试部',
           addDate: '2021-3-22 16:40'
         }, {
-          name: '123',
-          loginName: '顾桥煤矿',
-          department: '费宇翔',
+          name: '赵四',
+          loginName: '赵四',
+          department: '实施部',
           addDate: '2021-3-22 16:40'
         }, {
-          name: '123',
-          loginName: '顾桥煤矿',
-          department: '费宇翔',
+          name: '武汉',
+          loginName: '武汉',
+          department: '软件部',
           addDate: '2021-3-22 16:40'
         },{
-          name: '123',
-          loginName: '顾桥煤矿',
-          department: '费宇翔',
+          name: '张飞',
+          loginName: '张飞',
+          department: '测试部',
           addDate: '2021-3-22 16:40'
         }, {
-          name: '123',
-          loginName: '顾桥煤矿',
-          department: '费宇翔',
+          name: '李刚',
+          loginName: '李刚',
+          department: '软件部',
           addDate: '2021-3-22 16:40'
         },{
-          name: '123',
-          loginName: '顾桥煤矿',
-          department: '费宇翔',
-          addDate: '2021-3-22 16:40'
-        }, {
-          name: '123',
-          loginName: '顾桥煤矿',
-          department: '费宇翔',
-          addDate: '2021-3-22 16:40'
-        }, {
-          name: '123',
-          loginName: '顾桥煤矿',
-          department: '费宇翔',
-          addDate: '2021-3-22 16:40'
-        },{
-          name: '123',
-          loginName: '顾桥煤矿',
-          department: '费宇翔',
+          name: '李菲',
+          loginName: '李菲',
+          department: '软件部',
           addDate: '2021-3-22 16:40'
         }],
         memberConfig,
@@ -167,6 +148,8 @@
         console.log(val);
         if(val.length > 0){
           this.deleteDisabled = false;
+        }else{
+          this.deleteDisabled = true;
         }
       }
     }
