@@ -6,19 +6,21 @@
       <div class="left-side-wrapper">
         <el-button
           class="side-item"
+          type="primary"
           @click="openDrawer('jsDrawer', $event)"
         >检索</el-button>
         <el-button
           class="side-item"
+          type="primary"
           @click="openDrawer('zhDrawer', $event)"
         >综合</el-button>
-        <el-button class="side-item">地测</el-button>
-        <el-button class="side-item">生产</el-button>
-        <el-button class="side-item">通防</el-button>
-        <el-button class="side-item">机电</el-button>
-        <el-button class="side-item">安全</el-button>
-        <el-button class="side-item">应急</el-button>
-        <el-button class="side-item">监测</el-button>
+        <el-button class="side-item" type="primary">地测</el-button>
+        <el-button class="side-item" type="primary">生产</el-button>
+        <el-button class="side-item" type="primary">通防</el-button>
+        <el-button class="side-item" type="primary">机电</el-button>
+        <el-button class="side-item" type="primary">安全</el-button>
+        <el-button class="side-item" type="primary">应急</el-button>
+        <el-button class="side-item" type="primary">监测</el-button>
         <el-drawer
           ref="jsDrawer"
           title="检索"
@@ -526,7 +528,6 @@ export default {
         pos,
         'http://www.probim.cn:8088/bimexample/img/point.png'
       )
-
       document.getElementById(dt.id).addEventListener('click', this.addEvent)
       this.locationVisible = true
     },
@@ -806,6 +807,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import '~@/assets/styles/variables.scss';
 .gis-wrapper {
   width: 100%;
   height: 100%;
@@ -823,12 +825,16 @@ export default {
     .paper-wrapper {
       display: flex;
       flex-direction: column;
+      label {
+        margin-bottom: 2px;
+      }
     }
     .side-item {
       display: block;
-      background: #5cadff;
+      // background: #5cadff;
       color: #fff;
       margin-left: 0;
+      margin-bottom: 2px;
     }
     .drawer {
       width: 360px;

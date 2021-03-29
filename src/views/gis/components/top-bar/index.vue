@@ -2,10 +2,10 @@
   <div style="width:100%height:100%">
     <div class="top-btn-wrapper">
       <span
-        @click="item.fn"
-        class="btn-item"
         v-for="(item, idx) in config"
         :key="idx"
+        class="btn-item"
+        @click="item.fn"
       >
         <el-tooltip
           class="item"
@@ -19,13 +19,13 @@
           "
           placement="bottom"
         >
-          <i :class="item.icon"></i>
+          <i :class="item.icon" />
         </el-tooltip>
       </span>
       <el-select
+        v-model="value"
         class="switch"
         size="small"
-        v-model="value"
         placeholder="切换地图"
       >
         <el-option
@@ -33,8 +33,7 @@
           :key="item.value"
           :label="item.label"
           :value="item.value"
-        >
-        </el-option>
+        />
       </el-select>
     </div>
   </div>
@@ -49,25 +48,27 @@ export default {
     return {
       options: [
         {
-          value: "选项1",
-          label: "煤综合图1"
+          value: '选项1',
+          label: '煤综合图1'
         },
         {
-          value: "选项2",
-          label: "煤综合图2"
+          value: '选项2',
+          label: '煤综合图2'
         },
         {
-          value: "选项3",
-          label: "煤综合图3"
+          value: '选项3',
+          label: '煤综合图3'
         }
       ],
-      value: ""
-    };
+      value: ''
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
+@import '~@/assets/styles/variables.scss';
+@import '~@/assets/styles/theme.scss';
 // input::-webkit-input-placeholder {
 //   color: #fff;
 // }
@@ -82,7 +83,8 @@ export default {
   z-index: 10;
   height: 32px;
   margin-left: 160px;
-  background: #5cadff;
+  @include primaryBg($primaryColor);
+  // background: #5cadff;
   display: flex;
   align-items: center;
   top: 10px;
@@ -97,7 +99,8 @@ export default {
   .switch {
     width: 120px;
     ::v-deep .el-input__inner {
-      background-color: #5cadff;
+      @include primaryBg($primaryColor);
+      // background-color: #5cadff;
       border: none;
       color: #fff;
     }

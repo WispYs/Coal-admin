@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-26 17:04:30
+ * @Last Modified time: 2021-03-29 10:30:28
  */
 
 /**
@@ -29,104 +29,104 @@ const asyncRoutes = [
   },
   // GIS一张图
   {
-    path: '/demo-gis',
+    path: '/map-gis',
     name: 'demoGis',
     component: 'Layout',
-    redirect: '/demo-gis/gis3',
+    redirect: '/map-gis/index',
     meta: { title: 'GIS一张图', important: true },
     children: [
+      // {
+      //   path: '/map-gis/gis1',
+      //   name: 'GIS1',
+      //   component: '/demo/index',
+      //   meta: { title: '矿山三维场景展示' }
+      // },
+      // {
+      //   path: '/map-gis/gis2',
+      //   name: 'GIS2',
+      //   component: '/demo/index',
+      //   meta: { title: '三维地理信息展示' }
+      // },
       {
-        path: '/demo-gis/gis1',
-        name: 'GIS1',
-        component: '/demo/index',
-        meta: { title: '矿山三维场景展示' }
-      },
-      {
-        path: '/demo-gis/gis2',
-        name: 'GIS2',
-        component: '/demo/index',
-        meta: { title: '三维地理信息展示' }
-      },
-      {
-        path: '/demo-gis/gis3',
-        name: 'GIS3',
+        path: '/map-gis/index',
+        name: 'MapGis',
         component: '/gis/index',
         meta: {
           title: '综合一张图',
           externalUrl:
             'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
         }
-      },
-      {
-        path: '/demo-gis/gis4',
-        name: 'GIS4',
-        component: '/gis/index',
-        meta: {
-          title: '地测一张图',
-          externalUrl:
-            'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
-        }
-      },
-      {
-        path: '/demo-gis/gis5',
-        name: 'GIS5',
-        component: '/gis/index',
-        meta: {
-          title: '生产一张图',
-          externalUrl:
-            'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
-        }
-      },
-      {
-        path: '/demo-gis/gis6',
-        name: 'GIS6',
-        component: '/gis/index',
-        meta: {
-          title: '通防一张图',
-          externalUrl:
-            'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
-        }
-      },
-      {
-        path: '/demo-gis/gis7',
-        name: 'GIS7',
-        component: '/gis/index',
-        meta: {
-          title: '机电一张图',
-          externalUrl:
-            'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
-        }
-      },
-      {
-        path: '/demo-gis/gis8',
-        name: 'GIS8',
-        component: '/gis/index',
-        meta: {
-          title: '安全一张图',
-          externalUrl:
-            'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
-        }
-      },
-      {
-        path: '/demo-gis/gis9',
-        name: 'GIS9',
-        component: '/gis/index',
-        meta: {
-          title: '应急一张图',
-          externalUrl:
-            'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
-        }
-      },
-      {
-        path: '/demo-gis/gis10',
-        name: 'GIS10',
-        component: '/gis/index',
-        meta: {
-          title: '监测一张图',
-          externalUrl:
-            'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
-        }
       }
+      // {
+      //   path: '/map-gis/gis4',
+      //   name: 'GIS4',
+      //   component: '/gis/index',
+      //   meta: {
+      //     title: '地测一张图',
+      //     externalUrl:
+      //       'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
+      //   }
+      // },
+      // {
+      //   path: '/map-gis/gis5',
+      //   name: 'GIS5',
+      //   component: '/gis/index',
+      //   meta: {
+      //     title: '生产一张图',
+      //     externalUrl:
+      //       'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
+      //   }
+      // },
+      // {
+      //   path: '/map-gis/gis6',
+      //   name: 'GIS6',
+      //   component: '/gis/index',
+      //   meta: {
+      //     title: '通防一张图',
+      //     externalUrl:
+      //       'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
+      //   }
+      // },
+      // {
+      //   path: '/map-gis/gis7',
+      //   name: 'GIS7',
+      //   component: '/gis/index',
+      //   meta: {
+      //     title: '机电一张图',
+      //     externalUrl:
+      //       'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
+      //   }
+      // },
+      // {
+      //   path: '/map-gis/gis8',
+      //   name: 'GIS8',
+      //   component: '/gis/index',
+      //   meta: {
+      //     title: '安全一张图',
+      //     externalUrl:
+      //       'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
+      //   }
+      // },
+      // {
+      //   path: '/map-gis/gis9',
+      //   name: 'GIS9',
+      //   component: '/gis/index',
+      //   meta: {
+      //     title: '应急一张图',
+      //     externalUrl:
+      //       'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
+      //   }
+      // },
+      // {
+      //   path: '/map-gis/gis10',
+      //   name: 'GIS10',
+      //   component: '/gis/index',
+      //   meta: {
+      //     title: '监测一张图',
+      //     externalUrl:
+      //       'http://122.112.148.164:9980/BIMComposer/index.html?projectId=9759d32b-8245-4567-875b-908be0f612ce&model=77b4621d-d89d-45d4-a66d-7b5be1c938f8&ver='
+      //   }
+      // }
     ]
   },
   // 地测防控水
