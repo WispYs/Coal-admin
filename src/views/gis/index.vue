@@ -143,16 +143,16 @@
                 size="small"
                 placeholder="请输入内容"
               >
+                <el-select slot="prepend" v-model="gzmSelected" size="small" placeholder="类型">
+                  <el-option
+                    v-for="item in gzmOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
                 <el-button slot="append" icon="el-icon-search" />
               </el-input>
-              <el-select v-model="gzmSelected" size="small" placeholder="类型">
-                <el-option
-                  v-for="item in gzmOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
             </el-tab-pane>
             <el-tab-pane label="安全状况" name="second">
               <div style="margin-top: 15px;">
@@ -480,7 +480,7 @@ export default {
             el.webkitCancelFullScreen ||
             el.mozCancelFullScreen ||
             el.exitFullScreen
-      console.log(flag)
+
       if (rfs) {
         rfs.call(el)
       } else if (typeof window.ActiveXObject !== 'undefined') {
@@ -522,12 +522,14 @@ export default {
       return flag
     },
     locationFn(e) {
+      console.log(api.Context.sheetGetPosition)
       const pos = api.Context.sheetGetPosition(e)
       pos.y = 0
       const dt = api.Extension.Point.addAnchorPointByPosition(
         pos,
         'http://www.probim.cn:8088/bimexample/img/point.png'
       )
+
       document.getElementById(dt.id).addEventListener('click', this.addEvent)
       this.locationVisible = true
     },
@@ -861,6 +863,15 @@ export default {
       }
       .el-select {
         width: 100px;
+      }
+
+      ::v-deep .el-input-group__prepend div.el-select .el-input__inner {
+        border-color: transparent;
+      }
+      ::v-deep .el-input-group__append button.el-button {
+        border-color: transparent;
+        background-color: transparent;
+        color: inherit;
       }
 
       ::v-deep .el-drawer__body {
