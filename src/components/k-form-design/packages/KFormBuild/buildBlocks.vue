@@ -2,32 +2,32 @@
   <!-- 标签页布局 -->
   <a-tabs
     v-if="record.type === 'tabs'"
+    v-model="activeKey"
     class="grid-row"
     :default-active-key="0"
-    :tabBarGutter="record.options.tabBarGutter"
+    :tab-bar-gutter="record.options.tabBarGutter"
     :type="record.options.type"
     :size="record.options.size"
-    :tabPosition="record.options.tabPosition"
+    :tab-position="record.options.tabPosition"
     :animated="record.options.animated"
-    v-model="activeKey"
   >
     <a-tab-pane
       v-for="(tabItem, index) in record.columns"
       :key="index"
       :tab="tabItem.label"
-      :forceRender="true"
+      :force-render="true"
     >
       <buildBlocks
+        v-for="item in tabItem.list"
         ref="nestedComponents"
+        :key="item.key"
+        :disabled="disabled"
+        :dynamic-data="dynamicData"
+        :record="item"
+        :form-config="formConfig"
+        :config="config"
         @handleReset="$emit('handleReset')"
         @change="handleChange"
-        v-for="item in tabItem.list"
-        :disabled="disabled"
-        :dynamicData="dynamicData"
-        :key="item.key"
-        :record="item"
-        :formConfig="formConfig"
-        :config="config"
       />
     </a-tab-pane>
   </a-tabs>
@@ -38,22 +38,22 @@
     :gutter="record.options.gutter"
   >
     <a-col
-      class="grid-col"
       v-for="(colItem, idnex) in record.columns"
       :key="idnex"
+      class="grid-col"
       :span="colItem.span || 0"
     >
       <buildBlocks
+        v-for="item in colItem.list"
         ref="nestedComponents"
+        :key="item.key"
+        :disabled="disabled"
+        :dynamic-data="dynamicData"
+        :record="item"
+        :form-config="formConfig"
+        :config="config"
         @handleReset="$emit('handleReset')"
         @change="handleChange"
-        v-for="item in colItem.list"
-        :disabled="disabled"
-        :dynamicData="dynamicData"
-        :key="item.key"
-        :record="item"
-        :formConfig="formConfig"
-        :config="config"
       />
     </a-col>
   </a-row>
@@ -64,16 +64,16 @@
     :title="record.label"
   >
     <buildBlocks
+      v-for="item in record.list"
       ref="nestedComponents"
+      :key="item.key"
+      :disabled="disabled"
+      :dynamic-data="dynamicData"
+      :record="item"
+      :form-config="formConfig"
+      :config="config"
       @handleReset="$emit('handleReset')"
       @change="handleChange"
-      v-for="item in record.list"
-      :disabled="disabled"
-      :dynamicData="dynamicData"
-      :key="item.key"
-      :record="item"
-      :formConfig="formConfig"
-      :config="config"
     />
   </a-card>
   <!-- 表格布局 -->
@@ -89,23 +89,23 @@
   >
     <tr v-for="(trItem, trIndex) in record.trs" :key="trIndex">
       <td
-        class="table-td"
         v-for="(tdItem, tdIndex) in trItem.tds"
         :key="tdIndex"
+        class="table-td"
         :colspan="tdItem.colspan"
         :rowspan="tdItem.rowspan"
       >
         <buildBlocks
+          v-for="item in tdItem.list"
           ref="nestedComponents"
+          :key="item.key"
+          :disabled="disabled"
+          :dynamic-data="dynamicData"
+          :record="item"
+          :form-config="formConfig"
+          :config="config"
           @handleReset="$emit('handleReset')"
           @change="handleChange"
-          v-for="item in tdItem.list"
-          :disabled="disabled"
-          :dynamicData="dynamicData"
-          :key="item.key"
-          :record="item"
-          :formConfig="formConfig"
-          :config="config"
         />
       </td>
     </tr>
@@ -114,14 +114,14 @@
   <KFormItem
     v-else
     ref="nestedComponents"
+    :key="record.key"
+    :disabled="disabled"
+    :dynamic-data="dynamicData"
+    :record="record"
+    :form-config="formConfig"
+    :config="config"
     @handleReset="$emit('handleReset')"
     @change="handleChange"
-    :disabled="disabled"
-    :dynamicData="dynamicData"
-    :key="record.key"
-    :record="record"
-    :formConfig="formConfig"
-    :config="config"
   />
 </template>
 <script>
@@ -129,9 +129,12 @@
  * author kcz
  * date 2019-11-20
  */
-import KFormItem from "../KFormItem/index";
+import KFormItem from '../KFormItem/index'
 export default {
-  name: "buildBlocks",
+  name: 'BuildBlocks',
+  components: {
+    KFormItem
+  },
   props: {
     record: {
       type: Object,
@@ -158,36 +161,9 @@ export default {
       default: () => ({})
     }
   },
-  components: {
-    KFormItem
-  },
   data() {
     return {
       activeKey: 0
-    };
-  },
-  methods: {
-    validationSubform() {
-      // 验证动态表格
-      let nestedComponents = this.$refs.nestedComponents;
-      if (
-        typeof nestedComponents === "object" &&
-        nestedComponents instanceof Array
-      ) {
-        for (let i = 0; nestedComponents.length > i; i++) {
-          if (!nestedComponents[i].validationSubform()) {
-            return false;
-          }
-        }
-        return true;
-      } else if (typeof nestedComponents !== "undefined") {
-        return nestedComponents.validationSubform();
-      } else {
-        return true;
-      }
-    },
-    handleChange(value, key) {
-      this.$emit("change", value, key);
     }
   },
   watch: {
@@ -198,20 +174,47 @@ export default {
     validatorError: {
       deep: true,
       handler: function(n) {
-        let errorItems = Object.keys(n);
+        const errorItems = Object.keys(n)
+
         if (errorItems.length) {
-          for (let i = 0; i < this.record.columns.length; i++) {
-            let err = this.record.columns[i].list.filter(item =>
-              errorItems.includes(item.model)
-            );
-            if (err.length) {
-              this.activeKey = i;
-              break;
+          if (this.record.columns) {
+            for (let i = 0; i < this.record.columns.length; i++) {
+              const err = this.record.columns[i].list.filter(item =>
+                errorItems.includes(item.model)
+              )
+              if (err.length) {
+                this.activeKey = i
+                break
+              }
             }
           }
         }
       }
     }
+  },
+  methods: {
+    validationSubform() {
+      // 验证动态表格
+      const nestedComponents = this.$refs.nestedComponents
+      if (
+        typeof nestedComponents === 'object' &&
+        nestedComponents instanceof Array
+      ) {
+        for (let i = 0; nestedComponents.length > i; i++) {
+          if (!nestedComponents[i].validationSubform()) {
+            return false
+          }
+        }
+        return true
+      } else if (typeof nestedComponents !== 'undefined') {
+        return nestedComponents.validationSubform()
+      } else {
+        return true
+      }
+    },
+    handleChange(value, key) {
+      this.$emit('change', value, key)
+    }
   }
-};
+}
 </script>

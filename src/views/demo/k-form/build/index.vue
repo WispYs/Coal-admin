@@ -10,6 +10,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -147,6 +148,7 @@ export default {
                       rangePlaceholder: ['开始时间', '结束时间'],
                       format: 'YYYY-MM-DD'
                     },
+
                     model: 'birthday',
                     key: 'date_1616657348672',
                     help: '',
@@ -318,10 +320,12 @@ export default {
       this.visible = true
     },
     // 获取表单数据
-    async handleOk(e) {
-      const d = await this.$refs.kfb.getData()
-      console.log(d)
-      this.visible = false
+    handleOk(e) {
+      this.$refs.kfb.getData().then(async values => {
+        this.visible = false
+      }).catch(() => {
+        console.log('验证未通过，获取失败')
+      })
     }
   }
 }

@@ -10,10 +10,17 @@
 </template>
 
 <script>
+import axios from 'axios'
+import qs from 'qs'
 export default {
   methods: {
     handleSave(data) {
-      console.log(JSON.parse(data))
+      const a = axios({
+        url: 'http://192.168.1.83:8880/tomo-datasource/source/mgr/create',
+        method: 'post',
+        data: qs.stringify({ cfg: data })
+      })
+      console.log(a)
     }
   }
 }

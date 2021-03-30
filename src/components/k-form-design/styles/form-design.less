@@ -18,7 +18,7 @@
 
 // 表单设计器样式
 .form-designer-container-9136076486841527 {
-  height: 100vh;
+  height: 78vh;
   width: 100%;
   overflow: hidden;
 
@@ -77,10 +77,12 @@
     display: flex;
     height: 100%;
     flex: 1;
+    margin: 2px 2px 0 2px;
+    padding-bottom: 4px;
 
     &.show-head {
       margin-top: 6px;
-      height: calc(100% - @header-height - 6px);
+      height: calc(100% - @header-height - 16px);
     }
 
     &.toolbars-top {
@@ -189,25 +191,25 @@
             left: 0px;
 
             .close-box {
-              right: @left-right-width - 1px;
+              right: 266px;
               opacity: 0.7;
             }
           }
 
           // 关闭控件属性面板按钮
           .close-box {
-            opacity: 0;
+            opacity: 0.7;
             transition: all 0.5s;
             position: fixed;
             background: @primary-color;
             // background   : fade(@primary-color,70%);
-            padding: 8px 10px;
+            padding: 8px 2px;
             cursor: pointer;
             user-select: none;
             border-radius: 5px 0 0 5px;
             font-size: 16px;
             color: #fff;
-            bottom: 10px;
+            top: 410px;
             right: 0px;
           }
         }
@@ -228,7 +230,7 @@
 
           .properties-body {
             overflow: auto;
-            height: calc(100% - 48px);
+            height: calc(78vh - 50px);
             padding: 8px 16px;
           }
 

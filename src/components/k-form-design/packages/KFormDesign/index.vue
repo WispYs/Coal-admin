@@ -1,67 +1,87 @@
 <template>
   <a-config-provider :locale="locale">
     <div class="form-designer-container-9136076486841527">
-      <k-header v-if="showHead"
-                :title="title" />
+      <k-header
+        v-if="showHead"
+        :title="title"
+      />
       <!-- 操作区域 start -->
-      <operatingArea v-if="toolbarsTop"
-                     :showToolbarsText="showToolbarsText"
-                     :toolbars="toolbars"
-                     @handleSave="handleSave"
-                     @handlePreview="handlePreview"
-                     @handleOpenImportJsonModal="handleOpenImportJsonModal"
-                     @handleOpenCodeModal="handleOpenCodeModal"
-                     @handleOpenJsonModal="handleOpenJsonModal"
-                     @handleReset="handleReset"
-                     @handleClose="handleClose">
+      <operatingArea
+        v-if="toolbarsTop"
+        :show-toolbars-text="showToolbarsText"
+        :toolbars="toolbars"
+        @handleSave="handleSave"
+        @handlePreview="handlePreview"
+        @handleOpenImportJsonModal="handleOpenImportJsonModal"
+        @handleOpenCodeModal="handleOpenCodeModal"
+        @handleOpenJsonModal="handleOpenJsonModal"
+        @handleReset="handleReset"
+        @handleClose="handleClose"
+      >
         <template slot="left-action">
-          <slot name="left-action"></slot>
+          <slot name="left-action" />
         </template>
 
         <template slot="right-action">
-          <slot name="right-action"></slot>
+          <slot name="right-action" />
         </template>
       </operatingArea>
       <!-- 操作区域 end -->
-      <div class="content"
-           :class="{
+      <div
+        class="content"
+        :class="{
           'show-head': showHead,
           'toolbars-top': toolbarsTop,
           'show-head-and-toolbars-top': toolbarsTop && showHead
-        }">
+        }"
+      >
         <!-- 左侧控件区域 start -->
         <aside class="left">
-          <a-collapse @change="collapseChange"
-                      :defaultActiveKey="collapseDefaultActiveKey">
+          <a-collapse
+            :default-active-key="collapseDefaultActiveKey"
+            @change="collapseChange"
+          >
             <!-- 基础控件 start -->
-            <a-collapse-panel v-if="basicsArray.length > 0"
-                              header="基础控件"
-                              key="1">
-              <collapseItem :list="basicsArray"
-                            @generateKey="generateKey"
-                            @handleListPush="handleListPush"
-                            @start="handleStart" />
+            <a-collapse-panel
+              v-if="basicsArray.length > 0"
+              key="1"
+              header="基础控件"
+            >
+              <collapseItem
+                :list="basicsArray"
+                @generateKey="generateKey"
+                @handleListPush="handleListPush"
+                @start="handleStart"
+              />
             </a-collapse-panel>
             <!-- 基础控件 end -->
             <!-- 自定义控件 start -->
-            <a-collapse-panel v-if="customComponents.list.length > 0"
-                              :header="customComponents.title"
-                              key="3">
-              <collapseItem :list="customComponents.list"
-                            @generateKey="generateKey"
-                            @handleListPush="handleListPush"
-                            @start="handleStart" />
+            <a-collapse-panel
+              v-if="customComponents.list.length > 0"
+              key="3"
+              :header="customComponents.title"
+            >
+              <collapseItem
+                :list="customComponents.list"
+                @generateKey="generateKey"
+                @handleListPush="handleListPush"
+                @start="handleStart"
+              />
             </a-collapse-panel>
             <!-- 自定义控件 end -->
 
             <!-- 布局控件 start -->
-            <a-collapse-panel v-if="layoutArray.length > 0"
-                              header="布局控件"
-                              key="4">
-              <collapseItem :list="layoutArray"
-                            @generateKey="generateKey"
-                            @handleListPush="handleListPush"
-                            @start="handleStart" />
+            <a-collapse-panel
+              v-if="layoutArray.length > 0"
+              key="4"
+              header="布局控件"
+            >
+              <collapseItem
+                :list="layoutArray"
+                @generateKey="generateKey"
+                @handleListPush="handleListPush"
+                @start="handleStart"
+              />
             </a-collapse-panel>
             <!-- 布局控件 end -->
           </a-collapse>
@@ -71,33 +91,37 @@
         <!-- 中间面板区域 start -->
         <section>
           <!-- 操作区域 start -->
-          <operatingArea v-if="!toolbarsTop"
-                         :showToolbarsText="showToolbarsText"
-                         :toolbars="toolbars"
-                         @handleSave="handleSave"
-                         @handlePreview="handlePreview"
-                         @handleOpenImportJsonModal="handleOpenImportJsonModal"
-                         @handleOpenCodeModal="handleOpenCodeModal"
-                         @handleOpenJsonModal="handleOpenJsonModal"
-                         @handleReset="handleReset"
-                         @handleClose="handleClose">
+          <operatingArea
+            v-if="!toolbarsTop"
+            :show-toolbars-text="showToolbarsText"
+            :toolbars="toolbars"
+            @handleSave="handleSave"
+            @handlePreview="handlePreview"
+            @handleOpenImportJsonModal="handleOpenImportJsonModal"
+            @handleOpenCodeModal="handleOpenCodeModal"
+            @handleOpenJsonModal="handleOpenJsonModal"
+            @handleReset="handleReset"
+            @handleClose="handleClose"
+          >
             <template slot="left-action">
-              <slot name="left-action"></slot>
+              <slot name="left-action" />
             </template>
 
             <template slot="right-action">
-              <slot name="right-action"></slot>
+              <slot name="right-action" />
             </template>
           </operatingArea>
           <!-- 操作区域 end -->
-          <k-form-component-panel :class="{ 'no-toolbars-top': !toolbarsTop }"
-                                  :data="data"
-                                  :selectItem="selectItem"
-                                  :noModel="noModel"
-                                  :hideModel="hideModel"
-                                  :startType="startType"
-                                  ref="KFCP"
-                                  @handleSetSelectItem="handleSetSelectItem" />
+          <k-form-component-panel
+            ref="KFCP"
+            :class="{ 'no-toolbars-top': !toolbarsTop }"
+            :data="data"
+            :select-item="selectItem"
+            :no-model="noModel"
+            :hide-model="hideModel"
+            :start-type="startType"
+            @handleSetSelectItem="handleSetSelectItem"
+          />
           <!-- 操作区域 start -->
           <k-json-modal ref="jsonModal" />
           <k-code-modal ref="codeModal" />
@@ -108,13 +132,19 @@
 
         <!-- 右侧控件属性区域 start -->
         <aside class="right">
-          <formProperties :config="data.config"
-                          :previewOptions="previewOptions" />
-          <formItemProperties :class="{ 'show-properties': showPropertie }"
-                              class="form-item-properties"
-                              :selectItem="selectItem"
-                              :hideModel="hideModel"
-                              @handleHide="showPropertie = false" />
+          <formProperties
+            :config="data.config"
+            :preview-options="previewOptions"
+          />
+          {{ showPropertie }}
+          <formItemProperties
+            :class="{ 'show-properties': showPropertie }"
+            class="form-item-properties"
+            :select-item="selectItem"
+            :hide-model="hideModel"
+            :show-propertie="showPropertie"
+            @handleHide="showPropertie = !showPropertie"
+          />
         </aside>
         <!-- 右侧控件属性区域 end -->
       </div>
@@ -144,28 +174,42 @@ import {
   basicsList,
   // highList,
   layoutList,
-  customComponents,
+  customComponents
 } from './config/formItemsConfig'
 import formItemProperties from './module/formItemProperties'
 import formProperties from './module/formProperties'
 export default {
   name: 'KFormDesign',
+  components: {
+    kHeader,
+    // kFooter,
+    operatingArea,
+    collapseItem,
+    kJsonModal,
+    kCodeModal,
+    importJsonModal,
+    previewModal,
+    kFormComponentPanel,
+    formItemProperties,
+    formProperties
+    // draggable
+  },
   props: {
     title: {
       type: String,
-      default: '表单设计器 --by kcz',
+      default: '表单设计器'
     },
     showHead: {
       type: Boolean,
-      default: true,
+      default: true
     },
     hideResetHint: {
       type: Boolean,
-      default: false,
+      default: false
     },
     toolbarsTop: {
       type: Boolean,
-      default: false,
+      default: false
     },
     toolbars: {
       type: Array,
@@ -176,12 +220,12 @@ export default {
         'exportJson',
         'exportCode',
         'reset',
-        'close',
-      ],
+        'close'
+      ]
     },
     showToolbarsText: {
       type: Boolean,
-      default: false,
+      default: false
     },
     fields: {
       type: Array,
@@ -211,14 +255,14 @@ export default {
         'card',
         'tabs',
         'grid',
-        'table',
-      ],
+        'table'
+      ]
     },
     hideModel: {
       // 隐藏数据字段
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
@@ -236,39 +280,28 @@ export default {
         'table',
         'alert',
         'text',
-        'html',
+        'html'
       ],
       data: {
         list: [],
         config: {
+          formName: '', // 表单名称
+          formDesc: '', // 表单描述
+          formBelong: '', // 表单归属
           layout: 'horizontal',
           labelCol: { xs: 4, sm: 4, md: 4, lg: 4, xl: 4, xxl: 4 },
           wrapperCol: { xs: 18, sm: 18, md: 18, lg: 18, xl: 18, xxl: 18 },
           hideRequiredMark: false,
-          customStyle: '',
-        },
+          customStyle: ''
+        }
       },
       previewOptions: {
-        width: 850,
+        width: 850
       },
       selectItem: {
-        key: '',
-      },
+        key: ''
+      }
     }
-  },
-  components: {
-    kHeader,
-    // kFooter,
-    operatingArea,
-    collapseItem,
-    kJsonModal,
-    kCodeModal,
-    importJsonModal,
-    previewModal,
-    kFormComponentPanel,
-    formItemProperties,
-    formProperties,
-    // draggable
   },
   computed: {
     basicsArray() {
@@ -281,7 +314,7 @@ export default {
     },
     collapseDefaultActiveKey() {
       // 计算当前展开的控件列表
-      let defaultActiveKey = window.localStorage.getItem(
+      const defaultActiveKey = window.localStorage.getItem(
         'collapseDefaultActiveKey'
       )
       if (defaultActiveKey) {
@@ -289,7 +322,7 @@ export default {
       } else {
         return ['1']
       }
-    },
+    }
   },
   methods: {
     generateKey(list, index) {
@@ -298,7 +331,7 @@ export default {
       this.$set(list, index, {
         ...list[index],
         key,
-        model: key,
+        model: key
       })
       if (this.noModel.includes(list[index].type)) {
         // 删除不需要的model属性
@@ -314,7 +347,7 @@ export default {
         item = {
           ...item,
           key,
-          model: key,
+          model: key
         }
         if (this.noModel.includes(item.type)) {
           // 删除不需要的model属性
@@ -361,6 +394,7 @@ export default {
         return
       }
 
+      console.log(this)
       this.$antConfirm({
         title: '警告',
         content: '是否确认清空内容?',
@@ -368,7 +402,7 @@ export default {
         cancelText: '否',
         onOk: () => {
           this.resetData()
-        },
+        }
       })
     },
     resetData() {
@@ -379,15 +413,15 @@ export default {
           labelCol: { xs: 4, sm: 4, md: 4, lg: 4, xl: 4, xxl: 4 },
           wrapperCol: { xs: 18, sm: 18, md: 18, lg: 18, xl: 18, xxl: 18 },
           hideRequiredMark: false,
-          customStyle: '',
-        },
+          customStyle: ''
+        }
       }
       this.handleSetSelectItem({ key: '' })
       this.$message.success('已清空')
     },
     handleSetSelectItem(record) {
       // 操作间隔不能低于100毫秒
-      let newTime = new Date().getTime()
+      const newTime = new Date().getTime()
       if (newTime - this.updateTime < 100) {
         return false
       }
@@ -429,7 +463,6 @@ export default {
       this.startType = type
     },
     handleSave() {
-      console.log(this.data)
       // 保存函数
       this.$emit('save', JSON.stringify(this.data))
     },
@@ -439,7 +472,7 @@ export default {
     },
     handleClose() {
       this.$emit('close')
-    },
-  },
+    }
+  }
 }
 </script>
