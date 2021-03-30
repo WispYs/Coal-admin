@@ -202,6 +202,16 @@
   @include primaryBg($primaryColor)
 }
 
+// tabs
+.el-tabs__item.is-active,
+.el-tabs__item:hover {
+  @include primaryColor($primaryColor)
+}
+
+.el-tabs__active-bar {
+  @include primaryBg($primaryColor)
+}
+
 .app-wrapper {
 
   // 解决 el-date-picker 样式问题
