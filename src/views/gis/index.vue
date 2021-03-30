@@ -522,7 +522,6 @@ export default {
       return flag
     },
     locationFn(e) {
-      console.log(api.Context.sheetGetPosition)
       const pos = api.Context.sheetGetPosition(e)
       pos.y = 0
       const dt = api.Extension.Point.addAnchorPointByPosition(

@@ -1,6 +1,6 @@
 <template>
   <div class="page-container upload-page has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
-    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" />
+    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @handleNodeClick="handleNodeClick"/>
     <div class="tree-form-container">
       <div class="upload-button">
         <el-button type="primary" size="medium" @click="openDailog"><i class="el-icon-plus el-icon--left" />新建文件</el-button>
@@ -72,6 +72,7 @@
         deleteDisabled: true,
         treeData: {
           title: '文件夹',
+          title2: '部门',
           list: [{
             label: '根目录',
             children: [{
@@ -135,16 +136,12 @@
         }
         console.log(this.multipleSelection)
       },
-      handleClick(row) {
-        console.log(row)
-      },
-
       // 上传文件控件成功回调
       uploadSubmit(fileList) {
         console.log(fileList)
         this.uploadDialogVisible = false
       },
-
+      // 点击编辑时触发
       updateClick(id) {
         this.$confirm('确定编辑该项目文件?', '提示', {
           confirmButtonText: '确定',
@@ -155,12 +152,14 @@
           this.$message.success('编辑成功')
         })
       },
+      // 点击预览时触发
       previewClick() {
         this.$message({
           message: '谢谢您，点击预览',
           type: 'success'
         });
       },
+      // 点击下载时触发
       downloadClick(){
         this.$message({
           message: '谢谢您，点击下载',
@@ -184,12 +183,17 @@
           this.$message.success('删除成功')
         })
       },
+      // 点击刷新时触发
       refresh() {
         this.$message({
           message: '谢谢您，点击刷新',
           type: 'success'
         });
         this.__fetchData();
+      },
+      // 点击树结构时触发
+      handleNodeClick(_data){
+        console.log(_data);
       }
     }
   }

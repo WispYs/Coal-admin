@@ -391,7 +391,7 @@ export const NewsConfig = {
   actions: [],
   otherActionTitle: [],
   rowKey: 'num',
-  checkbox: true,
+  checkbox: false,
   columns: [
     { label: '标题', field: 'title', layout: 'Text', width:'auto', placeholder: '请填写标题' },
     { label: '内容', field: 'content', layout: 'Text', width:'200', placeholder: '请填写内容' },
