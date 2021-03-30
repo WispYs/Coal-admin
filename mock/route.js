@@ -3587,9 +3587,14 @@ const asyncRoutes = [
           {
             path: '/system-management/authority-manage/application-manage',
             name: 'Authority1',
-            component:
-              '/system-management/authority-manage/application-manage/index',
+            component:'/system-management/authority-manage/application-manage/index',
             meta: { title: '应用系统管理' }
+          },
+          {
+            path: '/system-management/authority-manage/role-type',
+            name: 'Authority1',
+            component:'/system-management/authority-manage/role-type/index',
+            meta: { title: '角色类型管理' }
           },
           {
             path: '/system-management/authority-manage/user-manage',
@@ -3615,6 +3620,12 @@ const asyncRoutes = [
             name: 'Authority5',
             component: '/system-management/authority-manage/menu-manage/index',
             meta: { title: '菜单资源管理' }
+          },
+          {
+            path: '/system-management/authority-manage/data-dictionary-manage',
+            name: 'Authority6',
+            component:'/system-management/authority-manage/data-dictionary-manage/index',
+            meta: { title: '数据字典管理' }
           },
           {
             path: '/system-management/authority-manage/resource-manage',
@@ -3696,6 +3707,12 @@ const asyncRoutes = [
             component:
               '/system-management/message-manage/message-template/index',
             meta: { title: '消息模板配置' }
+          },
+          {
+            path: '/system-management/message-manage/message-type',
+            name: 'Message1',
+            component:'/system-management/message-manage/message-type/index',
+            meta: { title: '消息类型' }
           },
           {
             path: '/system-management/message-manage/message-log',
@@ -3845,6 +3862,12 @@ const asyncRoutes = [
         name: 'System6',
         component: '/system-management/feedback/index',
         meta: { title: '问题反馈' }
+      },
+      {
+        path: '/system-management/app-power-manage',
+        name: 'System6',
+        component: '/system-management/app-power-manage/index',
+        meta: { title: 'APP权限管理' }
       }
     ]
   },
