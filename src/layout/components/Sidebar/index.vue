@@ -74,6 +74,7 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
   transition: width .3s;
+  z-index: 1002;
   .el-submenu {
     .el-menu-item {
       padding-right: 10px;

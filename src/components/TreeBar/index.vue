@@ -59,8 +59,8 @@ export default {
     }
   }
   .treeInpt{
-    height: 37px;
-    line-height: 37px;
+    height: 36px;
+    line-height: 36px;
     margin-bottom: 8px;
   }
 </style>

@@ -23,7 +23,7 @@
       width="55"
       align="center"
     />
-    <el-table-column align="center" label="序号" width="95" fixed>
+    <el-table-column align="center" label="序号" width="95" fixed v-if="config.orderNumber">
       <template slot-scope="scope">
         {{ scope.$index+1 }}
       </template>
