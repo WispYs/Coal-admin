@@ -2,24 +2,21 @@
   <div class="page-container">
     <div class="buttons">
       <div class="buttons_item">
-        <el-button type="primary" size="medium" @click="openDialog('menuType')"><i class="el-icon-plus el-icon--left" />新建
+        <el-button type="primary" size="medium" @click="openDialog('create')"><i class="el-icon-plus el-icon--left" />创建
         </el-button>
         <el-button type="primary" size="medium" plain :disabled="updateDisabled" @click="openDialog('edit')"><i class="el-icon-edit el-icon--left" />编辑
         </el-button>
         <el-button type="danger" size="medium" plain :disabled="deleteDisabled" @click="deleteClick"><i class="el-icon-delete el-icon--left" />删除
         </el-button>
-        <el-button type="warning" size="medium" plain :disabled="moveUpDisabled" @click="moveUpClick"><i class="el-icon-top el-icon--left" />上移</el-button>
-        <el-button type="info" size="medium" plain :disabled="moveDownDisabled" @click="moveDownClick"><i class="el-icon-bottom el-icon--left" />下移</el-button>
         <el-button size="medium" plain @click="synchroClick"><i class="el-icon-refresh el-icon--left" />同步</el-button>
       </div>
       <div class="search">
-        <el-input v-model="menuSearch" size="medium" placeholder="名称、值"></el-input>
-        <el-button type="primary" size="medium" @click="queryData(menuSearch)">搜索</el-button>
+        <el-input v-model="dataDictionary" size="medium" placeholder="名称、值"></el-input>
+        <el-button type="primary" size="medium" @click="queryData(dataDictionary)">搜索</el-button>
       </div>
     </div>
-    <list-table :id="id" :list="list" :list-loading="listLoading" :config="menuResourceConfig" @addIco="(row) => openDialog('create', row)"
-      @editIco="(row) => openDialog('edit', row)" @deleteIco="deleteClick" @moveUpIco="moveUpClick" @moveDownIco="moveDownClick"
-      @selectionChange="selectionChange" />
+    <list-table :id="id" :list="list" :list-loading="listLoading" :config="dataDictionaryConfig" @addIco="(row) => openDialog('create', row)"
+      @editIco="(row) => openDialog('edit', row)" @deleteIco="deleteClick" @selectionChange="selectionChange" />
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="__fetchData" />
     <!-- 新建弹窗 -->
     <form-dialog :config="initCreateConfig()" :dialog-visible="createDialogVisible" @close-dialog="createDialogVisible = false"
@@ -27,8 +24,6 @@
     <!-- 编辑弹窗 -->
     <form-dialog ref="editDialog" :config="initEditConfig()" :dialog-visible="editDialogVisible" @close-dialog="editDialogVisible = false"
       @submit="editSubmit" />
-    <menu-type-dialog :config="initMenuConfig()" :dialog-visible="menuTypeDialogVisible" @menuClick="menuClick"
-      @closeDialog="menuTypeDialogVisible = false"></menu-type-dialog>
   </div>
 </template>
 
@@ -40,11 +35,7 @@
   import ListTable from '@/components/ListTable'
   import Pagination from '@/components/Pagination'
   import FormDialog from '@/components/FormDialog'
-  import MenuTypeDialog from './conponments/menu-type-dialog/index.vue'
-  import {
-    menuResourceConfig,
-    FilterConfig
-  } from '@/data/authority-management'
+  import {dataDictionaryConfig} from '@/data/authority-management'
 
   export default {
     components: {
@@ -52,7 +43,6 @@
       ListTable,
       Pagination,
       FormDialog,
-      MenuTypeDialog
     },
     data() {
       return {
@@ -65,119 +55,72 @@
         },
         filter: {}, // 筛选项
         listLoading: true,
-        FilterConfig,
-        menuResourceConfig,
+        dataDictionaryConfig,
         createDialogVisible: false,
         editDialogVisible: false,
         list: [{
-          id: '1001',
-          name: '门户页面子系统权限',
-          identifier: '033004002001',
-          type: '模块',
-          clientType: 2,
-          show: 2,
-          state: 1,
-          adress: '/menuMange',
-          openType: 1,
-          dataRange: 4,
-          source: 5,
+          id: '001',
+          name: '组织机构类型',
+          identifier: '001',
+          value: '',
           sort: 1,
-          remark: '无',
+          type: 2,
+          remark: '组织机构类型',
           children: [{
-            id: '10010',
-            name: '智慧安监',
-            identifier: '033004002001',
-            type: '模块',
-            clientType: 2,
-            show: 2,
-            state: 1,
-            adress: '/menuMange',
-            openType: 1,
-            dataRange: 4,
-            source: 5,
-            sort: 1,
+            id: '001001',
+            name: '集团公司',
+            identifier: '001001',
+            value: '',
+            sort: 2,
+            type: 1,
             remark: '无',
           }, {
-            id: '10011',
-            name: '调度查询',
-            identifier: '0330040020011',
-            type: '模块',
-            clientType: 1,
-            show: 2,
-            state: 1,
-            adress: '/menuMange',
-            openType: 1,
-            dataRange: 2,
-            source: 4,
-            sort: 1,
+            id: '001002',
+            name: '二级公司',
+            identifier: '001002',
+            value: '',
+            sort: 3,
+            type: 1,
             remark: '无',
           }]
         }, {
-          id: '1002',
-          name: '全息一张图',
-          identifier: '033004002002',
-          type: '菜单',
-          clientType: 1,
-          show: 1,
-          state: 2,
-          adress: '/menuMange',
-          openType: 2,
-          dataRange: 2,
-          source: 3,
+          id: '002',
+          name: '数据权限类型',
+          identifier: '002',
+          value: '',
           sort: 2,
-          remark: '无'
+          type: 2,
+          remark: '数据权限类型',
         }, {
-          id: '1003',
-          name: '设备检修',
-          identifier: '033004002003',
-          type: '模块',
-          clientType: 2,
-          show: 1,
-          state: 2,
-          adress: '/menuMange',
-          openType: 1,
-          dataRange: 4,
-          source: 4,
+          id: '003',
+          name: '责任追究类型',
+          identifier: '003',
+          value: '',
           sort: 3,
-          remark: '无',
+          type: 2,
+          remark: '责任追究类型',
           children: [{
-            id: '10030',
-            name: '检修计划',
-            identifier: '0330040020030',
-            type: '菜单',
-            clientType: 2,
-            show: 1,
-            state: 2,
-            adress: '/menuMange',
-            openType: 2,
-            dataRange: 2,
-            source: 2,
-            sort: 30,
+            id: '003001',
+            name: '罚款',
+            identifier: '003001',
+            value: '',
+            sort: 2,
+            type: 1,
             remark: '无',
             children:[{
-              id:'100300',
-              name: '维修任务',
-              identifier: '03300400200300',
-              type: '页面',
-              clientType: 2,
-              show: 1,
-              state: 2,
-              adress: '/menuMange',
-              openType: 1,
-              dataRange: 4,
-              source: 5,
-              sort: 300,
-              remark:'无'
+              id: '003001001',
+              name: '约谈',
+              identifier: '003001001',
+              value: '',
+              sort: 3,
+              type: 1,
+              remark: '无'
             }]
           }]
         }],
         updateDisabled: true,
         deleteDisabled: true,
-        moveUpDisabled: true,
-        moveDownDisabled: true,
-        menuSearch: '',
-        menuTypeDialogVisible: false,
-        menuName: '',
+        dataDictionary: '',
         selectData: []
       }
     },
@@ -201,7 +144,8 @@
       queryData(filter) {
         if (!!filter) {
           this.filter = Object.assign(this.filter, filter);
-          this.__fetchData()
+          this.$message.success("查询成功");
+          this.__fetchData();
         } else {
           this.$message.error("请输入搜索内容");
         }
@@ -209,9 +153,9 @@
       // 初始化新建窗口配置
       initCreateConfig() {
         const createConfig = Object.assign({
-          title: this.menuName,
+          title: "创建",
           width: '800px',
-          form: this.menuResourceConfig.columns
+          form: this.dataDictionaryConfig.columns
         })
         return createConfig
       },
@@ -220,18 +164,9 @@
         const editConfig = Object.assign({
           title: '编辑',
           width: '800px',
-          form: this.menuResourceConfig.columns
+          form: this.dataDictionaryConfig.columns
         })
         return editConfig
-      },
-      // 初始化展示选择哪种类型的菜单
-      initMenuConfig() {
-        const createConfig = Object.assign({
-          title: '你要添加哪种类型的菜单？',
-          width: '500px',
-          form: this.menuResourceConfig.columns
-        })
-        return createConfig
       },
       // 打开弹窗
       openDialog(name, row) {
@@ -266,14 +201,6 @@
         this.editDialogVisible = false
         this.$message.success('编辑成功')
       },
-      //点击上移触发
-      moveUpClick() {
-        this.$message.success("上移成功")
-      },
-      // 点击下移触发
-      moveDownClick() {
-        this.$message.success("下移成功")
-      },
       // 点击同步触发
       synchroClick() {
         this.$message.success("同步成功")
@@ -298,19 +225,6 @@
           this.moveUpDisabled = true;
           this.moveDownDisabled = true;
         }
-      },
-      // 点击模块、页面、上传页面触发
-      menuClick(_row) {
-        console.log(_row);
-        if (_row == 'module') {
-          this.menuName = '模块组';
-        } else if (_row == 'page') {
-          this.menuName = '菜单'
-        } else if (_row == 'uploadPage') {
-          this.menuName = '上传页面'
-        }
-        this.menuTypeDialogVisible = false;
-        this.createDialogVisible = true;
       }
     }
   }

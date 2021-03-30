@@ -125,7 +125,7 @@
       initCreateConfig() {
         const createConfig = Object.assign({
           title: '新建',
-          width: '500px',
+          width: '800px',
           form: this.OrganTableConfig.columns
         })
         return createConfig
@@ -134,7 +134,7 @@
       initEditConfig() {
         const editConfig = Object.assign({
           title: '编辑',
-          width: '500px',
+          width: '800px',
           form: this.OrganTableConfig.columns
         })
         return editConfig
