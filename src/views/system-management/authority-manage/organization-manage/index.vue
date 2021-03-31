@@ -1,24 +1,8 @@
 <template>
   <div class="page-container">
-    <div class="buttons">
-      <div class="buttons_item">
-        <el-button type="primary" size="medium" @click="openDialog('create')"><i class="el-icon-plus el-icon--left" />新建
-        </el-button>
-        <el-button type="primary" size="medium" plain :disabled="updateDisabled" @click="openDialog('edit')"><i class="el-icon-edit el-icon--left" />编辑
-        </el-button>
-        <el-button type="danger" size="medium" plain :disabled="deleteDisabled" @click="deletePersonnel"><i class="el-icon-delete el-icon--left" />删除
-        </el-button>
-        <el-button type="warning" size="medium" plain :disabled="moveUpDisabled" @click="moveUpClick"><i class="el-icon-top el-icon--left" />上移</el-button>
-        <el-button type="info" size="medium" plain :disabled="moveDownDisabled" @click="moveDownClick"><i class="el-icon-bottom el-icon--left" />下移</el-button>
-        <el-button type="danger" size="medium" plain @click="handelExport"><i class="el-icon-download el-icon--left" />导出</el-button>
-        <el-button size="medium" plain @click="synchroClick"><i class="el-icon-refresh el-icon--left" />同步</el-button>
-
-      </div>
-      <div class="search">
-        <el-input v-model="institutionSearch" size="medium" placeholder="名称、简称"></el-input>
-        <el-button type="primary" size="medium" @click="queryData">搜索</el-button>
-      </div>
-    </div>
+    <organ-button-search :updateDisabled="updateDisabled" :deleteDisabled="deleteDisabled" @openDialog="openDialog" :moveUpDisabled="moveUpDisabled" :moveDownDisabled="moveDownDisabled"
+      @deleteClick="deleteClick" @moveUpClick="moveUpClick" @moveDownClick="moveDownClick" @handelExport="handelExport"
+      @synchroClick="synchroClick" @queryData="queryData"></organ-button-search>
     <list-table :id="id" :list="list" :list-loading="listLoading" :config="OrganTableConfig" @load-tree-data="asyncData"
       @addIco="(row) => openDialog('create', row)" @editIco="(row) => openDialog('edit', row)" @deleteIco="deleteClick"
       @moveUpIco="moveUpClick" @moveDownIco="moveDownClick" @selectionChange="selectionChange" />
@@ -35,16 +19,15 @@
 
 <script>
   import {
-    getOrganList
+    getOrganList,
+    createOrganLsit
   } from '@/api/authority-management'
   import FilterBar from '@/components/FilterBar'
   import ListTable from '@/components/ListTable'
   import Pagination from '@/components/Pagination'
   import FormDialog from '@/components/FormDialog'
-  import {
-    OrganTableConfig,
-    OrganFilterConfig
-  } from '@/data/authority-management'
+  import OrganButtonSearch from './components/organ-button-search/index.vue'
+  import { OrganTableConfig } from '@/data/authority-management'
   import exportExcel from '@/utils/export-excel'
 
   export default {
@@ -52,7 +35,8 @@
       FilterBar,
       ListTable,
       Pagination,
-      FormDialog
+      FormDialog,
+      OrganButtonSearch
     },
     data() {
       return {
@@ -65,7 +49,6 @@
         },
         filter: {}, // 筛选项
         listLoading: true,
-        OrganFilterConfig,
         OrganTableConfig,
         createDialogVisible: false,
         editDialogVisible: false,
@@ -77,7 +60,6 @@
         selectData: []
       }
     },
-
     created() {
       this.__fetchData()
     },
@@ -115,8 +97,11 @@
       },
       // 查询数据
       queryData(filter) {
-        if (!!this.institutionSearch) {
+        console.log(filter);
+        if (!!filter) {
           this.$message.success('查询成功');
+        }else{
+          this.$message.info("请输入查询关键字")
         }
         this.filter = Object.assign(this.filter, filter);
         this.__fetchData()
@@ -143,7 +128,6 @@
       openDialog(name, row) {
         const visible = `${name}DialogVisible`
         this[visible] = true
-        // console.log(this.editDialogVisible);
         if (row) {
           // 如果有数据，更新子组件的 formData
           this.$refs.editDialog.updataForm(row);
@@ -153,27 +137,40 @@
         }
       },
       // 删除
-      deleteClick(id) {
+      deleteClick(row, index) {
         this.$confirm('确定删除该组织吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          // if(row && index){
+
+          // }else{
+
+          // }
           this.$message.success('删除成功')
+          this.__fetchData();
         }).catch(() => {
           this.$message.info('已取消删除')
         });
       },
-      // submit data
+      // submit createData
       createSubmit(submitData) {
         console.log(submitData)
-        this.createDialogVisible = false
-        this.$message.success('新建成功')
+        // const _data = Object.assign(this.listQuery,submitData);
+        // createOrganLsit(_data).then(res=>{
+        //   console.log(res);
+        // })
+        this.createDialogVisible = false;
+        this.$message.success('新建成功');
+        this.__fetchData();
       },
+      // submit edit
       editSubmit(submitData) {
         console.log(submitData)
-        this.editDialogVisible = false
+        this.editDialogVisible = false;
         this.$message.success('编辑成功')
+        this.__fetchData();
       },
       // 定义导出Excel表格事件
       handelExport() {
@@ -181,21 +178,44 @@
         // 第二个参数为导出文件的 name
         exportExcel(this.id, '组织机构管理')
       },
-      editClick() {
-
-      },
-      deletePersonnel() {
-        this.$message.success('删除成功')
-      },
+      // 同步
       synchroClick() {
+        this.__fetchData();
         this.$message.success('同步成功')
       },
-      moveUpClick() {
+      // 上移
+      moveUpClick(row, index) {
+        if (row && index) {
+          this.list[index] = this.list[index - 1];
+          this.list[index - 1] = row;
+        } else {
+          let _index;
+          for (let d in this.list) {
+            console.log(d);
+            if (this.list[d].name == this.selectData[0].name) {
+              _index = d;
+              break;
+            }
+          }
+          if (_index == 0) {
+            this.$message.error("该数据已经位于最前面,不能再上移了哈");
+            return;
+          } else {
+            this.list[_index] = this.list[_index - 1];
+            this.list[_index - 1] = this.selectData[0];
+          }
+        }
         this.$message.success('上移成功');
+        this.__fetchData();
       },
-      moveDownClick() {
+      // 下移
+      moveDownClick(row, index) {
+        this.list[index] = this.list[index + 1];
+        this.list[index + 1] = row;;
         this.$message.success('下移成功');
+        this.__fetchData();
       },
+      // 点击checkbox触发
       selectionChange(_data) {
         this.selectData = _data;
         console.log(_data);
@@ -221,26 +241,4 @@
   }
 </script>
 <style lang="scss" scoped>
-  .buttons {
-    margin-bottom: 16px;
-
-    .buttons_item {
-      display: inline-block;
-    }
-
-    .search {
-      display: inline-block;
-      float: right;
-
-      .el-input {
-        display: inline-block;
-        width: 200px;
-      }
-
-      .el-button {
-        display: inline-block;
-        margin-left: 20px;
-      }
-    }
-  }
 </style>

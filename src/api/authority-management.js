@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { SystemUrl } from './url'
 
 export function getApplicationList(params) {
   return request({
@@ -10,7 +11,7 @@ export function getApplicationList(params) {
 
 export function getUserList(params) {
   return request({
-    url: '/system/user/list',
+    url: `${SystemUrl}/sysUser/getInfo`,
     method: 'get',
     params
   })
@@ -23,6 +24,13 @@ export function getOrganList(params) {
     params
   })
 }
+export function createOrganLsit(params){
+  return request({
+    url: '/admin/createOrganLsit/list',
+    method: 'get',
+    params
+  })
+}
 
 export function getRoleList(params) {
   return request({
@@ -31,4 +39,3 @@ export function getRoleList(params) {
     params
   })
 }
-

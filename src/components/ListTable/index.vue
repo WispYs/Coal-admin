@@ -347,10 +347,18 @@ export default {
       this.$emit("deleteIco",row,index)
     },
     moveUpIco(row,index){
-      this.$emit("moveUpIco",row,index);
+      if(index == 0){
+        this.$message.error("该数据已经位于最前面,不能再上移了哈");
+      }else{
+        this.$emit("moveUpIco",row,index);
+      }
     },
     moveDownIco(row,index){
-      this.$emit("moveDownIco",row,index)
+      if(index + 1 == this.list.length){
+        this.$message.error("该数据已经位于最后面,不能再下移了哈");
+      }else{
+        this.$emit("moveDownIco",row,index)
+      }
     }
   }
 }

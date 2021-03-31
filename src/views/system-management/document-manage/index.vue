@@ -140,6 +140,7 @@
       uploadSubmit(fileList) {
         console.log(fileList)
         this.uploadDialogVisible = false
+        this.__fetchData()
       },
       // 点击编辑时触发
       updateClick(id) {
@@ -150,6 +151,7 @@
         }).then(() => {
           console.log(id)
           this.$message.success('编辑成功')
+          this.__fetchData()
         })
       },
       // 点击预览时触发
@@ -180,20 +182,20 @@
           type: 'warning'
         }).then(() => {
           console.log(selectId)
+          this.__fetchData()
           this.$message.success('删除成功')
         })
       },
       // 点击刷新时触发
       refresh() {
-        this.$message({
-          message: '谢谢您，点击刷新',
-          type: 'success'
-        });
+        this.$message.success('谢谢您，点击刷新');
         this.__fetchData();
       },
       // 点击树结构时触发
       handleNodeClick(_data){
         console.log(_data);
+        this.__fetchData();
+        this.$message.success("点击"+_data.label+"成功");
       }
     }
   }

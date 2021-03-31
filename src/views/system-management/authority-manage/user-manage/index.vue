@@ -3,12 +3,6 @@
     <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @handleNodeClick="handleNodeClick" />
 
     <div class="tree-form-container">
-      <!-- <filter-bar
-        :config="UserFilterConfig"
-        @search-click="queryData"
-        @create-click="openDialog('create')"
-        @reset-click="queryData"
-      /> -->
       <!-- 按钮功能、搜索 -->
       <button-search :updateDisabled="updateDisabled" :deleteDisabled="deleteDisabled" @openDialog="openDialog"
         @deletePersonnel="deletePersonnel" @synchroClick="synchroClick" @startSearch="startSearch"></button-search>
@@ -131,7 +125,6 @@
           this.$refs.editDialog.updataForm(row);
         } else if (this.selectData.length == 1) {
           console.log(this.selectData[0]);
-          // this.$refs.editDialog.updataForm(this.selectData[0]);
           this.$refs.editDialog.updataForm(this.selectData[0]);
         }
       },
@@ -143,6 +136,7 @@
           type: 'warning'
         }).then(() => {
           this.$message.success('删除成功')
+          this.__fetchData()
         })
       },
       // submit data
@@ -150,11 +144,13 @@
         console.log(submitData)
         this.createDialogVisible = false
         this.$message.success('新建成功')
+        this.__fetchData()
       },
       editSubmit(submitData) {
         console.log(submitData)
         this.editDialogVisible = false
         this.$message.success('编辑成功')
+        this.__fetchData()
       },
 
       // 打开弹窗
@@ -168,14 +164,17 @@
       //点击删除时触发
       deletePersonnel() {
         this.$message.success("删除成功");
+        this.__fetchData()
       },
       // 点击同步时触发
       synchroClick() {
+        this.__fetchData()
         this.$message.success("同步成功");
       },
       // 点击搜索时触发
       startSearch(_search) {
         if (!!_search) {
+          this.__fetchData();
           this.$message.success("查询成功");
         } else {
           this.$message.info("请输入搜索条件");
@@ -199,7 +198,8 @@
       // 点击树形菜单时触发
       handleNodeClick(_data) {
         console.log(_data);
-        this.$message.success("点击树形节点成功");
+        this.__fetchData();
+        this.$message.success("点击"+_data.label+"成功");
       }
     }
   }

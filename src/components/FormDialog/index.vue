@@ -185,6 +185,7 @@ export default {
     onSubmit() {
       this.$refs.formData.validate((valid) => {
         if (valid) {
+          this.$refs.formData.resetFields()
           this.$emit('submit', this.formData)
         } else {
           console.log('error submit!!')

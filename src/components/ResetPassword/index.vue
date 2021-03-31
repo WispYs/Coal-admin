@@ -75,6 +75,7 @@ export default {
         if (valid) {
           console.log(this.passwordData)
           this.$message.success('修改成功')
+          this.$refs.resetPassword.resetFields()
           this.$emit('close-dialog')
         } else {
           console.log('error submit!!')

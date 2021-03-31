@@ -397,7 +397,7 @@
 
       .el-button {
         width: 88px;
-        height: 36px;
+        // height: 36px;
       }
     }
   }

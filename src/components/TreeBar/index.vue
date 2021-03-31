@@ -56,33 +56,44 @@
     }
   }
 </script>
-<style lang="scss" scoped>
-  .trees {
-    .el-tree-node {
-      .el-tree-node__content {
-        .el-tree-node__label {
-          width: 160px;
+<style lang="scss">
+  .tree-container{
+    .trees {
+      .el-tree-node {
+        .el-tree-node__content {
+          .el-tree-node__label {
+            width: 160px;
+          }
         }
+      }
+
+      .span-ellipsis {
+        font-size: 13px;
+        width: 160px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
 
-    .span-ellipsis {
-      font-size: 13px;
-      width: 100px;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
+    .treeInpt {
+      height: 36px;
+      line-height: 36px;
+      margin-bottom: 8px;
+    }
+
+    .t_titles{
+      margin-bottom: 16px;
+    }
+
+    #tab-file,#tab-dept{
+      width: 68px;
+      padding: 0;
+      text-align: center;
+    }
+
+    #pane-file,#pane-dept{
+      text-indent: 0.8em;
     }
   }
-
-  .treeInpt {
-    height: 36px;
-    line-height: 36px;
-    margin-bottom: 8px;
-  }
-
-  .t_titles{
-    margin-bottom: 16px;
-  }
-
 </style>

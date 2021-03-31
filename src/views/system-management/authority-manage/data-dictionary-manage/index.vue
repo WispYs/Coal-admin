@@ -15,12 +15,16 @@
         <el-button type="primary" size="medium" @click="queryData(dataDictionary)">搜索</el-button>
       </div>
     </div>
+    
     <list-table :id="id" :list="list" :list-loading="listLoading" :config="dataDictionaryConfig" @addIco="(row) => openDialog('create', row)"
       @editIco="(row) => openDialog('edit', row)" @deleteIco="deleteClick" @selectionChange="selectionChange" />
+    
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="__fetchData" />
+    
     <!-- 新建弹窗 -->
     <form-dialog :config="initCreateConfig()" :dialog-visible="createDialogVisible" @close-dialog="createDialogVisible = false"
       @submit="createSubmit" />
+    
     <!-- 编辑弹窗 -->
     <form-dialog ref="editDialog" :config="initEditConfig()" :dialog-visible="editDialogVisible" @close-dialog="editDialogVisible = false"
       @submit="editSubmit" />
@@ -47,7 +51,6 @@
     data() {
       return {
         id: 'application-manage',
-        list: [],
         total: 0,
         listQuery: {
           page: 1,

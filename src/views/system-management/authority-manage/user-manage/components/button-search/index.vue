@@ -48,6 +48,7 @@
       },
       startSearch(_data){
         this.$emit("startSearch",_data);
+        this.personSearch = "";
       }
     }
   }

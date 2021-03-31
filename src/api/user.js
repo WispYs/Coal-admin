@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import baseUrl from './url.js'
+import { BaseUrl } from './url.js'
 
 export function login(data) {
   return request({
@@ -26,7 +26,7 @@ export function logout() {
 
 // export function login(data) {
 //   return request({
-//     url: `${baseUrl}/auth/login`,
+//     url: `${BaseUrl}/auth/login`,
 //     method: 'post',
 //     // headers: { 'Content-Type': 'multipart/form-data' },
 //     data: {
@@ -39,7 +39,7 @@ export function logout() {
 
 // export function getInfo(token) {
 //   return request({
-//     url: `${baseUrl}/admin/sysUser/getInfo`,
+//     url: `${BaseUrl}/admin/sysUser/getInfo`,
 //     method: 'get'
 //   })
 // }

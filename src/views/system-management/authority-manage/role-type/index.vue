@@ -97,7 +97,6 @@ export default {
       treeData: {
         title: '选择站点',
         search: true,
-
         list: OrganizationTree
       },
       selectData:[],
