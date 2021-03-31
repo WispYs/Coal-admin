@@ -603,7 +603,7 @@ export default {
   mounted() {
     if (this.record.type === 'date') {
       this.record.timeStamp = ''
-      console.log('timeStamp', this.record)
+      // console.log('timeStamp', this.record)
     }
   },
   methods: {

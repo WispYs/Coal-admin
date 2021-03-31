@@ -81,9 +81,8 @@ export default {
       } else {
         date = val.format(this.record.options.format)
       }
-      console.log('record', this.record)
       this.record['timeStamp'] = val._d.getTime()
-      console.log('date格式的时间戳', val._d.getTime())
+      console.log('dataRecord', this.record)
       this.$emit('change', date)
       this.$emit('input', date)
     }

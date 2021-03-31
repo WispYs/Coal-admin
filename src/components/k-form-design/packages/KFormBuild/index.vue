@@ -72,6 +72,7 @@ export default {
   },
   data() {
     return {
+      tempArray: [],
       locale: zhCN,
       form: this.$form.createForm(this),
       validatorError: {},
@@ -102,18 +103,20 @@ export default {
       // 重置表单
       this.form.resetFields()
     },
-    // searchDate(arr = [], key) {
-    //   arr.list.forEach(t => {
-    //     if (t.type === 'date') {
-    //       console.log('timeStamp', t)
-    //     }
-    //     if (t.columns && t.columns.length) {
-    //       t.columns.forEach(t2 => {
-    //         this.searchDate(t2)
-    //       })
-    //     }
-    //   })
-    // },
+    // 筛选日期或时间类型
+    searchDate(arr = [], key) {
+      arr.list.forEach(t => {
+        if (t.type === 'date' || t.type === 'time') {
+          this.tempArray.push(t)
+        }
+        if (t.columns && t.columns.length) {
+          t.columns.forEach(t2 => {
+            this.searchDate(t2)
+          })
+        }
+      })
+      return this.tempArray
+    },
     getData() {
       // 提交函数，提供父级组件调用
       return new Promise((resolve, reject) => {
@@ -150,9 +153,18 @@ export default {
               }
               resolve(values)
             } else {
-              // const timeStamp = this.searchDate(this.value)
+              const keys = Object.keys(values)
+              this.searchDate(this.value)
+              keys.forEach(k => {
+                this.tempArray.forEach(t => {
+                  if (k === t.model) {
+                    values[`${k}_timeStamp`] = t.timeStamp
+                  }
+                })
+              })
+              console.log('timeStampValues', values)
+              this.tempArray = []
               // values['timeStamp'] = timeStamp
-              console.log(values)
               resolve(values)
             }
           })
