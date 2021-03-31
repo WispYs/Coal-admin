@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100%;height:100%">
+  <div class="gis-container">
     <TopBar :config="topConfig" />
 
     <div class="side-wrapper">
@@ -57,61 +57,41 @@
 
             <div class="js-tools-wrapper">
               <span class="js-tools">
-                <img
-                  class="js-tools-img"
-                  src="//www.baidu.com/img/flexible/logo/pc/result@2.png"
-                  alt=""
-                >
+                <img class="js-tools-img" src="//www.baidu.com/img/flexible/logo/pc/result@2.png" alt="">
                 预警报警
               </span>
               <span class="js-tools">
-                <img
-                  class="js-tools-img"
-                  src="//www.baidu.com/img/flexible/logo/pc/result@2.png"
-                  alt=""
-                >
+                <img class="js-tools-img" src="//www.baidu.com/img/flexible/logo/pc/result@2.png" alt="">
                 工作面
               </span>
               <span class="js-tools">
-                <img
-                  class="js-tools-img"
-                  src="//www.baidu.com/img/flexible/logo/pc/result@2.png"
-                  alt=""
-                >
+                <img class="js-tools-img" src="//www.baidu.com/img/flexible/logo/pc/result@2.png" alt="">
                 安全监测
               </span>
               <span class="js-tools">
-                <img
-                  class="js-tools-img"
-                  src="//www.baidu.com/img/flexible/logo/pc/result@2.png"
-                  alt=""
-                >
+                <img class="js-tools-img" src="//www.baidu.com/img/flexible/logo/pc/result@2.png" alt="">
                 人员定位
               </span>
             </div>
             <el-divider />
 
             <div class="js-quick-tools-wrapper">
-              <span><img
-                class="js-tools-img"
-                src="//www.baidu.com/img/flexible/logo/pc/result@2.png"
-                alt=""
-              >钻孔</span>
-              <span><img
-                class="js-tools-img"
-                src="//www.baidu.com/img/flexible/logo/pc/result@2.png"
-                alt=""
-              >自动化</span>
-              <span><img
-                class="js-tools-img"
-                src="//www.baidu.com/img/flexible/logo/pc/result@2.png"
-                alt=""
-              >突水点</span>
-              <span><img
-                class="js-tools-img"
-                src="//www.baidu.com/img/flexible/logo/pc/result@2.png"
-                alt=""
-              >设备</span>
+              <span>
+                <img class="js-tools-img" src="//www.baidu.com/img/flexible/logo/pc/result@2.png" alt="">
+                钻孔
+              </span>
+              <span>
+                <img class="js-tools-img" src="//www.baidu.com/img/flexible/logo/pc/result@2.png" alt="">
+                自动化
+              </span>
+              <span>
+                <img class="js-tools-img" src="//www.baidu.com/img/flexible/logo/pc/result@2.png" alt="">
+                突水点
+              </span>
+              <span>
+                <img class="js-tools-img" src="//www.baidu.com/img/flexible/logo/pc/result@2.png" alt="">
+                设备
+              </span>
             </div>
           </div>
         </el-drawer>
@@ -167,11 +147,8 @@
               <el-divider />
               <div class="list-item-wrapper">
                 <div v-for="idx in 4" :key="idx" class="list-item">
-                  <img
-                    class="js-tools-img"
-                    src="//www.baidu.com/img/flexible/logo/pc/result@2.png"
-                    alt=""
-                  >1126(工作面)
+                  <img class="js-tools-img" src="//www.baidu.com/img/flexible/logo/pc/result@2.png" alt="">
+                  1126(工作面)
                   <div class="work-wrapper">
                     <el-tag effect="dark" size="mini" type="info">
                       重大隐患0
@@ -251,12 +228,7 @@
     </el-dialog>
 
     <el-dialog :title="dlgTitle" :visible.sync="outerVisible">
-      <div
-        style="    padding: 15px;
-    line-height: 22px;
-    font-size: 15px;"
-        v-html="dlgData"
-      />
+      <div style="padding: 15px; line-height: 22px;font-size: 15px;" v-html="dlgData" />
       <div slot="footer" class="dialog-footer">
         <el-button @click="outerVisible = false">关 闭</el-button>
       </div>
@@ -265,6 +237,7 @@
 </template>
 <script>
 import TopBar from './components/top-bar'
+import { getViewPoint, getPointInfo } from '@/api/gis'
 var model = null
 var api = null
 export default {
@@ -366,10 +339,12 @@ export default {
         ''
       ],
       maps: ['综合', '地测', '生产', '通防', '机电', '安全', '应急', '监测'],
-      dataList: []
+      dataList: [],
+      viewPointData: [] // 锚点坐标列表
     }
   },
   mounted() {
+    this.__fetchViewPoint()
     document.querySelector('.app-main').style.padding = '20px 20px 0 20px'
     window._this = this
     this.dataList = []
@@ -409,50 +384,52 @@ export default {
     model.load()
     api = model.BIM365API
 
-    api.Events.finishRender.on('default', function(e) {
+    api.Events.finishRender.on('default', (e) => {
       // 获取视点列表
       const viewpointlist = model.BIM365API.Data.getMainModel().activeView.getViewpointList()
       // viewpoint 视点 annotation批注数据
       console.log(viewpointlist)
-      // for(var i=0;i<viewpointlist.annotation.length;i++)
-      var i = 1
-      {
-        const annotation = viewpointlist.annotation[i]
-        const inf = JSON.parse(annotation.override)
-        // console.log(inf)
-        // console.log(annotation)
+      // for (var i = 0; i < viewpointlist.annotation.length; i++)
+      // var i = 1
+      // {
+      //   // const annotation = viewpointlist.annotation[1]
+      //   // const annotation = viewpointlist.annotation[i]
+      //   // const inf = JSON.parse(annotation.override)
+      //   // console.log(inf)
+      //   // console.log(annotation)
 
-        // 添加锚点
-        const pos = inf.controlPostion
-        pos.y = 0
-        var a = 1
-        delete annotation.override
-        delete annotation.viewpointInfo.Override
-        annotation.name = window._this.name[window._this.pos]
-        // console.log(annotation)
-        // let data = model.BIM365API.Extension.Point.addAnchorPointByPosition(pos,'http://www.probim.cn:8088/bimexample/img/point.png',annotation)
-        // window._this.dataList.push(data);
-        // point添加事件
-        // let pointDom = data.viewpointIcon;
-        // document.getElementById(data.id).addEventListener('click',()=>{
-        //     //alert('刚才根据' + JSON.stringify(data.data) +'添加的锚点')
-        //     //console.log(data.data)
-        //     window._this.clickPoint(data.data);
-        //     // window._this.$alert('<strong>'+JSON.stringify(data.data) +'</strong>', 'HTML 片段', {
-        //     //   dangerouslyUseHTMLString: true
-        //     // });
-        // })
-        // 利用锚点位置 自定义html
-        // pointDom.innerHTML = " <div style='background:#fff;width:300px;border:1px solid #ff0000'><li>设备名称："+annotation.name+"</li><li>设备状态：开机</li><li>生产数：88</li><li>温度：120­°C</li></div>";
-        window._this.randPoint(annotation, pos)
-      }
+      //   // 添加锚点
+      //   // const pos = inf.controlPostion
+      //   // pos.y = 0
+      //   // var a = 1
+      //   // delete annotation.override
+      //   // delete annotation.viewpointInfo.Override
+      //   // annotation.name = window._this.name[window._this.pos]
+      //   // console.log(annotation)
+      //   // let data = model.BIM365API.Extension.Point.addAnchorPointByPosition(pos,'http://www.probim.cn:8088/bimexample/img/point.png',annotation)
+      //   // window._this.dataList.push(data);
+      //   // point添加事件
+      //   // let pointDom = data.viewpointIcon;
+      //   // document.getElementById(data.id).addEventListener('click',()=>{
+      //   //     //alert('刚才根据' + JSON.stringify(data.data) +'添加的锚点')
+      //   //     //console.log(data.data)
+      //   //     window._this.clickPoint(data.data);
+      //   //     // window._this.$alert('<strong>'+JSON.stringify(data.data) +'</strong>', 'HTML 片段', {
+      //   //     //   dangerouslyUseHTMLString: true
+      //   //     // });
+      //   // })
+      //   // 利用锚点位置 自定义html
+      //   // pointDom.innerHTML = " <div style='background:#fff;width:300px;border:1px solid #ff0000'><li>设备名称："+annotation.name+"</li><li>设备状态：开机</li><li>生产数：88</li><li>温度：120­°C</li></div>";
+      //   // window._this.randPoint(annotation, pos)
+
+      // }
+
+      this.randPoint(this.viewPointData)
       model.BIM365API.Extension.Point.openCluster()
-
-      for (var i = 0; i < window._this.dataList.length; i++) {
-        var dt = window._this.dataList[i]
-        document
-          .getElementById(dt.id)
-          .addEventListener('click', window._this.addEvent)
+      console.log(this.dataList)
+      for (var i = 0; i < this.dataList.length; i++) {
+        var dt = this.dataList[i]
+        document.getElementById(dt.id).addEventListener('click', this.addEvent)
       }
 
       // var dom=document.getElementsByClassName("gis-wrapper")[0].childNodes;
@@ -466,6 +443,27 @@ export default {
     })
   },
   methods: {
+    // 获取所有锚点信息
+    __fetchViewPoint() {
+      getViewPoint().then(response => {
+        this.viewPointData = response.data.items
+      })
+    },
+
+    // 点击锚点获取详情
+    __fetchPointInfo(id) {
+      getPointInfo(id).then(response => {
+        const viewPointInfo = response.data.items
+        this.dlgTitle = `${viewPointInfo.name}详情`
+        this.dlgData = `设备编号：${viewPointInfo.id}<br/>` +
+                      `传感器类型：${viewPointInfo.type}<br/>` +
+                      `安装地点：${viewPointInfo.addr}<br/>` +
+                      `实时值：${viewPointInfo.num}<br/>` +
+                      `单位：%CH4<br/>` +
+                      `状态：正常<br/>` +
+                      `监测时间：${viewPointInfo.date}`
+      })
+    },
     // 全屏
     fullScreen() {
       const idx = this.topConfig.findIndex(t => t.name == '全屏')
@@ -588,7 +586,7 @@ export default {
     },
     addEvent(e, a) {
       // console.dir(e)
-      window._this.clickPoint(e.currentTarget.id)
+      this.clickPoint(e.currentTarget.id)
     },
     randomPos() {
       return Math.random() * 100
@@ -599,190 +597,211 @@ export default {
     randomAdd() {
       return Math.random() * 10000 > 5000
     },
-    randPoint(ctl, controlPostion) {
-      for (var i = 1; i < 21; i++) {
-        var dt = JSON.parse(JSON.stringify(ctl))
-        dt.name += '(' + i + ')'
-        dt.viewID = parseInt(dt.viewID) + i + ''
-        dt.id = this.randomPos() + ''
-        dt.modelID = this.randomPos() + ''
-        dt.viewpointInfo.ModelID = dt.modelID
-        dt.viewpointInfo.ID = dt.id
-        dt.viewpointInfo.ViewID = dt.viewID
-        // let inf=JSON.parse(dt.override)
-        const pos = JSON.parse(JSON.stringify(controlPostion))
-        if (this.randomAdd()) pos.x += this.randomPos()
-        else pos.x -= this.randomPos()
-        if (this.randomAdd()) pos.z += this.randomPos()
-        else pos.z -= this.randomPos()
-        pos.y = 0
-        delete dt.override
-        delete dt.viewpointInfo.Override
-
-        dt.x = pos.x
-        dt.y = pos.z
-        dt.a = this.randomNum()
-        dt.b = this.randomNum()
-        dt.c = this.randomNum()
-        dt.d = this.randomNum()
-        dt.e = this.randomNum()
-
+    randPoint(viewPointData) {
+      viewPointData.forEach(it => {
+        it.x = it.controlPostion.x
+        it.y = it.controlPostion.z
+        it.a = this.randomNum()
+        it.b = this.randomNum()
+        it.c = this.randomNum()
+        it.d = this.randomNum()
+        it.e = this.randomNum()
         const data = model.BIM365API.Extension.Point.addAnchorPointByPosition(
-          pos,
+          it.controlPostion,
           'http://www.probim.cn:8088/bimexample/img/point.png',
-          dt
+          it
         )
-        window._this.dataList.push(data)
-      }
+        this.dataList.push(data)
+      })
+      // for (var i = 1; i < 3; i++) {
+      //   var dt = JSON.parse(JSON.stringify(ctl))
+      //   dt.name += '(' + i + ')'
+      //   dt.viewID = parseInt(dt.viewID) + i + ''
+      //   dt.id = this.randomPos() + ''
+      //   dt.modelID = this.randomPos() + ''
+      //   dt.viewpointInfo.ModelID = dt.modelID
+      //   dt.viewpointInfo.ID = dt.id
+      //   dt.viewpointInfo.ViewID = dt.viewID
+      //   // let inf=JSON.parse(dt.override)
+      //   const pos = JSON.parse(JSON.stringify(controlPostion))
+      //   if (this.randomAdd()) pos.x += this.randomPos()
+      //   else pos.x -= this.randomPos()
+      //   if (this.randomAdd()) pos.z += this.randomPos()
+      //   else pos.z -= this.randomPos()
+      //   pos.y = 0
+      //   delete dt.override
+      //   delete dt.viewpointInfo.Override
+
+      //   dt.x = pos.x
+      //   dt.y = pos.z
+      //   dt.a = this.randomNum()
+      //   dt.b = this.randomNum()
+      //   dt.c = this.randomNum()
+      //   dt.d = this.randomNum()
+      //   dt.e = this.randomNum()
+      //   console.log(pos)
+      //   console.log(dt)
+
+      //   const data = model.BIM365API.Extension.Point.addAnchorPointByPosition(
+      //     pos,
+      //     'http://www.probim.cn:8088/bimexample/img/point.png',
+      //     dt
+      //   )
+      //   window._this.dataList.push(data)
+      // }
     },
     clickPoint(id) {
-      var data = {}
-      for (var i = 0; i < this.dataList.length; i++) { if (this.dataList[i].id == id) data = this.dataList[i] }
-      console.log(data)
-      this.dlgTitle = data.data.name + '详情'
-      data = data.data
-      if (this.pos == 0) {
-        this.dlgData =
-          '传感器编号：340' +
-          data.id.replace('.', '') +
-          '<br/>' +
-          '传感器类型：激光甲烷<br/>' +
-          '安装地点：中区11-2采区煤层回风T回<br/>' +
-          '实时值：' +
-          this.randomNum() +
-          '<br/>' +
-          '单位：%CH4<br/>' +
-          '状态：正常<br/>' +
-          '监测时间：' +
-          new Date()
-      } else if (this.pos == 1) {
-        this.dlgData =
-          '勘探线：十南线<br/>' +
-          'X：' +
-          data.x +
-          '<br/>' +
-          'Y：' +
-          data.y +
-          '<br/>' +
-          '孔口标高(m)：' +
-          data.a +
-          '<br/>' +
-          '施工日期：2011.8.29-2020.2.12<br/>' +
-          '施工机组：' +
-          data.b +
-          '<br/>' +
-          '新地层厚度：' +
-          data.c +
-          '<br/>' +
-          '终孔深度：' +
-          data.d +
-          '<br/>' +
-          '钻探级别：甲<br/>' +
-          '测井级别：甲<br/>' +
-          '综合级别：甲<br/>' +
-          '穿过层位： 25～13-1/11-2～6-2/4-2～1～C31 DF30 H=40m F97 H=10～15m<br/>' +
-          '终孔歪斜：3°36′<br/>' +
-          '方位角：' +
-          data.e +
-          '°<br/>' +
-          '最大歪斜：3°36′<br/>'
-      } else if (this.pos == 2) {
-        this.dlgData =
-          '设计长度（m）：' +
-          data.a +
-          '<br/>' +
-          '工作面长度（m）：' +
-          data.b +
-          '<br/>' +
-          '采高（m）：3.8<br/>' +
-          '煤层视密度（t /m3）：0<br/>' +
-          '可采储量（预期）：' +
-          data.c +
-          '<br/>' +
-          '采煤工艺：综采<br/>' +
-          '采深（m）：-' +
-          data.d +
-          '<br/>' +
-          '编号：1<br/>' +
-          '出厂日期：2008-1-12<br/>' +
-          '出厂编号：<br/>' +
-          '防爆证号：<br/>' +
-          '煤安证号：<br/>' +
-          '电压等级：<br/>' +
-          '资产类型：自有<br/>' +
-          '状态：在用'
-      } else if (this.pos == 3) {
-        this.dlgData =
-          '编号：' +
-          data.id.replace('.', '') +
-          '<br/>' +
-          '粉尘1.5毫克/立方米正常<br/>' +
-          '当前矿井在采工作面4个，在掘工作面' +
-          data.a +
-          '个；井下作业人员' +
-          data.b +
-          '人，中央区' +
-          data.c +
-          '人，南区' +
-          data.d +
-          '人；存在重大风险0个，重大隐患0个，发生红线三违0个；主要设备运转发生故障0处。<br/>' +
-          '厂家：常州科研试制中心有限公司<br/>' +
-          '领用人：王龙<br/>' +
-          '使用单位：综采三队<br/>' +
-          '领用时间：2018-02-27<br/>' +
-          '使用地点：1213（1）运顺<br/>' +
-          '型号：SQ-90 / 132K'
-      } else if (this.pos == 4) {
-        this.dlgData =
-          '编号：' +
-          data.id.replace('.', '') +
-          '<br/>' +
-          '状态：正常<br/>' +
-          '厂家：常州科研试制中心有限公司<br/>' +
-          '领用人：王龙<br/>' +
-          '使用单位：综采三队<br/>' +
-          '领用时间：2018-02-27<br/>' +
-          '使用地点：1213（1）运顺<br/>' +
-          '型号：SQ-90 / 132K'
-      } else if (this.pos == 5) {
-        this.dlgData =
-          '传感器编号：' +
-          data.id.replace('.', '') +
-          '<br/>' +
-          '当前矿井在采工作面4个，在掘工作面' +
-          data.a +
-          '个；井下作业人员' +
-          data.b +
-          '人，中央区' +
-          data.c +
-          '人，南区' +
-          data.d +
-          '人；存在重大风险0个，重大隐患0个，发生红线三违0个；主要设备运转发生故障0处。<br/>' +
-          '传感器类型：粉尘<br/>' +
-          '安装地点：东一边界回风巷粉尘<br/>' +
-          '实时值：1.2<br/>' +
-          '单位：mg / m3<br/>' +
-          '状态：正常'
-      } else if (this.pos == 6) {
-        this.dlgData =
-          '传感器编号：' +
-          data.id.replace('.', '') +
-          '<br/>' +
-          '当前矿井在采工作面4个，在掘工作面' +
-          data.a +
-          '个；井下作业人员' +
-          data.b +
-          '人，中央区' +
-          data.c +
-          '人，南区' +
-          data.d +
-          '人；存在重大风险0个，重大隐患0个，发生红线三违0个；主要设备运转发生故障0处。<br/>' +
-          '重大风险（0）<br/>' +
-          '潜在风险（0）<br/>' +
-          '一般风险（0）<br/>' +
-          '低风险（0）<br/>' +
-          '状态：正常'
-      }
+      console.log(`----${id}----`)
+      console.log(this.dataList)
+      this.__fetchPointInfo(id)
+
+      // var data = {}
+      // for (var i = 0; i < this.dataList.length; i++) { if (this.dataList[i].id == id) data = this.dataList[i] }
+      // console.log(data)
+      // this.dlgTitle = data.data.name + '详情'
+      // data = data.data
+      // if (this.pos == 0) {
+      //   this.dlgData =
+      //     '传感器编号：340' +
+      //     data.id.replace('.', '') +
+      //     '<br/>' +
+      //     '传感器类型：激光甲烷<br/>' +
+      //     '安装地点：中区11-2采区煤层回风T回<br/>' +
+      //     '实时值：' +
+      //     this.randomNum() +
+      //     '<br/>' +
+      //     '单位：%CH4<br/>' +
+      //     '状态：正常<br/>' +
+      //     '监测时间：' +
+      //     new Date()
+      // } else if (this.pos == 1) {
+      //   this.dlgData =
+      //     '勘探线：十南线<br/>' +
+      //     'X：' +
+      //     data.x +
+      //     '<br/>' +
+      //     'Y：' +
+      //     data.y +
+      //     '<br/>' +
+      //     '孔口标高(m)：' +
+      //     data.a +
+      //     '<br/>' +
+      //     '施工日期：2011.8.29-2020.2.12<br/>' +
+      //     '施工机组：' +
+      //     data.b +
+      //     '<br/>' +
+      //     '新地层厚度：' +
+      //     data.c +
+      //     '<br/>' +
+      //     '终孔深度：' +
+      //     data.d +
+      //     '<br/>' +
+      //     '钻探级别：甲<br/>' +
+      //     '测井级别：甲<br/>' +
+      //     '综合级别：甲<br/>' +
+      //     '穿过层位： 25～13-1/11-2～6-2/4-2～1～C31 DF30 H=40m F97 H=10～15m<br/>' +
+      //     '终孔歪斜：3°36′<br/>' +
+      //     '方位角：' +
+      //     data.e +
+      //     '°<br/>' +
+      //     '最大歪斜：3°36′<br/>'
+      // } else if (this.pos == 2) {
+      //   this.dlgData =
+      //     '设计长度（m）：' +
+      //     data.a +
+      //     '<br/>' +
+      //     '工作面长度（m）：' +
+      //     data.b +
+      //     '<br/>' +
+      //     '采高（m）：3.8<br/>' +
+      //     '煤层视密度（t /m3）：0<br/>' +
+      //     '可采储量（预期）：' +
+      //     data.c +
+      //     '<br/>' +
+      //     '采煤工艺：综采<br/>' +
+      //     '采深（m）：-' +
+      //     data.d +
+      //     '<br/>' +
+      //     '编号：1<br/>' +
+      //     '出厂日期：2008-1-12<br/>' +
+      //     '出厂编号：<br/>' +
+      //     '防爆证号：<br/>' +
+      //     '煤安证号：<br/>' +
+      //     '电压等级：<br/>' +
+      //     '资产类型：自有<br/>' +
+      //     '状态：在用'
+      // } else if (this.pos == 3) {
+      //   this.dlgData =
+      //     '编号：' +
+      //     data.id.replace('.', '') +
+      //     '<br/>' +
+      //     '粉尘1.5毫克/立方米正常<br/>' +
+      //     '当前矿井在采工作面4个，在掘工作面' +
+      //     data.a +
+      //     '个；井下作业人员' +
+      //     data.b +
+      //     '人，中央区' +
+      //     data.c +
+      //     '人，南区' +
+      //     data.d +
+      //     '人；存在重大风险0个，重大隐患0个，发生红线三违0个；主要设备运转发生故障0处。<br/>' +
+      //     '厂家：常州科研试制中心有限公司<br/>' +
+      //     '领用人：王龙<br/>' +
+      //     '使用单位：综采三队<br/>' +
+      //     '领用时间：2018-02-27<br/>' +
+      //     '使用地点：1213（1）运顺<br/>' +
+      //     '型号：SQ-90 / 132K'
+      // } else if (this.pos == 4) {
+      //   this.dlgData =
+      //     '编号：' +
+      //     data.id.replace('.', '') +
+      //     '<br/>' +
+      //     '状态：正常<br/>' +
+      //     '厂家：常州科研试制中心有限公司<br/>' +
+      //     '领用人：王龙<br/>' +
+      //     '使用单位：综采三队<br/>' +
+      //     '领用时间：2018-02-27<br/>' +
+      //     '使用地点：1213（1）运顺<br/>' +
+      //     '型号：SQ-90 / 132K'
+      // } else if (this.pos == 5) {
+      //   this.dlgData =
+      //     '传感器编号：' +
+      //     data.id.replace('.', '') +
+      //     '<br/>' +
+      //     '当前矿井在采工作面4个，在掘工作面' +
+      //     data.a +
+      //     '个；井下作业人员' +
+      //     data.b +
+      //     '人，中央区' +
+      //     data.c +
+      //     '人，南区' +
+      //     data.d +
+      //     '人；存在重大风险0个，重大隐患0个，发生红线三违0个；主要设备运转发生故障0处。<br/>' +
+      //     '传感器类型：粉尘<br/>' +
+      //     '安装地点：东一边界回风巷粉尘<br/>' +
+      //     '实时值：1.2<br/>' +
+      //     '单位：mg / m3<br/>' +
+      //     '状态：正常'
+      // } else if (this.pos == 6) {
+      //   this.dlgData =
+      //     '传感器编号：' +
+      //     data.id.replace('.', '') +
+      //     '<br/>' +
+      //     '当前矿井在采工作面4个，在掘工作面' +
+      //     data.a +
+      //     '个；井下作业人员' +
+      //     data.b +
+      //     '人，中央区' +
+      //     data.c +
+      //     '人，南区' +
+      //     data.d +
+      //     '人；存在重大风险0个，重大隐患0个，发生红线三违0个；主要设备运转发生故障0处。<br/>' +
+      //     '重大风险（0）<br/>' +
+      //     '潜在风险（0）<br/>' +
+      //     '一般风险（0）<br/>' +
+      //     '低风险（0）<br/>' +
+      //     '状态：正常'
+      // }
 
       this.outerVisible = true
     },
@@ -809,6 +828,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '~@/assets/styles/variables.scss';
+.gis-container {
+  width: 100%;
+  height: 100%;
+  ::v-deep.el-dialog {
+    height: auto;
+  }
+}
 .gis-wrapper {
   width: 100%;
   height: 100%;

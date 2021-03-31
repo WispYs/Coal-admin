@@ -13,6 +13,7 @@ const liabilitySystem = require('./liability-system')
 const assessmentLibrary = require('./assessment-library')
 const controlMeasure = require('./control-measure')
 const authorityManagement = require('./authority-management')
+const gis = require('./gis')
 
 const mocks = [
   ...user,
@@ -26,7 +27,8 @@ const mocks = [
   ...liabilitySystem,
   ...assessmentLibrary,
   ...controlMeasure,
-  ...authorityManagement
+  ...authorityManagement,
+  ...gis
 ]
 
 // for front mock
