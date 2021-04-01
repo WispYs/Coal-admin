@@ -64,7 +64,7 @@ export default {
       total: 0,
       listQuery: {
         page: 1,
-        size: 10
+        pagerows: 10
       },
       filter: {}, // 筛选项
       listLoading: true,

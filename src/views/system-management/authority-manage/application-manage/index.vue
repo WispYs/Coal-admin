@@ -24,6 +24,7 @@
     />
     <!-- 新建弹窗 -->
     <form-dialog
+      ref="createDialog"
       :config="initCreateConfig()"
       :dialog-visible="createDialogVisible"
       @close-dialog="createDialogVisible = false"
@@ -42,7 +43,7 @@
 </template>
 
 <script>
-import { getApplicationList } from '@/api/authority-management'
+import { getApplicationList, createApplication, editApplication, getApplicationInfo } from '@/api/authority-management'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -58,7 +59,7 @@ export default {
       total: 0,
       listQuery: {
         page: 1,
-        size: 10
+        pagerows: 10
       },
       filter: {}, // 筛选项
       listLoading: true,
@@ -111,6 +112,9 @@ export default {
       const visible = `${name}DialogVisible`
       this[visible] = true
       if (row) {
+        getApplicationInfo(row.id).then(response => {
+          console.log(response)
+        })
         // 如果有数据，更新子组件的 formData
         this.$refs.editDialog.updataForm(row)
       }
@@ -125,16 +129,31 @@ export default {
         this.$message.success('删除成功')
       })
     },
-    // submit data
+    // 新建
     createSubmit(submitData) {
       console.log(submitData)
-      this.createDialogVisible = false
-      this.$message.success('新建成功')
+      const query = Object.assign(submitData, {
+        orderNum: Number(submitData.orderNum) || 0
+      })
+      createApplication(query).then(response => {
+        console.log(response)
+        this.createDialogVisible = false
+        this.$message.success('新建成功')
+        this.$refs.createDialog.resetForm()
+      })
     },
+    // 编辑
     editSubmit(submitData) {
       console.log(submitData)
-      this.editDialogVisible = false
-      this.$message.success('编辑成功')
+      const query = Object.assign(submitData, {
+        orderNum: Number(submitData.orderNum) || 0
+      })
+      editApplication(query).then(response => {
+        console.log(response)
+        this.editDialogVisible = false
+        this.$message.success('编辑成功')
+        this.$refs.editDialog.resetForm()
+      })
     }
 
   }

@@ -1,6 +1,6 @@
 <template>
   <div class="page-container upload-page has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
-    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @handleNodeClick="handleNodeClick"/>
+    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @handleNodeClick="handleNodeClick" />
     <div class="tree-form-container">
       <div class="upload-button">
         <el-button type="primary" size="medium" @click="openDailog"><i class="el-icon-plus el-icon--left" />新建文件</el-button>
@@ -31,174 +31,178 @@
         </el-table-column>
       </el-table>
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="__fetchData" />
-      <upload-file :dialog-visible="uploadDialogVisible" :multiple="false" @close-dialog="uploadDialogVisible = false"
-        @upload-submit="uploadSubmit" />
+      <upload-file
+        :dialog-visible="uploadDialogVisible"
+        :multiple="false"
+        @close-dialog="uploadDialogVisible = false"
+        @upload-submit="uploadSubmit"
+      />
     </div>
   </div>
 </template>
 <script>
-  import TreeBar from '@/components/TreeBar'
-  import Pagination from '@/components/Pagination'
-  import UploadFile from '@/components/UploadFile'
-  import {
-    getUploadList
-  } from '@/api/table'
+import TreeBar from '@/components/TreeBar'
+import Pagination from '@/components/Pagination'
+import UploadFile from '@/components/UploadFile'
+import {
+  getUploadList
+} from '@/api/table'
 
-  export default {
-    components: {
-      Pagination,
-      UploadFile,
-      TreeBar
-    },
-    data() {
-      return {
-        addForm: {
-          superiorFolder: '根目录',
-          folderName: '',
-          sort: '',
-          note: ''
-        },
-        dialogVisible: false,
-        list: null,
-        listLoading: true,
-        total: 0,
-        listQuery: {
-          page: 1,
-          size: 10
-        },
-        multipleSelection: [],
-        uploadDialogVisible: false,
-        treeExtend: true,
-        deleteDisabled: true,
-        treeData: {
-          title: '文件夹',
-          title2: '部门',
-          list: [{
-            label: '根目录',
-            children: [{
-                label: '安检'
-              },
-              {
-                label: '采煤'
-              },
-              {
-                label: '掘进（中央区）'
-              },
-              {
-                label: '掘进（南区）'
-              },
-              {
-                label: '机电运输'
-              },
-              {
-                label: '一通三防'
-              },
-              {
-                label: '地面设施'
-              },
-              {
-                label: '维护'
-              },
-              {
-                label: '地质灾害防治'
-              }
-            ]
-          }]
-        }
-      }
-    },
-    mounted() {
-      this.__fetchData()
-    },
-    methods: {
-      openDailog() {
-        this.$message({
-          message: '谢谢您，点击新建文件',
-          type: 'success'
-        });
-        this.dialogVisible = true
+export default {
+  components: {
+    Pagination,
+    UploadFile,
+    TreeBar
+  },
+  data() {
+    return {
+      addForm: {
+        superiorFolder: '根目录',
+        folderName: '',
+        sort: '',
+        note: ''
       },
-      __fetchData() {
-        this.listLoading = true
-        getUploadList().then(response => {
-          this.listLoading = false
-          this.list = response.data.items
-          this.total = response.data.total
-        })
+      dialogVisible: false,
+      list: null,
+      listLoading: true,
+      total: 0,
+      listQuery: {
+        page: 1,
+        pagerows: 10
       },
-      // 改变所选项
-      handleSelectionChange(val) {
-        this.multipleSelection = val
-        if (this.multipleSelection.length > 0) {
-          this.deleteDisabled = false;
-        } else {
-          this.deleteDisabled = true;
-        }
-        console.log(this.multipleSelection)
-      },
-      // 上传文件控件成功回调
-      uploadSubmit(fileList) {
-        console.log(fileList)
-        this.uploadDialogVisible = false
-        this.__fetchData()
-      },
-      // 点击编辑时触发
-      updateClick(id) {
-        this.$confirm('确定编辑该项目文件?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          console.log(id)
-          this.$message.success('编辑成功')
-          this.__fetchData()
-        })
-      },
-      // 点击预览时触发
-      previewClick() {
-        this.$message({
-          message: '谢谢您，点击预览',
-          type: 'success'
-        });
-      },
-      // 点击下载时触发
-      downloadClick(){
-        this.$message({
-          message: '谢谢您，点击下载',
-          type: 'success'
-        });
-      },
-      // 批量删除
-      deleteBatches() {
-        const selectId = []
-        this.multipleSelection.forEach(it => selectId.push(it.id))
-        if (selectId.length === 0) {
-          this.$message.warning('请选择所删除的文件')
-          return false
-        }
-        this.$confirm('确定删除所选中文件?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          console.log(selectId)
-          this.__fetchData()
-          this.$message.success('删除成功')
-        })
-      },
-      // 点击刷新时触发
-      refresh() {
-        this.$message.success('谢谢您，点击刷新');
-        this.__fetchData();
-      },
-      // 点击树结构时触发
-      handleNodeClick(_data){
-        console.log(_data);
-        this.__fetchData();
-        this.$message.success("点击"+_data.label+"成功");
+      multipleSelection: [],
+      uploadDialogVisible: false,
+      treeExtend: true,
+      deleteDisabled: true,
+      treeData: {
+        title: '文件夹',
+        title2: '部门',
+        list: [{
+          label: '根目录',
+          children: [{
+            label: '安检'
+          },
+          {
+            label: '采煤'
+          },
+          {
+            label: '掘进（中央区）'
+          },
+          {
+            label: '掘进（南区）'
+          },
+          {
+            label: '机电运输'
+          },
+          {
+            label: '一通三防'
+          },
+          {
+            label: '地面设施'
+          },
+          {
+            label: '维护'
+          },
+          {
+            label: '地质灾害防治'
+          }
+          ]
+        }]
       }
     }
+  },
+  mounted() {
+    this.__fetchData()
+  },
+  methods: {
+    openDailog() {
+      this.$message({
+        message: '谢谢您，点击新建文件',
+        type: 'success'
+      })
+      this.dialogVisible = true
+    },
+    __fetchData() {
+      this.listLoading = true
+      getUploadList().then(response => {
+        this.listLoading = false
+        this.list = response.data.items
+        this.total = response.data.total
+      })
+    },
+    // 改变所选项
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+      if (this.multipleSelection.length > 0) {
+        this.deleteDisabled = false
+      } else {
+        this.deleteDisabled = true
+      }
+      console.log(this.multipleSelection)
+    },
+    // 上传文件控件成功回调
+    uploadSubmit(fileList) {
+      console.log(fileList)
+      this.uploadDialogVisible = false
+      this.__fetchData()
+    },
+    // 点击编辑时触发
+    updateClick(id) {
+      this.$confirm('确定编辑该项目文件?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(id)
+        this.$message.success('编辑成功')
+        this.__fetchData()
+      })
+    },
+    // 点击预览时触发
+    previewClick() {
+      this.$message({
+        message: '谢谢您，点击预览',
+        type: 'success'
+      })
+    },
+    // 点击下载时触发
+    downloadClick() {
+      this.$message({
+        message: '谢谢您，点击下载',
+        type: 'success'
+      })
+    },
+    // 批量删除
+    deleteBatches() {
+      const selectId = []
+      this.multipleSelection.forEach(it => selectId.push(it.id))
+      if (selectId.length === 0) {
+        this.$message.warning('请选择所删除的文件')
+        return false
+      }
+      this.$confirm('确定删除所选中文件?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(selectId)
+        this.__fetchData()
+        this.$message.success('删除成功')
+      })
+    },
+    // 点击刷新时触发
+    refresh() {
+      this.$message.success('谢谢您，点击刷新')
+      this.__fetchData()
+    },
+    // 点击树结构时触发
+    handleNodeClick(_data) {
+      console.log(_data)
+      this.__fetchData()
+      this.$message.success('点击' + _data.label + '成功')
+    }
   }
+}
 </script>
 <style lang="scss" scoped>
   .upload-page {

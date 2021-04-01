@@ -64,30 +64,30 @@ export default {
     return {
       id: 'user-manage',
       list: [{
-        definition:'应急救援专业',
-        siteName:'顾桥煤矿',
-        sort:'1'
-      },{
-        definition:'一通三防专业',
-        siteName:'顾桥煤矿',
-        sort:'2'
-      },{
-        definition:'机电运输专业',
-        siteName:'顾桥煤矿',
-        sort:'8'
-      },{
-        definition:'综合自动化专业',
-        siteName:'顾桥煤矿',
-        sort:'10'
-      },{
-        definition:'监测监控专业',
-        siteName:'顾桥煤矿',
-        sort:'16'
+        definition: '应急救援专业',
+        siteName: '顾桥煤矿',
+        sort: '1'
+      }, {
+        definition: '一通三防专业',
+        siteName: '顾桥煤矿',
+        sort: '2'
+      }, {
+        definition: '机电运输专业',
+        siteName: '顾桥煤矿',
+        sort: '8'
+      }, {
+        definition: '综合自动化专业',
+        siteName: '顾桥煤矿',
+        sort: '10'
+      }, {
+        definition: '监测监控专业',
+        siteName: '顾桥煤矿',
+        sort: '16'
       }],
       total: 0,
       listQuery: {
         page: 1,
-        size: 10
+        pagerows: 10
       },
       listLoading: true,
       RoleTypeConfig,
@@ -99,7 +99,7 @@ export default {
         search: true,
         list: OrganizationTree
       },
-      selectData:[],
+      selectData: [],
       updateDisabled: true,
       deleteDisabled: true
     }
@@ -117,8 +117,8 @@ export default {
       //   this.list = response.data.items
       //   this.total = response.data.total
       // })
-      this.total = this.list.length;
-      this.listLoading = false;
+      this.total = this.list.length
+      this.listLoading = false
     },
     // 初始化新建窗口配置
     initCreateConfig() {
@@ -161,39 +161,39 @@ export default {
     },
 
     // 勾选checkbox触发
-    selectionChange(_data){
-      this.selectData = _data;
-      if(this.selectData.length > 0){
-        this.deleteDisabled = false;
-        if(this.selectData.length == 1){
-          this.updateDisabled= false;
-        }else{
-          this.updateDisabled= true;
+    selectionChange(_data) {
+      this.selectData = _data
+      if (this.selectData.length > 0) {
+        this.deleteDisabled = false
+        if (this.selectData.length == 1) {
+          this.updateDisabled = false
+        } else {
+          this.updateDisabled = true
         }
-      }else{
-        this.deleteDisabled = true;
+      } else {
+        this.deleteDisabled = true
       }
     },
     // 点击创建触发
-    createClick(){
-      this.createDialogVisible = true;
+    createClick() {
+      this.createDialogVisible = true
     },
     // 点击编辑触发
-    editClick(){
+    editClick() {
       if (this.selectData.length == 1) {
         // 如果有数据，更新子组件的 formData
-        console.log(this.selectData);
-        this.$refs.editDialog.updataForm(this.selectData[0]);
+        console.log(this.selectData)
+        this.$refs.editDialog.updataForm(this.selectData[0])
       }
-      this.editDialogVisible = true;
+      this.editDialogVisible = true
     },
     // 点击删除触发
-    deletePersonnel(){
-      this.$message.success('删除成功');
+    deletePersonnel() {
+      this.$message.success('删除成功')
     },
     // 点击同步触发
-    synchroClick(){
-      this.$message.success('同步成功');
+    synchroClick() {
+      this.$message.success('同步成功')
     }
   }
 }
