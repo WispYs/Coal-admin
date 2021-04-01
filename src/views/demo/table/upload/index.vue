@@ -96,7 +96,7 @@ export default {
       total: 0,
       listQuery: {
         page: 1,
-        size: 10
+        pagerows: 10
       },
       multipleSelection: [],
       uploadDialogVisible: false,

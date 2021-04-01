@@ -132,7 +132,6 @@ export default {
     },
     // 下拉框出现/隐藏
     dropdownShow(dropdown) {
-      console.log(dropdown)
     },
     // 清除选中
     clearHandle() {

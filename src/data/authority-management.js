@@ -24,9 +24,9 @@ export const AppTableConfig = {
   actions: ['edit', 'delete'],
   checkbox: true,
   columns: [
-    { label: '站点名称', field: 'name', width: '200', layout: 'Text', require: true, placeholder: '请填写站点名称' },
+    { label: '站点名称', field: 'site', width: '200', layout: 'Text', require: true, placeholder: '请填写站点名称' },
     { label: '站点地址', field: 'url', width: '200', layout: 'Text', placeholder: '请填写站点地址' },
-    { label: '所属部门', field: 'department', width: '200', layout: 'TreeSelect', require: true,
+    { label: '所属部门', field: 'sysDeptId', width: '200', layout: 'TreeSelect', require: true,
       options: [
         {
           value: 1,
@@ -43,11 +43,10 @@ export const AppTableConfig = {
           ]
         }
       ], placeholder: '请选择所属部门' },
-    { label: '排序', field: 'sort', width: '150', layout: 'Text', placeholder: '请选择排序' },
+    { label: '排序', field: 'orderNum', width: '150', layout: 'Text', placeholder: '请选择排序' },
     { label: '备注', field: 'remark', width: '', layout: 'Textarea', placeholder: '请填写备注' }
   ]
 }
-
 
 export const AppFilterConfig = {
   /**
@@ -298,36 +297,36 @@ export const menuResourceConfig = {
       { value: 2, label: '移动端' }
     ], placeholder: '请选择客户端类型' },
     { label: '显示', field: 'show', width: 'auto', layout: 'Radio', options: [
-        { value: 1, label: '可见' },
-        { value: 2, label: '隐藏' }
-      ], placeholder: '请选择显示' },
+      { value: 1, label: '可见' },
+      { value: 2, label: '隐藏' }
+    ], placeholder: '请选择显示' },
     { label: '状态', field: 'state', width: 'auto', layout: 'Radio', options: [
-        { value: 1, label: '正常' },
-        { value: 2, label: '禁用' }
-      ], placeholder: '请选择状态' },
+      { value: 1, label: '正常' },
+      { value: 2, label: '禁用' }
+    ], placeholder: '请选择状态' },
     { label: '地址', field: 'adress', width: 'auto', layout: 'Text', placeholder: '请填写地址' },
     { label: '打开方式', field: 'openType', width: 'auto', layout: 'Select', options: [
-        { value: 1, label: '内部嵌入' },
-        { value: 2, label: '浏览器弹出' }
-      ], placeholder: '请选择打开方式' },
+      { value: 1, label: '内部嵌入' },
+      { value: 2, label: '浏览器弹出' }
+    ], placeholder: '请选择打开方式' },
     { label: '数据范围', field: 'dataRange', width: '140', layout: 'Select', options: [
-        { value: 1, label: '未知' },
-        { value: 2, label: '个人' },
-        { value: 3, label: '部门' },
-        { value: 4, label: '部门及子部门' },
-        { value: 5, label: '公共' },
-        { value: 6, label: '自定义' },
-      ], placeholder: '请选择数据范围' },
+      { value: 1, label: '未知' },
+      { value: 2, label: '个人' },
+      { value: 3, label: '部门' },
+      { value: 4, label: '部门及子部门' },
+      { value: 5, label: '公共' },
+      { value: 6, label: '自定义' }
+    ], placeholder: '请选择数据范围' },
     { label: '数据源', field: 'source', width: '140', layout: 'Select', options: [
-        { value: 1, label: '无' },
-        { value: 2, label: '默认数据源' },
-        { value: 3, label: '技术资源数据源' },
-        { value: 4, label: '采掘平面图数据源' },
-        { value: 5, label: '企业证照数据源' },
-        { value: 6, label: '特殊部门数据源' },
-      ], placeholder: '请选择数据源' },
+      { value: 1, label: '无' },
+      { value: 2, label: '默认数据源' },
+      { value: 3, label: '技术资源数据源' },
+      { value: 4, label: '采掘平面图数据源' },
+      { value: 5, label: '企业证照数据源' },
+      { value: 6, label: '特殊部门数据源' }
+    ], placeholder: '请选择数据源' },
     { label: '排序', field: 'sort', layout: 'Text', width: 'auto', require: true, placeholder: '请填写排序' },
-    { label: '备注', field: 'remark', layout: 'Textarea', width: 'auto', placeholder: '请填写备注'}
+    { label: '备注', field: 'remark', layout: 'Textarea', width: 'auto', placeholder: '请填写备注' }
   ]
 }
 
@@ -344,9 +343,9 @@ export const dataDictionaryConfig = {
     { label: '值', field: 'value', width: 'auto', layout: 'Text', placeholder: '请填写值' },
     { label: '排序', field: 'sort', width: 'auto', layout: 'Text', placeholder: '请填写排序' },
     { label: '类型', field: 'type', width: 'auto', layout: 'Radio', options: [
-        { value: 1, label: '类别' },
-        { value: 2, label: '项' }
-      ], placeholder: '请选择类型' },
+      { value: 1, label: '类别' },
+      { value: 2, label: '项' }
+    ], placeholder: '请选择类型' },
     { label: '备注', field: 'remark', width: 'auto', layout: 'Textarea', placeholder: '请填写备注' }
   ]
 }
@@ -393,16 +392,16 @@ export const NewsConfig = {
   rowKey: 'num',
   checkbox: false,
   columns: [
-    { label: '标题', field: 'title', layout: 'Text', width:'auto', placeholder: '请填写标题' },
-    { label: '内容', field: 'content', layout: 'Text', width:'200', placeholder: '请填写内容' },
-    { label: '消息类型', field: 'newsType', layout: 'Text', width:'auto', placeholder: '请填写消息类型' },
-    { label: '消息级别', field: 'newsLevel', layout: 'Text', width:'auto', placeholder: '请填写消息级别' },
-    { label: '发生次数', field: 'count', layout: 'Text', width:'auto', placeholder: '请填写发生次数' },
-    { label: '创建时间', field: 'createDate', layout: 'Text', width:'auto', placeholder: '请填写创建时间' },
-    { label: '最近更新', field: 'lastUpdated', layout: 'Text', width:'auto', placeholder: '请选择最近更新' },
-    { label: '状态', field: 'state', layout: 'Text', width:'auto', placeholder: '请填写状态' },
-    { label: '读取人', field: 'reader', layout: 'Text', width:'auto', placeholder: '请填写读取人' },
-    { label: '读取时间', field: 'readTime', layout: 'Text', width:'auto', placeholder: '请填写读取时间' }
+    { label: '标题', field: 'title', layout: 'Text', width: 'auto', placeholder: '请填写标题' },
+    { label: '内容', field: 'content', layout: 'Text', width: '200', placeholder: '请填写内容' },
+    { label: '消息类型', field: 'newsType', layout: 'Text', width: 'auto', placeholder: '请填写消息类型' },
+    { label: '消息级别', field: 'newsLevel', layout: 'Text', width: 'auto', placeholder: '请填写消息级别' },
+    { label: '发生次数', field: 'count', layout: 'Text', width: 'auto', placeholder: '请填写发生次数' },
+    { label: '创建时间', field: 'createDate', layout: 'Text', width: 'auto', placeholder: '请填写创建时间' },
+    { label: '最近更新', field: 'lastUpdated', layout: 'Text', width: 'auto', placeholder: '请选择最近更新' },
+    { label: '状态', field: 'state', layout: 'Text', width: 'auto', placeholder: '请填写状态' },
+    { label: '读取人', field: 'reader', layout: 'Text', width: 'auto', placeholder: '请填写读取人' },
+    { label: '读取时间', field: 'readTime', layout: 'Text', width: 'auto', placeholder: '请填写读取时间' }
   ]
 }
 
@@ -412,27 +411,27 @@ export const NewsTypeConfig = {
   rowKey: 'ID',
   checkbox: true,
   columns: [
-    { label: 'ID', field: 'ID', layout: 'Text', width:'160', placeholder: '请填写标题' },
-    { label: '名称', field: 'name', layout: 'Text', width:'200', require: true, placeholder: '请填写内容' },
-    { label: '编号', field: 'identifier', layout: 'Text', width:'auto', placeholder: '请填写消息类型' },
-    { label: '消息级别', field: 'newsLevel', layout: 'Select', width:'auto', options: [
+    { label: 'ID', field: 'ID', layout: 'Text', width: '160', placeholder: '请填写标题' },
+    { label: '名称', field: 'name', layout: 'Text', width: '200', require: true, placeholder: '请填写内容' },
+    { label: '编号', field: 'identifier', layout: 'Text', width: 'auto', placeholder: '请填写消息类型' },
+    { label: '消息级别', field: 'newsLevel', layout: 'Select', width: 'auto', options: [
       { value: 1, label: '通知' },
       { value: 2, label: '协同' },
       { value: 3, label: '报警' }
     ], placeholder: '请选择消息级别' },
-    { label: '提醒类型', field: 'newsType', layout: 'Select', width:'auto', options: [
+    { label: '提醒类型', field: 'newsType', layout: 'Select', width: 'auto', options: [
       { value: 1, label: '无' },
       { value: 2, label: '提示' },
       { value: 3, label: '窗口' }
     ], placeholder: '请选择提醒类型' },
-    { label: '目标类型', field: 'targetType', layout: 'Select', width:'auto', options: [
+    { label: '目标类型', field: 'targetType', layout: 'Select', width: 'auto', options: [
       { value: 1, label: '自定义' },
       { value: 2, label: '用户' },
       { value: 3, label: '部门' },
       { value: 4, label: '角色' }
     ], placeholder: '请选择提醒类型' },
-    { label: '提醒目标', field: 'remindTarget', layout: 'Text', width:'auto', placeholder: '请选择最近更新' },
-    { label: '备注', field: 'remark', layout: 'Text', width:'auto', placeholder: '请填写状态' }
+    { label: '提醒目标', field: 'remindTarget', layout: 'Text', width: 'auto', placeholder: '请选择最近更新' },
+    { label: '备注', field: 'remark', layout: 'Text', width: 'auto', placeholder: '请填写状态' }
   ]
 }
 
@@ -442,8 +441,8 @@ export const AppPowerConfig = {
   rowKey: 'ID',
   checkbox: true,
   columns: [
-    { label: 'App模块名称', field: 'moduleName', layout: 'Text', width:'auto', placeholder: '请填写App模块名称' },
-    { label: 'App模块URL', field: 'moduleUrl', layout: 'Text', width:'auto', placeholder: '请填写App模块URL' },
-    { label: '备注', field: 'remark', layout: 'Textarea', width:'auto', placeholder: '请填写备注' }
+    { label: 'App模块名称', field: 'moduleName', layout: 'Text', width: 'auto', placeholder: '请填写App模块名称' },
+    { label: 'App模块URL', field: 'moduleUrl', layout: 'Text', width: 'auto', placeholder: '请填写App模块URL' },
+    { label: '备注', field: 'remark', layout: 'Textarea', width: 'auto', placeholder: '请填写备注' }
   ]
 }

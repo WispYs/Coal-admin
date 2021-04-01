@@ -1,22 +1,46 @@
 import request from '@/utils/request'
 import { SystemUrl } from './url'
 
-export function getApplicationList(params) {
+// 应用管理系统
+export function getApplicationList(data) {
   return request({
-    url: '/system/application/list',
-    method: 'get',
-    params
+    url: `${SystemUrl}/sysManage/search`,
+    method: 'post',
+    data
+  })
+}
+export function createApplication(data) {
+  return request({
+    url: `${SystemUrl}/sysManage/save`,
+    method: 'post',
+    data
+  })
+}
+export function getApplicationInfo(id) {
+  return request({
+    url: `${SystemUrl}/sysManage/get`,
+    method: 'post',
+    data: { id }
+  })
+}
+export function editApplication(data) {
+  return request({
+    url: `${SystemUrl}/sysManage/update`,
+    method: 'post',
+    data
   })
 }
 
-export function getUserList(params) {
+// 用户管理
+export function getUserList(data) {
   return request({
-    url: `${SystemUrl}/sysUser/getInfo`,
+    url: `${SystemUrl}/sysUser/search`,
     method: 'get',
-    params
+    data
   })
 }
 
+// 组织机构管理
 export function getOrganList(params) {
   return request({
     url: '/system/organization/list',
@@ -24,7 +48,7 @@ export function getOrganList(params) {
     params
   })
 }
-export function createOrganLsit(params){
+export function createOrganLsit(params) {
   return request({
     url: '/admin/createOrganLsit/list',
     method: 'get',
@@ -32,6 +56,7 @@ export function createOrganLsit(params){
   })
 }
 
+// 角色管理
 export function getRoleList(params) {
   return request({
     url: '/system/role/list',

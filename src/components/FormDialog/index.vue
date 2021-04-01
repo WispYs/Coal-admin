@@ -36,6 +36,7 @@
           <!-- tree-select  -->
           <tree-select
             v-if="item.layout === 'TreeSelect'"
+            ref="treeSelect"
             class="form-item"
             :value="formData[item.field]"
             :placeholder="item.placeholder"
@@ -178,14 +179,23 @@ export default {
   methods: {
     // 更新组件内 form 数据
     updataForm(form) {
-      console.log(form);
+      console.log(form)
       this.formData = Object.assign(this.formData, form)
       console.log(this.formData)
     },
+
+    // 清空组件 form 数据
+    resetForm() {
+      this.$refs.formData.resetFields()
+      const treeSelectComponents = this.$refs.treeSelect
+      treeSelectComponents.forEach(it => {
+        it.clearHandle()
+      })
+    },
+
     onSubmit() {
       this.$refs.formData.validate((valid) => {
         if (valid) {
-          this.$refs.formData.resetFields()
           this.$emit('submit', this.formData)
         } else {
           console.log('error submit!!')
@@ -199,7 +209,7 @@ export default {
     },
     // 更新父组件 xxxxxDialogVisible 的值
     closeDialog() {
-      this.$refs.formData.resetFields()
+      this.resetForm()
       this.$emit('close-dialog')
     },
     // treeSelect 值改变

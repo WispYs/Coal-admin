@@ -14,7 +14,8 @@ service.interceptors.request.use(
   config => {
     // config.headers['Content-Type'] = 'multipart/form-data'
     if (store.getters.token) {
-      config.headers['Authorization'] = getToken()
+      config.headers['Authorization'] = 'admin'
+      // config.headers['Authorization'] = getToken()
     }
     return config
   },
@@ -43,7 +44,7 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error)
     Message({
-      message: error.msg,
+      message: error,
       type: 'error',
       duration: 5 * 1000
     })

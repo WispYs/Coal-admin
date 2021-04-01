@@ -238,6 +238,7 @@
 <script>
 import TopBar from './components/top-bar'
 import { getViewPoint, getPointInfo } from '@/api/gis'
+import { GisViewPoint, PointInfo } from '@/data/gis-data'
 var model = null
 var api = null
 export default {
@@ -424,7 +425,10 @@ export default {
 
       // }
 
-      this.randPoint(this.viewPointData)
+      this.randPoint(GisViewPoint)
+
+      // 后台api
+      // this.randPoint(this.viewPointData)
       model.BIM365API.Extension.Point.openCluster()
       console.log(this.dataList)
       for (var i = 0; i < this.dataList.length; i++) {
@@ -446,23 +450,33 @@ export default {
     // 获取所有锚点信息
     __fetchViewPoint() {
       getViewPoint().then(response => {
-        this.viewPointData = response.data.items
+        this.viewPointData = response.data.records
       })
     },
 
     // 点击锚点获取详情
     __fetchPointInfo(id) {
-      getPointInfo(id).then(response => {
-        const viewPointInfo = response.data.items
-        this.dlgTitle = `${viewPointInfo.name}详情`
-        this.dlgData = `设备编号：${viewPointInfo.id}<br/>` +
-                      `传感器类型：${viewPointInfo.type}<br/>` +
-                      `安装地点：${viewPointInfo.addr}<br/>` +
-                      `实时值：${viewPointInfo.num}<br/>` +
-                      `单位：%CH4<br/>` +
-                      `状态：正常<br/>` +
-                      `监测时间：${viewPointInfo.date}`
-      })
+      // 后台api
+      // getPointInfo(id).then(response => {
+      //   const viewPointInfo = response.data
+      //   this.dlgTitle = `${viewPointInfo.name}详情`
+      //   this.dlgData = `设备编号：${viewPointInfo.id}<br/>` +
+      //                 `传感器类型：${viewPointInfo.type}<br/>` +
+      //                 `安装地点：${viewPointInfo.addr}<br/>` +
+      //                 `实时值：${viewPointInfo.num}<br/>` +
+      //                 `单位：%CH4<br/>` +
+      //                 `状态：正常<br/>` +
+      //                 `监测时间：${viewPointInfo.currDate}`
+      // })
+      const viewPointInfo = PointInfo
+      this.dlgTitle = `${viewPointInfo.name}详情`
+      this.dlgData = `设备编号：${viewPointInfo.id}<br/>` +
+                    `传感器类型：${viewPointInfo.type}<br/>` +
+                    `安装地点：${viewPointInfo.addr}<br/>` +
+                    `实时值：${viewPointInfo.num}<br/>` +
+                    `单位：%CH4<br/>` +
+                    `状态：正常<br/>` +
+                    `监测时间：${viewPointInfo.currDate}`
     },
     // 全屏
     fullScreen() {
@@ -526,6 +540,8 @@ export default {
         pos,
         'http://www.probim.cn:8088/bimexample/img/point.png'
       )
+      console.log(pos)
+      console.log(dt)
 
       document.getElementById(dt.id).addEventListener('click', this.addEvent)
       this.locationVisible = true
@@ -599,15 +615,20 @@ export default {
     },
     randPoint(viewPointData) {
       viewPointData.forEach(it => {
-        it.x = it.controlPostion.x
-        it.y = it.controlPostion.z
+        const pos = {
+          x: it.x,
+          y: it.y,
+          z: it.z
+        }
         it.a = this.randomNum()
         it.b = this.randomNum()
         it.c = this.randomNum()
         it.d = this.randomNum()
         it.e = this.randomNum()
+        console.log(pos)
+        console.log(it)
         const data = model.BIM365API.Extension.Point.addAnchorPointByPosition(
-          it.controlPostion,
+          pos,
           'http://www.probim.cn:8088/bimexample/img/point.png',
           it
         )
@@ -651,9 +672,10 @@ export default {
       // }
     },
     clickPoint(id) {
-      console.log(`----${id}----`)
       console.log(this.dataList)
-      this.__fetchPointInfo(id)
+      const clickPoint = this.dataList.filter(it => it.id === id)
+      console.log(clickPoint)
+      this.__fetchPointInfo(clickPoint[0].data.id)
 
       // var data = {}
       // for (var i = 0; i < this.dataList.length; i++) { if (this.dataList[i].id == id) data = this.dataList[i] }

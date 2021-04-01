@@ -60,7 +60,7 @@ export default {
       total: 0,
       listQuery: {
         page: 1,
-        size: 10
+        pagerows: 10
       },
       filter: {}, // 筛选项
       listLoading: true,
@@ -81,7 +81,7 @@ export default {
       getList(query).then(response => {
         this.listLoading = false
         this.list = response.data.items
-        console.log(this.list);
+        console.log(this.list)
         this.total = response.data.total
       })
     },

@@ -1,8 +1,8 @@
 import request from '@/utils/request'
-
+import { GisUrl } from './url'
 export function getViewPoint() {
   return request({
-    url: '/gis/viewPoint',
+    url: `${GisUrl}/anchor/list`,
     method: 'get'
 
   })
@@ -10,7 +10,7 @@ export function getViewPoint() {
 
 export function getPointInfo(id) {
   return request({
-    url: '/gis/pointInfo',
+    url: `${GisUrl}/anchor/get`,
     method: 'get',
     params: { id }
   })

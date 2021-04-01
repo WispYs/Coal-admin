@@ -2,16 +2,16 @@ const Mock = require('mockjs')
 
 const applicationData = Mock.mock({
   items: [{
-    name: '顾桥煤矿',
+    site: '顾桥煤矿',
     url: 'http://127.0.0.1:8080',
-    department: 1,
-    sort: 1,
+    sysDeptId: 1,
+    orderNum: 1,
     remark: ''
   }, {
-    name: '办公室',
+    site: '办公室',
     url: 'http://127.0.0.1:8080',
-    department: 6,
-    sort: 1,
+    sysDeptId: 6,
+    orderNum: 1,
     remark: ''
   }]
 })
