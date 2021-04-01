@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { getApplicationList, createApplication, editApplication, getApplicationInfo } from '@/api/authority-management'
+import { getApplicationList, createApplication, editApplication, getApplicationInfo, delApplication } from '@/api/authority-management'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -80,8 +80,8 @@ export default {
       const query = Object.assign(this.listQuery, this.filter)
       getApplicationList(query).then(response => {
         this.listLoading = false
-        this.list = response.data.items
-        this.total = response.data.total
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
       })
     },
     // 查询数据
@@ -111,35 +111,44 @@ export default {
     openDialog(name, row) {
       const visible = `${name}DialogVisible`
       this[visible] = true
+      // 如果有数据，更新子组件的 formData
       if (row) {
-        getApplicationInfo(row.id).then(response => {
-          console.log(response)
+        getApplicationInfo(row.sysManageId).then(response => {
+          const info = Object.assign(response.data, {
+            sysDeptId: Number(response.data.sysDeptId) || 0
+          })
+          this.$refs.editDialog.updataForm(info)
         })
-        // 如果有数据，更新子组件的 formData
-        this.$refs.editDialog.updataForm(row)
       }
     },
     // 删除
-    deleteClick(id) {
+    deleteClick(row) {
       this.$confirm('确定删除该站点?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success('删除成功')
+        console.log(row.sysManageId)
+        delApplication(row.sysManageId).then(response => {
+          console.log(response)
+          this.$message.success('删除成功')
+          this.__fetchData()
+        })
       })
     },
     // 新建
     createSubmit(submitData) {
       console.log(submitData)
       const query = Object.assign(submitData, {
-        orderNum: Number(submitData.orderNum) || 0
+        orderNum: Number(submitData.orderNum) || 0,
+        sysDeptId: Number(submitData.sysDeptId) || 0
       })
       createApplication(query).then(response => {
         console.log(response)
         this.createDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDialog.resetForm()
+        this.__fetchData()
       })
     },
     // 编辑
@@ -153,6 +162,7 @@ export default {
         this.editDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDialog.resetForm()
+        this.__fetchData()
       })
     }
 

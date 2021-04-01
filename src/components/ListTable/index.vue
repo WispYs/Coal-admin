@@ -23,7 +23,7 @@
       width="55"
       align="center"
     />
-    <el-table-column align="center" label="序号" width="95" fixed v-if="config.orderNumber">
+    <el-table-column v-if="config.orderNumber" align="center" label="序号" width="95" fixed>
       <template slot-scope="scope">
         {{ scope.$index+1 }}
       </template>
@@ -145,12 +145,12 @@
         <el-button v-if="config.actions.indexOf('edit') > -1 && !scope.row.edit" type="text" size="small" @click="edit(scope.row)">编辑</el-button>
         <el-button v-if="config.actions.indexOf('edit') > -1 && scope.row.edit" type="text" style="color: #67c23a" size="small" @click="submitRow(scope.row)">提交</el-button>
         <el-button v-if="config.actions.indexOf('edit') > -1 && scope.row.edit" type="text" style="color: #e6a23c" size="small" @click="cancelSubmit(scope.row)">取消</el-button>
-        <el-button v-if="config.actions.indexOf('delete') > -1" type="text" size="small" style="color: #f56c6c" @click="del(scope.row.id)">删除</el-button>
-        <i v-if="config.actions.indexOf('addIco') > -1" class="el-icon-plus icoButton" @click="addIco(scope.row, scope.$index)"></i>
-        <i v-if="config.actions.indexOf('editIco') > -1" class="el-icon-edit icoButton" @click="editIco(scope.row, scope.$index)"></i>
-        <i v-if="config.actions.indexOf('deleteIco') > -1" class="el-icon-delete icoButton" @click="deleteIco(scope.row, scope.$index)"></i>
-        <i v-if="config.actions.indexOf('moveUpIco') > -1" class="el-icon-top icoButton" @click="moveUpIco(scope.row, scope.$index)"></i>
-        <i v-if="config.actions.indexOf('moveDownIco') > -1" class="el-icon-bottom icoButton" @click="moveDownIco(scope.row, scope.$index)"></i>
+        <el-button v-if="config.actions.indexOf('delete') > -1" type="text" size="small" style="color: #f56c6c" @click="del(scope.row)">删除</el-button>
+        <i v-if="config.actions.indexOf('addIco') > -1" class="el-icon-plus icoButton" @click="addIco(scope.row, scope.$index)" />
+        <i v-if="config.actions.indexOf('editIco') > -1" class="el-icon-edit icoButton" @click="editIco(scope.row, scope.$index)" />
+        <i v-if="config.actions.indexOf('deleteIco') > -1" class="el-icon-delete icoButton" @click="deleteIco(scope.row, scope.$index)" />
+        <i v-if="config.actions.indexOf('moveUpIco') > -1" class="el-icon-top icoButton" @click="moveUpIco(scope.row, scope.$index)" />
+        <i v-if="config.actions.indexOf('moveDownIco') > -1" class="el-icon-bottom icoButton" @click="moveDownIco(scope.row, scope.$index)" />
       </template>
     </el-table-column>
   </el-table>
@@ -284,8 +284,8 @@ export default {
       this.$emit('update')
     },
     // 删除
-    del(id) {
-      this.$emit('delete-click', id)
+    del(row) {
+      this.$emit('delete-click', row)
     },
 
     // treeSelect 值改变
@@ -337,27 +337,27 @@ export default {
     selectionChange(val) {
       this.$emit('selectionChange', val)
     },
-    addIco(row,index){
-      this.$emit("addIco",row,index)
+    addIco(row, index) {
+      this.$emit('addIco', row, index)
     },
-    editIco(row,index){
-      this.$emit("editIco",row,index)
+    editIco(row, index) {
+      this.$emit('editIco', row, index)
     },
-    deleteIco(row,index){
-      this.$emit("deleteIco",row,index)
+    deleteIco(row, index) {
+      this.$emit('deleteIco', row, index)
     },
-    moveUpIco(row,index){
-      if(index == 0){
-        this.$message.error("该数据已经位于最前面,不能再上移了哈");
-      }else{
-        this.$emit("moveUpIco",row,index);
+    moveUpIco(row, index) {
+      if (index == 0) {
+        this.$message.error('该数据已经位于最前面,不能再上移了哈')
+      } else {
+        this.$emit('moveUpIco', row, index)
       }
     },
-    moveDownIco(row,index){
-      if(index + 1 == this.list.length){
-        this.$message.error("该数据已经位于最后面,不能再下移了哈");
-      }else{
-        this.$emit("moveDownIco",row,index)
+    moveDownIco(row, index) {
+      if (index + 1 == this.list.length) {
+        this.$message.error('该数据已经位于最后面,不能再下移了哈')
+      } else {
+        this.$emit('moveDownIco', row, index)
       }
     }
   }

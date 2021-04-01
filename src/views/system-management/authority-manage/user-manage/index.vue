@@ -28,6 +28,7 @@
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="__fetchData" />
       <!-- 新建弹窗 -->
       <form-dialog
+        ref="createDialog"
         :config="initCreateConfig()"
         :dialog-visible="createDialogVisible"
         @close-dialog="createDialogVisible = false"
@@ -50,9 +51,7 @@
 </template>
 
 <script>
-import {
-  getUserList
-} from '@/api/authority-management'
+import { getUserList, createUser } from '@/api/authority-management'
 import TreeBar from '@/components/TreeBar'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
@@ -166,9 +165,20 @@ export default {
     // submit data
     createSubmit(submitData) {
       console.log(submitData)
-      this.createDialogVisible = false
-      this.$message.success('新建成功')
-      this.__fetchData()
+
+      const query = Object.assign(submitData, {
+
+      })
+      createUser(query).then(response => {
+        console.log(response)
+        this.createDialogVisible = false
+        this.$message.success('新建成功')
+        this.$refs.createDialog.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.createDialog.resetForm()
+      })
     },
     editSubmit(submitData) {
       console.log(submitData)

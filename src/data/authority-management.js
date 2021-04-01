@@ -68,10 +68,10 @@ export const UserTableConfig = {
   columns: [
     { label: '登录名', field: 'loginName', width: '90', layout: 'Text', require: true, placeholder: '请填写登录名', message: '唯一的登录名' },
     { label: '姓名', field: 'userName', width: '90', layout: 'Text', require: true, placeholder: '请填写姓名' },
-    { label: '工号', field: 'jobNum', width: '100', layout: 'Text', require: true, hidden: true, placeholder: '请填写工号' },
+    { label: '工号', field: 'workNumber', width: '100', layout: 'Text', require: true, hidden: true, placeholder: '请填写工号' },
     { label: '密码', field: 'password', width: '100', layout: 'Text', require: true, hidden: true, placeholder: '请填写密码', message: '6到18个字符' },
-    { label: '手机', field: 'mobile', width: '110', layout: 'Text', placeholder: '请填写手机号码' },
-    { label: '电话', field: 'phone', width: '100', layout: 'Text', hidden: true, placeholder: '请填写电话' },
+    { label: '手机', field: 'phone', width: '110', layout: 'Text', placeholder: '请填写手机号码' },
+    { label: '电话', field: 'telephone', width: '100', layout: 'Text', hidden: true, placeholder: '请填写电话' },
     { label: '邮箱', field: 'email', width: '100', layout: 'Text', hidden: true, placeholder: '请填写邮箱' },
     { label: '入职时间', field: 'enterTime', width: '100', layout: 'DateTime', hidden: true, placeholder: '请选择入职时间' },
     { label: '性别', field: 'gender', width: '70', layout: 'Radio', hidden: true,
@@ -79,7 +79,7 @@ export const UserTableConfig = {
         { value: 1, label: '男' },
         { value: 2, label: '女' }
       ], placeholder: '请选择状态' },
-    { label: '部门', field: 'department', layout: 'TreeSelect', require: true,
+    { label: '部门', field: 'sysDeptId', layout: 'TreeSelect', require: true,
       options: [
         {
           value: 1,
@@ -110,10 +110,10 @@ export const UserTableConfig = {
     { label: '职务', field: 'position', width: '90', layout: 'Text', placeholder: '请填写职务' },
     { label: '岗位工种', field: 'workType', layout: 'Text', placeholder: '请填写职务' },
     { label: '排序', field: 'sort', width: '60', layout: 'Text', hidden: true, placeholder: '请填写排序' },
-    { label: '角色', field: 'role', layout: 'Select',
+    { label: '角色', field: 'sysRoleId', layout: 'Select',
       options: [
-        { value: '影响单位审核', label: '影响单位审核' },
-        { value: '科技创新', label: '科技创新' }
+        { value: 1, label: '影响单位审核' },
+        { value: 2, label: '科技创新' }
       ], placeholder: '请选择角色' },
     { label: '状态', field: 'status', width: '70', layout: 'Radio',
       options: [

@@ -18,9 +18,8 @@ export function createApplication(data) {
 }
 export function getApplicationInfo(id) {
   return request({
-    url: `${SystemUrl}/sysManage/get`,
-    method: 'post',
-    data: { id }
+    url: `${SystemUrl}/sysManage/get/${id}`,
+    method: 'get'
   })
 }
 export function editApplication(data) {
@@ -30,12 +29,32 @@ export function editApplication(data) {
     data
   })
 }
+export function delApplication(id) {
+  return request({
+    url: `${SystemUrl}/sysManage/delete/${id}`,
+    method: 'delete'
+  })
+}
 
 // 用户管理
-export function getUserList(data) {
+export function getUserList(params) {
   return request({
-    url: `${SystemUrl}/sysUser/search`,
+    url: '/system/user/list',
     method: 'get',
+    params
+  })
+}
+// export function getUserList(data) {
+//   return request({
+//     url: `${SystemUrl}/sysUser/search`,
+//     method: 'get',
+//     data
+//   })
+// }
+export function createUser(data) {
+  return request({
+    url: `${SystemUrl}/sysUser/save`,
+    method: 'post',
     data
   })
 }

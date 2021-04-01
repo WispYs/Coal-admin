@@ -95,7 +95,7 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button size="medium" @click="closeDialog">取消</el-button>
-      <el-button type="primary" size="medium" @click="onSubmit">{{ config.title }}</el-button>
+      <el-button :loading="submitLoading" type="primary" size="medium" @click="onSubmit">{{ config.title }}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -127,6 +127,7 @@ export default {
   },
   data() {
     return {
+      submitLoading: false, // 提交按钮loading状态
       formData: {}, // 弹窗表单
       formRules: {}
 
@@ -179,13 +180,13 @@ export default {
   methods: {
     // 更新组件内 form 数据
     updataForm(form) {
-      console.log(form)
       this.formData = Object.assign(this.formData, form)
       console.log(this.formData)
     },
 
     // 清空组件 form 数据
     resetForm() {
+      this.submitLoading = false
       this.$refs.formData.resetFields()
       const treeSelectComponents = this.$refs.treeSelect
       treeSelectComponents.forEach(it => {
@@ -196,6 +197,7 @@ export default {
     onSubmit() {
       this.$refs.formData.validate((valid) => {
         if (valid) {
+          this.submitLoading = true
           this.$emit('submit', this.formData)
         } else {
           console.log('error submit!!')
