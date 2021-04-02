@@ -19,3 +19,27 @@ export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }
 
+// 判断字符串是否是手机号
+export function isPhone(str) {
+  return /^1[3,4,5,6,7,8,9]\d{9}$/.test(str)
+}
+
+// 表单验证手机号码
+export const validatePhone = (rule, value, callback) => {
+  const isPhone = /^1[3,4,5,6,7,8,9]\d{9}$/.test(value)
+  if (!isPhone) {
+    callback(new Error('手机号码格式错误'))
+  } else {
+    callback()
+  }
+}
+
+export const validateEmail = (rule, value, callback) => {
+  const isEmail = /^[a-zA-z_][a-zA-Z_0-9]*?@\w{1,}.\[a-zA-Z]{1,}/.test(value)
+  if (!isEmail) {
+    callback(new Error('邮箱格式错误'))
+  } else {
+    callback()
+  }
+}
+

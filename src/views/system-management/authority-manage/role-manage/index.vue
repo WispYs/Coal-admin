@@ -60,7 +60,10 @@
 
 <script>
 import {
-  getRoleList
+  getRoleList,
+  saveRole,
+  deleteRole,
+  updateRole
 } from '@/api/authority-management'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
@@ -113,11 +116,14 @@ export default {
   methods: {
     __fetchData() {
       this.listLoading = true
-      const query = Object.assign(this.listQuery, this.filter)
-      getRoleList(query).then(response => {
-        this.listLoading = false
-        this.list = response.data.items
-        this.total = response.data.total
+      // const query = Object.assign(this.listQuery, this.filter)
+      getRoleList(this.listQuery).then(res => {
+        console.log(res)
+
+        this.list = res.data.rows
+        this.total = parseInt(res.data.records);
+        this.listLoading = false;
+        // this.total = response.data.total
       })
     },
     // 查询数据
@@ -183,24 +189,35 @@ export default {
     },
     // 删除
     deleteClick(id) {
-      this.$confirm('确定删除该站点?', '提示', {
+      this.$confirm('确定删除该角色?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success('删除成功')
+        console.log(id);
+        deleteRole(id.sysRoleId).then(res => {
+          this.__fetchData()
+          this.$message.success('删除成功')
+        })
       })
     },
-    // submit data
+    // submit data  创建角色
     createSubmit(submitData) {
-      console.log(submitData)
-      this.createDialogVisible = false
-      this.$message.success('新建成功')
+      saveRole(submitData).then(res => {
+        console.log(res)
+        this.__fetchData()
+        this.createDialogVisible = false
+        this.$message.success('新建成功')
+      })
     },
     editSubmit(submitData) {
       console.log(submitData)
-      this.editDialogVisible = false
-      this.$message.success('编辑成功')
+      updateRole(submitData).then(res => {
+        console.log(res);
+        this.__fetchData()
+        this.editDialogVisible = false
+        this.$message.success('编辑成功')
+      })
     },
     otherClick(row, index, item) {
       // console.log(row,index,item);

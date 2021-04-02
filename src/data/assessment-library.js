@@ -14,6 +14,7 @@ export const TableConfig = {
    * @param {string}  unit              字段单位，例如：元、kw/h
    * @param {string}  layout            表单类型
    * @param {boolean} require           是否为必填字段，默认false为非必填
+   * @param {boolean} rule              自定义验证方法
    * @param {string}  dateFormat        日期格式
    * @param {array}   options           选择器配置项
    * @param {boolean} hidden            是否在表格中隐藏，默认false，值为true时只在新建、编辑中显示该字段

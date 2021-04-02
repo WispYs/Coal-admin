@@ -164,9 +164,22 @@ export default {
       }
 
       if (item.require) {
+        const configRule = item.rule || []
         rules[item.field] = [
-          { required: item.require, message: item.placeholder, trigger: 'blur' }
+          { required: item.require, message: item.placeholder, trigger: 'blur' },
+          ...configRule
         ]
+
+        // if (item.field == 'password') {
+        //   rules[item.field] = [
+        //     { required: item.require, message: item.placeholder, trigger: 'blur' },
+        //     { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
+        //   ]
+        // } else {
+        //   rules[item.field] = [
+        //     { required: item.require, message: item.placeholder, trigger: 'blur' }
+        //   ]
+        // }
       }
     })
     this.formData = Object.assign({}, obj)
@@ -189,9 +202,11 @@ export default {
       this.submitLoading = false
       this.$refs.formData.resetFields()
       const treeSelectComponents = this.$refs.treeSelect
-      treeSelectComponents.forEach(it => {
-        it.clearHandle()
-      })
+      if (treeSelectComponents) {
+        treeSelectComponents.forEach(it => {
+          it.clearHandle()
+        })
+      }
     },
 
     onSubmit() {

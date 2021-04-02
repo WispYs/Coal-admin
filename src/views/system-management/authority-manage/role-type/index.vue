@@ -6,7 +6,7 @@
       <h2 style="margin-bottom: 16px;">顾桥煤矿—角色类型</h2>
       <div class="buttons">
         <div class="buttons_item">
-          <el-button type="primary" size="medium" @click="createClick"><i class="el-icon-plus el-icon--left" />创建
+          <el-button type="primary" size="medium" @click="openDialog('create')"><i class="el-icon-plus el-icon--left" />创建
           </el-button>
           <el-button type="primary" size="medium" plain :disabled="updateDisabled" @click="editClick('edit')"><i class="el-icon-edit el-icon--left" />编辑
           </el-button>
@@ -27,7 +27,7 @@
         :total="total"
         :page.sync="listQuery.page"
         :limit.sync="listQuery.pagerows"
-        @pagination="__fetchData"
+        @pagination="pagination"
       />
       <!-- 新建弹窗 -->
       <form-dialog
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { getUserList } from '@/api/authority-management'
+import { getUserList,saveRoleType,deleteRoleType,updateRoleType,getRoleTypeList,getSiteList } from '@/api/authority-management'
 import TreeBar from '@/components/TreeBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -63,27 +63,7 @@ export default {
   data() {
     return {
       id: 'user-manage',
-      list: [{
-        definition: '应急救援专业',
-        siteName: '顾桥煤矿',
-        sort: '1'
-      }, {
-        definition: '一通三防专业',
-        siteName: '顾桥煤矿',
-        sort: '2'
-      }, {
-        definition: '机电运输专业',
-        siteName: '顾桥煤矿',
-        sort: '8'
-      }, {
-        definition: '综合自动化专业',
-        siteName: '顾桥煤矿',
-        sort: '10'
-      }, {
-        definition: '监测监控专业',
-        siteName: '顾桥煤矿',
-        sort: '16'
-      }],
+      list: [],
       total: 0,
       listQuery: {
         page: 1,
@@ -110,15 +90,29 @@ export default {
   },
   methods: {
     __fetchData() {
-      // this.listLoading = true
-      // const query = Object.assign(this.listQuery, this.filter)
-      // getUserList(query).then(response => {
-      //   this.listLoading = false
-      //   this.list = response.data.items
-      //   this.total = response.data.total
-      // })
-      this.total = this.list.length
-      this.listLoading = false
+      this.listLoading = true
+      const sort = {
+        "asc":["orderNum"]
+      }
+      const query = {
+        page: this.listQuery.page,
+        pagerows: this.listQuery.size,
+        sort: sort
+      }
+      getRoleTypeList(query).then(res => {
+        console.log(res);
+        if(res.code == 200){
+          this.list = res.data.rows
+          this.total = parseInt(res.data.records);
+          this.listLoading = false;
+        }
+      })
+    },
+    pagination(_data){
+      console.log(_data);
+      this.listQuery.page = _data.page
+      this.listQuery.size =   _data.limit
+      this.__fetchData()
     },
     // 初始化新建窗口配置
     initCreateConfig() {
@@ -140,6 +134,20 @@ export default {
     },
     // 打开弹窗
     openDialog(name, row) {
+      //获取站点列表
+      getSiteList(this.listQuery).then(res => {
+        console.log(res);
+        let siteList = [];
+        if(res.code == 200){
+          for(let _r in res.data.rows){
+            siteList.push({
+              value: res.data.rows[_r].sysManageId,
+              label: res.data.rows[_r].site
+            })
+          }
+          console.log(siteList);
+        }
+      })
       const visible = `${name}DialogVisible`
       this[visible] = true
       if (row) {
@@ -148,16 +156,27 @@ export default {
       }
     },
 
-    // submit data
+    // submit data  创建角色类型
     createSubmit(submitData) {
-      console.log(submitData)
-      this.createDialogVisible = false
-      this.$message.success('新建成功')
+      saveRoleType(submitData).then(res => {
+        console.log(res);
+        if(res.code == 200){
+          this.__fetchData()
+          this.createDialogVisible = false
+          this.$message.success('新建成功')
+        }
+      })
     },
+    // 修改角色类型
     editSubmit(submitData) {
-      console.log(submitData)
-      this.editDialogVisible = false
-      this.$message.success('编辑成功')
+      this.selectData.sysRoleTypeId  = this.selectData[0].sysRoleTypeId
+      updateRoleType(submitData).then(res => {
+        if(res.code == 200){
+          this.__fetchData()
+          this.editDialogVisible = false
+          this.$message.success('编辑成功')
+        }
+      })
     },
 
     // 勾选checkbox触发
@@ -172,6 +191,7 @@ export default {
         }
       } else {
         this.deleteDisabled = true
+        this.updateDisabled= true
       }
     },
     // 点击创建触发
@@ -189,11 +209,19 @@ export default {
     },
     // 点击删除触发
     deletePersonnel() {
-      this.$message.success('删除成功')
+      const sysRoleTypeId  = this.selectData[0].sysRoleTypeId
+      deleteRoleType(sysRoleTypeId).then(res => {
+        console.log(res);
+        if(res.code == 200){
+          this.__fetchData()
+          this.$message.success('删除成功');
+        }
+      })
     },
     // 点击同步触发
     synchroClick() {
-      this.$message.success('同步成功')
+      this.__fetchData()
+      this.$message.success('同步成功');
     }
   }
 }

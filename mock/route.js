@@ -968,7 +968,7 @@ const asyncRoutes = [
           {
             path: '/mining-management/excavate1/excavate1-6',
             name: 'Excavate1-6',
-            component: '/demo/index',
+            component: '/mining-management/excavate1/excavate1-6/index',
             meta: { title: '掘进队信息' }
           },
           {

@@ -22,7 +22,8 @@
         <span :title="node.label">{{ node.label }}</span>
       </span>
     </el-tree>
-    <div class="extend-button" @click="handleExtend" />
+    <div v-if="treeData.arrow" class="extend" @click="handleExtend"><i class="el-icon-d-arrow-left"></i></div>
+    <div v-else class="extend-button" @click="handleExtend"/>
   </div>
 </template>
 <script>
@@ -102,5 +103,16 @@ export default {
     #pane-file,#pane-dept{
       text-indent: 0.8em;
     }
+  }
+  .extend{
+    position: absolute;
+    top: 4.5%;
+    right: -40px;
+    cursor: pointer;
+    // -ms-transform:rotate(-90deg); /* Internet Explorer 9*/
+    // -moz-transform:rotate(-90deg); /* Firefox */
+    // -webkit-transform:rotate(-90deg); /* Safari 和 Chrome */
+    // -o-transform:rotate(-90deg); /* Opera */
+    // filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
   }
 </style>

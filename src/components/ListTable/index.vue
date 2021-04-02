@@ -38,19 +38,7 @@
         :prop="column.field"
         :sortable="column.sortable"
       >
-        <!-- <el-table-column type="expand" v-if="column.layout === 'Develop'">
-        <template slot-scope="props">
-          <el-form inline class="demo-table-expand">
-            <el-form-item label="问题明细">
-              <span>{{ column.id }}</span>
-            </el-form-item>
-            <br />
-            <el-form-item label="落实明细">
-              <span>{{ column.name }}</span>
-            </el-form-item>
-          </el-form>
-        </template>
-      </el-table-column> -->
+
         <template slot-scope="scope">
           <template v-if="config.inlineEdit && scope.row.edit">
 

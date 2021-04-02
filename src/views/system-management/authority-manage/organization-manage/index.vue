@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <organ-button-search
+    <!-- <organ-button-search
       :update-disabled="updateDisabled"
       :delete-disabled="deleteDisabled"
       :move-up-disabled="moveUpDisabled"
@@ -12,8 +12,25 @@
       @handelExport="handelExport"
       @synchroClick="synchroClick"
       @queryData="queryData"
+    /> -->
+    <filter-bar
+      :config="OrganFilterConfig"
+      @search-click="queryData"
+      @create-click="openDialog('create')"
+      @reset-click="queryData"
+      @export-click="handelExport"
     />
     <list-table
+      :id="id"
+      :list="list"
+      :list-loading="listLoading"
+      :config="OrganTableConfig"
+      @load-tree-data="asyncData"
+      @edit-click="(row) => openDialog('edit', row)"
+      @delete-click="deleteClick"
+      @submit-data="editSubmit"
+    />
+    <!-- <list-table
       :id="id"
       :list="list"
       :list-loading="listLoading"
@@ -25,10 +42,17 @@
       @moveUpIco="moveUpClick"
       @moveDownIco="moveDownClick"
       @selectionChange="selectionChange"
+    /> -->
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.pagerows"
+      @pagination="__fetchData"
     />
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
     <!-- 新建弹窗 -->
     <form-dialog
+      ref="createDialog"
       :config="initCreateConfig()"
       :dialog-visible="createDialogVisible"
       @close-dialog="createDialogVisible = false"
@@ -56,7 +80,7 @@ import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import OrganButtonSearch from './components/organ-button-search/index.vue'
-import { OrganTableConfig } from '@/data/authority-management'
+import { OrganTableConfig, OrganFilterConfig } from '@/data/authority-management'
 import exportExcel from '@/utils/export-excel'
 
 export default {
@@ -79,6 +103,7 @@ export default {
       filter: {}, // 筛选项
       listLoading: true,
       OrganTableConfig,
+      OrganFilterConfig,
       createDialogVisible: false,
       editDialogVisible: false,
       updateDisabled: true,
@@ -126,12 +151,6 @@ export default {
     },
     // 查询数据
     queryData(filter) {
-      console.log(filter)
-      if (filter) {
-        this.$message.success('查询成功')
-      } else {
-        this.$message.info('请输入查询关键字')
-      }
       this.filter = Object.assign(this.filter, filter)
       this.__fetchData()
     },
@@ -160,9 +179,6 @@ export default {
       if (row) {
         // 如果有数据，更新子组件的 formData
         this.$refs.editDialog.updataForm(row)
-      } else {
-        console.log(this.selectData)
-        this.$refs.editDialog.updataForm(this.selectData[0])
       }
     },
     // 删除
@@ -172,11 +188,6 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        // if(row && index){
-
-        // }else{
-
-        // }
         this.$message.success('删除成功')
         this.__fetchData()
       }).catch(() => {

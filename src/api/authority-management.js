@@ -94,11 +94,83 @@ export function createOrganLsit(params) {
   })
 }
 
-// 角色管理
-export function getRoleList(params) {
+// 获取角色列表
+export function getRoleList(data) {
   return request({
-    url: '/system/role/list',
-    method: 'get',
-    params
+    url: SystemUrl + '/sysRole/search',
+    method: 'post',
+    data
+  })
+}
+
+//获取角色类型列表
+export function getRoleTypeList(data) {
+  return request({
+    url: SystemUrl + '/sysRoleType/search',
+    method: 'post',
+    data
+  })
+}
+
+// 创建角色类型
+export function saveRoleType(data) {
+  return request({
+    url: SystemUrl + '/sysRoleType/save',
+    method: 'post',
+    data
+  })
+}
+
+// 删除角色类型
+export function deleteRoleType(data) {
+  return request({
+    url: SystemUrl + '/sysRoleType/delete/'+data,
+    method: 'delete',
+    data
+  })
+}
+
+// 修改角色类型
+export function updateRoleType(data) {
+  return request({
+    url: SystemUrl + '/sysRoleType/update',
+    method: 'post',
+    data
+  })
+}
+
+// 获取站点列表
+export function getSiteList(data) {
+  return request({
+    url: SystemUrl + '/sysManage/search',
+    method: 'post',
+    data
+  })
+}
+
+// 创建角色
+export function saveRole(data) {
+  return request({
+    url: SystemUrl + '/sysRole/save',
+    method: 'post',
+    data
+  })
+}
+
+// 删除角色
+export function deleteRole(data) {
+  return request({
+    url: SystemUrl + '/sysRole/delete/'+data,
+    method: 'delete',
+    data
+  })
+}
+
+// 更新对象信息
+export function updateRole(data) {
+  return request({
+    url: SystemUrl + '/sysRole/update',
+    method: 'post',
+    data
   })
 }
