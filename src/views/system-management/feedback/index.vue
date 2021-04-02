@@ -17,7 +17,7 @@
     </div>
     <list-table :id="id" :list="list" :list-loading="listLoading" :config="FeedbackConfig" @selectionChange="selectionChange" />
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="__fetchData" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
 
     <!-- 新建弹窗 -->
     <form-dialog

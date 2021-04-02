@@ -2,7 +2,7 @@
   <div class="page-container">
     <filter-bar :config="FilterConfig" @search-click="queryData" />
     <list-table :id="id" :list="list" :list-loading="listLoading" :config="TableConfig" />
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="__fetchData" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
   </div>
 </template>
 

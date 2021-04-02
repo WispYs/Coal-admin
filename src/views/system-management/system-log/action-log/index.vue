@@ -6,7 +6,7 @@
       v-show="total>0"
       :total="total"
       :page.sync="listQuery.page"
-      :limit.sync="listQuery.size"
+      :limit.sync="listQuery.pagerows"
       @pagination="__fetchData"
     />
   </div>

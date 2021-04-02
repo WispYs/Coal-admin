@@ -19,7 +19,7 @@
       v-show="total>0"
       :total="total"
       :page.sync="listQuery.page"
-      :limit.sync="listQuery.size"
+      :limit.sync="listQuery.pagerows"
       @pagination="__fetchData"
     />
     <!-- 新建弹窗 -->
@@ -77,7 +77,10 @@ export default {
   methods: {
     __fetchData() {
       this.listLoading = true
-      const query = Object.assign(this.listQuery, this.filter)
+      const entity = {
+        ...this.filter
+      }
+      const query = Object.assign(this.listQuery, { entity })
       getApplicationList(query).then(response => {
         this.listLoading = false
         this.list = response.data.rows

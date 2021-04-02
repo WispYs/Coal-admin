@@ -11,7 +11,7 @@
       @submit-data="editSubmit"
       @other-click="otherClick"
     />
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="__fetchData" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
     <!-- 新建弹窗 -->
     <form-dialog
       :config="initCreateConfig()"

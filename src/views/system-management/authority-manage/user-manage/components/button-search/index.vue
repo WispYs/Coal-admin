@@ -10,48 +10,48 @@
       <el-button size="medium" plain @click="synchroClick"><i class="el-icon-refresh el-icon--left" />同步</el-button>
     </div>
     <div class="search">
-      <el-input v-model="personSearch" size="medium" placeholder="工号、姓名、登录名"></el-input>
+      <el-input v-model="personSearch" size="medium" placeholder="工号、姓名、登录名" />
       <el-button type="primary" size="medium" @click="startSearch(personSearch)">搜索</el-button>
     </div>
   </div>
 </template>
 
 <script>
-  export default{
-    props:{
-      updateDisabled:{
-        type: Boolean,
-        default: true
-      },
-      deleteDisabled:{
-        type: Boolean,
-        default: true
-      }
+export default {
+  props: {
+    updateDisabled: {
+      type: Boolean,
+      default: true
     },
-    data(){
-      return{
-        personSearch:''
-      }
-    },
-    created() {
+    deleteDisabled: {
+      type: Boolean,
+      default: true
+    }
+  },
+  data() {
+    return {
+      personSearch: ''
+    }
+  },
+  created() {
 
+  },
+  methods: {
+    openDialog(_data) {
+      this.$emit('openDialog', _data)
     },
-    methods:{
-      openDialog(_data){
-        this.$emit("openDialog",_data);
-      },
-      deletePersonnel(){
-        this.$emit("deletePersonnel");
-      },
-      synchroClick(){
-        this.$emit("synchroClick");
-      },
-      startSearch(_data){
-        this.$emit("startSearch",_data);
-        this.personSearch = "";
-      }
+    deletePersonnel() {
+      this.$emit('deletePersonnel')
+    },
+    synchroClick() {
+      this.$emit('synchroClick')
+    },
+    startSearch(_data) {
+      this.$emit('startSearch', _data)
+      this.personSearch = ''
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
