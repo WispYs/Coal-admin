@@ -56,14 +56,14 @@ export const AppFilterConfig = {
    */
   actions: ['search', 'reset', 'create', 'delete'],
   filters: [
-    { label: '站点名称', field: 'name', width: '220', layout: 'Text', placeholder: '请输入站点名称' }
+    { label: '站点名称', field: 'site', width: '220', layout: 'Text', placeholder: '请输入站点名称' }
   ]
 }
 
 // 用户管理
 export const UserTableConfig = {
   actions: ['edit', 'delete', 'other'],
-  otherActionTitle: ['修改密码'],
+  otherActionTitle: ['重置密码'],
   checkbox: true,
   columns: [
     { label: '登录名', field: 'loginName', width: '90', layout: 'Text', require: true, placeholder: '请填写登录名', message: '唯一的登录名' },
@@ -71,14 +71,14 @@ export const UserTableConfig = {
     { label: '工号', field: 'workNumber', width: '100', layout: 'Text', require: true, hidden: true, placeholder: '请填写工号' },
     { label: '密码', field: 'password', width: '100', layout: 'Text', require: true, hidden: true, placeholder: '请填写密码', message: '6到18个字符' },
     { label: '手机', field: 'phone', width: '110', layout: 'Text', placeholder: '请填写手机号码' },
-    { label: '电话', field: 'telephone', width: '100', layout: 'Text', hidden: true, placeholder: '请填写电话' },
+    // { label: '电话', field: 'telephone', width: '100', layout: 'Text', hidden: true, placeholder: '请填写电话' },
     { label: '邮箱', field: 'email', width: '100', layout: 'Text', hidden: true, placeholder: '请填写邮箱' },
-    { label: '入职时间', field: 'enterTime', width: '100', layout: 'DateTime', hidden: true, placeholder: '请选择入职时间' },
-    { label: '性别', field: 'gender', width: '70', layout: 'Radio', hidden: true,
-      options: [
-        { value: 1, label: '男' },
-        { value: 2, label: '女' }
-      ], placeholder: '请选择状态' },
+    // { label: '入职时间', field: 'enterTime', width: '100', layout: 'DateTime', hidden: true, placeholder: '请选择入职时间' },
+    // { label: '性别', field: 'gender', width: '70', layout: 'Radio', hidden: true,
+    //   options: [
+    //     { value: 1, label: '男' },
+    //     { value: 2, label: '女' }
+    //   ], placeholder: '请选择状态' },
     { label: '部门', field: 'sysDeptId', layout: 'TreeSelect', require: true,
       options: [
         {
@@ -107,22 +107,29 @@ export const UserTableConfig = {
           ]
         }
       ], placeholder: '请选择部门' },
-    { label: '职务', field: 'position', width: '90', layout: 'Text', placeholder: '请填写职务' },
-    { label: '岗位工种', field: 'workType', layout: 'Text', placeholder: '请填写职务' },
-    { label: '排序', field: 'sort', width: '60', layout: 'Text', hidden: true, placeholder: '请填写排序' },
+    // { label: '职务', field: 'position', width: '90', layout: 'Text', placeholder: '请填写职务' },
+    // { label: '岗位工种', field: 'workType', layout: 'Text', placeholder: '请填写职务' },
+    // { label: '排序', field: 'sort', width: '60', layout: 'Text', hidden: true, placeholder: '请填写排序' },
     { label: '角色', field: 'sysRoleId', layout: 'Select',
       options: [
-        { value: 1, label: '影响单位审核' },
+        { value: '1', label: '影响单位审核' },
         { value: 2, label: '科技创新' }
-      ], placeholder: '请选择角色' },
-    { label: '状态', field: 'status', width: '70', layout: 'Radio',
-      options: [
-        { value: 1, label: '正常' },
-        { value: 2, label: '锁定' }
-      ], placeholder: '请选择状态' },
-    { label: '人员定位卡号', field: 'card', width: '100', layout: 'Text', hidden: true, placeholder: '请填写人员定位卡号' },
-    { label: '备注信息', field: 'remark', width: '100', layout: 'Textarea', hidden: true, placeholder: '请填写备注信息' }
+      ], placeholder: '请选择角色' }
+    // { label: '状态', field: 'status', width: '70', layout: 'Radio',
+    //   options: [
+    //     { value: 1, label: '正常' },
+    //     { value: 2, label: '锁定' }
+    //   ], placeholder: '请选择状态' },
+    // { label: '人员定位卡号', field: 'card', width: '100', layout: 'Text', hidden: true, placeholder: '请填写人员定位卡号' },
+    // { label: '备注信息', field: 'remark', width: '100', layout: 'Textarea', hidden: true, placeholder: '请填写备注信息' }
 
+  ]
+}
+
+export const UserFilterConfig = {
+  actions: ['search', 'reset', 'create', 'delete'],
+  filters: [
+    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '工号、姓名、登录名' }
   ]
 }
 
@@ -187,13 +194,6 @@ export const RoleTypeConfig = {
         { value: 3, label: '上海煤矿' }
       ], placeholder: '请选择站点名称' },
     { label: '排序', field: 'sort', width: 'auto', layout: 'Text', requeire: true, placeholder: '请填写排序' }
-  ]
-}
-
-export const UserFilterConfig = {
-  actions: ['search', 'reset', 'create', 'delete'],
-  filters: [
-    { label: '关键字', field: 'name', width: '220', layout: 'Text', placeholder: '工号、姓名、登录名' }
   ]
 }
 
@@ -281,6 +281,17 @@ export const RoleTableConfig = {
   ]
 }
 
+export const RoleFilterConfig = {
+  actions: ['search', 'reset', 'create', 'delete'],
+  filters: [
+    { label: '角色类型', field: 'name', width: '220', layout: 'Select', options: [
+      { value: 1, label: '基础通用' },
+      { value: 2, label: '安全管理专业' },
+      { value: 3, label: '调度专业' }
+    ], placeholder: '请选择角色类型' }
+  ]
+}
+
 // 菜单资源管理
 export const menuResourceConfig = {
   actions: ['addIco', 'editIco', 'deleteIco', 'moveUpIco', 'moveDownIco'],
@@ -347,17 +358,6 @@ export const dataDictionaryConfig = {
       { value: 2, label: '项' }
     ], placeholder: '请选择类型' },
     { label: '备注', field: 'remark', width: 'auto', layout: 'Textarea', placeholder: '请填写备注' }
-  ]
-}
-
-export const RoleFilterConfig = {
-  actions: ['search', 'reset', 'create', 'delete'],
-  filters: [
-    { label: '角色类型', field: 'name', width: '220', layout: 'Select', options: [
-      { value: 1, label: '基础通用' },
-      { value: 2, label: '安全管理专业' },
-      { value: 3, label: '调度专业' }
-    ], placeholder: '请选择角色类型' }
   ]
 }
 

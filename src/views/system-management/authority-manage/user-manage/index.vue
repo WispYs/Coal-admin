@@ -4,13 +4,19 @@
 
     <div class="tree-form-container">
       <!-- 按钮功能、搜索 -->
-      <button-search
+      <!-- <button-search
         :update-disabled="updateDisabled"
         :delete-disabled="deleteDisabled"
         @openDialog="openDialog"
         @deletePersonnel="deletePersonnel"
         @synchroClick="synchroClick"
         @startSearch="startSearch"
+      /> -->
+      <filter-bar
+        :config="UserFilterConfig"
+        @search-click="queryData"
+        @create-click="openDialog('create')"
+        @reset-click="queryData"
       />
       <!-- 表格 -->
       <list-table
@@ -20,12 +26,12 @@
         :config="UserTableConfig"
         @edit-click="(row) => openDialog('edit', row)"
         @delete-click="deleteClick"
-        @other-click="openPasswordDialog"
+        @other-click="resetPassword"
         @submit-data="editSubmit"
         @selectionChange="selectionChange"
       />
       <!-- 分页 -->
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="__fetchData" />
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
       <!-- 新建弹窗 -->
       <form-dialog
         ref="createDialog"
@@ -51,14 +57,13 @@
 </template>
 
 <script>
-import { getUserList, createUser } from '@/api/authority-management'
+import { getUserList, createUser, getUserInfo, editUser, delUser, resetUserPassword } from '@/api/authority-management'
 import TreeBar from '@/components/TreeBar'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import ResetPassword from '@/components/ResetPassword'
-import ButtonSearch from './components/button-search/index.vue'
 import {
   UserTableConfig,
   UserFilterConfig,
@@ -72,8 +77,7 @@ export default {
     ListTable,
     Pagination,
     FormDialog,
-    ResetPassword,
-    ButtonSearch
+    ResetPassword
   },
   data() {
     return {
@@ -109,11 +113,15 @@ export default {
   methods: {
     __fetchData() {
       this.listLoading = true
-      const query = Object.assign(this.listQuery, this.filter)
+      const filter = {
+        ...this.filter,
+        keywordField: ['workNumber', 'loginName', 'userName']
+      }
+      const query = Object.assign(this.listQuery, filter)
       getUserList(query).then(response => {
         this.listLoading = false
-        this.list = response.data.items
-        this.total = response.data.total
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
       })
     },
     // 查询数据
@@ -143,23 +151,30 @@ export default {
     openDialog(name, row) {
       const visible = `${name}DialogVisible`
       this[visible] = true
+      // 如果有数据，更新子组件的 formData
       if (row) {
-        // 如果有数据，更新子组件的 formData
-        this.$refs.editDialog.updataForm(row)
-      } else if (this.selectData.length == 1) {
-        console.log(this.selectData[0])
-        this.$refs.editDialog.updataForm(this.selectData[0])
+        getUserInfo(row.sysUserId).then(response => {
+          const info = Object.assign(response.data, {
+            sysDeptId: Number(response.data.sysDeptId) || 0,
+            sysRoleId: Number(response.data.sysRoleId) || 0
+          })
+          this.$refs.editDialog.updataForm(info)
+        })
       }
     },
     // 删除
-    deleteClick(id) {
+    deleteClick(row) {
       this.$confirm('确定删除该用户?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success('删除成功')
-        this.__fetchData()
+        console.log(row.sysUserId)
+        delUser(row.sysUserId).then(response => {
+          console.log(response)
+          this.$message.success('删除成功')
+          this.__fetchData()
+        })
       })
     },
     // submit data
@@ -167,7 +182,8 @@ export default {
       console.log(submitData)
 
       const query = Object.assign(submitData, {
-
+        sysRoleId: Number(submitData.sysRoleId) || 0,
+        sysDeptId: Number(submitData.sysDeptId) || 0
       })
       createUser(query).then(response => {
         console.log(response)
@@ -181,19 +197,31 @@ export default {
       })
     },
     editSubmit(submitData) {
-      console.log(submitData)
-      this.editDialogVisible = false
-      this.$message.success('编辑成功')
-      this.__fetchData()
+      const query = Object.assign(submitData)
+      editUser(query).then(response => {
+        console.log(response)
+        this.editDialogVisible = false
+        this.$message.success('编辑成功')
+        this.$refs.editDialog.resetForm()
+        this.__fetchData()
+      })
     },
 
-    // 打开弹窗
-    openPasswordDialog(row) {
-      this.passwordDialogVisible = true
-      if (row) {
-        // 如果有数据，更新子组件的 formData
-        this.$refs.resetPasswordDialog.updataForm(row)
-      }
+    // 重置密码
+    resetPassword(row) {
+      console.log(row.sysUserId)
+      this.$confirm('是否重置为默认密码?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(row.sysUserId)
+        resetUserPassword(row.sysUserId).then(response => {
+          console.log(response)
+          this.$message.success('重置成功')
+          this.__fetchData()
+        })
+      })
     },
     // 点击删除时触发
     deletePersonnel() {
@@ -230,10 +258,13 @@ export default {
       }
     },
     // 点击树形菜单时触发
-    handleNodeClick(_data) {
-      console.log(_data)
+    handleNodeClick(data) {
+      const entity = {
+        sysDeptId: data.$treeNodeId
+      }
+      console.log(entity)
+      this.filter = Object.assign(this.filter, { entity })
       this.__fetchData()
-      this.$message.success('点击' + _data.label + '成功')
     }
   }
 }

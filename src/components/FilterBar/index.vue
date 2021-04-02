@@ -10,6 +10,7 @@
         size="medium"
         :style="`width:${item.width}px`"
         :placeholder="item.placeholder"
+        @change="search()"
       />
 
       <!-- select  -->
@@ -19,6 +20,7 @@
         size="medium"
         :style="`width:${item.width}px`"
         :placeholder="item.placeholder"
+        @change="search()"
       >
         <el-option
           v-for="it in item.options"
@@ -42,6 +44,7 @@
         end-placeholder="结束日期"
         :picker-options="pickerOptions"
         value-format="yyyy-MM-dd"
+        @change="search()"
       />
 
       <el-date-picker
@@ -50,6 +53,7 @@
         size="medium"
         type="datetime"
         placeholder="选择日期时间"
+        @change="search()"
       />
 
     </div>

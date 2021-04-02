@@ -37,25 +37,44 @@ export function delApplication(id) {
 }
 
 // 用户管理
-export function getUserList(params) {
+export function getUserList(data) {
   return request({
-    url: '/system/user/list',
-    method: 'get',
-    params
+    url: `${SystemUrl}/sysUser/search`,
+    method: 'post',
+    data
   })
 }
-// export function getUserList(data) {
-//   return request({
-//     url: `${SystemUrl}/sysUser/search`,
-//     method: 'get',
-//     data
-//   })
-// }
 export function createUser(data) {
   return request({
     url: `${SystemUrl}/sysUser/save`,
     method: 'post',
     data
+  })
+}
+export function getUserInfo(id) {
+  return request({
+    url: `${SystemUrl}/sysUser/get/${id}`,
+    method: 'get'
+  })
+}
+export function editUser(data) {
+  return request({
+    url: `${SystemUrl}/sysUser/update`,
+    method: 'post',
+    data
+  })
+}
+export function delUser(id) {
+  return request({
+    url: `${SystemUrl}/sysUser/delete/${id}`,
+    method: 'delete'
+  })
+}
+export function resetUserPassword(sysUserId) {
+  return request({
+    url: `${SystemUrl}/sysUser/resetPwd`,
+    method: 'delete',
+    params: { sysUserId }
   })
 }
 
