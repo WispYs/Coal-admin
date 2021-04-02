@@ -152,6 +152,9 @@ export default {
         this.$message.success('新建成功')
         this.$refs.createDialog.resetForm()
         this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.createDialog.resetSubmitBtn()
       })
     },
     // 编辑

@@ -126,7 +126,7 @@ export default {
     handleNodeClick(node) {
       this.valueTitle = node[this.props.label]
       this.valueId = node[this.props.value]
-      this.$emit('getTreeSelect', this.valueId)
+      this.$emit('tree-select', this.valueId)
       this.defaultExpandedKey = []
       this.$refs.treeSelect.blur()
     },
@@ -139,7 +139,7 @@ export default {
       this.valueId = null
       this.defaultExpandedKey = []
       this.clearSelected()
-      this.$emit('getTreeSelect', null)
+      this.$emit('tree-select', null)
     },
     // 清空选中样式
     clearSelected() {
@@ -163,6 +163,9 @@ export default {
     .el-select-dropdown__wrap {
       margin: 0!important;
       overflow: hidden;
+    }
+    .el-scrollbar__bar.is-vertical {
+      width: 0;
     }
   }
 </style>

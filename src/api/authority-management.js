@@ -79,18 +79,53 @@ export function resetUserPassword(sysUserId) {
 }
 
 // 组织机构管理
-export function getOrganList(params) {
+export function getOrganList(data) {
   return request({
-    url: '/system/organization/list',
-    method: 'get',
-    params
+    url: `${SystemUrl}/sysDept/search`,
+    method: 'post',
+    data
   })
 }
-export function createOrganLsit(params) {
+export function createOrgan(data) {
   return request({
-    url: '/admin/createOrganLsit/list',
-    method: 'get',
-    params
+    url: `${SystemUrl}/sysDept/save`,
+    method: 'post',
+    data
+  })
+}
+export function getOrganInfo(id) {
+  return request({
+    url: `${SystemUrl}/sysDept/get/${id}`,
+    method: 'get'
+  })
+}
+export function editOrgan(data) {
+  return request({
+    url: `${SystemUrl}/sysDept/update`,
+    method: 'post',
+    data
+  })
+}
+export function delOrgan(id) {
+  return request({
+    url: `${SystemUrl}/sysDept/delete/${id}`,
+    method: 'delete'
+  })
+}
+// 获取用户所在部门及以下所有子部门
+export function getOrganTree(sysDeptId) {
+  return request({
+    url: `${SystemUrl}/sysDept/getSysDeptTree`,
+    method: 'post',
+    params: { sysDeptId }
+  })
+}
+// 获取指定部门及以下所有子部门
+export function getOrganChildTree(sysDeptId) {
+  return request({
+    url: `${SystemUrl}/sysDept/getNhDeptTree`,
+    method: 'post',
+    params: { sysDeptId }
   })
 }
 
@@ -103,7 +138,7 @@ export function getRoleList(data) {
   })
 }
 
-//获取角色类型列表
+// 获取角色类型列表
 export function getRoleTypeList(data) {
   return request({
     url: SystemUrl + '/sysRoleType/search',
@@ -124,7 +159,7 @@ export function saveRoleType(data) {
 // 删除角色类型
 export function deleteRoleType(data) {
   return request({
-    url: SystemUrl + '/sysRoleType/delete/'+data,
+    url: SystemUrl + '/sysRoleType/delete/' + data,
     method: 'delete',
     data
   })
@@ -160,7 +195,7 @@ export function saveRole(data) {
 // 删除角色
 export function deleteRole(data) {
   return request({
-    url: SystemUrl + '/sysRole/delete/'+data,
+    url: SystemUrl + '/sysRole/delete/' + data,
     method: 'delete',
     data
   })

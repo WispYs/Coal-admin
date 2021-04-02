@@ -249,20 +249,48 @@ export const OrganizationTree = [
 export const OrganTableConfig = {
   // actions: ['addIco', 'editIco', 'deleteIco', 'moveUpIco', 'moveDownIco'],
   actions: ['edit', 'delete'],
-  rowKey: 'num',
+  rowKey: 'sysDeptId',
   checkbox: true,
   columns: [
-    { label: '名称', field: 'name', layout: 'Text', require: true, placeholder: '请填写名称' },
-    { label: '编号', field: 'num', layout: 'Text', require: true, placeholder: '请填写编号' },
-    { label: '简称', field: 'abbreviation', layout: 'Text', placeholder: '请填写简称' },
-    { label: '类型', field: 'type', layout: 'Select', require: true,
+    { label: '名称', field: 'deptName', layout: 'Text', require: true, placeholder: '请填写名称' },
+    { label: '编号', field: 'sysDeptId', width: '80', layout: 'Text', require: true, placeholder: '请填写编号' },
+    { label: '简称', field: 'shortName', layout: 'Text', placeholder: '请填写简称' },
+    { label: '类型', field: 'deptType', layout: 'Select', require: true,
       options: [
         { value: 1, label: '井工矿' },
         { value: 2, label: '矿机构' },
         { value: 3, label: '职务' }
-      ], placeholder: '请填写部门' },
-    { label: '排序', field: 'sort', layout: 'Text', requeire: true, placeholder: '请填写排序' },
-    { label: '创建日期', field: 'createDate', layout: 'DateTime', placeholder: '请选择创建日期' },
+      ], placeholder: '请选择类型' },
+    { label: '上级节点', field: 'parentId', layout: 'TreeSelect', hidden: true,
+      options: [
+        {
+          value: 1,
+          label: '顾桥矿',
+          children: [
+            { value: 2, label: '机关', children: [
+              { value: 3, label: '矿领导' },
+              { value: 4, label: '办公室', children: [
+                { value: 5, label: '部门', children: [
+                  { value: 6, label: '安全部门' },
+                  { value: 7, label: '监管部门' },
+                  { value: 8, label: '采掘部门' },
+                  { value: 9, label: '生产部门' },
+                  { value: 10, label: '调度部门' },
+                  { value: 11, label: '防控部门' },
+                  { value: 12, label: '应急部门' }
+                ] },
+                { value: 13, label: '办公室科室（中央区）' },
+                { value: 14, label: '办公室科室（南区）' },
+                { value: 15, label: '办公室科室（西区）' },
+                { value: 16, label: '办公室科室（东区）' }
+              ] },
+              { value: 17, label: '人力资源部' }
+            ] }
+          ]
+        }
+      ], placeholder: '请选择上级节点' },
+    { label: '排序', field: 'sort', width: '80', layout: 'Text', requeire: true, placeholder: '请填写排序' },
+    { label: '创建日期', field: 'createTime', width: '180', layout: 'DateTime', placeholder: '请选择创建日期' },
     { label: '备注', field: 'remark', layout: 'Textarea', placeholder: '请填写备注' }
 
   ]
@@ -271,7 +299,7 @@ export const OrganTableConfig = {
 export const OrganFilterConfig = {
   actions: ['search', 'reset', 'create', 'export', 'delete'],
   filters: [
-    { label: '关键字', field: 'name', width: '220', layout: 'Text', placeholder: '名称、简称' }
+    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '名称、简称' }
   ]
 }
 

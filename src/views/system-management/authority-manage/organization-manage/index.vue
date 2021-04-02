@@ -71,10 +71,7 @@
 </template>
 
 <script>
-import {
-  getOrganList,
-  createOrganLsit
-} from '@/api/authority-management'
+import { getOrganList, createOrgan, getOrganInfo, editOrgan, getOrganTree, getOrganChildTree, delOrgan } from '@/api/authority-management'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -117,37 +114,86 @@ export default {
   created() {
     this.__fetchData()
   },
+  mounted() {
+
+  },
   methods: {
+    // 接口获取组织机构树，更新config数据
+    __updateOrganTree() {
+      getOrganTree().then(response => {
+        OrganTableConfig.columns.forEach(it => {
+          if (it.field === 'parentId') {
+            it.options = response.data
+          }
+        })
+        console.log(OrganTableConfig)
+      })
+    },
+    // 获取组织机构列表
     __fetchData() {
       this.listLoading = true
-      const query = Object.assign(this.listQuery, this.filter)
+      const filter = {
+        ...this.filter,
+        keywordField: ['deptName', 'shortName']
+      }
+      const query = Object.assign(this.listQuery, filter)
       getOrganList(query).then(response => {
         this.listLoading = false
-        this.list = response.data.items
-        this.total = response.data.total
+        response.data.rows.forEach(it => {
+          it.sysDeptId = Number(it.sysDeptId)
+          if (it.parentCheck === 1) {
+            it.hasChildren = true
+          }
+        })
+        this.list = response.data.rows
+        console.log(this.list)
+        this.total = Number(response.data.records)
       })
+    },
+
+    //
+    getChild() {
+
     },
 
     // 异步获取树子节点数据
     asyncData(tree, treeNode, resolve) {
       console.log(tree, treeNode, resolve)
-      setTimeout(() => {
-        resolve([{
-          name: '矿领导',
-          num: '001010',
-          abbreviation: '矿领导',
-          type: 3,
-          sort: 2,
-          createDate: '2020.07.21'
-        }, {
-          name: '办公室',
-          num: '001012',
-          abbreviation: '办公室',
-          type: 2,
-          sort: 186,
-          createDate: '2020.12.19'
-        }])
-      }, 1000)
+      getOrganChildTree(tree.sysDeptId).then(response => {
+        console.log(response.data)
+        const childrenTree = []
+        response.data.forEach(it => {
+          const item = {
+            deptName: it.deptName,
+            sysDeptId: Number(it.sysDeptId),
+            shortName: it.shortName,
+            deptType: it.deptType,
+            sort: it.sort,
+            createTime: it.createTime,
+            remark: it.remark
+          }
+          childrenTree.push(item)
+        })
+        console.log(childrenTree.splice(-2))
+        resolve(childrenTree.splice(-2))
+      })
+      // setTimeout(() => {
+      //   resolve([{
+      //     deptName: '矿领导',
+      //     deptId: '001010',
+      //     shortName: '矿领导',
+      //     deptType: 3,
+      //     sort: 2,
+      //     createTime: '2020.07.21'
+      //   }, {
+      //     deptName: '办公室',
+      //     deptId: '001012',
+      //     shortName: '办公室',
+      //     deptType: 2,
+      //     sort: 186,
+      //     createTime: '2020.12.19'
+      //   }])
+      // }, 1000)
     },
     // 查询数据
     queryData(filter) {
@@ -176,41 +222,64 @@ export default {
     openDialog(name, row) {
       const visible = `${name}DialogVisible`
       this[visible] = true
+
+      // 接口获取组织机构树，更新config数据
+      this.__updateOrganTree()
+
+      // 如果有数据，更新子组件的 formData
       if (row) {
-        // 如果有数据，更新子组件的 formData
-        this.$refs.editDialog.updataForm(row)
+        getOrganInfo(row.sysDeptId).then(response => {
+          const info = Object.assign(response.data, {
+            parentId: Number(response.data.parentId) || 0,
+            deptType: Number(response.data.deptType) || 0
+          })
+          this.$refs.editDialog.updataForm(info)
+        })
       }
     },
     // 删除
-    deleteClick(row, index) {
+    deleteClick(row) {
       this.$confirm('确定删除该组织吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success('删除成功')
-        this.__fetchData()
+        delOrgan(row.sysUserId).then(response => {
+          console.log(response)
+          this.$message.success('删除成功')
+          this.__fetchData()
+        })
       }).catch(() => {
         this.$message.info('已取消删除')
       })
     },
-    // submit createData
+    // 新增
     createSubmit(submitData) {
       console.log(submitData)
-      // const _data = Object.assign(this.listQuery,submitData);
-      // createOrganLsit(_data).then(res=>{
-      //   console.log(res);
-      // })
-      this.createDialogVisible = false
-      this.$message.success('新建成功')
-      this.__fetchData()
+      const query = Object.assign(submitData, {
+        parentId: Number(submitData.parentId) || 0
+      })
+      createOrgan(query).then(response => {
+        console.log(response)
+        this.createDialogVisible = false
+        this.$message.success('新建成功')
+        this.$refs.createDialog.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.createDialog.resetSubmitBtn()
+      })
     },
     // submit edit
     editSubmit(submitData) {
-      console.log(submitData)
-      this.editDialogVisible = false
-      this.$message.success('编辑成功')
-      this.__fetchData()
+      const query = Object.assign(submitData)
+      editOrgan(query).then(response => {
+        console.log(response)
+        this.editDialogVisible = false
+        this.$message.success('编辑成功')
+        this.$refs.editDialog.resetForm()
+        this.__fetchData()
+      })
     },
     // 定义导出Excel表格事件
     handelExport() {

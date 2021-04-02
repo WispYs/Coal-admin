@@ -43,7 +43,7 @@
             :options="item.options"
             :clearable="true"
             :accordion="false"
-            @getTreeSelect="value => getTreeSelect(value,item.field)"
+            @tree-select="value => getTreeSelect(value,item.field)"
           />
 
           <!-- date-picker  -->
@@ -197,9 +197,14 @@ export default {
       console.log(this.formData)
     },
 
+    // 当提交失败的时候重置按钮状态
+    resetSubmitBtn() {
+      this.submitLoading = false
+    },
+
     // 清空组件 form 数据
     resetForm() {
-      this.submitLoading = false
+      this.resetSubmitBtn()
       this.$refs.formData.resetFields()
       const treeSelectComponents = this.$refs.treeSelect
       if (treeSelectComponents) {
@@ -231,7 +236,9 @@ export default {
     },
     // treeSelect 值改变
     getTreeSelect(value, field) {
-      this.formData[field] = value
+      console.log(value)
+      this.formData[field] = Number(value) || 0
+      console.log(this.formData)
     }
   }
 }

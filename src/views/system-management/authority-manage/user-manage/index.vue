@@ -177,7 +177,7 @@ export default {
         })
       })
     },
-    // submit data
+    // 新增
     createSubmit(submitData) {
       console.log(submitData)
 
@@ -193,7 +193,7 @@ export default {
         this.__fetchData()
       }).catch(err => {
         console.log(err)
-        this.$refs.createDialog.resetForm()
+        this.$refs.createDialog.resetSubmitBtn()
       })
     },
     editSubmit(submitData) {

@@ -69,7 +69,7 @@
               :options="column.options"
               :clearable="true"
               :accordion="false"
-              @getTreeSelect="getTreeSelect"
+              @tree-select="getTreeSelect"
             />
 
             <!-- date-picker  -->
