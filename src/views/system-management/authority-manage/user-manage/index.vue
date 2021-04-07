@@ -1,6 +1,6 @@
 <template>
   <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
-    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @handleNodeClick="handleNodeClick" />
+    <tree-bar :tree-data="treeData" @handleNodeClick="handleNodeClick" />
 
     <div class="tree-form-container">
       <!-- 按钮功能、搜索 -->
@@ -12,6 +12,9 @@
         @synchroClick="synchroClick"
         @startSearch="startSearch"
       /> -->
+      <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
+        <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
+      </span>
       <filter-bar
         :config="UserFilterConfig"
         @search-click="queryData"
@@ -24,14 +27,33 @@
         :list="list"
         :list-loading="listLoading"
         :config="UserTableConfig"
+        height="calc(100% - 157px)"
         @edit-click="(row) => openDialog('edit', row)"
         @delete-click="deleteClick"
         @other-click="resetPassword"
         @submit-data="editSubmit"
-        @selectionChange="selectionChange"
+        @selection-change="selectionChange"
       />
-      <!-- 分页 -->
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
+
+      <div v-show="total>0" class="page-bottom">
+        <el-button
+          class="page-bottom__delete"
+          type="warning"
+          size="small"
+          plain
+          :disabled="deleteDisabled"
+          @click="deleteBatches"
+        >
+          <i class="el-icon-delete el-icon--left" />批量删除
+        </el-button>
+        <pagination
+          :total="total"
+          :page.sync="listQuery.page"
+          :limit.sync="listQuery.pagerows"
+          @pagination="__fetchData"
+        />
+      </div>
+
       <!-- 新建弹窗 -->
       <form-dialog
         ref="createDialog"
@@ -57,18 +79,14 @@
 </template>
 
 <script>
-import { getUserList, createUser, getUserInfo, editUser, delUser, resetUserPassword } from '@/api/authority-management'
+import { getUserList, createUser, getUserInfo, editUser, delUser, resetUserPassword, getOrganTree } from '@/api/authority-management'
 import TreeBar from '@/components/TreeBar'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import ResetPassword from '@/components/ResetPassword'
-import {
-  UserTableConfig,
-  UserFilterConfig,
-  OrganizationTree
-} from '@/data/authority-management'
+import { UserTableConfig, UserFilterConfig } from '@/data/authority-management'
 
 export default {
   components: {
@@ -98,19 +116,33 @@ export default {
       treeExtend: true,
       treeData: {
         title: '',
-        list: OrganizationTree
+        list: []
       },
-      updateDisabled: true,
-      deleteDisabled: true,
-      personSearch: '',
-      selectData: []
+      multipleSelection: [], // 多选项
+      deleteDisabled: true // 批量删除置灰
     }
   },
 
   created() {
     this.__fetchData()
+    this.__updateOrganTree()
   },
   methods: {
+    // 接口获取组织机构树
+    __updateOrganTree() {
+      getOrganTree().then(response => {
+        console.log(response.data)
+        // 更新左侧树结构数据
+        this.treeData.list = response.data
+        // 更新新增、编辑config数据
+        UserTableConfig.columns.forEach(it => {
+          if (it.field === 'sysDeptId') {
+            it.options = response.data
+          }
+        })
+      })
+    },
+
     __fetchData() {
       this.listLoading = true
       const filter = {
@@ -133,7 +165,7 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '500px',
+        width: '800px',
         form: this.UserTableConfig.columns
       })
       return createConfig
@@ -142,7 +174,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '500px',
+        width: '800px',
         form: this.UserTableConfig.columns
       })
       return editConfig
@@ -151,6 +183,10 @@ export default {
     openDialog(name, row) {
       const visible = `${name}DialogVisible`
       this[visible] = true
+
+      // 接口获取组织机构树，更新config数据
+      this.__updateOrganTree()
+
       // 如果有数据，更新子组件的 formData
       if (row) {
         getUserInfo(row.sysUserId).then(response => {
@@ -207,15 +243,44 @@ export default {
       })
     },
 
+    // 改变所选项
+    selectionChange(val) {
+      this.multipleSelection = val
+      if (this.multipleSelection.length > 0) {
+        this.deleteDisabled = false
+      } else {
+        this.deleteDisabled = true
+      }
+      console.log(this.multipleSelection)
+    },
+
+    // 批量删除
+    deleteBatches() {
+      const selectId = []
+      this.multipleSelection.forEach(it => selectId.push(it.id))
+      console.log(selectId)
+      if (selectId.length === 0) {
+        this.$message.warning('请选择所删除的文件')
+        return false
+      }
+      this.$confirm('确定删除所选中文件?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(selectId)
+        this.__fetchData()
+        this.$message.success('删除成功')
+      })
+    },
+
     // 重置密码
     resetPassword(row) {
-      console.log(row.sysUserId)
       this.$confirm('是否重置为默认密码?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(row.sysUserId)
         resetUserPassword(row.sysUserId).then(response => {
           console.log(response)
           this.$message.success('重置成功')
@@ -223,44 +288,12 @@ export default {
         })
       })
     },
-    // 点击删除时触发
-    deletePersonnel() {
-      this.$message.success('删除成功')
-      this.__fetchData()
-    },
-    // 点击同步时触发
-    synchroClick() {
-      this.__fetchData()
-      this.$message.success('同步成功')
-    },
-    // 点击搜索时触发
-    startSearch(_search) {
-      if (_search) {
-        this.__fetchData()
-        this.$message.success('查询成功')
-      } else {
-        this.$message.info('请输入搜索条件')
-      }
-    },
-    selectionChange(_data) {
-      this.selectData = _data
-      console.log(this.selectData)
-      if (this.selectData.length > 0) {
-        this.deleteDisabled = false
-        if (this.selectData.length == 1) {
-          this.updateDisabled = false
-        } else {
-          this.updateDisabled = true
-        }
-      } else {
-        this.deleteDisabled = true
-        this.updateDisabled = true
-      }
-    },
+
     // 点击树形菜单时触发
     handleNodeClick(data) {
+      console.log(data)
       const entity = {
-        sysDeptId: data.$treeNodeId
+        sysDeptId: data.value
       }
       console.log(entity)
       this.filter = Object.assign(this.filter, { entity })

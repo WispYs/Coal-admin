@@ -1,8 +1,11 @@
 <template>
   <div class="page-container upload-page has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
-    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" />
+    <tree-bar :tree-data="treeData" />
     <div class="tree-form-container">
       <div class="upload-button">
+        <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
+          <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
+        </span>
         <el-button type="primary" size="medium" @click="openDailog"><i class="el-icon-plus el-icon--left" />新建文件</el-button>
         <el-button type="primary" size="medium" @click="uploadDialogVisible = true"><i class="el-icon-upload el-icon--left" />上传</el-button>
         <el-button type="danger" size="medium" plain @click="deleteBatches"><i class="el-icon-delete el-icon--left" />批量删除</el-button>
@@ -38,13 +41,26 @@
           </template>
         </el-table-column>
       </el-table>
-      <pagination
-        v-show="total>0"
-        :total="total"
-        :page.sync="listQuery.page"
-        :limit.sync="listQuery.pagerows"
-        @pagination="__fetchData"
-      />
+      <div v-show="total>0" class="page-bottom">
+        <el-button
+          class="page-bottom__delete"
+          type="warning"
+          size="small"
+          plain
+          :disabled="deleteDisabled"
+          @click="deleteBatches"
+        >
+          <i class="el-icon-delete el-icon--left" />批量删除
+        </el-button>
+        <pagination
+
+          :total="total"
+          :page.sync="listQuery.page"
+          :limit.sync="listQuery.pagerows"
+          @pagination="__fetchData"
+        />
+      </div>
+
       <upload-file
         :dialog-visible="uploadDialogVisible"
         :multiple="false"

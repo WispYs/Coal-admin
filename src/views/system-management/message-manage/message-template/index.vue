@@ -47,7 +47,7 @@ import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
-import { TableConfig, FilterConfig } from '@/data/authority-management'
+import { MessageTableConfig, MessageFilterConfig } from '@/data/authority-management'
 
 export default {
   components: { FilterBar, ListTable, Pagination, FormDialog },
@@ -62,8 +62,8 @@ export default {
       },
       filter: {}, // 筛选项
       listLoading: true,
-      FilterConfig,
-      TableConfig,
+      FilterConfig: MessageFilterConfig,
+      TableConfig: MessageTableConfig,
       createDialogVisible: false,
       editDialogVisible: false
 
@@ -90,6 +90,7 @@ export default {
     },
     // 初始化新建窗口配置
     initCreateConfig() {
+      console.log('TableConfig', this)
       const createConfig = Object.assign({
         title: '新建',
         width: '500px',

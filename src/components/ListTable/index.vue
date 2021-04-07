@@ -15,6 +15,7 @@
     :load="loadTreeData"
     :row-key="config.rowKey"
     :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+    :height="height"
     @selection-change="selectionChange"
   >
     <el-table-column
@@ -165,6 +166,10 @@ export default {
     config: {
       type: Object,
       default: () => ({})
+    },
+    height: {
+      type: String,
+      default: () => null
     }
   },
   data() {
@@ -323,7 +328,7 @@ export default {
       return 'font-size: 13px'
     },
     selectionChange(val) {
-      this.$emit('selectionChange', val)
+      this.$emit('selection-change', val)
     },
     addIco(row, index) {
       this.$emit('addIco', row, index)

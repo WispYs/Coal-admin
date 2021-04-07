@@ -1,5 +1,7 @@
 import request from '@/utils/request'
 
+import { FileUrl } from './url'
+
 export function getList(params) {
   return request({
     url: '/example/table/list',
@@ -15,10 +17,17 @@ export function getMultList() {
   })
 }
 
+// export function getUploadList() {
+//   return request({
+//     url: '/example/upload-table/list',
+//     method: 'get'
+//   })
+// }
+
 export function getUploadList() {
   return request({
-    url: '/example/upload-table/list',
-    method: 'get'
+    url: `${FileUrl}/sysFileInfo/search`,
+    method: 'post'
   })
 }
 

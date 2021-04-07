@@ -8,6 +8,7 @@
     <el-form ref="formData" class="dialog-container" :model="formData" :rules="formRules" label-width="110px" size="medium" :inline="true">
       <template v-for="(item, index) in config.form">
         <el-form-item
+          v-if="!item.disabled"
           :key="index"
           :class="item.layout === 'Textarea' || item.layout === 'Upload' ? 'block-form' : ''"
           :label="`${item.label}：`"
@@ -164,22 +165,16 @@ export default {
       }
 
       if (item.require) {
-        const configRule = item.rule || []
-        rules[item.field] = [
-          { required: item.require, message: item.placeholder, trigger: 'blur' },
-          ...configRule
-        ]
-
-        // if (item.field == 'password') {
-        //   rules[item.field] = [
-        //     { required: item.require, message: item.placeholder, trigger: 'blur' },
-        //     { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
-        //   ]
-        // } else {
-        //   rules[item.field] = [
-        //     { required: item.require, message: item.placeholder, trigger: 'blur' }
-        //   ]
-        // }
+        if (item.field === 'password') {
+          rules[item.field] = [
+            { required: item.require, message: item.placeholder, trigger: 'blur' },
+            { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
+          ]
+        } else {
+          rules[item.field] = [
+            { required: item.require, message: item.placeholder, trigger: 'blur' }
+          ]
+        }
       }
     })
     this.formData = Object.assign({}, obj)

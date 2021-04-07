@@ -11,7 +11,9 @@
         :style="`width:${item.width}px`"
         :placeholder="item.placeholder"
         @change="search()"
-      />
+      >
+        <el-button slot="append" icon="el-icon-search" @click="search()" />
+      </el-input>
 
       <!-- select  -->
       <el-select
@@ -58,17 +60,17 @@
 
     </div>
     <div v-if="config.actions && config.actions.length > 0" class="filter-bar__item">
-      <el-button v-if="config.actions.indexOf('search') > -1" type="primary" size="medium" icon="el-icon-search" @click="search()" />
+      <!-- <el-button v-if="config.actions.indexOf('search') > -1" type="primary" size="medium" icon="el-icon-search" @click="search()" /> -->
       <!-- <el-button v-if="config.actions.indexOf('search') > -1" type="primary" size="medium" @click="search()">搜索</el-button> -->
       <!-- <el-button v-if="config.actions.indexOf('reset') > -1" type="primary" size="medium" @click="reset()">重置</el-button> -->
       <!-- <el-button v-if="config.actions.indexOf('create') > -1" type="primary" size="medium" @click="create()">新建</el-button> -->
-    </div>
-    <div v-if="config.actions && config.actions.length > 0" class="filter-bar__item" style="display:block;">
-      <el-button v-if="config.actions.indexOf('delete') > -1" type="danger" size="medium" plain @click="deleteBatches()">批量删除</el-button>
       <el-button v-if="config.actions.indexOf('create') > -1" type="primary" size="medium" icon="el-icon-plus" @click="create()">新建</el-button>
       <el-button v-if="config.actions.indexOf('export') > -1" type="primary" size="medium" icon="el-icon-download" @click="exportExcel()">导出</el-button>
-
     </div>
+    <!-- <div v-if="config.actions && config.actions.length > 0" class="filter-bar__item" style="display:block;">
+      <el-button v-if="config.actions.indexOf('delete') > -1" type="danger" size="medium" plain @click="deleteBatches()">批量删除</el-button>
+
+    </div> -->
 
   </div>
 </template>

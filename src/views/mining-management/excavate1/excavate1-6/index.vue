@@ -3,7 +3,7 @@
     <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @handleNodeClick="handleNodeClick"/>
     <div class="tree-form-container">
 
-      <button-search @startSearch="startSearch" @addClick="addClick" @synchroClick="synchroClick"></button-search>
+      <button-search @startSearch="startSearch" @addClick="addClick" @synchroClick="synchroClick" @release="release"></button-search>
 
       <el-table ref="multipleTable" :data="list" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
@@ -181,6 +181,9 @@
         }else{
           this.$message.info("请输入搜索内容");
         }
+      },
+      release(){
+        // this.uploadDialogVisible = true
       }
     }
   }

@@ -29,30 +29,20 @@
           <div class="grid-content bg-purple-light">
             <list-table
               :id="id"
-              :list="list"
+              :list="roleUserInfo.roleUserList"
               :list-loading="listLoading"
-              :config="AddMemberConfig"
+              :config="memberConfig"
               @edit-click="(row) => openDialog('edit', row)"
               @delete-click="deleteClick"
               @selectionChange="selectionChange"
               @submit-data="editSubmit"
             />
-
-            <!-- <el-pagination class="page"
-                :total="50"
-                 @size-change="handleSizeChange"
-                      @current-change="handleCurrentChange"
-                      :current-page="currentPage4"
-                      :page-sizes="[100, 200, 300, 400]"
-                      :page-size="100"
-                      layout="total, sizes, prev, pager, next, jumper">
-              </el-pagination> -->
             <pagination
-              v-show="total>0"
-              :total="total"
-              :page.sync="listQuery.page"
-              :limit.sync="listQuery.pagerows"
-              @pagination="updataForm"
+              v-show="roleUserInfo.total>0"
+              :total="roleUserInfo.total"
+              :page.sync="roleUserInfo.listQuery.page"
+              :limit.sync="roleUserInfo.listQuery.pagerows"
+              @pagination="updataPage"
             />
           </div>
         </el-col>
@@ -60,7 +50,7 @@
           <div class="selectMember">
             <div v-if="selectMember.length > 0">
               <div v-for="(item,index) in selectMember" :key="index">
-                <span>{{ item.loginName }}-{{ item.department }}</span>
+                <span>{{ item.loginName }}</span>
               </div>
             </div>
             <span v-else class="nullData">暂无数据</span>
@@ -75,6 +65,7 @@
   </el-dialog>
 </template>
 <script>
+import { getUserList,addRoleUser,getOrganTree } from '@/api/authority-management'
 import TreeBar from '@/components/TreeBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -97,6 +88,14 @@ export default {
     config: {
       type: Object,
       default: () => ({})
+    },
+    selectRole:{
+      type: Object,
+      default: () => ({})
+    },
+    roleUserInfo:{
+      type: Object,
+      default: () => ({})
     }
     // 弹窗表单
     // formData: {
@@ -112,57 +111,10 @@ export default {
       content: '',
       id: 'member',
       selectMember: [],
-      list: [{
-        name: '李四',
-        loginName: '李四',
-        department: '软件部',
-        addDate: '2021-3-22 16:40'
-      }, {
-        name: '王菲',
-        loginName: '王菲',
-        department: '实施部',
-        addDate: '2021-3-22 16:40'
-      }, {
-        name: '赵四',
-        loginName: '赵四',
-        department: '实施部',
-        addDate: '2021-3-22 16:40'
-      }, {
-        name: '王五',
-        loginName: '王五',
-        department: '软件部',
-        addDate: '2021-3-22 16:40'
-      }],
+      list: [],
       treeData: {
         title: '',
-        list: [{
-          label: '顾桥煤矿',
-          children: [{
-            label: '机关',
-            children: [{
-              label: '矿领导'
-            },
-            {
-              label: '办公室',
-              children: [{
-                label: '部门'
-              },
-              {
-                label: '办公室科直'
-              },
-              {
-                label: '办公室职员'
-              },
-              {
-                label: '办公室小车班'
-              }
-              ]
-            }
-            ]
-          }
-
-          ]
-        }]
+        list: []
       },
       memberConfig,
       AddMemberConfig,
@@ -171,37 +123,24 @@ export default {
       listQuery: {
         page: 1,
         pagerows: 10
-      }
+      },
+      sysDeptId: ''
     }
   },
   created() {
-    const {
-      form
-    } = {
-      ...this.config
-    }
-    const obj = {}
-    form.forEach(item => {
-      if (item.options) {
-        obj[item.field] = []
-      } else {
-        obj[item.field] = ''
-      }
-    })
-    this.formData = Object.assign({}, obj)
-    this.total = this.list.length
-
-    // eventHub.$on('open-dialog', dialogVisible => {
-    //   this.dialogVisible = dialogVisible
-    // })
+    this.total = this.roleUserInfo.total
+    // 获取左侧部门树
+    this.getTree()
   },
   methods: {
-    // 更新组件内 form 数据
-    updataForm(form) {
-      this.formData = Object.assign(this.formData, form)
-      console.log(this.formData)
+    // 分页触发
+    updataPage(_data) {
+      this.$emit("updataPage",_data,2)
     },
     closeDialog() {
+      this.keyword = ''
+      this.content = ''
+      this.sysDeptId = ''
       this.$emit('closeDialog')
     },
     openDialog() {
@@ -215,32 +154,61 @@ export default {
     },
     // 关键字搜索
     keywordSearch(val) {
-      if (val) {
-        this.$emit('keywordSearch', val)
+      console.log(val);
+      if(val){
+        for(let _t in this.treeData.list){
+          this.getDeptId(this.treeData.list[_t],val);
+        }
       }
+      this.getTree(this.sysDeptId);
+      // this.$emit('keywordSearch',this.sysDeptId)
+    },
+    getDeptId(_data,val){
+      if(_data.label.indexOf(val) != -1){
+        this.sysDeptId = _data.value
+        return false;
+      }
+      if(!!_data.children){
+        for(let _t in _data.children){
+          this.getDeptId(_data.children[_t],val);
+        }
+      }
+    },
+    getTree(val){
+      let sysDeptId = val
+      getOrganTree(sysDeptId).then(response => {
+        console.log(response.data)
+        console.log(response);
+        this.treeData.list = response.data
+        this.sysDeptId = ''
+      })
     },
     // 工号、姓名、登录名搜索
     contentSearch() {
-      if (this.content) {
-        this.$emit('contentSearch', this.content)
-      }
+      this.$emit('contentSearch', this.content)
     },
     selectionChange(row) {
-      console.log(row)
       this.selectMember = row
-      // for(let b of row){
-      //   console.log(b.loginName,b.department);
-      // }
     },
     handleNodeClick(data) {
+      this.$emit("treeClick",data)
       console.log(data)
     },
+    // 点击添加角色用户
     AddMember() {
-      // this.$message({
-      //   message: '恭喜你，添加成功',
-      //   type: 'success'
-      // });
-      this.$emit('closeDialog')
+      console.log(this.selectMember);
+      let sysUserIds = [];
+      for(let _s of this.selectMember){
+        sysUserIds.push(_s.sysUserId);
+      }
+      const query= {
+        sysRoleId: this.selectRole.sysRoleId,
+        sysUserIds: sysUserIds
+      }
+      addRoleUser(query).then(response => {
+        console.log(response);
+        this.$emit('closeDialog')
+      })
     }
   }
 }

@@ -1,8 +1,8 @@
 <template>
   <div class="gis-container">
-    <TopBar :config="topConfig" />
+    <!-- <TopBar :config="topConfig" /> -->
 
-    <div class="side-wrapper">
+    <!-- <div class="side-wrapper">
       <div class="left-side-wrapper">
         <el-button
           class="side-item"
@@ -191,11 +191,11 @@
           >{{ paper }}</el-checkbox-button>
         </el-checkbox-group>
       </div>
-    </div>
+    </div> -->
 
     <div id="gis-wrapper" class="gis-wrapper" />
 
-    <el-dialog title="添加锚点信息" :visible.sync="locationVisible" width="30%">
+    <!-- <el-dialog title="添加锚点信息" :visible.sync="locationVisible" width="30%">
       <span>
         <el-form class="location-form" label-width="80px">
           <el-form-item label="类型">
@@ -225,7 +225,7 @@
         <el-button @click="locationVisible = false">取 消</el-button>
         <el-button type="primary" @click="saveLocation">确 定</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
 
     <el-dialog :title="dlgTitle" :visible.sync="outerVisible">
       <div style="padding: 15px; line-height: 22px;font-size: 15px;" v-html="dlgData" />
@@ -425,7 +425,7 @@ export default {
 
       // }
 
-      this.randPoint(GisViewPoint)
+      // this.randPoint(GisViewPoint)
 
       // 后台api
       // this.randPoint(this.viewPointData)
@@ -480,7 +480,7 @@ export default {
     },
     // 全屏
     fullScreen() {
-      const idx = this.topConfig.findIndex(t => t.name == '全屏')
+      const idx = this.topConfig.findIndex(t => t.name === '全屏')
       const flag = (this.topConfig[idx]['status'] = !this.topConfig[idx]['status'])
       const el = flag ? document.documentElement : document
       const rfs = flag
@@ -507,7 +507,7 @@ export default {
     openDrawer(ref, ev) {
       const drawers = ['jsDrawer', 'zhDrawer']
       for (let i = 0; i < drawers.length; i++) {
-        if (drawers[i] == ref) {
+        if (drawers[i] === ref) {
           this[ref] = !this[ref]
         } else {
           this[drawers[i]] = false
@@ -525,10 +525,10 @@ export default {
     resetItem(arr = [], key) {
       let flag = false
       arr.forEach(item => {
-        if (item.name == key) {
+        if (item.name === key) {
           flag = item.status = !item.status
         } else {
-          if (item.status != undefined) item.status = false
+          if (item.status !== undefined) item.status = false
         }
       })
       return flag

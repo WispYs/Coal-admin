@@ -1,6 +1,6 @@
 <template>
   <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
-    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" />
+    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @handleNodeClick="handleNodeClick" @searchSite="searchSite"/>
 
     <div class="tree-form-container">
       <h2 style="margin-bottom: 16px;">顾桥煤矿—角色类型</h2>
@@ -44,9 +44,7 @@
         @close-dialog="editDialogVisible = false"
         @submit="editSubmit"
       />
-
     </div>
-
   </div>
 </template>
 
@@ -79,6 +77,7 @@ export default {
         search: true,
         list: OrganizationTree
       },
+      filter:{},
       selectData: [],
       updateDisabled: true,
       deleteDisabled: true
@@ -87,17 +86,18 @@ export default {
 
   created() {
     this.__fetchData()
+    console.log(this.$route);
   },
   methods: {
     __fetchData() {
       this.listLoading = true
-      const sort = {
-        "asc":["orderNum"]
-      }
       const query = {
         page: this.listQuery.page,
         pagerows: this.listQuery.size,
-        sort: sort
+        sort: {
+          asc:["orderNum"]
+        },
+        entity: this.filter.entity
       }
       getRoleTypeList(query).then(res => {
         console.log(res);
@@ -178,7 +178,10 @@ export default {
         }
       })
     },
-
+    searchSite(filter){
+      this.filter = Object.assign(this.filter, filter)
+      this.__fetchData()
+    },
     // 勾选checkbox触发
     selectionChange(_data) {
       this.selectData = _data
@@ -218,8 +221,18 @@ export default {
         }
       })
     },
+    //根据站点查询站点下面的角色类型
+    handleNodeClick(_data){
+      console.log(_data);
+      this.filter= {
+        entity: {"sysManageId": 3}
+      }
+      this.__fetchData()
+      this.$message.success("查询成功")
+    },
     // 点击同步触发
     synchroClick() {
+      this.filter = {}
       this.__fetchData()
       this.$message.success('同步成功');
     }

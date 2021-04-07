@@ -8,6 +8,7 @@
       <el-button type="primary" size="medium" @click="addClick"><i class="el-icon-circle-plus-outline el-icon--left" />添加
       </el-button>
       <el-button type="primary" size="medium" @click="synchroClick"><i class="el-icon-refresh el-icon--left" />同步</el-button>
+      <el-button type="primary" size="medium" @click="release"><i class="el-icon-refresh el-icon--left" />发布</el-button>
     </div>
   </div>
 </template>
@@ -31,6 +32,9 @@
       },
       synchroClick(){
         this.$emit("synchroClick")
+      },
+      release(){
+        this.$emit("release")
       }
     }
   }

@@ -11,17 +11,31 @@
       :list="list"
       :list-loading="listLoading"
       :config="AppTableConfig"
+      height="calc(100% - 157px)"
       @edit-click="(row) => openDialog('edit', row)"
       @delete-click="deleteClick"
       @submit-data="editSubmit"
+      @selection-change="selectionChange"
     />
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.pagerows"
-      @pagination="__fetchData"
-    />
+    <div v-show="total>0" class="page-bottom">
+      <el-button
+        class="page-bottom__delete"
+        type="warning"
+        size="small"
+        plain
+        :disabled="deleteDisabled"
+        @click="deleteBatches"
+      >
+        <i class="el-icon-delete el-icon--left" />批量删除
+      </el-button>
+      <pagination
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.pagerows"
+        @pagination="__fetchData"
+      />
+    </div>
+
     <!-- 新建弹窗 -->
     <form-dialog
       ref="createDialog"
@@ -43,7 +57,7 @@
 </template>
 
 <script>
-import { getApplicationList, createApplication, editApplication, getApplicationInfo, delApplication } from '@/api/authority-management'
+import { getApplicationList, createApplication, editApplication, getApplicationInfo, delApplication, getOrganTree } from '@/api/authority-management'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -66,7 +80,9 @@ export default {
       AppFilterConfig,
       AppTableConfig,
       createDialogVisible: false,
-      editDialogVisible: false
+      editDialogVisible: false,
+      multipleSelection: [], // 多选项
+      deleteDisabled: true // 批量删除置灰
 
     }
   },
@@ -80,7 +96,12 @@ export default {
       const entity = {
         ...this.filter
       }
-      const query = Object.assign(this.listQuery, { entity })
+      const sort = {
+        sort: {
+          asc: ['orderNum']
+        }
+      }
+      const query = Object.assign(this.listQuery, sort, { entity })
       getApplicationList(query).then(response => {
         this.listLoading = false
         this.list = response.data.rows
@@ -96,7 +117,7 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '500px',
+        width: '800px',
         form: this.AppTableConfig.columns
       })
       return createConfig
@@ -105,15 +126,25 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '500px',
+        width: '800px',
         form: this.AppTableConfig.columns
       })
       return editConfig
     },
     // 打开弹窗
     openDialog(name, row) {
+      console.log(name, row)
       const visible = `${name}DialogVisible`
       this[visible] = true
+      getOrganTree().then(response => {
+        console.log(response.data)
+        // 更新新增、编辑config数据
+        AppTableConfig.columns.forEach(it => {
+          if (it.field === 'sysDeptId') {
+            it.options = response.data
+          }
+        })
+      })
       // 如果有数据，更新子组件的 formData
       if (row) {
         getApplicationInfo(row.sysManageId).then(response => {
@@ -169,6 +200,37 @@ export default {
         this.$message.success('编辑成功')
         this.$refs.editDialog.resetForm()
         this.__fetchData()
+      })
+    },
+
+    // 改变所选项
+    selectionChange(val) {
+      this.multipleSelection = val
+      if (this.multipleSelection.length > 0) {
+        this.deleteDisabled = false
+      } else {
+        this.deleteDisabled = true
+      }
+      console.log(this.multipleSelection)
+    },
+
+    // 批量删除
+    deleteBatches() {
+      const selectId = []
+      this.multipleSelection.forEach(it => selectId.push(it.id))
+      console.log(selectId)
+      if (selectId.length === 0) {
+        this.$message.warning('请选择所删除的文件')
+        return false
+      }
+      this.$confirm('确定删除所选中文件?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(selectId)
+        this.__fetchData()
+        this.$message.success('删除成功')
       })
     }
 

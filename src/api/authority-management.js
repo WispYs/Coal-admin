@@ -121,11 +121,11 @@ export function getOrganTree(sysDeptId) {
   })
 }
 // 获取指定部门及以下所有子部门
-export function getOrganChildTree(sysDeptId) {
+export function getOrganChildTree(parentId) {
   return request({
-    url: `${SystemUrl}/sysDept/getNhDeptTree`,
+    url: `${SystemUrl}/sysDept/findParentId`,
     method: 'post',
-    params: { sysDeptId }
+    params: { parentId }
   })
 }
 
@@ -192,11 +192,38 @@ export function saveRole(data) {
   })
 }
 
+// 获取角色下的用户列表
+export function getRoleUserList(data) {
+  return request({
+    url: SystemUrl + '/sysUser/search',
+    method: 'post',
+    data
+  })
+}
+
+// 添加角色用户
+export function addRoleUser(data) {
+  return request({
+    url: SystemUrl + '/sysRole/saveRoleUser' + '?sysRoleId=' + data.sysRoleId + '&sysUserIds=' + data.sysUserIds,
+    method: 'post',
+    data
+  })
+}
+
 // 删除角色
 export function deleteRole(data) {
   return request({
     url: SystemUrl + '/sysRole/delete/' + data,
     method: 'delete',
+    data
+  })
+}
+
+// 删除角色用户
+export function deleteRoleUser(data) {
+  return request({
+    url: SystemUrl + '/sysRole/deleteUsers' + '?sysRoleId=' + data.sysRoleId + '&sysUserIds=' + data.sysUserIds,
+    method: 'post',
     data
   })
 }

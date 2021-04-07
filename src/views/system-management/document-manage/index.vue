@@ -1,23 +1,25 @@
 <template>
   <div class="page-container upload-page has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
-    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @handleNodeClick="handleNodeClick" />
+    <tree-bar :tree-data="treeData" @handleNodeClick="handleNodeClick" @handleSwitch="handleSwitch" />
     <div class="tree-form-container">
       <div class="upload-button">
+        <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
+          <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
+        </span>
         <el-button type="primary" size="medium" @click="openDailog"><i class="el-icon-plus el-icon--left" />新建文件</el-button>
         <el-button type="success" size="medium" plain @click="uploadDialogVisible = true"><i class="el-icon-upload el-icon--left" />发布</el-button>
-        <el-button type="danger" size="medium" plain :disabled="deleteDisabled" @click="deleteBatches"><i class="el-icon-delete el-icon--left" />批量删除</el-button>
         <el-button size="medium" plain @click="refresh"><i class="el-icon-refresh el-icon--left" />刷新</el-button>
       </div>
-      <el-table ref="multipleTable" :data="list" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table ref="multipleTable" :data="list" tooltip-effect="dark" style="width: 100%" height="calc(100% - 153px)" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="根目录">
           <template slot-scope="scope">
             <div class="upload-item">
               <img src="@/assets/images/file.png" alt="">
               <div class="upload-info">
-                <h4>{{ scope.row.title }}</h4>
+                <h4>{{ scope.row.fileName }}</h4>
                 <span>{{ scope.row.updateTime }}</span>
-                <span>{{ scope.row.uploader }}</span>
+                <span>{{ scope.row.createdBy }}</span>
               </div>
             </div>
           </template>
@@ -30,7 +32,10 @@
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
+      <div v-show="total>0" class="page-bottom">
+        <el-button class="page-bottom__delete" type="warning" size="small" plain :disabled="deleteDisabled" @click="deleteBatches"><i class="el-icon-delete el-icon--left" />批量删除</el-button>
+        <pagination :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
+      </div>
       <upload-file
         :dialog-visible="uploadDialogVisible"
         :multiple="false"
@@ -38,24 +43,40 @@
         @upload-submit="uploadSubmit"
       />
     </div>
+
+    <!-- 编辑弹窗 -->
+    <form-dialog
+      ref="editDialog"
+      :config="initEditConfig()"
+      :dialog-visible="editDialogVisible"
+      @close-dialog="editDialogVisible = false"
+      @submit="editSubmit"
+    />
   </div>
 </template>
 <script>
 import TreeBar from '@/components/TreeBar'
 import Pagination from '@/components/Pagination'
 import UploadFile from '@/components/UploadFile'
+import FormDialog from '@/components/FormDialog'
+import { DocTable } from '@/data/document-management'
 import {
   getUploadList
 } from '@/api/table'
+import {
+  getTree
+} from '@/api/tree'
 
 export default {
   components: {
     Pagination,
     UploadFile,
-    TreeBar
+    TreeBar,
+    FormDialog
   },
   data() {
     return {
+      editDialogVisible: false,
       addForm: {
         superiorFolder: '根目录',
         folderName: '',
@@ -70,6 +91,7 @@ export default {
         page: 1,
         pagerows: 10
       },
+      DocTable,
       multipleSelection: [],
       uploadDialogVisible: false,
       treeExtend: true,
@@ -77,7 +99,43 @@ export default {
       treeData: {
         title: '文件夹',
         title2: '部门',
-        list: [{
+        list: []
+      }
+    }
+  },
+  mounted() {
+    this.__fetchData()
+    this._fetchTreeData()
+  },
+  methods: {
+    editSubmit() {
+
+    },
+    initEditConfig() {
+      const editConfig = Object.assign({
+        title: '编辑',
+        width: '500px',
+        form: this.DocTable.columns
+      })
+      return editConfig
+    },
+    openDailog() {
+      this.$message({
+        message: '谢谢您，点击新建文件',
+        type: 'success'
+      })
+      this.dialogVisible = true
+    },
+    _fetchDepartTreeData() {
+      getTree().then(res => {
+        res.data[0].deptName = '根目录'
+        this.treeData.list = res.data
+        console.log('res', res)
+      })
+    },
+    _fetchTreeData() {
+      this.treeData.list = [
+        {
           label: '根目录',
           children: [{
             label: '安检'
@@ -107,28 +165,26 @@ export default {
             label: '地质灾害防治'
           }
           ]
-        }]
-      }
-    }
-  },
-  mounted() {
-    this.__fetchData()
-  },
-  methods: {
-    openDailog() {
-      this.$message({
-        message: '谢谢您，点击新建文件',
-        type: 'success'
-      })
-      this.dialogVisible = true
+        }
+      ]
     },
     __fetchData() {
       this.listLoading = true
       getUploadList().then(response => {
         this.listLoading = false
-        this.list = response.data.items
-        this.total = response.data.total
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
+        this.total = 10
       })
+    },
+    // 切换tree
+    handleSwitch(el) {
+      const idx = Number(el.index)
+      if (idx === 1) {
+        this._fetchDepartTreeData()
+      } else if (idx === 0) {
+        this._fetchTreeData()
+      }
     },
     // 改变所选项
     handleSelectionChange(val) {

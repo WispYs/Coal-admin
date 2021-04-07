@@ -3,14 +3,15 @@
     <iframe :src="src" frameborder="no" style="width: 100%;height: 100%" scrolling="auto" />
   </div>
 </template>
+
 <script>
 export default {
-  name: 'Ureport',
+  name: 'Workflow',
   data() {
     return {
-      src: 'http://192.168.1.8:18050/ureport/designer',
-      // src: '/workflow/toWorkFlowModel',
-      height: document.documentElement.clientHeight - 60 - 80 + 82 + 'px;',
+      src: 'http://192.168.1.159:18060/workflow/toWorkFlowModel',
+      // src: 'http://www.baidu.com',
+      height: document.documentElement.clientHeight - 60 - 80 + 'px;',
       loading: true
     }
   },
@@ -20,8 +21,12 @@ export default {
     }, 230)
     const that = this
     window.onresize = function temp() {
-      that.height = document.documentElement.clientHeight - 60 - 80 + 82 + 'px;'
+      that.height = document.documentElement.clientHeight - 60 - 80 + 'px;'
     }
   }
 }
 </script>
+
+<style>
+
+</style>

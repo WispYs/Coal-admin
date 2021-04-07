@@ -245,7 +245,8 @@
 
   // dialog 弹窗css
   .el-dialog {
-    height: calc(85vh - 50px);
+    height: auto;
+    max-height: calc(85vh - 50px);
 
     .el-dialog__header {
       border-bottom: 1px solid #ededed;
@@ -258,7 +259,8 @@
 
     .el-dialog__body {
       padding: 0;
-      height: calc(100% - 124px); // 124 = header + footer
+      // height: calc(100% - 124px); // 124 = header + footer
+      max-height: calc(85vh - 174px); // 124 = header + footer + margin
       overflow: auto;
     }
   }
@@ -343,5 +345,17 @@
     font-weight: 400 !important;
   }
 
+  // input 内按钮
+  .el-input-group__append button.el-button {
+    border-color: transparent;
+    background-color: transparent;
+    color: inherit;
+  }
+
+  // 树状结构选中
+  .el-tree-node.is-current>.el-tree-node__content {
+    background-color: $blueColor;
+    color: #fff;
+  }
 
 }

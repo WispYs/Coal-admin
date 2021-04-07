@@ -67,6 +67,10 @@
   </el-dialog>
 </template>
 <script>
+import {
+  getOrganChildTree,
+  getOrganTree
+} from '@/api/authority-management'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import TreeBar from '@/components/TreeBar'
@@ -189,48 +193,7 @@ export default {
       treeData: {
         title: '授权机构',
         checkbox: true,
-        list: [{
-          label: '顾桥煤矿',
-          children: [{
-            label: '机关',
-            children: [{
-              label: '矿领导'
-            },
-            {
-              label: '办公室',
-              children: [{
-                label: '部门'
-              },
-              {
-                label: '办公室科直'
-              },
-              {
-                label: '办公室职员'
-              },
-              {
-                label: '办公室小车班'
-              }
-              ]
-            }, {
-              label: '财务科',
-              children: [{
-                label: '财务科科直'
-              }, {
-                label: '财务科科员'
-              }]
-            }, {
-              label: '企业管理科',
-              children: [{
-                label: '企业管理科科直'
-              }, {
-                label: '企业管理科科员'
-              }]
-            }
-            ]
-          }
-
-          ]
-        }]
+        list: []
       },
       treeData1: {
         title: '',
@@ -312,6 +275,10 @@ export default {
         this.dataVisible = false
         this.buttonVisible = true
       } else if (key == 3) {
+        getOrganTree().then(response => {
+          console.log(response.data)
+          this.treeData.list = response.data
+        })
         this.moduleVisible = false
         this.buttonVisible = false
         this.dataVisible = true

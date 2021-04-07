@@ -23,6 +23,7 @@ export const AppTableConfig = {
    * @param {string}  dateFormat        日期格式
    * @param {array}   options           选择器配置项
    * @param {boolean} hidden            是否在表格中隐藏，默认false，值为true时只在新建、编辑中显示该字段
+   * @param {boolean} disabled          不可在新增、编辑中修改的字段，默认false，值为true时表示该字段后台自动生成不可编辑
    * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump 色块显示
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
   */
@@ -71,22 +72,22 @@ export const UserTableConfig = {
   otherActionTitle: ['重置密码'],
   checkbox: true,
   columns: [
-    { label: '登录名', field: 'loginName', width: '90', layout: 'Text', require: true,
+    { label: '登录名', field: 'loginName', layout: 'Text', require: true,
       rule: [
         { min: 3, max: 18, message: '长度在 3 到 18 个字符', trigger: 'blur' }
-      ], placeholder: '请填写登录名', message: '唯一的登录名' },
-    { label: '姓名', field: 'userName', width: '90', layout: 'Text', require: true, placeholder: '请填写姓名' },
-    { label: '工号', field: 'workNumber', width: '100', layout: 'Text', require: true, hidden: true, placeholder: '请填写工号' },
-    { label: '密码', field: 'password', width: '100', layout: 'Text', require: true,
+      ], placeholder: '请填写登录名' },
+    { label: '姓名', field: 'userName', layout: 'Text', require: true, placeholder: '请填写姓名' },
+    { label: '工号', field: 'workNumber', layout: 'Text', require: true, hidden: true, placeholder: '请填写工号' },
+    { label: '密码', field: 'password', layout: 'Text', require: true,
       rule: [
         { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
-      ], hidden: true, placeholder: '请填写密码', message: '6到18个字符' },
-    { label: '手机', field: 'phone', width: '110', layout: 'Text', require: true,
+      ], hidden: true, placeholder: '请填写密码' },
+    { label: '手机', field: 'phone', layout: 'Text', require: true,
       rule: [
         { validator: validatePhone, trigger: 'blur' }
       ], placeholder: '请填写手机号码' },
     // { label: '电话', field: 'telephone', width: '100', layout: 'Text', hidden: true, placeholder: '请填写电话' },
-    { label: '邮箱', field: 'email', width: '100', layout: 'Text', hidden: true, placeholder: '请填写邮箱' },
+    { label: '邮箱', field: 'email', layout: 'Text', hidden: true, placeholder: '请填写邮箱' },
     // { label: '入职时间', field: 'enterTime', width: '100', layout: 'DateTime', hidden: true, placeholder: '请选择入职时间' },
     // { label: '性别', field: 'gender', width: '70', layout: 'Radio', hidden: true,
     //   options: [
@@ -153,16 +154,16 @@ export const personnelConfig = {
   otherActionTitle: [],
   checkbox: true,
   columns: [
-    { label: '部门名称', field: 'deptName', width: '160', layout: 'Text', requeire: true, placeholder: '请填写部门名称' },
-    { label: '人员编号', field: 'identifier', width: '90', layout: 'Text', requeire: true, placeholder: '请填写人员编号' },
-    { label: '人员姓名', field: 'personalName', width: '100', layout: 'Text', requeire: true, placeholder: '请填写人员姓名' },
-    { label: '身份证号', field: 'IDNumber', width: '160', layout: 'Text', requeire: true, placeholder: '请填写身份证号' },
-    { label: '人员性别', field: 'personalSex', width: '90', layout: 'Radio', requeire: true,
+    { label: '部门名称', field: 'deptName', width: '160', layout: 'Text', require: true, placeholder: '请填写部门名称' },
+    { label: '人员编号', field: 'identifier', width: '90', layout: 'Text', require: true, placeholder: '请填写人员编号' },
+    { label: '人员姓名', field: 'personalName', width: '100', layout: 'Text', require: true, placeholder: '请填写人员姓名' },
+    { label: '身份证号', field: 'IDNumber', width: '160', layout: 'Text', require: true, placeholder: '请填写身份证号' },
+    { label: '人员性别', field: 'personalSex', width: '90', layout: 'Radio', require: true,
       options: [
         { value: 1, label: '男' },
         { value: 2, label: '女' }
       ], placeholder: '请选择人员性别' },
-    { label: '人员生日', field: 'personalBirthdy', width: '100', layout: 'DateTime', requeire: true, placeholder: '请填写人员生日' },
+    { label: '人员生日', field: 'personalBirthdy', width: '100', layout: 'DateTime', require: true, placeholder: '请填写人员生日' },
     { label: '定位卡号', field: 'locationCardNumber', width: '150', layout: 'Text', placeholder: '请填写定位卡号' },
     { label: '人员学历', field: 'personnelEducation', width: '100', layout: 'Select',
       options: [
@@ -200,14 +201,14 @@ export const RoleTypeConfig = {
   otherActionTitle: [],
   checkbox: true,
   columns: [
-    { label: '名称', field: 'typeName', width: 'auto', layout: 'Text', requeire: true, placeholder: '请填写名称' },
-    { label: '站点名称', field: 'site', width: 'auto', layout: 'Select', requeire: true,
+    { label: '名称', field: 'typeName', width: 'auto', layout: 'Text', require: true, placeholder: '请填写名称' },
+    { label: '站点名称', field: 'site', width: 'auto', layout: 'Select',
       options: [
         { value: 1, label: '顾桥煤矿' },
         { value: 2, label: '合肥煤矿' },
         { value: 3, label: '上海煤矿' }
       ], placeholder: '请选择站点名称' },
-    { label: '排序', field: 'orderNum', width: 'auto', layout: 'Text', requeire: true, placeholder: '请填写排序' }
+    { label: '排序', field: 'orderNum', width: 'auto', layout: 'Text', require: true, placeholder: '请填写排序' }
   ]
 }
 
@@ -253,7 +254,7 @@ export const OrganTableConfig = {
   checkbox: true,
   columns: [
     { label: '名称', field: 'deptName', layout: 'Text', require: true, placeholder: '请填写名称' },
-    { label: '编号', field: 'sysDeptId', width: '80', layout: 'Text', require: true, placeholder: '请填写编号' },
+    { label: '编号', field: 'deptId', width: '80', layout: 'Text', disabled: true, placeholder: '请填写编号' },
     { label: '简称', field: 'shortName', layout: 'Text', placeholder: '请填写简称' },
     { label: '类型', field: 'deptType', layout: 'Select', require: true,
       options: [
@@ -261,7 +262,7 @@ export const OrganTableConfig = {
         { value: 2, label: '矿机构' },
         { value: 3, label: '职务' }
       ], placeholder: '请选择类型' },
-    { label: '上级节点', field: 'parentId', layout: 'TreeSelect', hidden: true,
+    { label: '上级节点', field: 'parentId', layout: 'TreeSelect', require: true, hidden: true,
       options: [
         {
           value: 1,
@@ -290,7 +291,7 @@ export const OrganTableConfig = {
         }
       ], placeholder: '请选择上级节点' },
     { label: '排序', field: 'sort', width: '80', layout: 'Text', requeire: true, placeholder: '请填写排序' },
-    { label: '创建日期', field: 'createTime', width: '180', layout: 'DateTime', placeholder: '请选择创建日期' },
+    { label: '创建日期', field: 'createTime', width: '180', layout: 'DateTime', disabled: true, placeholder: '请选择创建日期' },
     { label: '备注', field: 'remark', layout: 'Textarea', placeholder: '请填写备注' }
 
   ]
@@ -310,15 +311,15 @@ export const RoleTableConfig = {
   rowKey: 'num',
   checkbox: true,
   columns: [
-    { label: '角色名称', field: 'roleName', layout: 'Text', placeholder: '请填写角色名称' },
-    // { label: '角色类型', field: 'type', layout: 'Select', options: [
-    //   { value: 1, label: '基础通用' },
-    //   { value: 2, label: '安全管理专业' },
-    //   { value: 3, label: '调度专业' }
-    // ], placeholder: '请选择角色类型' },
-    // { label: '所属站点', field: 'site', layout: 'Text', placeholder: '请填写所属站点' },
-    // { label: '成员数量', field: 'personNum', layout: 'Text', placeholder: '请填写成员数量' },
-    // { label: '排序', field: 'sort', layout: 'Text', placeholder: '请填写排序' },
+    { label: '角色名称', field: 'roleName', layout: 'Text', require: true, placeholder: '请填写角色名称' },
+    { label: '角色类型', field: 'sysRoleId', layout: 'Select', options: [
+      { value: 1, label: '基础通用' },
+      { value: 2, label: '安全管理专业' },
+      { value: 3, label: '调度专业' }
+    ], placeholder: '请选择角色类型' },
+    { label: '所属站点', field: 'sysManageId', layout: 'Text', placeholder: '请填写所属站点' },
+    { label: '成员数量', field: 'memberNum', layout: 'Text', placeholder: '请填写成员数量' },
+    { label: '排序', field: 'orderNum', layout: 'Text', require: true, placeholder: '请填写排序' },
     { label: '备注', field: 'remark', layout: 'Textarea', placeholder: '请填写备注' }
 
   ]
@@ -410,10 +411,10 @@ export const memberConfig = {
   rowKey: 'num',
   checkbox: true,
   columns: [
-    { label: '姓名', field: 'name', layout: 'Text', placeholder: '请填写姓名' },
+    { label: '姓名', field: 'userName', layout: 'Text', placeholder: '请填写姓名' },
     { label: '登录名', field: 'loginName', layout: 'Select', placeholder: '请选择登录名' },
-    { label: '所在部门', field: 'department', layout: 'Text', placeholder: '请填写所在部门' },
-    { label: '添加日期', field: 'addDate', layout: 'Text', placeholder: '请填写添加日期' }
+    { label: '所在部门', field: 'sysDeptId', layout: 'Text', placeholder: '请填写所在部门' },
+    { label: '添加日期', field: 'createTime', layout: 'Text', placeholder: '请填写添加日期' }
   ]
 }
 

@@ -18,6 +18,7 @@ export const TableConfig = {
    * @param {string}  dateFormat        日期格式
    * @param {array}   options           选择器配置项
    * @param {boolean} hidden            是否在表格中隐藏，默认false，值为true时只在新建、编辑中显示该字段
+   * @param {boolean} disabled          不可在新增、编辑中修改的字段，默认false，值为true时表示该字段后台自动生成不可编辑
    * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump-有背景色块;underline-下划线可点击
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
    */

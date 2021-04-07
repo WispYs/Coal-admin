@@ -25,10 +25,12 @@
       :list="list"
       :list-loading="listLoading"
       :config="OrganTableConfig"
+      height="calc(100% - 157px)"
       @load-tree-data="asyncData"
       @edit-click="(row) => openDialog('edit', row)"
       @delete-click="deleteClick"
       @submit-data="editSubmit"
+      @selection-change="selectionChange"
     />
     <!-- <list-table
       :id="id"
@@ -43,13 +45,25 @@
       @moveDownIco="moveDownClick"
       @selectionChange="selectionChange"
     /> -->
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.pagerows"
-      @pagination="__fetchData"
-    />
+    <div v-show="total>0" class="page-bottom">
+      <el-button
+        class="page-bottom__delete"
+        type="warning"
+        size="small"
+        plain
+        :disabled="deleteDisabled"
+        @click="deleteBatches"
+      >
+        <i class="el-icon-delete el-icon--left" />批量删除
+      </el-button>
+      <pagination
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.pagerows"
+        @pagination="__fetchData"
+      />
+    </div>
+
     <!-- 新建弹窗 -->
     <form-dialog
       ref="createDialog"
@@ -103,20 +117,14 @@ export default {
       OrganFilterConfig,
       createDialogVisible: false,
       editDialogVisible: false,
-      updateDisabled: true,
-      deleteDisabled: true,
-      institutionSearch: '',
-      moveUpDisabled: true,
-      moveDownDisabled: true,
-      selectData: []
+      multipleSelection: [], // 多选项
+      deleteDisabled: true // 批量删除置灰
     }
   },
   created() {
     this.__fetchData()
   },
-  mounted() {
 
-  },
   methods: {
     // 接口获取组织机构树，更新config数据
     __updateOrganTree() {
@@ -132,8 +140,13 @@ export default {
     // 获取组织机构列表
     __fetchData() {
       this.listLoading = true
+      // 初次加载只获取根节点数据
+      const entity = {
+        'parentId': 0
+      }
       const filter = {
         ...this.filter,
+        ...{ entity },
         keywordField: ['deptName', 'shortName']
       }
       const query = Object.assign(this.listQuery, filter)
@@ -151,14 +164,8 @@ export default {
       })
     },
 
-    //
-    getChild() {
-
-    },
-
     // 异步获取树子节点数据
     asyncData(tree, treeNode, resolve) {
-      console.log(tree, treeNode, resolve)
       getOrganChildTree(tree.sysDeptId).then(response => {
         console.log(response.data)
         const childrenTree = []
@@ -170,12 +177,12 @@ export default {
             deptType: it.deptType,
             sort: it.sort,
             createTime: it.createTime,
-            remark: it.remark
+            remark: it.remark,
+            hasChildren: it.parentCheck === 1
           }
           childrenTree.push(item)
         })
-        console.log(childrenTree.splice(-2))
-        resolve(childrenTree.splice(-2))
+        resolve(childrenTree)
       })
       // setTimeout(() => {
       //   resolve([{
@@ -244,7 +251,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        delOrgan(row.sysUserId).then(response => {
+        delOrgan(row.sysDeptId).then(response => {
           console.log(response)
           this.$message.success('删除成功')
           this.__fetchData()
@@ -270,7 +277,7 @@ export default {
         this.$refs.createDialog.resetSubmitBtn()
       })
     },
-    // submit edit
+    // 编辑
     editSubmit(submitData) {
       const query = Object.assign(submitData)
       editOrgan(query).then(response => {
@@ -287,64 +294,36 @@ export default {
       // 第二个参数为导出文件的 name
       exportExcel(this.id, '组织机构管理')
     },
-    // 同步
-    synchroClick() {
-      this.__fetchData()
-      this.$message.success('同步成功')
-    },
-    // 上移
-    moveUpClick(row, index) {
-      if (row && index) {
-        this.list[index] = this.list[index - 1]
-        this.list[index - 1] = row
-      } else {
-        let _index
-        for (const d in this.list) {
-          console.log(d)
-          if (this.list[d].name == this.selectData[0].name) {
-            _index = d
-            break
-          }
-        }
-        if (_index == 0) {
-          this.$message.error('该数据已经位于最前面,不能再上移了哈')
-          return
-        } else {
-          this.list[_index] = this.list[_index - 1]
-          this.list[_index - 1] = this.selectData[0]
-        }
-      }
-      this.$message.success('上移成功')
-      this.__fetchData()
-    },
-    // 下移
-    moveDownClick(row, index) {
-      this.list[index] = this.list[index + 1]
-      this.list[index + 1] = row
-      this.$message.success('下移成功')
-      this.__fetchData()
-    },
-    // 点击checkbox触发
-    selectionChange(_data) {
-      this.selectData = _data
-      console.log(_data)
-      if (this.selectData.length > 0) {
+
+    // 改变所选项
+    selectionChange(val) {
+      this.multipleSelection = val
+      if (this.multipleSelection.length > 0) {
         this.deleteDisabled = false
-        if (this.selectData.length == 1) {
-          this.updateDisabled = false
-          this.moveDownDisabled = false
-          this.moveUpDisabled = false
-        } else {
-          this.updateDisabled = true
-          this.moveDownDisabled = true
-          this.moveUpDisabled = true
-        }
       } else {
         this.deleteDisabled = true
-        this.updateDisabled = true
-        this.moveDownDisabled = true
-        this.moveUpDisabled = true
       }
+      console.log(this.multipleSelection)
+    },
+
+    // 批量删除
+    deleteBatches() {
+      const selectId = []
+      this.multipleSelection.forEach(it => selectId.push(it.id))
+      console.log(selectId)
+      if (selectId.length === 0) {
+        this.$message.warning('请选择所删除的文件')
+        return false
+      }
+      this.$confirm('确定删除所选中文件?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(selectId)
+        this.__fetchData()
+        this.$message.success('删除成功')
+      })
     }
   }
 }

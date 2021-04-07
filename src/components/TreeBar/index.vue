@@ -7,7 +7,7 @@
     </el-tabs>
 
     <!-- <div class="tree-title-file">{{ treeData.title }}</div> -->
-    <el-input v-if="treeData.search" v-model="nodeContent" class="treeInpt" placeholder="请输入内容" prefix-icon="el-icon-search" />
+    <el-input v-if="treeData.search" v-model="nodeContent" class="treeInpt" placeholder="请输入内容" prefix-icon="el-icon-search" @change="searchSite" />
     <el-tree
       class="trees"
       :title="treeData.list"
@@ -18,12 +18,20 @@
       :expand-on-click-node="false"
       @node-click="handleNodeClick"
     >
-      <span slot-scope="{ node, data }" class="span-ellipsis">
+      <span slot-scope="{ node, data }" class="span-ellipsis" @contextmenu.prevent="openMenu(node, $event)">
         <span :title="node.label">{{ node.label }}</span>
       </span>
     </el-tree>
-    <div v-if="treeData.arrow" class="extend" @click="handleExtend"><i class="el-icon-d-arrow-left"></i></div>
-    <div v-else class="extend-button" @click="handleExtend"/>
+    <!-- <div v-if="treeData.arrow" class="extend" @click="handleExtend"><i class="el-icon-d-arrow-left" /></div>
+    <div v-else class="extend-button" @click="handleExtend" /> -->
+
+    <ul
+      v-show="visible"
+      :style="{ left: left + 'px', top: top + 'px' }"
+      class="contextmenu"
+    >
+      <li>wejiwjie</li>
+    </ul>
   </div>
 </template>
 <script>
@@ -36,6 +44,9 @@ export default {
   },
   data() {
     return {
+      visible: false,
+      top: 0,
+      left: 0,
       treeOpen: true,
       defaultProps: {
         children: 'children',
@@ -53,19 +64,61 @@ export default {
     handleExtend() {
       this.$emit('extend-click')
     },
-    handleSelect(key, keyPath) {
-      this.activeIndex = key
-    },
     // 点击文件夹或者部门触发
     handleClick(tab, event) {
-      console.log(tab, event)
+      // console.log('tab-switch', tab.index)
+      this.$emit('handleSwitch', tab)
       // this.$emit("handleClick",tab,event)
+    },
+    searchSite(_val){
+      this.$emit("searchSite",_val)
+    },
+    openMenu(tag, e) {
+      console.log('tag', tag)
+      const menuMinWidth = 105
+      const offsetLeft = this.$el.getBoundingClientRect().left // getBoundingClientRect 获取某个元素相对于视窗的位置
+      const offsetWidth = this.$el.offsetWidth
+      const maxLeft = offsetWidth - menuMinWidth
+      const left = e.clientX - offsetLeft
+      const top = e.clientY - this.$el.getBoundingClientRect().top
+
+      if (left > maxLeft) {
+        this.left = maxLeft
+      } else {
+        this.left = left
+      }
+
+      this.top = top // tagsView height
+      this.visible = true
     }
   }
 }
 </script>
 <style lang="scss">
+@import '~@/assets/styles/variables.scss';
+@import '~@/assets/styles/theme.scss';
   .tree-container{
+    .contextmenu {
+      margin: 0;
+      background: $whiteColor;
+      z-index: 3000;
+      position: absolute;
+      list-style-type: none;
+      padding: 5px 0;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 400;
+      color: $lightBlackColor;
+      box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
+      li {
+        margin: 0;
+        padding: 7px 16px;
+        cursor: pointer;
+        &:hover {
+          background: #eee;
+        }
+      }
+    }
     .trees {
       .el-tree-node {
         .el-tree-node__content {
@@ -102,6 +155,15 @@ export default {
 
     #pane-file,#pane-dept{
       text-indent: 0.8em;
+    }
+
+    .el-tabs__item.is-active,
+    .el-tabs__item:hover {
+      color: $blueColor;
+    }
+
+    .el-tabs__active-bar {
+      background-color:$blueColor;
     }
   }
   .extend{

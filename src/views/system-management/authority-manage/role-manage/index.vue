@@ -32,21 +32,27 @@
     <!-- 人员管理弹窗 -->
     <member-dialog
       :config="initTableConfig()"
+      :roleUserInfo = "roleUserInfo"
+      :selectRole = "selectRole"
       :dialog-visible="tableDialogVisible"
       @closeDialog="tableDialogVisible = false"
       @membersVisible="membersVisible"
       @removeMember="removeMember"
       @synchro="synchro"
       @search="search"
+      @updataPage="updataPage"
     />
     <!-- 添加人员弹窗 -->
     <add-member-dialog
       :config="initAddMemberConfig()"
+      :selectRole = "selectRole"
+      :roleUserInfo = "roleUserInfo"
       :dialog-visible="addMembersVisible"
       @closeDialog="addMembersClose"
       @membersVisible="membersVisible"
       @keywordSearch="keywordSearch"
       @contentSearch="contentSearch"
+      @treeClick="treeClick"
     />
 
     <role-permission-dialog
@@ -63,7 +69,8 @@ import {
   getRoleList,
   saveRole,
   deleteRole,
-  updateRole
+  updateRole,
+  getRoleUserList
 } from '@/api/authority-management'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
@@ -102,11 +109,20 @@ export default {
       RoleFilterConfig,
       RoleTableConfig,
       UserTableConfig,
+      selectRole: {},
       createDialogVisible: false,
       editDialogVisible: false,
       tableDialogVisible: false,
       addMembersVisible: false,
-      authorityVisible: false
+      authorityVisible: false,
+      roleUserInfo: {
+        roleUserList:[],
+        total: 0,
+        listQuery: {
+          page: 1,
+          pagerows: 10
+        }
+      }
     }
   },
 
@@ -116,14 +132,18 @@ export default {
   methods: {
     __fetchData() {
       this.listLoading = true
-      // const query = Object.assign(this.listQuery, this.filter)
-      getRoleList(this.listQuery).then(res => {
+      const query = {
+        page: this.listQuery.page,
+        pagerows: this.listQuery.pagerows,
+        sort:{
+          asc:["orderNum"]
+        }
+      }
+      getRoleList(query).then(res => {
         console.log(res)
-
         this.list = res.data.rows
         this.total = parseInt(res.data.records);
         this.listLoading = false;
-        // this.total = response.data.total
       })
     },
     // 查询数据
@@ -220,19 +240,58 @@ export default {
       })
     },
     otherClick(row, index, item) {
-      // console.log(row,index,item);
+      console.log(row,index,item);
       console.log(item)
       if (item == '管理成员') {
+        this.selectRole = row;
         this.tableDialogVisible = true
+        const flag = 1
+        this.getRoleUserList(this.selectRole.sysRoleId,this.listQuery.page,this.listQuery.pagerows,'',flag)
       } else if (item == '编辑权限') {
         this.authorityVisible = true
       }
     },
+    treeClick(_data){
+      console.log(_data);
+      this.getRoleUserList(this.selectRole.sysRoleId,this.listQuery.page,this.listQuery.pagerows,'',2,_data.value)
+    },
+    // 获取角色下的所有用户列表
+    getRoleUserList(_id,_page,_rows,_search,_falg,_p_id) {
+      console.log(_id,_page,_rows,_search);
+      const query = {
+        page: _page,
+        pagerows: _rows,
+        entity: {
+          "sysRoleId": _id,
+          "userName": _search,
+          "loginName": _search,
+          "sysDeptId": _p_id
+        },
+        extra:{
+          "flag": _falg
+        }
+      }
+      getRoleUserList(query).then(res => {
+        console.log(res);
+        this.roleUserInfo.roleUserList = res.data.rows
+        this.roleUserInfo.total = Number(res.data.records)
+        this.roleUserInfo.page = _page
+        this.roleUserInfo.pagerows = _rows
+        console.log(this.roleUserInfo);
+      })
+    },
+    updataPage(_data,_num){
+      console.log(_data);
+      this.getRoleUserList(this.selectRole.sysRoleId,_data.page,_data.limit,'',_num);
+    },
     membersVisible() {
+      const flag= 2
+      this.getRoleUserList(this.selectRole.sysRoleId,this.listQuery.page,this.listQuery.pagerows,'',flag)
       this.tableDialogVisible = false
       this.addMembersVisible = true
     },
     addMembersClose() {
+      this.getRoleUserList(this.selectRole.sysRoleId,this.listQuery.page,this.listQuery.pagerows,'',1)
       this.tableDialogVisible = true
       this.addMembersVisible = false
     },
@@ -244,24 +303,18 @@ export default {
       })
     },
     // 同步
-    synchro(val) {
-      this.$message({
-        message: '恭喜你，同步成功',
-        type: 'success'
-      })
+    synchro(val,_num) {
+      this.getRoleUserList(this.selectRole.sysRoleId,this.listQuery.page,this.listQuery.pagerows,'',_num)
+      this.$message.success('恭喜你，' + val + '成功')
     },
     // 搜索
-    search(val) {
-      console.log(val)
-      this.$message({
-        message: '恭喜你，搜索成功',
-        type: 'success'
-      })
-      this.__fetchData()
+    search(val,_num) {
+      this.getRoleUserList(this.selectRole.sysRoleId,'1','10',val,_num)
+      this.$message.success("查询成功")
     },
     // 通过关键字搜索
-    keywordSearch(val) {
-      console.log(val)
+    keywordSearch(_id) {
+      this.getRoleUserList(this.selectRole.sysRoleId,this.listQuery.page,this.listQuery.pagerows,'',2,_id)
       this.$message({
         message: '恭喜你，搜索成功',
         type: 'success'
@@ -269,10 +322,7 @@ export default {
     },
     contentSearch(val) {
       console.log(val)
-      this.$message({
-        message: '恭喜你，搜索成功',
-        type: 'success'
-      })
+      this.getRoleUserList("",this.listQuery.page,this.listQuery.pagerows,val)
     }
   }
 }

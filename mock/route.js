@@ -3587,13 +3587,13 @@ const asyncRoutes = [
           {
             path: '/system-management/authority-manage/application-manage',
             name: 'Authority1',
-            component:'/system-management/authority-manage/application-manage/index',
+            component: '/system-management/authority-manage/application-manage/index',
             meta: { title: '应用系统管理' }
           },
           {
             path: '/system-management/authority-manage/role-type',
             name: 'Authority1',
-            component:'/system-management/authority-manage/role-type/index',
+            component: '/system-management/authority-manage/role-type/index',
             meta: { title: '角色类型管理' }
           },
           {
@@ -3624,7 +3624,7 @@ const asyncRoutes = [
           {
             path: '/system-management/authority-manage/data-dictionary-manage',
             name: 'Authority6',
-            component:'/system-management/authority-manage/data-dictionary-manage/index',
+            component: '/system-management/authority-manage/data-dictionary-manage/index',
             meta: { title: '数据字典管理' }
           },
           {
@@ -3701,18 +3701,18 @@ const asyncRoutes = [
         component: '/demo/index',
         meta: { title: '消息管理' },
         children: [
-          {
-            path: '/system-management/message-manage/message-template',
-            name: 'Message1',
-            component:
-              '/system-management/message-manage/message-template/index',
-            meta: { title: '消息模板配置' }
-          },
+          // {
+          //   path: '/system-management/message-manage/message-template',
+          //   name: 'Message1',
+          //   component:
+          //     '/system-management/message-manage/message-template/index',
+          //   meta: { title: '消息模板配置' }
+          // },
           {
             path: '/system-management/message-manage/message-type',
             name: 'Message1',
-            component:'/system-management/message-manage/message-type/index',
-            meta: { title: '消息类型' }
+            component: '/system-management/message-manage/message-type/index',
+            meta: { title: '消息模板配置' }
           },
           {
             path: '/system-management/message-manage/message-log',
@@ -3770,7 +3770,7 @@ const asyncRoutes = [
           {
             path: '/system-management/flow-manage/flow1',
             name: 'Flow1',
-            component: '/demo/index',
+            component: '/system-management/flow-manage/flow-config/index',
             meta: { title: '流程配置' }
           },
           {
@@ -3782,7 +3782,7 @@ const asyncRoutes = [
           {
             path: '/system-management/flow-manage/flow3',
             name: 'Flow3',
-            component: '/demo/index',
+            component: '/system-management/flow-manage/index',
             meta: { title: '流程管理' }
           }
         ]
@@ -3835,25 +3835,64 @@ const asyncRoutes = [
             path: '/system-management/report/ureport',
             name: 'System5-1',
             component: '/ureport/designer/index',
-            meta: { title: 'urport' }
+            meta: { title: '报表设计器（ureport）' }
           },
           {
             path: '/system-management/report/kForm/design',
             name: 'kFormDesign',
             component: '/demo/k-form/design/index',
-            meta: { title: 'kFormDesign' }
+            meta: { title: '表单设计器' }
           },
           {
             path: '/system-management/report/kForm/build',
             name: 'kFormBuild',
             component: '/demo/k-form/build/index',
-            meta: { title: 'kFormBuild' }
+            meta: { title: '表单显示模块' }
+          }
+        ]
+      },
+      // 任务调度
+      {
+        path: '/system-management/demo-task',
+        name: 'DemoTask',
+        component: '/demo/index',
+        meta: { title: '任务调度' },
+        children: [
+          {
+            path: '/system-management/task1',
+            name: 'Task1',
+            component: '/system-management/task-scheduling/task-config/index',
+            meta: { title: '任务配置' }
+          },
+          {
+            path: '/system-management/task2',
+            name: 'Task2',
+            component: '/system-management/task-scheduling/task-manage/index',
+            meta: { title: '任务管理' }
+          },
+          {
+            path: '/system-management/task3',
+            name: 'Task3',
+            component: '/system-management/task-scheduling/task-monitoring/index',
+            meta: { title: '任务监控' }
+          },
+          {
+            path: '/system-management/task4',
+            name: 'Task4',
+            component: '/system-management/task-scheduling/task-log/index',
+            meta: { title: '任务调度日志' }
           }
         ]
       },
       {
-        path: '/system-management/menuManager',
+        path: '/system-management/to-do-list',
         name: 'System8',
+        component: '/system-management/to-do-list/index',
+        meta: { title: '待办列表' }
+      },
+      {
+        path: '/system-management/menuManager',
+        name: 'System9',
         component: '/system-management/menu-manager/index',
         meta: { title: '菜单管理' }
       },
@@ -4213,40 +4252,6 @@ const asyncRoutes = [
         name: 'Alarm3',
         component: '/demo/index',
         meta: { title: '预告警策略配置' }
-      }
-    ]
-  },
-  // 任务调度
-  {
-    path: '/demo-task',
-    name: 'DemoTask',
-    component: 'Layout',
-    redirect: '/demo-task/task1',
-    meta: { title: '任务调度' },
-    children: [
-      {
-        path: '/demo-task/task1',
-        name: 'Task1',
-        component: '/demo/index',
-        meta: { title: '任务配置' }
-      },
-      {
-        path: '/demo-task/task2',
-        name: 'Task2',
-        component: '/demo/index',
-        meta: { title: '任务管理' }
-      },
-      {
-        path: '/demo-task/task3',
-        name: 'Task3',
-        component: '/demo/index',
-        meta: { title: '任务监控' }
-      },
-      {
-        path: '/demo-task/task4',
-        name: 'Task4',
-        component: '/demo/index',
-        meta: { title: '任务调度日志' }
       }
     ]
   },
