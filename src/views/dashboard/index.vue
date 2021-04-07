@@ -1,112 +1,119 @@
 <template>
   <div class="page-container dashboard-wrapper">
     <el-row :gutter="20">
-      <el-col :span="19">
-        <div class="chart-wrapper">
-          <el-row :gutter="15" style="margin-bottom: 20px;">
-            <el-col :span="16">
-              <safe-content />
-            </el-col>
-            <el-col :span="8">
-              <work-sheep-content />
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="10">
-              <product-content />
-            </el-col>
-            <el-col :span="14">
-              <working-content />
-            </el-col>
-          </el-row>
-
-        </div>
+      <el-col :span="16">
+        <el-row :gutter="20" style="margin-bottom: 20px;">
+          <el-col :span="12">
+            <div class="board-wrapper">
+              <div class="board-title">快捷导航</div>
+              <div class="board-content nav-content">
+                <nav-board />
+              </div>
+            </div>
+          </el-col>
+          <el-col :span="12">
+            <div class="board-wrapper">
+              <div class="board-title">待办事项</div>
+              <div class="board-content backlog-content">
+                <backlog-board />
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin-bottom: 20px;">
+          <el-col :span="24">
+            <div class="board-wrapper">
+              <div class="board-title">产量图</div>
+              <div class="board-content product-content">
+                <product-board />
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="24">
+            <div class="board-wrapper">
+              <el-tabs v-model="infoActive">
+                <el-tab-pane label="新闻中心" name="news">
+                  <div class="board-content infomation-content">
+                    <news-board />
+                  </div>
+                </el-tab-pane>
+                <el-tab-pane label="通知公告" name="notice">
+                  <div class="board-content infomation-content">
+                    <notice-board />
+                  </div>
+                </el-tab-pane>
+              </el-tabs>
+            </div>
+          </el-col>
+        </el-row>
       </el-col>
-      <el-col :span="5">
-        <aside-content />
+      <el-col :span="8">
+        <el-row :gutter="20" style="margin-bottom: 20px;">
+          <el-col :span="24">
+            <div class="board-wrapper">
+              <div class="board-title">值班信息</div>
+              <div class="board-content worklog-content">
+                <worklog-board />
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin-bottom: 20px;">
+          <el-col :span="24">
+            <div class="board-wrapper">
+              <div class="board-title">待办项目</div>
+              <div class="board-content project-content">
+                <project-board />
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin-bottom: 20px;">
+          <el-col :span="24">
+            <div class="board-wrapper">
+              <div class="board-title">公文新闻</div>
+              <div class="board-content office-content">
+                <office-board />
+              </div>
+            </div>
+          </el-col>
+        </el-row>
       </el-col>
     </el-row>
-
   </div>
 </template>
 
 <script>
-import { getLineData } from '@/api/dashboard'
-import SafeContent from './components/SafeContent'
-import WorkSheepContent from './components/WorkSheepContent'
-import ProductContent from './components/ProductContent'
-import WorkingContent from './components/WorkingContent'
-import AsideContent from './components/AsideContent'
+import NavBoard from './components/NavBoard'
+import BacklogBoard from './components/BacklogBoard'
+import ProductBoard from './components/ProductBoard'
+import WorklogBoard from './components/WorklogBoard'
+import ProjectBoard from './components/ProjectBoard'
+import OfficeBoard from './components/OfficeBoard'
+import NewsBoard from './components/NewsBoard'
+import NoticeBoard from './components/NoticeBoard'
+
 export default {
   name: 'Dashboard',
   components: {
-    SafeContent,
-    WorkSheepContent,
-    ProductContent,
-    WorkingContent,
-    AsideContent
+    NavBoard,
+    BacklogBoard,
+    WorklogBoard,
+    ProductBoard,
+    ProjectBoard,
+    OfficeBoard,
+    NewsBoard,
+    NoticeBoard
   },
   data() {
     return {
-      loading: true,
-      lineData: {
-        name: [],
-        value: []
-      },
-      barData: {
-        name: [],
-        value: []
-      },
-      pieData: null,
-      years: [
-        { value: '2020', label: '2020年' },
-        { value: '2019', label: '2019年' },
-        { value: '2018', label: '2018年' },
-        { value: '2017', label: '2017年' },
-        { value: '2016', label: '2016年' }
-      ],
-      filterYear: '2020',
-      lineCount: 0,
-      filterTime: []
-
+      infoActive: 'news' // 消息模块选项卡
     }
   },
-  mounted() {
-    this.__fetchLineData()
-  },
+
   methods: {
-    __fetchLineData() {
-      this.loading = true
-      getLineData().then(response => {
-        this.loading = false
-        this.lineCount = response.data.lineCount
-        const line = response.data.lineData
-        const bar = response.data.barData
-        const pie = response.data.barData
-        const lineName = []
-        const lineValue = []
-        const barName = []
-        const barValue = []
-
-        line.forEach(item => {
-          lineName.push(item.month + '月')
-          lineValue.push(item.value)
-        })
-        bar.forEach(item => {
-          barName.push(item.name)
-          barValue.push(item.value)
-        })
-        this.lineData = {
-          name: lineName,
-          value: lineValue
-        }
-        this.barData = {
-          name: barName,
-          value: barValue
-        }
-        this.pieData = pie
-      })
-    }
 
   }
 }
@@ -118,6 +125,88 @@ export default {
 .dashboard-wrapper {
   @include clearfix;
   background: $pageBg !important;
+  .board-wrapper {
+    position: relative;
+    background: #fff;
+    .board-title,
+    ::v-deep .el-tabs__header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .board-title {
+      padding: 10px 15px;
+      border-bottom: 1px solid #f7f7f7;
+    }
+    ::v-deep {
+      .el-tabs__header {
+        padding: 0 15px;
+      }
+      .el-tabs__nav-wrap::after {
+        height: 1px;
+        background-color: #f7f7f7;
+      }
+      .el-tabs__item {
+        font-size: 15px;
+      }
+      .el-tabs__item.is-active,.el-tabs__item:hover {
+        font-weight: bold;
+        color:rgba(0, 0, 0, 0.65);
+      }
+    }
+
+    .board-content {
+      &.nav-content,
+      &.backlog-content,
+      &.worklog-content {
+        height: 242px;
+      }
+      &.product-content,
+      &.project-content {
+        height: 374px;
+      }
+      &.office-content,
+      &.infomation-content {
+        height: 400px;
+      }
+      .swiper-content {
+        background: #fff;
+        height: 100%;
+        ::v-deep {
+          .el-carousel--horizontal,
+          .el-carousel__container {
+            height: 100%;
+          }
+          .el-carousel {
+            padding-top: 42px;
+            position: relative;
+
+          }
+          .el-carousel__button {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+          }
+
+          .el-carousel__indicators--outside {
+            position: absolute;
+            top: 4px;
+            right: 20px;
+            bottom: initial;
+            left: initial;
+            button {
+              background-color: #999;
+            }
+          }
+        }
+
+      }
+    }
+  }
 }
 
 </style>

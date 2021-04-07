@@ -24,8 +24,18 @@ export default {
     cdata: {
       handler(newData) {
         this.options = {
+          title: {
+            text: '今日产量柱状图',
+            left: 'center',
+            top: 20,
+            textStyle: {
+              color: '#787878',
+              fontWeight: 'normal',
+              fontSize: 14
+            }
+          },
           grid: {
-            top: 50,
+            top: 60,
             left: '2%',
             right: '2%',
             bottom: '0%',
@@ -64,7 +74,7 @@ export default {
             type: 'bar',
             barWidth: 20,
             itemStyle: {
-              color: '#409EFF'
+              color: '#009688'
             }
           }]
         }
