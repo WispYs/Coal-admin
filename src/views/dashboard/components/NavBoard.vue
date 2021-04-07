@@ -4,7 +4,9 @@
       <el-carousel-item v-for="item in 2" :key="item">
         <div class="nav-board">
           <div v-for="it in navData" :key="it.title" class="nav-board__item">
-            <div class="item-icon"><i :class="it.icon" /></div>
+            <div class="item-icon">
+              <img :src="it.icon" alt="" :width="it.width">
+            </div>
             <span class="item-tit">{{ it.title }}</span>
           </div>
         </div>
@@ -23,14 +25,14 @@ export default {
   data() {
     return {
       navData: [
-        { title: '任务调度', icon: 'el-icon-sunset' },
-        { title: '大数据分析', icon: 'el-icon-sunset' },
-        { title: 'GIS一张图', icon: 'el-icon-sunset' },
-        { title: '消息管理', icon: 'el-icon-sunset' },
-        { title: '一通三防', icon: 'el-icon-sunset' },
-        { title: '生产调度', icon: 'el-icon-sunset' },
-        { title: '用户中心', icon: 'el-icon-sunset' },
-        { title: '系统管理', icon: 'el-icon-sunset' }
+        { title: '任务调度', icon: require('@/assets/images/nav_icon_1.png') },
+        { title: '大数据分析', icon: require('@/assets/images/nav_icon_2.png') },
+        { title: 'GIS一张图', icon: require('@/assets/images/nav_icon_3.png') },
+        { title: '消息管理', icon: require('@/assets/images/nav_icon_4.png'), width: '38px' },
+        { title: '一通三防', icon: require('@/assets/images/nav_icon_5.png') },
+        { title: '生产调度', icon: require('@/assets/images/nav_icon_6.png'), width: '30px' },
+        { title: '用户中心', icon: require('@/assets/images/nav_icon_7.png') },
+        { title: '系统管理', icon: require('@/assets/images/nav_icon_8.png') }
       ]
     }
   }
