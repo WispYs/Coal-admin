@@ -17,6 +17,7 @@
       default-expand-all
       :expand-on-click-node="false"
       @node-click="handleNodeClick"
+      @check-change="checkChange"
     >
       <span slot-scope="{ node, data }" class="span-ellipsis" @contextmenu.prevent="openMenu(node, $event)">
         <span :title="node.label">{{ node.label }}</span>
@@ -26,11 +27,14 @@
     <div v-else class="extend-button" @click="handleExtend" /> -->
 
     <ul
+      v-if="hasMenu"
       v-show="visible"
       :style="{ left: left + 'px', top: top + 'px' }"
       class="contextmenu"
     >
-      <li>wejiwjie</li>
+      <li @click="create">新建</li>
+      <li v-if="tag && tag.data.value > 0" @click="edit">编辑</li>
+      <li v-if="tag && tag.data.value > 0" @click="del">删除</li>
     </ul>
   </div>
 </template>
@@ -40,6 +44,10 @@ export default {
     treeData: {
       type: Object,
       default: () => {}
+    },
+    hasMenu: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -48,12 +56,23 @@ export default {
       top: 0,
       left: 0,
       treeOpen: true,
+      sysMenuIds: [],
       defaultProps: {
         children: 'children',
         label: 'label'
       },
       nodeContent: '',
-      activeName: 'file'
+      activeName: 'file',
+      tag: null
+    }
+  },
+  watch: {
+    visible(value) {
+      if (value) {
+        document.body.addEventListener('click', this.closeMenu)
+      } else {
+        document.body.removeEventListener('click', this.closeMenu)
+      }
     }
   },
   methods: {
@@ -70,17 +89,32 @@ export default {
       this.$emit('handleSwitch', tab)
       // this.$emit("handleClick",tab,event)
     },
-    searchSite(_val){
-      this.$emit("searchSite",_val)
+    checkChange(data, checked, indeterminate) {
+      console.log(data, checked, indeterminate)
+      if (checked) {
+        this.sysMenuIds.push(data.value)
+      } else {
+        for (const s in this.sysMenuIds) {
+          if (data.value === this.sysMenuIds[s]) {
+            this.sysMenuIds.splice(s, 1)
+          }
+        }
+      }
+      this.$emit('checkChange', this.sysMenuIds)
+      // console.log(this.sysMenuIds);
+    },
+    searchSite(_val) {
+      this.$emit('searchSite', _val)
     },
     openMenu(tag, e) {
       console.log('tag', tag)
-      const menuMinWidth = 105
-      const offsetLeft = this.$el.getBoundingClientRect().left // getBoundingClientRect 获取某个元素相对于视窗的位置
+      this.tag = tag
+      const menuMinWidth = 60
+      const rect = this.$el.getBoundingClientRect()
       const offsetWidth = this.$el.offsetWidth
       const maxLeft = offsetWidth - menuMinWidth
-      const left = e.clientX - offsetLeft
-      const top = e.clientY - this.$el.getBoundingClientRect().top
+      const left = e.clientX - rect.left
+      const top = e.clientY - rect.top
 
       if (left > maxLeft) {
         this.left = maxLeft
@@ -90,6 +124,22 @@ export default {
 
       this.top = top // tagsView height
       this.visible = true
+    },
+    closeMenu() {
+      this.visible = false
+      this.fId = ''
+    },
+    create() {
+      this.$emit('createFolder', this.tag)
+      this.closeMenu()
+    },
+    edit() {
+      this.$emit('editFolder', this.tag)
+      this.closeMenu()
+    },
+    del() {
+      this.$emit('delFolder', this.tag)
+      this.closeMenu()
     }
   }
 }

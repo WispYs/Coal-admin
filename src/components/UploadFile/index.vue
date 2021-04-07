@@ -9,6 +9,7 @@
     <el-upload
       class="upload-content"
       drag
+      :data="data"
       :multiple="multiple"
       :accept="acceptList"
       :action="action"
@@ -47,12 +48,17 @@ export default {
     multiple: {
       type: Boolean,
       default: true
+    },
+    data: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
     return {
       // action: 'https://jsonplaceholder.typicode.com/posts/'
-      action: 'https://httpbin.org/post',
+      // action: 'https://httpbin.org/post',
+      action: 'http://192.168.1.139:18000/sysFileInfo/save',
       uploadStatus: false, // 上传状态
       uploadFileList: [], // 上传成功的列表
       preloadNum: 0 // 预加载文件数量
@@ -98,7 +104,7 @@ export default {
       const fileObj = {
         uid: file.uid,
         name: file.name,
-        url: response.files.file,
+        // url: response.files.file,
         uploadSuccess: true // 上传成功
       }
       this.uploadFileList.push(fileObj)

@@ -17,17 +17,10 @@ export function getMultList() {
   })
 }
 
-// export function getUploadList() {
-//   return request({
-//     url: '/example/upload-table/list',
-//     method: 'get'
-//   })
-// }
-
 export function getUploadList() {
   return request({
-    url: `${FileUrl}/sysFileInfo/search`,
-    method: 'post'
+    url: '/example/upload-table/list',
+    method: 'get'
   })
 }
 

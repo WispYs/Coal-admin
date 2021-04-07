@@ -236,3 +236,30 @@ export function updateRole(data) {
     data
   })
 }
+
+// 角色类型获取站点列表
+export function selectCombox(data) {
+  return request({
+    url: SystemUrl + '/sysManage/selectCombox',
+    method: 'get',
+    data
+  })
+}
+
+// 角色管理获取角色类型列表
+export function RoleTypeSelectBox(data) {
+  return request({
+    url: SystemUrl + '/sysRoleType/selectCombox',
+    method: 'get',
+    data
+  })
+}
+
+// 角色管理获取模块授权列表
+export function getMeauList(data) {
+  return request({
+    url: SystemUrl + '/sysMenu/getMenuTree',
+    method: 'post',
+    data
+  })
+} 

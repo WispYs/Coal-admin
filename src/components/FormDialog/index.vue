@@ -137,6 +137,9 @@ export default {
   computed: {
 
   },
+  mounted() {
+    console.log(this.formData)
+  },
   created() {
     this.formData = this.selectUpdateData
     const { form } = { ...this.config }
@@ -200,7 +203,10 @@ export default {
     // 清空组件 form 数据
     resetForm() {
       this.resetSubmitBtn()
-      this.$refs.formData.resetFields()
+      this.$nextTick(() => {
+        this.$refs.formData.resetFields()
+      })
+
       const treeSelectComponents = this.$refs.treeSelect
       if (treeSelectComponents) {
         treeSelectComponents.forEach(it => {

@@ -10,10 +10,24 @@
       @delete-click="deleteClick"
       @submit-data="editSubmit"
       @other-click="otherClick"
+      @selection-change="selectionChange"
     />
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
+    <div v-show="total>0" class="page-bottom">
+      <el-button
+        class="page-bottom__delete"
+        type="warning"
+        size="small"
+        plain
+        :disabled="deleteDisabled"
+        @click="deleteBatches"
+      >
+        <i class="el-icon-delete el-icon--left" />批量删除
+      </el-button>
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
+    </div>
     <!-- 新建弹窗 -->
     <form-dialog
+      ref="createDialog"
       :config="initCreateConfig()"
       :dialog-visible="createDialogVisible"
       @close-dialog="createDialogVisible = false"
@@ -56,6 +70,7 @@
     />
 
     <role-permission-dialog
+      :moduleInfo="moduleInfo"
       :config="initAuthorityConfig()"
       :dialog-visible="authorityVisible"
       @closeDialog="authorityVisible = false"
@@ -70,7 +85,10 @@ import {
   saveRole,
   deleteRole,
   updateRole,
-  getRoleUserList
+  getRoleUserList,
+  RoleTypeSelectBox,
+  selectCombox,
+  getMeauList
 } from '@/api/authority-management'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
@@ -115,6 +133,8 @@ export default {
       tableDialogVisible: false,
       addMembersVisible: false,
       authorityVisible: false,
+      deleteDisabled: true,
+      multipleSelection:[],
       roleUserInfo: {
         roleUserList:[],
         total: 0,
@@ -122,19 +142,89 @@ export default {
           page: 1,
           pagerows: 10
         }
+      },
+      roleTypeList:[],
+      moduleInfo:{
+        title: '',
+        checkbox: true,
+        list:[]
       }
     }
   },
 
   created() {
     this.__fetchData()
+    this.__getRoleType()
+    this.__getSiteTree()
   },
   methods: {
-    __fetchData() {
+    __getSiteTree(){
+      selectCombox().then(res => {
+        console.log(res);
+        // this.treeData.list = res.data
+        let tList = res.data
+        for(let d in res.data){
+          console.log(tList[d],res.data[d]);
+          this.siteRecursion(tList[d],res.data[d])
+        }
+        console.log(tList);
+        RoleTableConfig.columns.forEach(it => {
+          console.log(it);
+          if (it.field === 'sysManageId') {
+            it.options = tList
+          }
+        })
+      })
+    },
+    siteRecursion(list,data){
+      console.log(list,data);
+      list.label = data.site
+      list.value = data.sysManageId
+      if(data.children && data.children.length > 0){
+        for(let d in data.children){
+          this.siteRecursion(list.children[d],data.children[d])
+        }
+      }
+    },
+    __getRoleType(){
+      RoleTypeSelectBox().then(res => {
+        console.log(res)
+        this.roleTypeList = res.data
+        for(let d in res.data){
+          this.roleRecursion(this.roleTypeList[d],res.data[d])
+        }
+        console.log(this.roleTypeList);
+
+        RoleFilterConfig.filters.forEach(it => {
+          if (it.field === 'sysRoleTypeId') {
+            it.options = this.roleTypeList
+          }
+        })
+
+        RoleTableConfig.columns.forEach(it => {
+          if (it.field === 'sysRoleTypeId') {
+            it.options = this.roleTypeList
+          }
+        })
+      })
+    },
+    roleRecursion(list,data){
+      list.label = data.typeName
+      list.value = data.sysRoleTypeId
+      if(data.children && data.children.length > 0){
+        for(let d in data.children){
+          this.roleRecursion(list.children[d],data.children[d])
+        }
+      }
+    },
+    __fetchData(_id) {
       this.listLoading = true
       const query = {
         page: this.listQuery.page,
         pagerows: this.listQuery.pagerows,
+        entity: {
+          "sysRoleTypeId": _id
+        },
         sort:{
           asc:["orderNum"]
         }
@@ -148,8 +238,10 @@ export default {
     },
     // 查询数据
     queryData(filter) {
-      this.filter = Object.assign(this.filter, filter)
-      this.__fetchData()
+      console.log(filter);
+      // this.filter = Object.assign(this.filter, filter)
+      console.log(this.filter);
+      this.__fetchData(filter.sysRoleTypeId)
     },
     // 初始化表格窗口配置
     initTableConfig() {
@@ -221,12 +313,26 @@ export default {
         })
       })
     },
+    selectionChange(val){
+      this.multipleSelection = val
+      if (this.multipleSelection.length > 0) {
+        this.deleteDisabled = false
+      } else {
+        this.deleteDisabled = true
+      }
+    },
     // submit data  创建角色
     createSubmit(submitData) {
+      console.log(submitData);
+      const query = Object.assign(submitData, {
+        orderNum: Number(submitData.orderNum) || 0,
+        memberNum: Number(submitData.memberNum) || 0
+      })
       saveRole(submitData).then(res => {
         console.log(res)
         this.__fetchData()
         this.createDialogVisible = false
+        this.$refs.createDialog.resetForm()
         this.$message.success('新建成功')
       })
     },
@@ -236,6 +342,7 @@ export default {
         console.log(res);
         this.__fetchData()
         this.editDialogVisible = false
+        this.$refs.editDialog.resetForm()
         this.$message.success('编辑成功')
       })
     },
@@ -248,8 +355,26 @@ export default {
         const flag = 1
         this.getRoleUserList(this.selectRole.sysRoleId,this.listQuery.page,this.listQuery.pagerows,'',flag)
       } else if (item == '编辑权限') {
+        this.getRoleMeauList();
         this.authorityVisible = true
       }
+    },
+    // 获取模块授权信息
+    getRoleMeauList(){
+      let query ={
+        parentId: 0
+      }
+      getMeauList(query).then(res => {
+        console.log(res);
+        this.moduleInfo.list = res.data
+        for(let m in this.moduleInfo.list){
+          this.moduleInfoPotting(this.moduleInfo.list[m],this.moduleInfo.list[m].children)
+        }
+        console.log(this.moduleInfo);
+      })
+    },
+    moduleInfoPotting(module,m_children){
+      module.label = module.meta.title
     },
     treeClick(_data){
       console.log(_data);
@@ -301,6 +426,10 @@ export default {
         message: '恭喜你，移除成功',
         type: 'success'
       })
+    },
+    // 批量删除
+    deleteBatches(){
+
     },
     // 同步
     synchro(val,_num) {

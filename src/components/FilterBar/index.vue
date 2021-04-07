@@ -20,6 +20,7 @@
         v-if="item.layout === 'Select'"
         v-model="filterForm[item.field]"
         size="medium"
+        clearable
         :style="`width:${item.width}px`"
         :placeholder="item.placeholder"
         @change="search()"

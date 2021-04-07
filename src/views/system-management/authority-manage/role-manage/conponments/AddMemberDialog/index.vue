@@ -34,7 +34,7 @@
               :config="memberConfig"
               @edit-click="(row) => openDialog('edit', row)"
               @delete-click="deleteClick"
-              @selectionChange="selectionChange"
+              @selection-change="selectionChange"
               @submit-data="editSubmit"
             />
             <pagination

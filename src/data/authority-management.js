@@ -197,12 +197,12 @@ export const personnelConfig = {
 }
 
 export const RoleTypeConfig = {
-  // actions: ['other'],
+  actions: ['edit', 'delete'],
   otherActionTitle: [],
   checkbox: true,
   columns: [
     { label: '名称', field: 'typeName', width: 'auto', layout: 'Text', require: true, placeholder: '请填写名称' },
-    { label: '站点名称', field: 'site', width: 'auto', layout: 'Select',
+    { label: '站点名称', field: 'sysManageId', width: 'auto', layout: 'Select',
       options: [
         { value: 1, label: '顾桥煤矿' },
         { value: 2, label: '合肥煤矿' },
@@ -312,12 +312,16 @@ export const RoleTableConfig = {
   checkbox: true,
   columns: [
     { label: '角色名称', field: 'roleName', layout: 'Text', require: true, placeholder: '请填写角色名称' },
-    { label: '角色类型', field: 'sysRoleId', layout: 'Select', options: [
+    { label: '角色类型', field: 'sysRoleTypeId', layout: 'Select', options: [
       { value: 1, label: '基础通用' },
       { value: 2, label: '安全管理专业' },
       { value: 3, label: '调度专业' }
     ], placeholder: '请选择角色类型' },
-    { label: '所属站点', field: 'sysManageId', layout: 'Text', placeholder: '请填写所属站点' },
+    { label: '所属站点', field: 'sysManageId', layout: 'Select', options: [
+      { value: 1, label: '基础通用' },
+      { value: 2, label: '安全管理专业' },
+      { value: 3, label: '调度专业' }
+    ], placeholder: '请选择所属站点' },
     { label: '成员数量', field: 'memberNum', layout: 'Text', placeholder: '请填写成员数量' },
     { label: '排序', field: 'orderNum', layout: 'Text', require: true, placeholder: '请填写排序' },
     { label: '备注', field: 'remark', layout: 'Textarea', placeholder: '请填写备注' }
@@ -328,7 +332,7 @@ export const RoleTableConfig = {
 export const RoleFilterConfig = {
   actions: ['search', 'reset', 'create', 'delete'],
   filters: [
-    { label: '角色类型', field: 'name', width: '220', layout: 'Select', options: [
+    { label: '角色类型', field: 'sysRoleTypeId', width: '220', layout: 'Select', options: [
       { value: 1, label: '基础通用' },
       { value: 2, label: '安全管理专业' },
       { value: 3, label: '调度专业' }

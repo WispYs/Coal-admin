@@ -3,15 +3,6 @@
     <tree-bar :tree-data="treeData" @handleNodeClick="handleNodeClick" />
 
     <div class="tree-form-container">
-      <!-- 按钮功能、搜索 -->
-      <!-- <button-search
-        :update-disabled="updateDisabled"
-        :delete-disabled="deleteDisabled"
-        @openDialog="openDialog"
-        @deletePersonnel="deletePersonnel"
-        @synchroClick="synchroClick"
-        @startSearch="startSearch"
-      /> -->
       <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
         <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
       </span>

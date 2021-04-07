@@ -29,17 +29,32 @@ service.interceptors.response.use(
 
   response => {
     const res = response.data
-    if (res.code !== 200) {
-      Message({
-        message: res.msg || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      })
-
-      return Promise.reject(new Error(res.msg || 'Error'))
-    } else {
+    const cfg = response.config
+    // 流下载
+    if (response.status === 200 && cfg && cfg.responseType === 'blob') {
+      // new Blob([data])用来创建URL的file对象或者blob对象
+      const url = window.URL.createObjectURL(new Blob([res]))
+      // 生成一个a标签
+      const link = document.createElement('a')
+      const data = JSON.parse(cfg.data)
+      link.style.display = 'none'
+      link.href = url
+      link.download = data.fileName
+      document.body.appendChild(link)
+      link.click()
       return res
     }
+
+    if (res.code === 200) {
+      return res
+    }
+    Message({
+      message: res.msg || 'Error',
+      type: 'error',
+      duration: 5 * 1000
+    })
+
+    return Promise.reject(new Error(res.msg || 'Error'))
   },
   error => {
     console.log('err' + error)

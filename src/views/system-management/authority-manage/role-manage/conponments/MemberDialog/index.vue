@@ -12,7 +12,7 @@
         <el-button type="primary" size="medium" @click="search">搜索
         </el-button>
       </div>
-      <list-table :id="id" :list="roleUserInfo.roleUserList" :list-loading="listLoading" :config="memberConfig" @selectionChange="selectionChange" />
+      <list-table :id="id" :list="roleUserInfo.roleUserList" :list-loading="listLoading" :config="memberConfig" @selection-change="selectionChange" />
     </div>
     <div slot="footer" class="dialog-footer">
       <pagination v-show="roleUserInfo.total>0" :total="roleUserInfo.total" :page.sync="roleUserInfo.listQuery.page" :limit.sync="roleUserInfo.listQuery.pagerows"

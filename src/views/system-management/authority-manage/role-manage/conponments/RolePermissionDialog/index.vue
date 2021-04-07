@@ -24,7 +24,7 @@
         </el-col>
         <el-col :span="20" class="empower">
           <div v-if="!!moduleVisible">
-            <tree-bar :tree-data="treeData1" @extend-click="treeExtend = !treeExtend" />
+            <tree-bar :tree-data="moduleInfo" @extend-click="treeExtend = !treeExtend" @checkChange="checkChange"/>
           </div>
           <div v-if="!!buttonVisible">
             <div class="buttons">
@@ -55,7 +55,7 @@
                 </el-select>
               </el-form-item>
             </el-form>
-            <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" />
+            <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @checkChange="checkChange"/>
           </div>
         </el-col>
       </el-row>
@@ -90,6 +90,10 @@ export default {
     },
     // 弹窗配置项
     config: {
+      type: Object,
+      default: () => ({})
+    },
+    moduleInfo:{
       type: Object,
       default: () => ({})
     }
@@ -195,38 +199,12 @@ export default {
         checkbox: true,
         list: []
       },
-      treeData1: {
-        title: '',
-        checkbox: true,
-        list: [{
-          label: '门户页面子系统权限'
-        }, {
-          label: '全息一张图'
-        }, {
-          label: '地质技术资料',
-          children: [{
-            label: '钻孔成果卡片'
-          }, {
-            label: '地质构造素描卡片'
-          }, {
-            label: '并筒石门见煤点柱状卡片'
-          }, {
-            label: '地质专业的业务规程'
-          }, {
-            label: '理论知识'
-          }, {
-            label: '培训教材'
-          }]
-        }, {
-          label: '申请人申请'
-        }, {
-          label: '申请单位审批'
-        }, {
-          label: '分管领导审批'
-        }, {
-          label: '矿主要领导审批'
-        }]
-      }
+      // treeData1: {
+      //   title: '',
+      //   checkbox: true,
+      //   list: this.moduleInfo
+      // },
+      sysMenuIds:[]
     }
   },
   created() {
@@ -316,6 +294,7 @@ export default {
       // this.$emit("updateClick",this.selectData[0]);
     },
     empowerSubmit() {
+      console.log(this.sysMenuIds);
       if (this.moduleVisible) {
         this.$message({
           message: '模块授权成功',
@@ -333,6 +312,10 @@ export default {
         })
       }
       this.$emit('closeDialog')
+    },
+    checkChange(data){
+      console.log(data);
+      this.sysMenuIds = data
     },
     sourceChange(val) {
       console.log(val)
