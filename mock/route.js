@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-03-29 10:30:28
+ * @Last Modified time: 2021-04-08 13:33:51
  */
 
 /**
@@ -3084,314 +3084,299 @@ const asyncRoutes = [
     path: '/mechatronics',
     name: 'DemoMechanical',
     component: 'Layout',
-    redirect: '/mechatronics/transportation-management/equipment-management',
+    redirect: '/mechatronics/mechanical-manage/large-equipment-manage',
     meta: { title: '机电运输', important: true },
     children: [
       {
-        path: '/mechatronics/mechanical1',
+        path: '/mechatronics/mechanical-manage',
         name: 'Mechanical1',
-        component: '/demo/index',
+        component: '/mechatronics/mechanical-manage/index',
         meta: { title: '机电管理' },
         children: [
           {
-            path: '/mechatronics/mechanical1/mechanical1-1',
+            path: '/mechatronics/mechanical-manage/large-equipment-manage',
             name: 'Mechanical1-1',
-            component: '/demo/index',
+            component: '/mechatronics/mechanical-manage/large-equipment-manage/index',
             meta: { title: '大型设备管理' }
           },
           {
-            path: '/mechatronics/mechanical1/mechanical1-2',
+            path: '/mechatronics/mechanical-manage/large-equipment-type',
             name: 'Mechanical1-2',
-            component: '/demo/index',
+            component: '/mechatronics/mechanical-manage/large-equipment-type/index',
             meta: { title: '大型设备类型' }
           },
           {
-            path: '/mechatronics/mechanical1/mechanical1-3',
+            path: '/mechatronics/mechanical-manage/maintain-knowledge',
             name: 'Mechanical1-3',
-            component: '/demo/index',
+            component: '/mechatronics/mechanical-manage/maintain-knowledge/index',
             meta: { title: '维修知识库' }
           },
           {
-            path: '/mechatronics/mechanical1/mechanical1-4',
+            path: '/mechatronics/mechanical-manage/dissipation-knowledge',
             name: 'Mechanical1-4',
-            component: '/demo/index',
+            component: '/mechatronics/mechanical-manage/dissipation-knowledge/index',
             meta: { title: '设备能耗分析知识库' }
           },
           {
-            path: '/mechatronics/mechanical1/mechanical1-5',
+            path: '/mechatronics/mechanical-manage/mechanical-document',
             name: 'Mechanical1-5',
-            component: '/demo/index',
+            component: '/mechatronics/mechanical-manage/mechanical-document/index',
             meta: { title: '机电数字文档' }
           }
         ]
       },
       {
-        path: '/mechatronics/mechanical2',
+        path: '/mechatronics/transportation-manage',
         name: 'Mechanical2',
-        component: '/demo/index',
+        component: '/mechatronics/transportation-manage/index',
         meta: { title: '运输管理' },
         children: [
           {
-            path:
-              '/mechatronics/transportation-management/equipment-management',
+            path: '/mechatronics/transportation-manage/large-equipment-manage',
             name: 'EquipmentManagement',
-            component:
-              '/mechatronics/transportation-management/equipment-management/index',
+            component: '/mechatronics/transportation-manage/large-equipment-manage/index',
             meta: { title: '大型设备管理' }
           },
           {
-            path: '/mechatronics/transportation-management/equipment-type',
+            path: '/mechatronics/transportation-manage/large-equipment-type',
             name: 'EquipmentType',
-            component:
-              '/mechatronics/transportation-management/equipment-type/index',
+            component: '/mechatronics/transportation-manage/large-equipment-type/index',
             meta: { title: '大型设备类型' }
           },
           {
-            path: '/mechatronics/transportation-management/typical-fault',
+            path: '/mechatronics/transportation-manage/typical-fault',
             name: 'TypicalFault',
-            component:
-              '/mechatronics/transportation-management/typical-fault/index',
+            component: '/mechatronics/transportation-manage/typical-fault/index',
             meta: { title: '典型故障知识库' }
           },
           {
-            path: '/mechatronics/transportation-management/history-fault',
+            path: '/mechatronics/transportation-manage/history-fault',
             name: 'HistoryFault',
-            component:
-              '/mechatronics/transportation-management/history-fault/index',
+            component: '/mechatronics/transportation-manage/history-fault/index',
             meta: { title: '历史故障知识库' }
           },
           {
-            path:
-              '/mechatronics/transportation-management/transportation-document',
+            path: '/mechatronics/transportation-manage/transportation-document',
             name: 'TransportationDocument',
-            component:
-              '/mechatronics/transportation-management/transportation-document/index',
+            component: '/mechatronics/transportation-manage/transportation-document/index',
             meta: { title: '运输数字文档' }
           }
         ]
       },
       {
-        path: '/mechatronics/mechanical3',
+        path: '/mechatronics/service-manage',
         name: 'Mechanical3',
-        component: '/demo/index',
+        component: '/mechatronics/service-manage/index',
         meta: { title: '检修管理' },
         children: [
           {
-            path: '/mechatronics/service-management/service-plan',
+            path: '/mechatronics/service-manage/service-plan',
             name: 'ServicePlan',
-            component: '/mechatronics/service-management/service-plan/index',
+            component: '/mechatronics/service-manage/service-plan/index',
             meta: { title: '检修计划' }
           },
           {
-            path: '/mechatronics/service-management/daily-service-manage',
+            path: '/mechatronics/service-manage/daily-service-manage',
             name: 'DailyServiceManage',
-            component:
-              '/mechatronics/service-management/daily-service-manage/index',
+            component: '/mechatronics/service-manage/daily-service-manage/index',
             meta: { title: '日常维检管理' }
           },
           {
-            path: '/mechatronics/service-management/daily-service-calendar',
+            path: '/mechatronics/service-manage/daily-service-calendar',
             name: 'DailyServiceCalendar',
-            component:
-              '/mechatronics/service-management/daily-service-calendar/index',
+            component: '/mechatronics/service-manage/daily-service-calendar/index',
             meta: { title: '日常维检日历' }
           },
           {
-            path: '/mechatronics/service-management/equipment-service',
+            path: '/mechatronics/service-manage/equipment-service',
             name: 'EquipmentService',
-            component:
-              '/mechatronics/service-management/equipment-service/index',
+            component: '/mechatronics/service-manage/equipment-service/index',
             meta: { title: '设备维修' }
           },
           {
-            path: '/mechatronics/service-management/spare-parts',
+            path: '/mechatronics/service-manage/spare-parts',
             name: 'SpareParts',
-            component: '/mechatronics/service-management/spare-parts/index',
+            component: '/mechatronics/service-manage/spare-parts/index',
             meta: { title: '备品备件' }
           }
         ]
       },
       {
-        path: '/mechatronics/mechanical4',
+        path: '/mechatronics/equipment-manage',
         name: 'Mechanical4',
-        component: '/demo/index',
+        component: '/mechatronics/equipment-manage/index',
         meta: { title: '设备管理' },
         children: [
           {
-            path: '/mechatronics/equipment-management/supplier-manage',
+            path: '/mechatronics/equipment-manage/supplier-manage',
             name: 'SupplierManage',
-            component:
-              '/mechatronics/equipment-management/supplier-manage/index',
+            component: '/mechatronics/equipment-manage/supplier-manage/index',
             meta: { title: '供应商管理' }
           },
           {
-            path: '/mechatronics/equipment-management/category-manage',
+            path: '/mechatronics/equipment-manage/category-manage',
             name: 'CategoryManage',
-            component:
-              '/mechatronics/equipment-management/category-manage/index',
+            component: '/mechatronics/equipment-manage/category-manage/index',
             meta: { title: '设备类型管理' }
           },
           {
-            path: '/mechatronics/equipment-management/model-manage',
+            path: '/mechatronics/equipment-manage/model-manage',
             name: 'ModelManage',
-            component: '/mechatronics/equipment-management/model-manage/index',
+            component: '/mechatronics/equipment-manage/model-manage/index',
             meta: { title: '设备型号管理' }
           },
           {
-            path: '/mechatronics/equipment-management/storage-manage',
+            path: '/mechatronics/equipment-manage/storage-manage',
             name: 'StorageManage',
-            component:
-              '/mechatronics/equipment-management/storage-manage/index',
+            component: '/mechatronics/equipment-manage/storage-manage/index',
             meta: { title: '设备出入库' }
           },
           {
-            path: '/mechatronics/equipment-management/using-equipment',
+            path: '/mechatronics/equipment-manage/using-equipment',
             name: 'UsingEquipment',
-            component:
-              '/mechatronics/equipment-management/using-equipment/index',
+            component: '/mechatronics/equipment-manage/using-equipment/index',
             meta: { title: '在用设备' }
           },
           {
-            path: '/mechatronics/equipment-management/repair-manage',
+            path: '/mechatronics/equipment-manage/repair-manage',
             name: 'RepairManage',
-            component: '/mechatronics/equipment-management/repair-manage/index',
+            component: '/mechatronics/equipment-manage/repair-manage/index',
             meta: { title: '设备维修' }
           },
           {
-            path: '/mechatronics/equipment-management/scrap-manage',
+            path: '/mechatronics/equipment-manage/scrap-manage',
             name: 'ScrapManage',
-            component: '/mechatronics/equipment-management/scrap-manage/index',
+            component: '/mechatronics/equipment-manage/scrap-manage/index',
             meta: { title: '设备报废' }
           },
           {
-            path: '/mechatronics/equipment-management/standing-book',
+            path: '/mechatronics/equipment-manage/standing-book',
             name: 'StandingBook',
-            component: '/mechatronics/equipment-management/standing-book/index',
+            component: '/mechatronics/equipment-manage/standing-book/index',
             meta: { title: '设备台账' }
           },
           {
-            path: '/mechatronics/equipment-management/certificate-manage',
+            path: '/mechatronics/equipment-manage/certificate-manage',
             name: 'CertificateManage',
-            component:
-              '/mechatronics/equipment-management/certificate-manage/index',
+            component: '/mechatronics/equipment-manage/certificate-manage/index',
             meta: { title: '设备证书' }
           },
           {
-            path: '/mechatronics/mechanical4/mechanical4-10',
-            name: 'Mechanical4-10',
-            component: '/demo/index',
+            path: '/mechatronics/equipment-manage/equipment-summary-sheet',
+            name: 'EquipmentSummarySheet',
+            component: '/mechatronics/equipment-manage/equipment-summary-sheet/index',
             meta: { title: '生产设备汇总表' }
           }
         ]
       },
       {
-        path: '/mechatronics/mechanical5',
+        path: '/mechatronics/power-supply',
         name: 'Mechanical5',
-        component: '/demo/index',
+        component: '/mechatronics/power-supply/index',
         meta: { title: '供电管理' },
         children: [
           {
-            path: '/mechatronics/mechanical5/mechanical5-1',
+            path: '/mechatronics/power-supply/encode-manage',
             name: 'Mechanical5-1',
-            component: '/demo/index',
+            component: '/mechatronics/power-supply/encode-manage/index',
             meta: { title: '编码管理' }
           },
           {
-            path: '/mechatronics/mechanical5/mechanical5-2',
+            path: '/mechatronics/power-supply/cable-storage',
             name: 'Mechanical5-2',
-            component: '/demo/index',
+            component: '/mechatronics/power-supply/cable-storage/index',
             meta: { title: '电缆出入库' }
           },
           {
-            path: '/mechatronics/mechanical5/mechanical5-3',
+            path: '/mechatronics/power-supply/using-cable',
             name: 'Mechanical5-3',
-            component: '/demo/index',
+            component: '/mechatronics/power-supply/using-cable/index',
             meta: { title: '在用电缆' }
           },
           {
-            path: '/mechatronics/mechanical5/mechanical5-4',
+            path: '/mechatronics/power-supply/cable-scrap',
             name: 'Mechanical5-4',
-            component: '/demo/index',
+            component: '/mechatronics/power-supply/cable-scrap/index',
             meta: { title: '电缆报废' }
           },
           {
-            path: '/mechatronics/mechanical5/mechanical5-5',
+            path: '/mechatronics/power-supply/cable-ledger',
             name: 'Mechanical5-5',
-            component: '/demo/index',
+            component: '/mechatronics/power-supply/cable-ledger/index',
             meta: { title: '电缆台账' }
           },
           {
-            path: '/mechatronics/mechanical5/mechanical5-6',
+            path: '/mechatronics/power-supply/power-consumption',
             name: 'Mechanical5-6',
-            component: '/demo/index',
+            component: '/mechatronics/power-supply/power-consumption/index',
             meta: { title: '用电量管理' },
             children: [
               {
-                path: '/mechatronics/mechanical5/mechanical5-6/mechanical5-6-1',
+                path: '/mechatronics/power-supply/power-consumption/team-report-1',
                 name: 'Mechanical5-6-1',
-                component: '/demo/index',
+                component: '/mechatronics/power-supply/power-consumption/team-report-1/index',
                 meta: { title: '供电一队上报' }
               },
               {
-                path: '/mechatronics/mechanical5/mechanical5-6/mechanical5-6-2',
+                path: '/mechatronics/power-supply/power-consumption/team-report-2',
                 name: 'Mechanical5-6-2',
-                component: '/demo/index',
+                component: '/mechatronics/power-supply/power-consumption/team-report-2/index',
                 meta: { title: '供电二队上报' }
               }
             ]
           },
           {
-            path: '/mechatronics/mechanical5/mechanical5-7',
+            path: '/mechatronics/power-supply/approve',
             name: 'Mechanical5-7',
-            component: '/demo/index',
+            component: '/mechatronics/power-supply/approve/index',
             meta: { title: '停供电申请审批' },
             children: [
               {
-                path: '/mechatronics/mechanical5/mechanical5-7/mechanical5-7-1',
+                path: '/mechatronics/power-supply/approve/apply',
                 name: 'Mechanical5-7-1',
-                component: '/demo/index',
+                component: '/mechatronics/power-supply/approve/apply/index',
                 meta: { title: '停供电申请' }
               },
               {
-                path: '/mechatronics/mechanical5/mechanical5-7/mechanical5-7-2',
+                path: '/mechatronics/power-supply/approve/organ-audit',
                 name: 'Mechanical5-7-2',
-                component: '/demo/index',
+                component: '/mechatronics/power-supply/approve/organ-audit/index',
                 meta: { title: '单位审核' }
               },
               {
-                path: '/mechatronics/mechanical5/mechanical5-7/mechanical5-7-3',
+                path: '/mechatronics/power-supply/approve/administrator-audit',
                 name: 'Mechanical5-7-3',
-                component: '/demo/index',
+                component: '/mechatronics/power-supply/approve/administrator-audit/index',
                 meta: { title: '电管员审核' }
               },
               {
-                path: '/mechatronics/mechanical5/mechanical5-7/mechanical5-7-4',
+                path: '/mechatronics/power-supply/approve/group-audit',
                 name: 'Mechanical5-7-4',
-                component: '/demo/index',
+                component: '/mechatronics/power-supply/approve/group-audit/index',
                 meta: { title: '电管班审核' }
               },
               {
-                path: '/mechatronics/mechanical5/mechanical5-7/mechanical5-7-5',
+                path: '/mechatronics/power-supply/approve/affect-audit',
                 name: 'Mechanical5-7-5',
-                component: '/demo/index',
+                component: '/mechatronics/power-supply/approve/affect-audit/index',
                 meta: { title: '影响单位审核' }
               },
               {
-                path: '/mechatronics/mechanical5/mechanical5-7/mechanical5-7-6',
+                path: '/mechatronics/power-supply/approve/fixed-audit',
                 name: 'Mechanical5-7-6',
-                component: '/demo/index',
+                component: '/mechatronics/power-supply/approve/fixed-audit/index',
                 meta: { title: '固定单位审核' }
               },
               {
-                path: '/mechatronics/mechanical5/mechanical5-7/mechanical5-7-7',
+                path: '/mechatronics/power-supply/approve/leader-audit',
                 name: 'Mechanical5-7-7',
-                component: '/demo/index',
+                component: '/mechatronics/power-supply/approve/leader-audit/index',
                 meta: { title: '机电领导审核' }
               },
               {
-                path: '/mechatronics/mechanical5/mechanical5-7/mechanical5-7-8',
+                path: '/mechatronics/power-supply/approve/duty-audit',
                 name: 'Mechanical5-7-8',
-                component: '/demo/index',
+                component: '/mechatronics/power-supply/approve/duty-audit/index',
                 meta: { title: '矿总值班审核' }
               }
             ]
@@ -3399,83 +3384,83 @@ const asyncRoutes = [
         ]
       },
       {
-        path: '/mechatronics/mechanical6',
+        path: '/mechatronics/mechanical-maps',
         name: 'Mechanical6',
-        component: '/demo/index',
+        component: '/mechanical-maps/index',
         meta: { title: '机电图件' },
         children: [
           {
-            path: '/mechatronics/mechanical6/mechanical6-1',
+            path: '/mechatronics/mechanical-maps/drain',
             name: 'Mechanical6-1',
-            component: '/demo/index',
+            component: '/mechatronics/mechanical-maps/drain/index',
             meta: { title: '主排水系统图' }
           },
           {
-            path: '/mechatronics/mechanical6/mechanical6-2',
+            path: '/mechatronics/mechanical-maps/water-supply',
             name: 'Mechanical6-2',
-            component: '/demo/index',
+            component: '/mechatronics/mechanical-maps/water-supply/index',
             meta: { title: '供水系统图' }
           },
           {
-            path: '/mechatronics/mechanical6/mechanical6-3',
+            path: '/mechatronics/mechanical-maps/pressure-air',
             name: 'Mechanical6-3',
-            component: '/demo/index',
+            component: '/mechatronics/mechanical-maps/pressure-air/index',
             meta: { title: '压风系统图' }
           },
           {
-            path: '/mechatronics/mechanical6/mechanical6-4',
+            path: '/mechatronics/mechanical-maps/equipment-layout',
             name: 'Mechanical6-4',
-            component: '/demo/index',
+            component: '/mechatronics/mechanical-maps/equipment-layout/index',
             meta: { title: '机电设备布置图' }
           },
           {
-            path: '/mechatronics/mechanical6/mechanical6-5',
+            path: '/mechatronics/mechanical-maps/power-supply',
             name: 'Mechanical6-5',
-            component: '/demo/index',
+            component: '/mechatronics/mechanical-maps/power-supply/index',
             meta: { title: '井上下供电系统图' }
           },
           {
-            path: '/mechatronics/mechanical6/mechanical6-6',
+            path: '/mechatronics/mechanical-maps/transportation',
             name: 'Mechanical6-6',
-            component: '/demo/index',
+            component: '/mechatronics/mechanical-maps/transportation/index',
             meta: { title: '运输系统图' }
           }
         ]
       },
       {
-        path: '/mechatronics/mechanical7',
+        path: '/mechatronics/technology-manage',
         name: 'Mechanical7',
-        component: '/demo/index',
+        component: '/mechatronics/technology-manage/index',
         meta: { title: '技术管理' },
         children: [
           {
-            path: '/mechatronics/mechanical7/mechanical7-1',
+            path: '/mechatronics/technology-manage/regulation',
             name: 'Mechanical7-1',
-            component: '/demo/index',
+            component: '/mechatronics/technology-manage/regulation/index',
             meta: { title: '规章制度' }
           },
           {
-            path: '/mechatronics/mechanical7/mechanical7-2',
+            path: '/mechatronics/technology-manage/operation',
             name: 'Mechanical7-2',
-            component: '/demo/index',
+            component: '/mechatronics/technology-manage/operation/index',
             meta: { title: '操作规程' }
           },
           {
-            path: '/mechatronics/mechanical7/mechanical7-3',
+            path: '/mechatronics/technology-manage/information',
             name: 'Mechanical7-3',
-            component: '/demo/index',
+            component: '/mechatronics/technology-manage/information/index',
             meta: { title: '资料文件' }
           },
           {
-            path: '/mechatronics/mechanical7/mechanical7-4',
+            path: '/mechatronics/technology-manage/relevant-standard',
             name: 'Mechanical7-4',
-            component: '/demo/index',
+            component: '/mechatronics/technology-manage/relevant-standard/index',
             meta: { title: '相关标准' }
           },
           {
-            path: '/mechatronics/mechanical7/mechanical7-5',
+            path: '/mechatronics/technology-manage/technical-documents',
             name: 'Mechanical7-5',
-            component: '/demo/index',
+            component: '/mechatronics/technology-manage/technical-documents/index',
             meta: { title: '机电技术档案' }
           }
         ]
