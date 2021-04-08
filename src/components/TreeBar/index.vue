@@ -32,9 +32,7 @@
       :style="{ left: left + 'px', top: top + 'px' }"
       class="contextmenu"
     >
-      <li @click="create">新建</li>
-      <li v-if="tag && tag.data.value > 0" @click="edit">编辑</li>
-      <li v-if="tag && tag.data.value > 0" @click="del">删除</li>
+      <li v-for="(m,k) in menuConfig" v-show="m.flag" :key="k" @click="m.fn(tag)">{{ m.menuName }}</li>
     </ul>
   </div>
 </template>
@@ -48,6 +46,11 @@ export default {
     hasMenu: {
       type: Boolean,
       default: false
+    },
+    // 右键菜单配置
+    menuConfig: {
+      type: Array,
+      default: () => {}
     }
   },
   data() {
@@ -63,7 +66,7 @@ export default {
       },
       nodeContent: '',
       activeName: 'file',
-      tag: null
+      tag: {}
     }
   },
   watch: {
@@ -110,6 +113,15 @@ export default {
     openMenu(tag, e) {
       console.log('tag', tag)
       this.tag = tag
+
+      if (tag.data.value === 0) {
+        this.menuConfig.forEach((m, idx) => {
+          if (idx !== 0) m.flag = false
+        })
+      } else {
+        this.menuConfig.forEach(m => { m.flag = true })
+      }
+
       const menuMinWidth = 60
       const rect = this.$el.getBoundingClientRect()
       const offsetWidth = this.$el.offsetWidth
@@ -128,19 +140,6 @@ export default {
     },
     closeMenu() {
       this.visible = false
-      this.fId = ''
-    },
-    create() {
-      this.$emit('createFolder', this.tag)
-      this.closeMenu()
-    },
-    edit() {
-      this.$emit('editFolder', this.tag)
-      this.closeMenu()
-    },
-    del() {
-      this.$emit('delFolder', this.tag)
-      this.closeMenu()
     }
   }
 }

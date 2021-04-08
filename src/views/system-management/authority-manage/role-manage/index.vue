@@ -162,16 +162,11 @@ export default {
   methods: {
     __getSiteTree(){
       selectCombox().then(res => {
-        console.log(res);
-        // this.treeData.list = res.data
         let tList = res.data
         for(let d in res.data){
-          console.log(tList[d],res.data[d]);
           this.siteRecursion(tList[d],res.data[d])
         }
-        console.log(tList);
         RoleTableConfig.columns.forEach(it => {
-          console.log(it);
           if (it.field === 'sysManageId') {
             it.options = tList
           }
@@ -179,7 +174,6 @@ export default {
       })
     },
     siteRecursion(list,data){
-      console.log(list,data);
       list.label = data.site
       list.value = data.sysManageId
       if(data.children && data.children.length > 0){

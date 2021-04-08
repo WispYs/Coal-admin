@@ -1,5 +1,10 @@
 <template>
   <div class="page-container report-table">
+
+    <filter-bar
+      :config="FlowFilterConfig"
+      @create-click="openDialog('create')"
+    />
     <list-table
       :id="id"
       :list="list"
@@ -12,68 +17,61 @@
       @selection-change="selectionChange"
     />
 
-    <pagination
-      :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.pagerows"
-      @pagination="__fetchData"
+    <div v-show="total>0" class="page-bottom">
+      <el-button
+        class="page-bottom__delete"
+        type="warning"
+        size="small"
+        plain
+        :disabled="deleteDisabled"
+        @click="deleteBatches"
+      >
+        <i class="el-icon-delete el-icon--left" />批量删除
+      </el-button>
+      <pagination
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.pagerows"
+        @pagination="__fetchData"
+      />
+    </div>
+
+    <!-- 新建弹窗 -->
+    <form-dialog
+      ref="createDialog"
+      :config="initCreateConfig()"
+      :dialog-visible="createDialogVisible"
+      @close-dialog="createDialogVisible = false"
+      @submit="createSubmit"
     />
 
-    <!-- <el-form ref="menuForm" :model="menuForm" label-width="180px" class="configForm">
-      <el-form-item
-        label="流程名称"
-        prop="max"
-      >
-        <el-select v-model="menuForm.value" placeholder="请选择">
-          <el-option
-            v-for="item in menuForm.options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item
-        label="流程表"
-        prop="max"
-      >
-        <el-select v-model="menuForm.value" placeholder="请选择">
-          <el-option
-            v-for="item in menuForm.options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm('menuForm')">提交</el-button>
-        <el-button @click="resetForm('menuForm')">重置</el-button>
-      </el-form-item>
+    <!-- 编辑弹窗 -->
+    <form-dialog
+      ref="editDialog"
+      :config="initEditConfig()"
+      :dialog-visible="editDialogVisible"
+      @close-dialog="editDialogVisible = false"
+      @submit="editSubmit"
+    />
 
-      <el-divider />
-      <el-table
-        :data="tableData"
-        tooltip-effect="dark"
-        style="width: 100%"
-      >
-        <el-table-column prop="analysisName" label="流程名称" />
-        <el-table-column prop="businessTable" label="业务表" />
-      </el-table>
-    </el-form> -->
   </div>
 </template>
 
 <script>
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
-import { flowTableConfig } from '@/data/flow-management'
+import FormDialog from '@/components/FormDialog'
+import FilterBar from '@/components/FilterBar'
+import { flowTableConfig, FlowFilterConfig } from '@/data/flow-management'
 import { getApplicationList } from '@/api/flow-management'
 export default {
-  components: { ListTable, Pagination },
+  components: { ListTable, Pagination, FormDialog, FilterBar },
   data() {
     return {
+      editDialogVisible: false,
+      createDialogVisible: false,
       flowTableConfig,
+      FlowFilterConfig,
       id: 'flow-manage',
       list: [],
       total: 0,
@@ -83,32 +81,7 @@ export default {
       },
       listLoading: true,
       multipleSelection: [], // 多选项
-      deleteDisabled: true, // 批量删除置灰
-      tableData: [
-        {
-          analysisName: '业务一',
-          businessTable: '业务表十'
-        }
-      ],
-      menuForm: {
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: ''
-      }
+      deleteDisabled: true // 批量删除置灰
     }
   },
   created() {
@@ -117,12 +90,32 @@ export default {
   methods: {
     __fetchData() {
       this.listLoading = true
-      const query = Object.assign(this.listQuery, sort, { entity })
-      getApplicationList(query).then(response => {
-        this.listLoading = false
-        this.list = response.data.rows
-        this.total = Number(response.data.records)
+      const query = Object.assign(this.listQuery)
+      this.listLoading = false
+      this.list = []
+      // getApplicationList(query).then(response => {
+      //   this.listLoading = false
+      //   this.list = response.data.rows
+      //   this.total = Number(response.data.records)
+      // })
+    },
+    // 初始化新建窗口配置
+    initCreateConfig() {
+      const createConfig = Object.assign({
+        title: '新建',
+        width: '800px',
+        form: this.flowTableConfig.columns
       })
+      return createConfig
+    },
+    // 初始化编辑窗口配置
+    initEditConfig() {
+      const editConfig = Object.assign({
+        title: '编辑',
+        width: '800px',
+        form: this.flowTableConfig.columns
+      })
+      return editConfig
     },
     // 删除
     deleteClick(row) {
@@ -132,11 +125,11 @@ export default {
         type: 'warning'
       }).then(() => {
         console.log(row.sysManageId)
-        delApplication(row.sysManageId).then(response => {
-          console.log(response)
-          this.$message.success('删除成功')
-          this.__fetchData()
-        })
+        // delApplication(row.sysManageId).then(response => {
+        //   console.log(response)
+        //   this.$message.success('删除成功')
+        //   this.__fetchData()
+        // })
       })
     },
     // 编辑
@@ -145,13 +138,13 @@ export default {
       const query = Object.assign(submitData, {
         orderNum: Number(submitData.orderNum) || 0
       })
-      editApplication(query).then(response => {
-        console.log(response)
-        this.editDialogVisible = false
-        this.$message.success('编辑成功')
-        this.$refs.editDialog.resetForm()
-        this.__fetchData()
-      })
+      // editApplication(query).then(response => {
+      //   console.log(response)
+      //   this.editDialogVisible = false
+      //   this.$message.success('编辑成功')
+      //   this.$refs.editDialog.resetForm()
+      //   this.__fetchData()
+      // })
     },
     // 改变所选项
     selectionChange(val) {
@@ -163,6 +156,44 @@ export default {
       }
       console.log(this.multipleSelection)
     },
+    // 批量删除
+    deleteBatches() {
+      const selectId = []
+      this.multipleSelection.forEach(it => selectId.push(it.id))
+      console.log(selectId)
+      if (selectId.length === 0) {
+        this.$message.warning('请选择所删除的文件')
+        return false
+      }
+      this.$confirm('确定删除所选中文件?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(selectId)
+        this.__fetchData()
+        this.$message.success('删除成功')
+      })
+    },
+    // 新建
+    createSubmit(submitData) {
+      console.log(submitData)
+      const query = Object.assign(submitData, {
+        orderNum: Number(submitData.orderNum) || 0,
+        sysDeptId: Number(submitData.sysDeptId) || 0
+      })
+      // createApplication(query).then(response => {
+      //   console.log(response)
+      //   this.createDialogVisible = false
+      //   this.$message.success('新建成功')
+      //   this.$refs.createDialog.resetForm()
+      //   this.__fetchData()
+      // }).catch(err => {
+      //   console.log(err)
+      //   this.$refs.createDialog.resetSubmitBtn()
+      // })
+    },
+
     // 打开弹窗
     openDialog(name, row) {
       console.log(name, row)

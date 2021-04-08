@@ -290,12 +290,66 @@ export function saveMenu(data) {
     data
   })
 }
-  
+
 // 根据id删除菜单
 export function deleteMenuById(id) {
   return request({
     url: SystemUrl + '/sysMenu/search?entityId=' + id,
     method: 'post',
     id
+  })
+}
+
+// 查询数据字典
+export function getDictionaryList(data) {
+  return request({
+    url: SystemUrl + '/sysDict/search',
+    method: 'post',
+    data
+  })
+}
+
+// 查询全部数据字典
+export function getSelectSysDict(data) {
+  return request({
+    url: SystemUrl + '/sysDict/selectCombox',
+    method: 'post',
+    data
+  })
+}
+
+// 创建数据字典
+export function saveSysDict(data) {
+  return request({
+    url: SystemUrl + '/sysDict/saveSysDict',
+    method: 'post',
+    data
+  })
+}
+
+// 更新数据字典
+export function updateSysDict(data) {
+  return request({
+    url: SystemUrl + '/sysDict/updateSysDict',
+    method: 'post',
+    data
+  })
+}
+
+// 删除数据字典
+export function deleteDict(id) {
+  return request({
+    url: SystemUrl + '/sysDict/delete?entityId=' + id,
+    method: 'post',
+    id
+  })
+}
+
+// 获取登录日志
+export function getLoginLogList(data) {
+  return request({
+    url: SystemUrl + '/sysLog/search',
+    method: 'post',
+    data
   })
 }

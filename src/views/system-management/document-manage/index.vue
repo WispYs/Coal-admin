@@ -3,9 +3,7 @@
     <tree-bar
       :has-menu="hasMenu"
       :tree-data="treeData"
-      @createFolder="createFolder"
-      @editFolder="editFolder"
-      @delFolder="delFolder"
+      :menu-config="menuConfig"
       @extend-click="treeExtend = !treeExtend"
       @handleNodeClick="handleNodeClick"
       @handleSwitch="handleSwitch"
@@ -16,7 +14,7 @@
       </span>
       <div class="upload-button">
         <!-- <el-button type="primary" size="medium" @click="openDailog"><i class="el-icon-plus el-icon--left" />新建文件</el-button> -->
-        <el-button type="success" size="medium" plain @click="uploadDialogVisible = true"><i class="el-icon-upload el-icon--left" />发布</el-button>
+        <el-button type="success" size="medium" plain @click="uploadDialogVisible = true"><i class="el-icon-upload el-icon--left" />上传</el-button>
         <el-button size="medium" plain @click="refresh"><i class="el-icon-refresh el-icon--left" />刷新</el-button>
       </div>
       <el-table ref="multipleTable" :data="list" tooltip-effect="dark" style="width: 100%" height="calc(100% - 153px)" @selection-change="handleSelectionChange">
@@ -123,6 +121,24 @@ export default {
   },
   data() {
     return {
+      // tree右键菜单配置
+      menuConfig: [
+        {
+          menuName: '新建',
+          fn: this.createFolder,
+          flag: true
+        },
+        {
+          menuName: '编辑',
+          fn: this.editFolder,
+          flag: true
+        },
+        {
+          menuName: '删除',
+          fn: this.delFolder,
+          flag: true
+        }
+      ],
       selectTree: 0,
       uploadData: null,
       folderName: '',
@@ -131,12 +147,6 @@ export default {
       dialogTitle: '添加',
       operationDialogVisible: false,
       editDialogVisible: false,
-      // addForm: {
-      //   superiorFolder: '根目录',
-      //   folderName: '',
-      //   sort: '',
-      //   note: ''
-      // },
       dialogVisible: false,
       list: null,
       listLoading: true,
@@ -192,6 +202,26 @@ export default {
       this.folderName = tag.label
       this.operationDialogVisible = true
     },
+    // 右键菜单操作提交
+    async operationSubmit() {
+      const editData = {
+        sysFileDictId: this.tag.data.value,
+        dictName: this.folderName
+      }
+      const addData = {
+        parentId: this.tag.data.value,
+        dictName: this.folderName,
+        menuId: this.$route.name
+      }
+      const res = this.dialogTitle === '添加' ? await addFolder(addData) : await updateFolder(editData)
+      if (res.result === 1) {
+        this.$message.success(res.msg)
+        this.operationDialogVisible = false
+        this._fetchTreeData()
+      } else {
+        this.$message.error('操作失败')
+      }
+    },
     // 删除文件夹
     delFolder(tag) {
       this.$confirm('确定删除所选中文件夹?', '提示', {
@@ -214,26 +244,6 @@ export default {
         this.editDialogVisible = false
         this.__fetchData()
         this.$message.success(res.msg)
-      }
-    },
-    // 右键菜单操作提交
-    async operationSubmit() {
-      const editData = {
-        sysFileDictId: this.tag.data.value,
-        dictName: this.folderName
-      }
-      const addData = {
-        parentId: this.tag.data.value,
-        dictName: this.folderName,
-        menuId: this.$route.name
-      }
-      const res = this.dialogTitle === '添加' ? await addFolder(addData) : await updateFolder(editData)
-      if (res.result === 1) {
-        this.$message.success(res.msg)
-        this.operationDialogVisible = false
-        this._fetchTreeData()
-      } else {
-        this.$message.error('操作失败')
       }
     },
     initEditConfig() {
@@ -308,14 +318,12 @@ export default {
           'menuId': this.$route.name
         }
       }
-      const d = this.hasMenu ? await getUploadList(folderData) : await getUploadListByDept(deptData)
+      const d = this.hasMenu ? await getUploadList(Object.assign(folderData, this.listQuery)) : await getUploadListByDept(Object.assign(deptData, this.listQuery))
       if (d.result === 1) {
         const res = d.data
         this.listLoading = false
         this.list = res.rows
-        this.listQuery.pagerows = Number(res.records)
         this.total = Number(res.total)
-        this.listQuery.page = Number(res.page)
       }
     },
     // 切换tree
@@ -392,7 +400,6 @@ export default {
         const data = selectId
         const res = await deleteDocument(data)
         if (res.result) {
-          // console.log(selectId)
           this.__fetchData()
           this.$message.success(res.msg)
         } else {
@@ -402,12 +409,10 @@ export default {
     },
     // 点击刷新时触发
     refresh() {
-      // this.$message.success('谢谢您，点击刷新')
       this.__fetchData()
     },
     // 点击树结构时触发
     handleNodeClick(_data) {
-      // console.log(_data)
       this.selectTree = _data.value
       this.uploadData = this.hasMenu ? {
         sysFileDictId: this.selectTree,
@@ -417,7 +422,6 @@ export default {
         menuId: this.$route.name
       }
       this.__fetchData(this.selectTree)
-      // this.$message.success('点击' + _data.label + '成功')
     }
   }
 }

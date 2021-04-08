@@ -1,21 +1,10 @@
 <template>
   <div class="page-container">
-    <div class="buttons">
-      <div class="buttons_item">
-        <el-button type="primary" size="medium" @click="openDialog('create')"><i class="el-icon-plus el-icon--left" />创建
-        </el-button>
-        <el-button type="primary" size="medium" plain :disabled="updateDisabled" @click="openDialog('edit')"><i class="el-icon-edit el-icon--left" />编辑
-        </el-button>
-        <el-button type="danger" size="medium" plain :disabled="deleteDisabled" @click="deleteClick"><i class="el-icon-delete el-icon--left" />删除
-        </el-button>
-        <el-button size="medium" plain @click="synchroClick"><i class="el-icon-refresh el-icon--left" />同步</el-button>
-      </div>
-      <div class="search">
-        <el-input v-model="dataDictionary" size="medium" placeholder="名称、值" />
-        <el-button type="primary" size="medium" @click="queryData(dataDictionary)">搜索</el-button>
-      </div>
-    </div>
-
+    <filter-bar
+      :config="dataDictionaryFilterConfig"
+      @search-click="queryData"
+      @create-click="openDialog('create')"
+    />
     <list-table
       :id="id"
       :list="list"
@@ -35,7 +24,7 @@
         size="small"
         plain
         :disabled="deleteDisabled"
-        @click="deleteBatches"
+        @click="deleteClick"
       >
         <i class="el-icon-delete el-icon--left" />批量删除
       </el-button>
@@ -43,7 +32,7 @@
         :total="total"
         :page.sync="listQuery.page"
         :limit.sync="listQuery.pagerows"
-        @pagination="__fetchData"
+        @pagination="pagination"
       />
     </div>
     <!-- 新建弹窗 -->
@@ -67,13 +56,18 @@
 
 <script>
 import {
-  getApplicationList
+  getApplicationList,
+  getDictionaryList,
+  getSelectSysDict,
+  updateSysDict,
+  saveSysDict,
+  deleteDict
 } from '@/api/authority-management'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
-import { dataDictionaryConfig } from '@/data/authority-management'
+import { dataDictionaryConfig,dataDictionaryFilterConfig } from '@/data/authority-management'
 
 export default {
   components: {
@@ -93,71 +87,11 @@ export default {
       filter: {}, // 筛选项
       listLoading: true,
       dataDictionaryConfig,
+      dataDictionaryFilterConfig,
       createDialogVisible: false,
       editDialogVisible: false,
-      list: [{
-        id: '001',
-        name: '组织机构类型',
-        identifier: '001',
-        value: '',
-        sort: 1,
-        type: 2,
-        remark: '组织机构类型',
-        children: [{
-          id: '001001',
-          name: '集团公司',
-          identifier: '001001',
-          value: '',
-          sort: 2,
-          type: 1,
-          remark: '无'
-        }, {
-          id: '001002',
-          name: '二级公司',
-          identifier: '001002',
-          value: '',
-          sort: 3,
-          type: 1,
-          remark: '无'
-        }]
-      }, {
-        id: '002',
-        name: '数据权限类型',
-        identifier: '002',
-        value: '',
-        sort: 2,
-        type: 2,
-        remark: '数据权限类型'
-      }, {
-        id: '003',
-        name: '责任追究类型',
-        identifier: '003',
-        value: '',
-        sort: 3,
-        type: 2,
-        remark: '责任追究类型',
-        children: [{
-          id: '003001',
-          name: '罚款',
-          identifier: '003001',
-          value: '',
-          sort: 2,
-          type: 1,
-          remark: '无',
-          children: [{
-            id: '003001001',
-            name: '约谈',
-            identifier: '003001001',
-            value: '',
-            sort: 3,
-            type: 1,
-            remark: '无'
-          }]
-        }]
-      }],
-      updateDisabled: true,
+      list:[],
       deleteDisabled: true,
-      dataDictionary: '',
       selectData: []
     }
   },
@@ -166,42 +100,55 @@ export default {
     this.__fetchData()
   },
   methods: {
-    __fetchData() {
-      // this.listLoading = true
-      // const query = Object.assign(this.listQuery, this.filter)
-      // getApplicationList(query).then(response => {
-      //   this.listLoading = false
-      //   this.list = response.data.items
-      //   this.total = response.data.total
-      // })
-      this.listLoading = false
-      this.total = this.list.length
+    __fetchData(_filter) {
+      this.listLoading = true
+      console.log();
+      let query = {
+        entity:{
+          dictName: _filter,
+          dictValue: _filter
+        },
+        sort:{
+          asc:["sort"]
+        },
+        page: this.listQuery.page,
+        pagerows: this.listQuery.pagerows
+      }
+      getDictionaryList(query).then(response => {
+        console.log(response);
+        this.listLoading = false
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
+      })
+    },
+    pagination(){
+      this.__fetchData()
     },
     // 查询数据
     queryData(filter) {
-      if (filter) {
-        this.filter = Object.assign(this.filter, filter)
-        this.$message.success('查询成功')
-        this.__fetchData()
-      } else {
-        this.$message.error('请输入搜索内容')
-      }
+      this.__fetchData(filter.keyword)
     },
     // 初始化新建窗口配置
     initCreateConfig() {
+      let arrFilter = this.dataDictionaryConfig.columns.filter((ele, index, arr) => {
+        return !!ele.field.indexOf("sysDictId") && !!ele.field.indexOf("dictType")
+      })
       const createConfig = Object.assign({
         title: '创建',
         width: '800px',
-        form: this.dataDictionaryConfig.columns
+        form: arrFilter
       })
       return createConfig
     },
     // 初始化编辑窗口配置
     initEditConfig() {
+      let arrFilter = this.dataDictionaryConfig.columns.filter((ele, index, arr) => {
+        return !!ele.field.indexOf("sysDictId") && !!ele.field.indexOf("dictType")
+      })
       const editConfig = Object.assign({
         title: '编辑',
         width: '800px',
-        form: this.dataDictionaryConfig.columns
+        form: arrFilter
       })
       return editConfig
     },
@@ -209,12 +156,38 @@ export default {
     openDialog(name, row) {
       const visible = `${name}DialogVisible`
       this[visible] = true
-      console.log(row)
+      this.dictTree()
       if (row) {
         // 如果有数据，更新子组件的 formData
         this.$refs.editDialog.updataForm(row)
       } else if (this.selectData.length == 1) {
         this.$refs.editDialog.updataForm(this.selectData[0])
+      }
+    },
+    // 接口获取数据字典树，更新config数据
+    dictTree(){
+      getSelectSysDict().then(response => {
+        console.log(response);
+        let dictList = []
+        dictList = response.data
+        for(let d in response.data){
+          this.recursionDict(dictList[d],response.data[d])
+        }
+        this.dataDictionaryConfig.columns.forEach(it => {
+          if (it.field === 'parentId') {
+            it.options = dictList
+          }
+        })
+      })
+    },
+    recursionDict(dict,data){
+      dict.label = data.dictName
+      dict.value = data.sysDictId
+      dict.children = data.sysDictList
+      if(!!data.sysDictList && data.sysDictList.length > 0){
+        for(let d in data.sysDictList){
+          this.recursionDict(dict.sysDictList[d],data.sysDictList[d])
+        }
       }
     },
     // 删除
@@ -224,69 +197,51 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success('删除成功')
+        deleteDict(id).then(response => {
+          console.log(response);
+          this.$message.success('删除成功')
+        })
       })
     },
     // submit data
     createSubmit(submitData) {
       console.log(submitData)
-      this.createDialogVisible = false
-      this.$message.success('新建成功')
+      let query ={
+        entity: submitData
+      }
+      saveSysDict(query).then(response => {
+        console.log(response);
+        this.__fetchData()
+        this.createDialogVisible = false
+        this.$message.success('新建成功')
+      })
     },
     editSubmit(submitData) {
       console.log(submitData)
+      let query ={
+        entity: submitData
+      }
+      updateSysDict(query).then(response => {
+        console.log(response);
+        this.__fetchData()
+        this.editDialogVisible = false
+        this.$message.success('编辑成功')
+      })
       this.editDialogVisible = false
       this.$message.success('编辑成功')
-    },
-    // 点击同步触发
-    synchroClick() {
-      this.$message.success('同步成功')
     },
     // 点击表格checkbox框触发
     selectionChange(row) {
       this.selectData = row
       if (this.selectData.length > 0) {
         this.deleteDisabled = false
-        if (this.selectData.length == 1) {
-          this.updateDisabled = false
-          this.moveUpDisabled = false
-          this.moveDownDisabled = false
-        } else {
-          this.updateDisabled = true
-          this.moveUpDisabled = true
-          this.moveDownDisabled = true
-        }
       } else {
         this.deleteDisabled = true
-        this.updateDisabled = true
-        this.moveUpDisabled = true
-        this.moveDownDisabled = true
       }
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-  .buttons {
-    margin-bottom: 16px;
 
-    .buttons_item {
-      display: inline-block;
-    }
-
-    .search {
-      display: inline-block;
-      float: right;
-
-      .el-input {
-        display: inline-block;
-        width: 200px;
-      }
-
-      .el-button {
-        display: inline-block;
-        margin-left: 20px;
-      }
-    }
-  }
 </style>

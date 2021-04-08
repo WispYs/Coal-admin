@@ -3769,6 +3769,18 @@ const asyncRoutes = [
             name: 'Flow3',
             component: '/system-management/flow-manage/index',
             meta: { title: '流程管理' }
+          },
+          {
+            path: '/system-management/flow-manage/flow4',
+            name: 'Flow3',
+            component: '/system-management/flow-manage/my-publish/index',
+            meta: { title: '我的发布', externalUrl: '' }
+          },
+          {
+            path: '/system-management/flow-manage/flow5',
+            name: 'Flow3',
+            component: '/system-management/flow-manage/to-do-process/index',
+            meta: { title: '待办流程' }
           }
         ]
       },

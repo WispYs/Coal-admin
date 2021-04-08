@@ -545,15 +545,30 @@ export const dataDictionaryConfig = {
   checkbox: true,
   orderNumber: false,
   columns: [
-    { label: '名称', field: 'name', width: '170', layout: 'Text', placeholder: '请填写名称' },
-    { label: '编号', field: 'identifier', width: 'auto', layout: 'Text', placeholder: '请填写编号' },
-    { label: '值', field: 'value', width: 'auto', layout: 'Text', placeholder: '请填写值' },
-    { label: '排序', field: 'sort', width: 'auto', layout: 'Text', placeholder: '请填写排序' },
-    { label: '类型', field: 'type', width: 'auto', layout: 'Radio', options: [
+    { label: '名称', field: 'dictName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
+    { label: '编号', field: 'sysDictId', width: 'auto', layout: 'Text', placeholder: '请填写编号' },
+    { label: '值', field: 'dictValue', width: 'auto', layout: 'Text', placeholder: '请填写值' },
+    { label: '上级节点', field: 'parentId', layout: 'TreeSelect', require: true, hidden: true,
+      options: [
+        {
+          value: 1,
+          label: '顾桥矿',
+        }
+      ], placeholder: '请选择上级节点' },
+    { label: '排序', field: 'sortNo', width: 'auto', layout: 'Text', require: true, placeholder: '请填写排序' },
+    { label: '类型', field: 'dictType', width: 'auto', layout: 'Radio', options: [
       { value: 1, label: '类别' },
       { value: 2, label: '项' }
     ], placeholder: '请选择类型' },
     { label: '备注', field: 'remark', width: 'auto', layout: 'Textarea', placeholder: '请填写备注' }
+  ]
+}
+
+//菜单filter
+export const dataDictionaryFilterConfig = {
+  actions: ['search', 'create'],
+  filters: [
+    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '名称、值' }
   ]
 }
 

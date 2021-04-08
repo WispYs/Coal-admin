@@ -33,6 +33,20 @@
         />
       </el-select>
 
+      <!-- tree-select  -->
+      <tree-select
+        v-if="item.layout === 'TreeSelect'"
+        v-model="filterForm[item.field]"
+        ref="treeSelect"
+        class="form-item"
+        :value="filterForm[item.field]"
+        :placeholder="item.placeholder"
+        :options="item.options"
+        :clearable="true"
+        :accordion="false"
+        @tree-select="value => getTreeSelect(value,item.field)"
+      />
+
       <!-- date-picker  -->
       <el-date-picker
         v-if="item.layout === 'DateTime'"
@@ -77,7 +91,9 @@
 </template>
 
 <script>
+import TreeSelect from '@/components/TreeSelect'
 export default {
+  components: { TreeSelect },
   props: {
     config: {
       type: Object,
@@ -158,6 +174,15 @@ export default {
       }).then(() => {
         this.$message.success('删除成功')
       })
+    },
+    getTreeSelect(value, field) {
+      console.log(value);
+      if(!value){
+        this.filterForm.sysDeptId= ''
+      }else{
+        this.filterForm.sysDeptId = Number(value)
+      }
+      this.$emit('search-click', this.__getFilter(), this.filterForm)
     }
   }
 }

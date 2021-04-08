@@ -19,13 +19,13 @@ export const TableConfig = {
    */
   // actions: ['preview', 'edit', 'delete'],
   columns: [
-    { label: '姓名', field: 'uesr', width: 'auto', align: 'center', layout: 'Text', placeholder: '请填写姓名' },
-    { label: '部门', field: 'department', width: 'auto', layout: 'Text', placeholder: '请填写部门' },
-    { label: '登录名', field: 'loginaNme', width: 'auto', layout: 'Text', placeholder: '请选择登录名' },
-    { label: '来源ip地址', field: 'ipSource', width: 'auto', layout: 'Text', placeholder: '请填写来源ip地址' },
-    { label: '登录开始时间', field: 'loginStart', width: 'auto', layout: 'DateTime', placeholder: '请填写登录开始时间' },
-    { label: '登录结束时间', field: 'loginEnd', width: 'auto', layout: 'DateTime', placeholder: '请填写登录结束时间' },
-    { label: '登录方式', field: 'loginMode', width: 'auto', layout: 'Text', placeholder: '请填写登录方式' }
+    { label: '姓名', field: 'userName', width: 'auto', align: 'center', layout: 'Text', placeholder: '请填写姓名' },
+    { label: '部门', field: 'deptName', width: 'auto', layout: 'Text', placeholder: '请填写部门' },
+    { label: '登录名', field: 'loginName', width: 'auto', layout: 'Text', placeholder: '请选择登录名' },
+    { label: '来源ip地址', field: 'requestIp', width: 'auto', layout: 'Text', placeholder: '请填写来源ip地址' },
+    { label: '登录开始时间', field: 'startTime', width: 'auto', layout: 'DateTime', placeholder: '请填写登录开始时间' },
+    { label: '登录结束时间', field: 'endTime', width: 'auto', layout: 'DateTime', placeholder: '请填写登录结束时间' },
+    { label: '登录方式', field: 'loginType', width: 'auto', layout: 'Text', placeholder: '请填写登录方式' }
 
   ]
 }
@@ -36,9 +36,9 @@ export const FilterConfig = {
    * @param {array} filters   筛选项
    * @param {array} options   选择器配置项
    */
-  actions: ['search'],
+  actions: [],
   filters: [
-    { label: '部门', field: 'department', width: '150', layout: 'Select',
+    { label: '部门', field: 'sysDeptId', width: '150', layout: 'TreeSelect',
       options: [
         {
           value: 1,
