@@ -1,6 +1,6 @@
 <template>
   <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
-    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @handleNodeClick="handleNodeClick" @searchSite="searchSite"/>
+    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @handleNodeClick="handleNodeClick" @searchSite="searchSite" />
 
     <div class="tree-form-container">
       <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
@@ -24,6 +24,7 @@
         :list="list"
         :list-loading="listLoading"
         :config="RoleTypeConfig"
+        height="calc(100% - 196px)"
         @edit-click="editClick"
         @delete-click="deleteClick"
         @selection-change="selectionChange"
@@ -50,7 +51,7 @@
 
       <!-- 新建弹窗 -->
       <form-dialog
-         ref="createDialog"
+        ref="createDialog"
         :config="initCreateConfig()"
         :dialog-visible="createDialogVisible"
         @close-dialog="createDialogVisible = false"
@@ -69,7 +70,7 @@
 </template>
 
 <script>
-import { getUserList,saveRoleType,deleteRoleType,updateRoleType,getRoleTypeList,getSiteList,selectCombox } from '@/api/authority-management'
+import { getUserList, saveRoleType, deleteRoleType, updateRoleType, getRoleTypeList, getSiteList, selectCombox } from '@/api/authority-management'
 import TreeBar from '@/components/TreeBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -97,7 +98,7 @@ export default {
         search: true,
         list: []
       },
-      filter:{},
+      filter: {},
       selectData: [],
       updateDisabled: true,
       multipleSelection: [], // 多选项
@@ -108,15 +109,15 @@ export default {
   created() {
     this.__fetchData()
     this._getSiteTree()
-    console.log(this.$route);
+    console.log(this.$route)
   },
   methods: {
-    _getSiteTree(){
+    _getSiteTree() {
       selectCombox().then(res => {
-        console.log(res);
+        console.log(res)
         this.treeData.list = res.data
-        for(let d in res.data){
-          this.siteRecursion(this.treeData.list[d],res.data[d])
+        for (const d in res.data) {
+          this.siteRecursion(this.treeData.list[d], res.data[d])
         }
 
         RoleTypeConfig.columns.forEach(it => {
@@ -126,12 +127,12 @@ export default {
         })
       })
     },
-    siteRecursion(list,data){
+    siteRecursion(list, data) {
       list.label = data.site
       list.value = data.sysManageId
-      if(data.children && data.children.length > 0){
-        for(let d in data.children){
-          this.siteRecursion(list.children[d],data.children[d])
+      if (data.children && data.children.length > 0) {
+        for (const d in data.children) {
+          this.siteRecursion(list.children[d], data.children[d])
         }
       }
     },
@@ -141,24 +142,24 @@ export default {
         page: this.listQuery.page,
         pagerows: this.listQuery.pagerows,
         sort: {
-          asc:["orderNum"]
+          asc: ['orderNum']
         },
         entity: {
-          "sysManageId": _id
-        },
+          'sysManageId': _id
+        }
         // entity: this.filter.entity
       }
       getRoleTypeList(query).then(res => {
-        console.log(res);
-        if(res.code == 200){
+        console.log(res)
+        if (res.code == 200) {
           this.list = res.data.rows
-          this.total = parseInt(res.data.records);
-          this.listLoading = false;
+          this.total = parseInt(res.data.records)
+          this.listLoading = false
         }
       })
     },
-    pagination(_data){
-      console.log(_data);
+    pagination(_data) {
+      console.log(_data)
       this.listQuery.page = _data.page
       this.listQuery.pagerows = _data.limit
       this.__fetchData()
@@ -183,18 +184,18 @@ export default {
     },
     // 打开弹窗
     openDialog(name, row) {
-      //获取站点列表
+      // 获取站点列表
       getSiteList(this.listQuery).then(res => {
-        console.log(res);
-        let siteList = [];
-        if(res.code == 200){
-          for(let _r in res.data.rows){
+        console.log(res)
+        const siteList = []
+        if (res.code == 200) {
+          for (const _r in res.data.rows) {
             siteList.push({
               value: res.data.rows[_r].sysManageId,
               label: res.data.rows[_r].site
             })
           }
-          console.log(siteList);
+          console.log(siteList)
         }
       })
       const visible = `${name}DialogVisible`
@@ -207,13 +208,13 @@ export default {
 
     // submit data  创建角色类型
     createSubmit(submitData) {
-      console.log(submitData);
+      console.log(submitData)
       const query = Object.assign(submitData, {
         orderNum: Number(submitData.orderNum) || 0
       })
       saveRoleType(query).then(res => {
-        console.log(res);
-        if(res.code == 200){
+        console.log(res)
+        if (res.code == 200) {
           this.__fetchData()
           this.createDialogVisible = false
           this.$refs.createDialog.resetForm()
@@ -223,23 +224,23 @@ export default {
     },
     // 修改角色类型
     editSubmit(submitData) {
-      console.log(submitData);
+      console.log(submitData)
       // this.selectData.sysRoleTypeId  = this.selectData[0].sysRoleTypeId
       updateRoleType(submitData).then(res => {
-        if(res.code == 200){
+        if (res.code == 200) {
           this.__fetchData()
           this.editDialogVisible = false
           this.$message.success('编辑成功')
         }
       })
     },
-    searchSite(filter){
+    searchSite(filter) {
       this.filter = Object.assign(this.filter, filter)
       this.__fetchData()
     },
     // 勾选checkbox触发
     selectionChange(_data) {
-      console.log(_data);
+      console.log(_data)
       this.selectData = _data
       if (this.selectData.length > 0) {
         this.deleteDisabled = false
@@ -250,7 +251,7 @@ export default {
         }
       } else {
         this.deleteDisabled = true
-        this.updateDisabled= true
+        this.updateDisabled = true
       }
     },
     // 点击创建触发
@@ -270,27 +271,27 @@ export default {
       // console.log();
       // const sysRoleTypeId  = this.selectData[0].sysRoleTypeId
       deleteRoleType(_del.sysRoleTypeId).then(res => {
-        console.log(res);
-        if(res.code == 200){
+        console.log(res)
+        if (res.code == 200) {
           this.__fetchData()
-          this.$message.success('删除成功');
+          this.$message.success('删除成功')
         }
       })
     },
-    //根据站点查询站点下面的角色类型
-    handleNodeClick(_data){
-      console.log(_data);
+    // 根据站点查询站点下面的角色类型
+    handleNodeClick(_data) {
+      console.log(_data)
       // this.filter= {
       //   entity: {"sysManageId": _data.sysManageId}
       // }
       this.__fetchData(_data.sysManageId)
-      this.$message.success("查询成功")
+      this.$message.success('查询成功')
     },
     // 点击同步触发
     synchroClick() {
       this.filter = {}
       this.__fetchData()
-      this.$message.success('同步成功');
+      this.$message.success('同步成功')
     },
     deleteBatches() {
       const selectId = []

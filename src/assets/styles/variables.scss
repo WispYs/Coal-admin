@@ -29,6 +29,10 @@ $grayColor: #909399;
 $darkBlueColor: #304156;
 $lightBlackColor: #333333;
 $blackColor: #000000;
+// 可编辑表格颜色
+$editTable: #ace3ac;
+// 自动计算表格颜色
+$autoTable: #acc8ff;
 
 // icon默认颜色
 $iconColor: #eeeeee;
@@ -87,4 +91,6 @@ $inputDateBgGreen: #f5fcf2;
   menuBg: $menuBg;
   menuBgGreen: $menuBgGreen;
   lightBlackColor: $lightBlackColor;
+  editTable: $editTable;
+  autoTable: $autoTable;
 }

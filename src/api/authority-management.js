@@ -258,8 +258,36 @@ export function RoleTypeSelectBox(data) {
 // 角色管理获取模块授权列表
 export function getMeauList(data) {
   return request({
-    url: SystemUrl + '/sysMenu/getMenuTree',
+    url: SystemUrl + '/sysMenu/findMenuTree',
     method: 'post',
     data
   })
-} 
+}
+
+// 角色管理模块授权
+export function roleEmpower(data) {
+  return request({
+    url: SystemUrl + '/sysRole/saveRoleMenu'+ '?sysRoleId=' + data.sysRoleId + '&sysMenuIds=' + data.sysMenuIds + '&type=' + data.type,
+    method: 'post',
+    data
+  })
+}
+
+// 获取菜单列表
+export function getMenuList(data) {
+  return request({
+    url: SystemUrl + '/sysMenu/search',
+    method: 'post',
+    data
+  })
+}
+
+// 根据id删除菜单
+export function deleteMenuById(id) {
+  return request({
+    url: SystemUrl + '/sysMenu/search?entityId=' + id,
+    method: 'post',
+    id
+  })
+}
+

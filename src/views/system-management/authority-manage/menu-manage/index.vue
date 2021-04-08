@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <div class="buttons">
+    <!-- <div class="buttons">
       <div class="buttons_item">
         <el-button type="primary" size="medium" @click="openDialog('menuType')"><i class="el-icon-plus el-icon--left" />新建
         </el-button>
@@ -16,20 +16,39 @@
         <el-input v-model="menuSearch" size="medium" placeholder="名称、值" />
         <el-button type="primary" size="medium" @click="queryData(menuSearch)">搜索</el-button>
       </div>
-    </div>
+    </div> -->
+    <filter-bar
+      :config="MenuFilterConfig"
+      @search-click="queryData"
+      @create-click="openDialog('create')"
+    />
     <list-table
       :id="id"
       :list="list"
       :list-loading="listLoading"
       :config="menuResourceConfig"
+      height="calc(100% - 157px)"
       @addIco="(row) => openDialog('create', row)"
       @editIco="(row) => openDialog('edit', row)"
       @deleteIco="deleteClick"
       @moveUpIco="moveUpClick"
       @moveDownIco="moveDownClick"
-      @selectionChange="selectionChange"
+      @selection-change="selectionChange"
     />
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
+    <div v-show="total>0" class="page-bottom">
+      <el-button
+        class="page-bottom__delete"
+        type="warning"
+        size="small"
+        plain
+        :disabled="deleteDisabled"
+        @click="deleteClick"
+      >
+        <i class="el-icon-delete el-icon--left" />批量删除
+      </el-button>
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
+    </div>
+
     <!-- 新建弹窗 -->
     <form-dialog
       :config="initCreateConfig()"
@@ -56,7 +75,9 @@
 
 <script>
 import {
-  getApplicationList
+  getApplicationList,
+  getMenuList,
+  deleteMenuById
 } from '@/api/authority-management'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
@@ -65,7 +86,8 @@ import FormDialog from '@/components/FormDialog'
 import MenuTypeDialog from './conponments/menu-type-dialog/index.vue'
 import {
   menuResourceConfig,
-  FilterConfig
+  FilterConfig,
+  MenuFilterConfig
 } from '@/data/authority-management'
 
 export default {
@@ -89,110 +111,10 @@ export default {
       listLoading: true,
       FilterConfig,
       menuResourceConfig,
+      MenuFilterConfig,
       createDialogVisible: false,
       editDialogVisible: false,
-      list: [{
-        id: '1001',
-        name: '门户页面子系统权限',
-        identifier: '033004002001',
-        type: '模块',
-        clientType: 2,
-        show: 2,
-        state: 1,
-        adress: '/menuMange',
-        openType: 1,
-        dataRange: 4,
-        source: 5,
-        sort: 1,
-        remark: '无',
-        children: [{
-          id: '10010',
-          name: '智慧安监',
-          identifier: '033004002001',
-          type: '模块',
-          clientType: 2,
-          show: 2,
-          state: 1,
-          adress: '/menuMange',
-          openType: 1,
-          dataRange: 4,
-          source: 5,
-          sort: 1,
-          remark: '无'
-        }, {
-          id: '10011',
-          name: '调度查询',
-          identifier: '0330040020011',
-          type: '模块',
-          clientType: 1,
-          show: 2,
-          state: 1,
-          adress: '/menuMange',
-          openType: 1,
-          dataRange: 2,
-          source: 4,
-          sort: 1,
-          remark: '无'
-        }]
-      }, {
-        id: '1002',
-        name: '全息一张图',
-        identifier: '033004002002',
-        type: '菜单',
-        clientType: 1,
-        show: 1,
-        state: 2,
-        adress: '/menuMange',
-        openType: 2,
-        dataRange: 2,
-        source: 3,
-        sort: 2,
-        remark: '无'
-      }, {
-        id: '1003',
-        name: '设备检修',
-        identifier: '033004002003',
-        type: '模块',
-        clientType: 2,
-        show: 1,
-        state: 2,
-        adress: '/menuMange',
-        openType: 1,
-        dataRange: 4,
-        source: 4,
-        sort: 3,
-        remark: '无',
-        children: [{
-          id: '10030',
-          name: '检修计划',
-          identifier: '0330040020030',
-          type: '菜单',
-          clientType: 2,
-          show: 1,
-          state: 2,
-          adress: '/menuMange',
-          openType: 2,
-          dataRange: 2,
-          source: 2,
-          sort: 30,
-          remark: '无',
-          children: [{
-            id: '100300',
-            name: '维修任务',
-            identifier: '03300400200300',
-            type: '页面',
-            clientType: 2,
-            show: 1,
-            state: 2,
-            adress: '/menuMange',
-            openType: 1,
-            dataRange: 4,
-            source: 5,
-            sort: 300,
-            remark: '无'
-          }]
-        }]
-      }],
+      list:[],
       updateDisabled: true,
       deleteDisabled: true,
       moveUpDisabled: true,
@@ -206,24 +128,34 @@ export default {
 
   created() {
     this.__fetchData()
+    console.log(this.MenuFilterConfig);
   },
   methods: {
-    __fetchData() {
-      // this.listLoading = true
-      // const query = Object.assign(this.listQuery, this.filter)
-      // getApplicationList(query).then(response => {
-      //   this.listLoading = false
-      //   this.list = response.data.items
-      //   this.total = response.data.total
-      // })
-      this.listLoading = false
-      this.total = this.list.length
+    __fetchData(_filter) {
+      this.listLoading = true
+      let query={
+        entity:{
+          menuName: _filter
+        },
+        sort:{
+          asc:["sort"]
+        },
+        page:this.listQuery.page,
+        pagerows: this.listQuery.pagerows
+      }
+      getMenuList(query).then(response => {
+        console.log(response);
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
+        this.listLoading = false
+      })
     },
     // 查询数据
     queryData(filter) {
+      console.log(filter);
       if (filter) {
-        this.filter = Object.assign(this.filter, filter)
-        this.__fetchData()
+        // this.filter = Object.assign(this.filter, filter)
+        this.__fetchData(filter.keyword)
       } else {
         this.$message.error('请输入搜索内容')
       }
@@ -274,7 +206,9 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success('删除成功')
+        deleteMenuById(id).then(response => {
+          this.$message.success('删除成功')
+        })
       })
     },
     // submit data
@@ -303,6 +237,7 @@ export default {
     // 点击表格checkbox框触发
     selectionChange(row) {
       this.selectData = row
+      console.log(this.selectData);
       if (this.selectData.length > 0) {
         this.deleteDisabled = false
         if (this.selectData.length == 1) {

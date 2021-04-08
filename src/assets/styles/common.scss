@@ -2,7 +2,7 @@
  * @Author: Wisper 
  * @Date: 2021-01-14 11:21:49 
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-04-06 14:31:37
+ * @Last Modified time: 2021-04-07 17:47:51
  */
 
 #app {
@@ -50,6 +50,19 @@
           .pagination-container {
             display: inline-block;
             width: calc(100% - 100px);
+          }
+        }
+
+        .report-table__tip {
+          margin-top: 20px;
+          font-size: 13px;
+
+          .green {
+            color: $editTable;
+          }
+
+          .blue {
+            color: $autoTable;
           }
         }
       }
@@ -169,4 +182,6 @@
   .dialog-container {
     padding: 20px 40px;
   }
+
+
 }

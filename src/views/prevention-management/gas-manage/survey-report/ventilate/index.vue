@@ -188,10 +188,12 @@
 <script>
 import { getReportList } from '@/api/table'
 import exportExcel from '@/utils/export-excel'
+import variables from '@/assets/styles/variables.scss'
 
 export default {
   data() {
     return {
+      variables,
       id: 'report-table',
       list: [],
       listLoading: true,
@@ -368,7 +370,7 @@ export default {
         enumerable: false
       })
       if (this.editableField(obj.row.editable, obj.column.property)) {
-        return 'background: #fdf5e6;'
+        return `background: ${variables.editTable}`
       }
     },
     // 双击单元格

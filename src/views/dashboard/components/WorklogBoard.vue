@@ -28,14 +28,7 @@
 export default {
   data() {
     return {
-      worklogData: [
-        { title: '待阅文件', num: 66 },
-        { title: '消息提示', num: 18 },
-        { title: '待审评论', num: 23 },
-        { title: '待上报', num: 12 },
-        { title: '待确认', num: 28 },
-        { title: '待审核项目', num: 20 }
-      ]
+
     }
   }
 }
@@ -53,6 +46,7 @@ export default {
     line-height: 24px;
     height: 175px;
     font-size: 13px;
+    border-collapse: collapse;
     td {
       padding: 12px 0;
     }

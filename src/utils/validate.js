@@ -5,7 +5,7 @@
 
 // 暂时限制登录名称为'admin' 和 'editor'，便于测试动态路由权限
 export function validUsername(str) {
-  const valid_map = ['admin', 'editor']
+  const valid_map = ['admin', 'editor','李少勇']
   return valid_map.indexOf(str.trim()) >= 0
 }
 

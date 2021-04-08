@@ -21,14 +21,31 @@
       :list="list"
       :list-loading="listLoading"
       :config="dataDictionaryConfig"
+      height="calc(100% - 148px)"
       @addIco="(row) => openDialog('create', row)"
       @editIco="(row) => openDialog('edit', row)"
       @deleteIco="deleteClick"
       @selectionChange="selectionChange"
     />
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
-
+    <div v-show="total>0" class="page-bottom">
+      <el-button
+        class="page-bottom__delete"
+        type="warning"
+        size="small"
+        plain
+        :disabled="deleteDisabled"
+        @click="deleteBatches"
+      >
+        <i class="el-icon-delete el-icon--left" />批量删除
+      </el-button>
+      <pagination
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.pagerows"
+        @pagination="__fetchData"
+      />
+    </div>
     <!-- 新建弹窗 -->
     <form-dialog
       :config="initCreateConfig()"

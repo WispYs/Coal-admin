@@ -6,6 +6,7 @@
       :list="list"
       :list-loading="listLoading"
       :config="RoleTableConfig"
+      height="calc(100% - 157px)"
       @edit-click="(row) => openDialog('edit', row)"
       @delete-click="deleteClick"
       @submit-data="editSubmit"
@@ -23,7 +24,7 @@
       >
         <i class="el-icon-delete el-icon--left" />批量删除
       </el-button>
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="pagination" />
     </div>
     <!-- 新建弹窗 -->
     <form-dialog
@@ -71,6 +72,7 @@
 
     <role-permission-dialog
       :moduleInfo="moduleInfo"
+      :selectRole="selectRole"
       :config="initAuthorityConfig()"
       :dialog-visible="authorityVisible"
       @closeDialog="authorityVisible = false"
@@ -218,8 +220,9 @@ export default {
       }
     },
     __fetchData(_id) {
+      console.log(_id);
       this.listLoading = true
-      const query = {
+      let query = {
         page: this.listQuery.page,
         pagerows: this.listQuery.pagerows,
         entity: {
@@ -229,12 +232,19 @@ export default {
           asc:["orderNum"]
         }
       }
+      console.log();
       getRoleList(query).then(res => {
         console.log(res)
         this.list = res.data.rows
         this.total = parseInt(res.data.records);
         this.listLoading = false;
       })
+    },
+    pagination(_data){
+      console.log(_data);
+      this.listQuery.page= _data.page
+      this.listQuery.pagerows = _data.pagerows
+      this.__fetchData();
     },
     // 查询数据
     queryData(filter) {
@@ -349,20 +359,26 @@ export default {
     otherClick(row, index, item) {
       console.log(row,index,item);
       console.log(item)
+      this.roleUserInfo.roleUserList = []
+      this.roleUserInfo.total = 0
+      this.roleUserInfo.listQuery.page = 1
+      this.roleUserInfo.listQuery.pagerows = 10
       if (item == '管理成员') {
         this.selectRole = row;
         this.tableDialogVisible = true
         const flag = 1
         this.getRoleUserList(this.selectRole.sysRoleId,this.listQuery.page,this.listQuery.pagerows,'',flag)
       } else if (item == '编辑权限') {
-        this.getRoleMeauList();
+        this.selectRole = row;
+        this.getRoleMeauList(row.sysRoleId);
         this.authorityVisible = true
       }
     },
     // 获取模块授权信息
-    getRoleMeauList(){
+    getRoleMeauList(_id){
       let query ={
-        parentId: 0
+        parentId: 0,
+        roleId: _id
       }
       getMeauList(query).then(res => {
         console.log(res);
@@ -411,7 +427,7 @@ export default {
     },
     membersVisible() {
       const flag= 2
-      this.getRoleUserList(this.selectRole.sysRoleId,this.listQuery.page,this.listQuery.pagerows,'',flag)
+      this.getRoleUserList(this.selectRole.sysRoleId,this.listQuery.page,this.listQuery.pagerows,'',flag,1)
       this.tableDialogVisible = false
       this.addMembersVisible = true
     },

@@ -69,7 +69,8 @@
 <script>
 import {
   getOrganChildTree,
-  getOrganTree
+  getOrganTree,
+  roleEmpower
 } from '@/api/authority-management'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -96,6 +97,10 @@ export default {
     moduleInfo:{
       type: Object,
       default: () => ({})
+    },
+    selectRole:{
+      type: Object,
+      default: () => ({})
     }
     // 弹窗表单
     // formData: {
@@ -120,6 +125,7 @@ export default {
       buttonVisible: false,
       dataVisible: false,
       dataSource: '',
+      empowerType: 0,
       sourceList: [{
         value: 'one',
         label: '顾桥煤矿一'
@@ -247,11 +253,15 @@ export default {
         this.moduleVisible = true
         this.buttonVisible = false
         this.dataVisible = false
+        this.empowerType = 0
         this.checkList = []
+        this.sysMenuIds= []
       } else if (key == 2) {
         this.moduleVisible = false
         this.dataVisible = false
         this.buttonVisible = true
+        this.empowerType = 1
+        this.sysMenuIds= []
       } else if (key == 3) {
         getOrganTree().then(response => {
           console.log(response.data)
@@ -260,6 +270,7 @@ export default {
         this.moduleVisible = false
         this.buttonVisible = false
         this.dataVisible = true
+        this.sysMenuIds= []
       }
     },
     createEmpower() {
@@ -295,23 +306,24 @@ export default {
     },
     empowerSubmit() {
       console.log(this.sysMenuIds);
-      if (this.moduleVisible) {
-        this.$message({
-          message: '模块授权成功',
-          type: 'success'
-        })
-      } else if (this.buttonVisible) {
-        this.$message({
-          message: '按钮授权成功',
-          type: 'success'
-        })
-      } else if (this.dataVisible) {
-        this.$message({
-          message: '数据授权成功',
-          type: 'success'
-        })
+      console.log(this.selectRole);
+      let query = {
+        sysMenuIds: this.sysMenuIds,
+        sysRoleId: Number(this.selectRole.sysRoleId),
+        type: this.empowerType
       }
-      this.$emit('closeDialog')
+      console.log(query);
+      roleEmpower(query).then(res => {
+        console.log(res);
+        if (this.moduleVisible) {
+          this.$message.success('模块授权成功')
+        } else if (this.buttonVisible) {
+          this.$message.success('按钮授权成功')
+        } else if (this.dataVisible) {
+          this.$message.success('数据授权成功')
+        }
+        this.$emit('closeDialog')
+      })
     },
     checkChange(data){
       console.log(data);
