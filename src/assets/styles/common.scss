@@ -2,7 +2,7 @@
  * @Author: Wisper 
  * @Date: 2021-01-14 11:21:49 
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-04-07 17:47:51
+ * @Last Modified time: 2021-04-08 16:59:26
  */
 
 #app {
@@ -44,6 +44,7 @@
           height: 96px;
 
           &__delete {
+            float: left;
             margin-top: 32px;
           }
 
@@ -83,6 +84,7 @@
           background: $whiteColor;
           margin-right: 15px;
           border-right: 1px solid $borderColor;
+          overflow: auto;
 
           .extend-button {
             position: absolute;

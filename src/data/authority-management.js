@@ -341,14 +341,14 @@ export const RoleFilterConfig = {
 }
 
 // 菜单资源管理
-export const menuResourceConfig = {
-  actions: ['addIco', 'editIco', 'deleteIco', 'moveUpIco', 'moveDownIco'],
-  otherActionTitle: [],
-  rowKey: 'id',
-  checkbox: true,
-  orderNumber: false,
-  columns: [
-    { label: '名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
+// export const menuResourceConfig = {
+//   actions: ['addIco', 'editIco', 'deleteIco', 'moveUpIco', 'moveDownIco'],
+//   otherActionTitle: [],
+//   rowKey: 'id',
+//   checkbox: true,
+//   orderNumber: false,
+//   columns: [
+//     { label: '名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
     // { label: '编号', field: 'identifier', width: 'auto', layout: 'Text', placeholder: '请选择编号' },
     // { label: '类型', field: 'type', width: 'auto', layout: 'Text', placeholder: '请填写类型' },
     // { label: '客户端类型', field: 'clientType', width: 'auto', layout: 'Select', require: true, options: [
@@ -384,10 +384,150 @@ export const menuResourceConfig = {
     //   { value: 5, label: '企业证照数据源' },
     //   { value: 6, label: '特殊部门数据源' }
     // ], placeholder: '请选择数据源' },
-    { label: '排序', field: 'sort', layout: 'Text', width: 'auto', require: true, placeholder: '请填写排序' },
-    { label: '备注', field: 'remark', layout: 'Textarea', width: 'auto', placeholder: '请填写备注' }
+//     { label: '排序', field: 'sort', layout: 'Text', width: 'auto', require: true, placeholder: '请填写排序' },
+//     { label: '备注', field: 'remark', layout: 'Textarea', width: 'auto', placeholder: '请填写备注' }
+//   ]
+// }
+
+// 菜单资源管理
+export const menuResourceConfig = {
+  actions: ['addIco', 'editIco', 'deleteIco'],
+  otherActionTitle: [],
+  rowKey: 'id',
+  checkbox: true,
+  orderNumber: false,
+  columns: [
+    { label: '菜单名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
+    { label: '前端路由', field: 'component', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
+    { label: '外部链接URL', field: 'externalUrl', width: '370', layout: 'Text', placeholder: '请填写名称' },
+    { label: '菜单图标', field: 'icon', width: '170', layout: 'Text', placeholder: '请填写名称' },
+    { label: '上级节点', field: 'parentId', layout: 'TreeSelect', require: true, hidden: true,
+      options: [
+        {
+          value: 1,
+          label: '顾桥矿'
+        }
+      ], placeholder: '请选择上级节点' },
+    { label: '前端路由标识路径', field: 'path', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
+    { label: '菜单权限标识', field: 'permission', width: '170', layout: 'Text', placeholder: '请填写名称' },
+    { label: '路由重定向路径', field: 'redirect', width: '170', layout: 'Text', placeholder: '请填写名称' },
+    { label: '排序', field: 'sort', layout: 'Text', width: 'auto', require: true, placeholder: '请填写排序' }
   ]
 }
+
+// 菜单资源管理 模块
+// export const menuResourceModuleConfig = {
+//   actions: ['addIco', 'editIco', 'deleteIco', 'moveUpIco', 'moveDownIco'],
+//   otherActionTitle: [],
+//   rowKey: 'id',
+//   checkbox: true,
+//   orderNumber: false,
+//   columns: [
+//     { label: '模块名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
+//     { label: '客户端类型', field: 'clientType', width: 'auto', layout: 'Select', require: true, options: [
+//       { value: 1, label: 'PC端' },
+//       { value: 2, label: '移动端' }
+//     ], placeholder: '请选择客户端类型' },
+//     { label: '上级节点', field: 'type', width: 'auto', layout: 'Select', options: [
+//       { value: 1, label: '根节点' },
+//       { value: 2, label: '浏览器弹出' }
+//     ], placeholder: '请选择上级节点' },
+//     { label: '排序', field: 'type', width: 'auto', layout: 'Text', require: true, placeholder: '请填写排序' },
+//     { label: '显示', field: 'type', width: 'auto', layout: 'Radio', options: [
+//       { value: 1, label: '可见' },
+//       { value: 2, label: '隐藏' }
+//     ], placeholder: '请选择显示' },
+//     { label: '状态', field: 'type', width: 'auto', layout: 'Radio', options: [
+//       { value: 1, label: '正常' },
+//       { value: 2, label: '禁用' }
+//     ], placeholder: '请选择状态' },
+//     { label: '备注', field: 'remark', layout: 'Textarea', width: 'auto', placeholder: '请填写备注' }
+//   ]
+// }
+
+// 菜单资源管理 页面
+// export const menuResourcePageConfig = {
+//   actions: ['addIco', 'editIco', 'deleteIco', 'moveUpIco', 'moveDownIco'],
+//   otherActionTitle: [],
+//   rowKey: 'id',
+//   checkbox: true,
+//   orderNumber: false,
+//   columns: [
+//     { label: '菜单名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
+//     { label: '客户端类型', field: 'clientType', width: 'auto', layout: 'Select', require: true, options: [
+//       { value: 1, label: 'PC端' },
+//       { value: 2, label: '移动端' }
+//     ], placeholder: '请选择客户端类型' },
+//     { label: '所属模块', field: 'type', width: 'auto', layout: 'Select', options: [
+//       { value: 1, label: '内部嵌入' },
+//       { value: 2, label: '浏览器弹出' }
+//     ], placeholder: '请选择打开方式' },
+//     { label: 'URL', field: 'type', width: 'auto', layout: 'Text', require: true, placeholder: '请填写URL' },
+//     { label: '图标', field: 'type', width: 'auto', layout: 'Text', placeholder: '请填写所属模块' },
+//     { label: '背景色', field: 'type', width: 'auto', layout: 'Text', require: true, placeholder: '请填写URL' },
+//     { label: '打开方式', field: 'type', width: 'auto', layout: 'Select', options: [
+//       { value: 1, label: '内部嵌入' },
+//       { value: 2, label: '浏览器弹出' }
+//     ], placeholder: '请选择打开方式' },
+//     { label: '排序', field: 'type', width: 'auto', layout: 'Text', require: true, placeholder: '请填写URL' },
+//     { label: '显示', field: 'type', width: 'auto', layout: 'Radio', options: [
+//       { value: 1, label: '可见' },
+//       { value: 2, label: '隐藏' }
+//     ], placeholder: '请选择显示' },
+//     { label: '状态', field: 'type', width: 'auto', layout: 'Radio', options: [
+//       { value: 1, label: '可见' },
+//       { value: 2, label: '隐藏' }
+//     ], placeholder: '请选择显示' },
+//     { label: '数据范围', field: 'type', width: 'auto', layout: 'Select', options: [
+//       { value: 1, label: '内部嵌入' },
+//       { value: 2, label: '浏览器弹出' }
+//     ], placeholder: '请选择打开方式' },
+//     { label: '数据源', field: 'type', width: 'auto', layout: 'Select', options: [
+//       { value: 1, label: '内部嵌入' },
+//       { value: 2, label: '浏览器弹出' }
+//     ], placeholder: '请选择打开方式' },
+//     { label: '备注', field: 'type', width: 'auto', layout: 'Textarea', placeholder: '请填写备注' }
+//   ]
+// }
+
+// 菜单资源管理 上传页面
+// export const menuResourceUploadPageConfig = {
+//   actions: ['addIco', 'editIco', 'deleteIco', 'moveUpIco', 'moveDownIco'],
+//   otherActionTitle: [],
+//   rowKey: 'id',
+//   checkbox: true,
+//   orderNumber: false,
+//   columns: [
+//     { label: '菜单名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
+//     { label: '所属模块', field: 'type', width: 'auto', layout: 'Select', options: [
+//       { value: 1, label: '内部嵌入' },
+//       { value: 2, label: '浏览器弹出' }
+//     ], placeholder: '请选择所属模块' },
+//     { label: '文档类别', field: 'type', width: 'auto', layout: 'Select', options: [
+//       { value: 1, label: '内部嵌入' },
+//       { value: 2, label: '浏览器弹出' }
+//     ], placeholder: '请选择文档类别' },
+//     { label: '排序', field: 'type', width: 'auto', layout: 'Text', placeholder: '请填写所属模块' },
+//     { label: '显示', field: 'type', width: 'auto', layout: 'Radio', options: [
+//       { value: 1, label: '可见' },
+//       { value: 2, label: '隐藏' }
+//     ], placeholder: '请选择显示' },
+//     { label: '状态', field: 'type', width: 'auto', layout: 'Radio', options: [
+//       { value: 1, label: '可见' },
+//       { value: 2, label: '隐藏' }
+//     ], placeholder: '请选择显示' },
+//     { label: '数据范围', field: 'type', width: 'auto', layout: 'Select', options: [
+//       { value: 1, label: '内部嵌入' },
+//       { value: 2, label: '浏览器弹出' }
+//     ], placeholder: '请选择文档类别' },
+//     { label: '数据源', field: 'type', width: 'auto', layout: 'Select', options: [
+//       { value: 1, label: '内部嵌入' },
+//       { value: 2, label: '浏览器弹出' }
+//     ], placeholder: '请选择文档类别' },
+//     { label: '公共菜单', field: 'type', width: 'Switch', layout: 'Radio', placeholder: '请选择显示' },
+//     { label: '备注', field: 'type', width: 'auto', layout: 'Textarea', placeholder: '请填写备注' }
+//   ]
+// }
 
 //菜单filter
 export const MenuFilterConfig = {

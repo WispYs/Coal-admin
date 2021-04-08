@@ -9,7 +9,7 @@ export default {
   name: 'TaskManage',
   data() {
     return {
-      src: 'http://192.168.1.68:18020/jobinfo',
+      src: this.$route.meta.externalUrl,
       // src: '/workflow/toWorkFlowModel',
       height: document.documentElement.clientHeight - 60 - 80 + 82 + 'px;',
       loading: true

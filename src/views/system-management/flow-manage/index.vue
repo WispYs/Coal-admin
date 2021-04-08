@@ -9,7 +9,7 @@ export default {
   name: 'Workflow',
   data() {
     return {
-      src: 'http://192.168.1.168:18060/workflow/toWorkFlowModel',
+      src: this.$route.meta.externalUrl,
       // src: 'http://www.baidu.com',
       height: document.documentElement.clientHeight - 60 - 80 + 'px;',
       loading: true

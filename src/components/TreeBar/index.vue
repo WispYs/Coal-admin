@@ -79,6 +79,7 @@ export default {
     // 树形控件
     handleNodeClick(data) {
       this.$emit('handleNodeClick', data)
+      this.closeMenu()
     },
     handleExtend() {
       this.$emit('extend-click')

@@ -90,7 +90,7 @@ import {
   getRoleUserList,
   RoleTypeSelectBox,
   selectCombox,
-  getMeauList
+  getMenuOrButtonList
 } from '@/api/authority-management'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
@@ -378,9 +378,10 @@ export default {
     getRoleMeauList(_id){
       let query ={
         parentId: 0,
-        roleId: _id
+        roleId: _id,
+        type: 1
       }
-      getMeauList(query).then(res => {
+      getMenuOrButtonList(query).then(res => {
         console.log(res);
         this.moduleInfo.list = res.data
         for(let m in this.moduleInfo.list){

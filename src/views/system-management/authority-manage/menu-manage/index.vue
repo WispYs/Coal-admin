@@ -1,22 +1,5 @@
 <template>
   <div class="page-container">
-    <!-- <div class="buttons">
-      <div class="buttons_item">
-        <el-button type="primary" size="medium" @click="openDialog('menuType')"><i class="el-icon-plus el-icon--left" />新建
-        </el-button>
-        <el-button type="primary" size="medium" plain :disabled="updateDisabled" @click="openDialog('edit')"><i class="el-icon-edit el-icon--left" />编辑
-        </el-button>
-        <el-button type="danger" size="medium" plain :disabled="deleteDisabled" @click="deleteClick"><i class="el-icon-delete el-icon--left" />删除
-        </el-button>
-        <el-button type="warning" size="medium" plain :disabled="moveUpDisabled" @click="moveUpClick"><i class="el-icon-top el-icon--left" />上移</el-button>
-        <el-button type="info" size="medium" plain :disabled="moveDownDisabled" @click="moveDownClick"><i class="el-icon-bottom el-icon--left" />下移</el-button>
-        <el-button size="medium" plain @click="synchroClick"><i class="el-icon-refresh el-icon--left" />同步</el-button>
-      </div>
-      <div class="search">
-        <el-input v-model="menuSearch" size="medium" placeholder="名称、值" />
-        <el-button type="primary" size="medium" @click="queryData(menuSearch)">搜索</el-button>
-      </div>
-    </div> -->
     <filter-bar
       :config="MenuFilterConfig"
       @search-click="queryData"
@@ -46,7 +29,7 @@
       >
         <i class="el-icon-delete el-icon--left" />批量删除
       </el-button>
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="pagination" />
     </div>
 
     <!-- 新建弹窗 -->
@@ -64,12 +47,6 @@
       @close-dialog="editDialogVisible = false"
       @submit="editSubmit"
     />
-    <menu-type-dialog
-      :config="initMenuConfig()"
-      :dialog-visible="menuTypeDialogVisible"
-      @menuClick="menuClick"
-      @closeDialog="menuTypeDialogVisible = false"
-    />
   </div>
 </template>
 
@@ -77,13 +54,14 @@
 import {
   getApplicationList,
   getMenuList,
-  deleteMenuById
+  deleteMenuById,
+  getMenuOrButtonList,
+  saveMenu
 } from '@/api/authority-management'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
-import MenuTypeDialog from './conponments/menu-type-dialog/index.vue'
 import {
   menuResourceConfig,
   FilterConfig,
@@ -95,8 +73,7 @@ export default {
     FilterBar,
     ListTable,
     Pagination,
-    FormDialog,
-    MenuTypeDialog
+    FormDialog
   },
   data() {
     return {
@@ -115,20 +92,13 @@ export default {
       createDialogVisible: false,
       editDialogVisible: false,
       list:[],
-      updateDisabled: true,
       deleteDisabled: true,
-      moveUpDisabled: true,
-      moveDownDisabled: true,
-      menuSearch: '',
-      menuTypeDialogVisible: false,
-      menuName: '',
       selectData: []
     }
   },
 
   created() {
     this.__fetchData()
-    console.log(this.MenuFilterConfig);
   },
   methods: {
     __fetchData(_filter) {
@@ -160,10 +130,14 @@ export default {
         this.$message.error('请输入搜索内容')
       }
     },
+    pagination(val){
+
+      this.__fetchData()
+    },
     // 初始化新建窗口配置
     initCreateConfig() {
       const createConfig = Object.assign({
-        title: this.menuName,
+        title: "创建菜单",
         width: '800px',
         form: this.menuResourceConfig.columns
       })
@@ -178,19 +152,28 @@ export default {
       })
       return editConfig
     },
-    // 初始化展示选择哪种类型的菜单
-    initMenuConfig() {
-      const createConfig = Object.assign({
-        title: '你要添加哪种类型的菜单？',
-        width: '500px',
-        form: this.menuResourceConfig.columns
+    // 接口获取组织机构树，更新config数据
+    __updateMenuTree() {
+      let query ={
+        parentId: Number(0),
+        type: Number(0)
+      }
+      getMenuOrButtonList(query).then(response => {
+        console.log(response);
+        this.menuResourceConfig.columns.forEach(it => {
+          if (it.field === 'parentId') {
+            it.options = response.data
+          }
+        })
       })
-      return createConfig
     },
     // 打开弹窗
     openDialog(name, row) {
+      console.log(name, row)
       const visible = `${name}DialogVisible`
       this[visible] = true
+      // 接口获取组织机构树，更新config数据
+      this.__updateMenuTree()
       console.log(row)
       if (row) {
         // 如果有数据，更新子组件的 formData
@@ -206,14 +189,21 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteMenuById(id).then(response => {
-          this.$message.success('删除成功')
-        })
+        // deleteMenuById(id).then(response => {
+        //   this.$message.success('删除成功')
+        // })
+        this.$message.success('删除成功')
       })
     },
     // submit data
     createSubmit(submitData) {
       console.log(submitData)
+      // let query={
+      //   entity: submitData
+      // }
+      // saveMenu(query).then(response => {
+      //   console.log(response);
+      // })
       this.createDialogVisible = false
       this.$message.success('新建成功')
     },
@@ -230,69 +220,18 @@ export default {
     moveDownClick() {
       this.$message.success('下移成功')
     },
-    // 点击同步触发
-    synchroClick() {
-      this.$message.success('同步成功')
-    },
     // 点击表格checkbox框触发
     selectionChange(row) {
       this.selectData = row
       console.log(this.selectData);
       if (this.selectData.length > 0) {
         this.deleteDisabled = false
-        if (this.selectData.length == 1) {
-          this.updateDisabled = false
-          this.moveUpDisabled = false
-          this.moveDownDisabled = false
-        } else {
-          this.updateDisabled = true
-          this.moveUpDisabled = true
-          this.moveDownDisabled = true
-        }
       } else {
         this.deleteDisabled = true
-        this.updateDisabled = true
-        this.moveUpDisabled = true
-        this.moveDownDisabled = true
       }
     },
-    // 点击模块、页面、上传页面触发
-    menuClick(_row) {
-      console.log(_row)
-      if (_row == 'module') {
-        this.menuName = '模块组'
-      } else if (_row == 'page') {
-        this.menuName = '菜单'
-      } else if (_row == 'uploadPage') {
-        this.menuName = '上传页面'
-      }
-      this.menuTypeDialogVisible = false
-      this.createDialogVisible = true
-    }
   }
 }
 </script>
 <style lang="scss" scoped>
-  .buttons {
-    margin-bottom: 16px;
-
-    .buttons_item {
-      display: inline-block;
-    }
-
-    .search {
-      display: inline-block;
-      float: right;
-
-      .el-input {
-        display: inline-block;
-        width: 200px;
-      }
-
-      .el-button {
-        display: inline-block;
-        margin-left: 20px;
-      }
-    }
-  }
 </style>

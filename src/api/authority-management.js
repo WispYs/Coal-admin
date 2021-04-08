@@ -256,7 +256,7 @@ export function RoleTypeSelectBox(data) {
 }
 
 // 角色管理获取模块授权列表
-export function getMeauList(data) {
+export function getMenuOrButtonList(data) {
   return request({
     url: SystemUrl + '/sysMenu/findMenuTree',
     method: 'post',
@@ -282,6 +282,15 @@ export function getMenuList(data) {
   })
 }
 
+// 保存菜单
+export function saveMenu(data) {
+  return request({
+    url: SystemUrl + '/sysMenu/save',
+    method: 'post',
+    data
+  })
+}
+  
 // 根据id删除菜单
 export function deleteMenuById(id) {
   return request({
@@ -290,4 +299,3 @@ export function deleteMenuById(id) {
     id
   })
 }
-

@@ -137,9 +137,7 @@ export default {
   computed: {
 
   },
-  mounted() {
-    console.log(this.formData)
-  },
+
   created() {
     this.formData = this.selectUpdateData
     const { form } = { ...this.config }
@@ -181,7 +179,6 @@ export default {
       }
     })
     this.formData = Object.assign({}, obj)
-    console.log(this.formData)
     this.formRules = Object.assign({}, rules)
 
     // eventHub.$on('open-dialog', dialogVisible => {

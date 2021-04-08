@@ -11,6 +11,9 @@
       @handleSwitch="handleSwitch"
     />
     <div class="tree-form-container">
+      <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
+        <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
+      </span>
       <div class="upload-button">
         <!-- <el-button type="primary" size="medium" @click="openDailog"><i class="el-icon-plus el-icon--left" />新建文件</el-button> -->
         <el-button type="success" size="medium" plain @click="uploadDialogVisible = true"><i class="el-icon-upload el-icon--left" />发布</el-button>
@@ -21,7 +24,7 @@
         <el-table-column label="根目录">
           <template slot-scope="scope">
             <div class="upload-item">
-              <img src="@/assets/images/file.png" alt="">
+              <img :src="getFileType(scope.row)" alt="">
               <div class="upload-info">
                 <h4>{{ scope.row.fileName }}</h4>
                 <span>{{ scope.row.updateTime }}</span>
@@ -102,7 +105,9 @@ import {
   deleteDocument,
   addFolder,
   updateFolder,
-  deleteFolder
+  deleteFolder,
+  previewDocument,
+  getUploadListByDept
 } from '@/api/document-management'
 import {
   getTree,
@@ -158,6 +163,23 @@ export default {
     this._fetchTreeData()
   },
   methods: {
+    getFileType(row) {
+      const type = row.suffix
+      const img = ['png', 'jpg', 'jpeg'].includes(type)
+      const doc = ['doc', 'docx'].includes(type)
+      const xls = ['xls', 'xlsx'].includes(type)
+      if (img) {
+        return require(`@/assets/images/img.png`)
+      }
+      if (doc) {
+        return require(`@/assets/images/doc.png`)
+      }
+      if (xls) {
+        return require(`@/assets/images/xls.png`)
+      }
+
+      return `@/assets/images/file.png`
+    },
     createFolder(tag) {
       this.dialogTitle = '添加'
       this.tag = tag
@@ -202,7 +224,8 @@ export default {
       }
       const addData = {
         parentId: this.tag.data.value,
-        dictName: this.folderName
+        dictName: this.folderName,
+        menuId: this.$route.name
       }
       const res = this.dialogTitle === '添加' ? await addFolder(addData) : await updateFolder(editData)
       if (res.result === 1) {
@@ -237,8 +260,8 @@ export default {
       this.dialogVisible = true
     },
     // 获取部门树
-    async _fetchDepartTreeData() {
-      const res = await getTree()
+    async _fetchDepartTreeData(pId = 0) {
+      const res = await getTree(pId)
       if (res.result === 1) {
         // res.data[0].deptName = '根目录'
         this.treeData.list = res.data
@@ -251,32 +274,8 @@ export default {
       //     value: 0,
       //     children: [
       //       {
-      //       label: '安检'
-      //     },
-      //     {
-      //       label: '采煤'
-      //     },
-      //     {
-      //       label: '掘进（中央区）'
-      //     },
-      //     {
-      //       label: '掘进（南区）'
-      //     },
-      //     {
-      //       label: '机电运输'
-      //     },
-      //     {
-      //       label: '一通三防'
-      //     },
-      //     {
-      //       label: '地面设施'
-      //     },
-      //     {
-      //       label: '维护'
-      //     },
-      //     {
-      //       label: '地质灾害防治'
-      //     }
+      //          label: '安检'
+      //        }
       //     ]
       //   }
       // ]
@@ -295,21 +294,29 @@ export default {
       }
     },
     // 获取表格数据
-    __fetchData(fId = 0) {
+    async __fetchData(tId = 0) {
       this.listLoading = true
-      const data = {
+      const folderData = {
         'entity': {
-          'sysFileDictId': fId
+          'sysFileDictId': tId,
+          'menuId': this.$route.name
         }
       }
-      getUploadList(data).then(response => {
-        const res = response.data
+      const deptData = {
+        'entity': {
+          'sysDeptId': tId,
+          'menuId': this.$route.name
+        }
+      }
+      const d = this.hasMenu ? await getUploadList(folderData) : await getUploadListByDept(deptData)
+      if (d.result === 1) {
+        const res = d.data
         this.listLoading = false
         this.list = res.rows
-        this.listQuery.pagerows = Number(res.total)
-        this.total = Number(res.records)
+        this.listQuery.pagerows = Number(res.records)
+        this.total = Number(res.total)
         this.listQuery.page = Number(res.page)
-      })
+      }
     },
     // 切换tree
     handleSwitch(el) {
@@ -317,9 +324,11 @@ export default {
       if (idx === 1) {
         this.hasMenu = false
         this._fetchDepartTreeData()
+        this.__fetchData(1)
       } else if (idx === 0) {
         this.hasMenu = true
         this._fetchTreeData()
+        this.__fetchData()
       }
     },
     // 改变所选项
@@ -356,11 +365,8 @@ export default {
       // })
     },
     // 点击预览时触发
-    previewClick() {
-      this.$message({
-        message: '谢谢您，点击预览',
-        type: 'success'
-      })
+    previewClick(row) {
+      previewDocument(row.sysFileInfoId)
     },
     // 下载文件
     downloadClick(row) {
@@ -403,8 +409,12 @@ export default {
     handleNodeClick(_data) {
       // console.log(_data)
       this.selectTree = _data.value
-      this.uploadData = {
-        sysFileDictId: this.selectTree
+      this.uploadData = this.hasMenu ? {
+        sysFileDictId: this.selectTree,
+        menuId: this.$route.name
+      } : {
+        sysDeptId: this.selectTree,
+        menuId: this.$route.name
       }
       this.__fetchData(this.selectTree)
       // this.$message.success('点击' + _data.label + '成功')
@@ -420,6 +430,8 @@ export default {
     }
 
     .upload-item {
+      display: flex;
+      align-content: center;
       img {
         display: inline-block;
         width: 32px;

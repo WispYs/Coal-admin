@@ -14,6 +14,7 @@ const assessmentLibrary = require('./assessment-library')
 const controlMeasure = require('./control-measure')
 const authorityManagement = require('./authority-management')
 const gis = require('./gis')
+const mechatronics = require('./mechatronics')
 
 const mocks = [
   ...user,
@@ -28,7 +29,8 @@ const mocks = [
   ...assessmentLibrary,
   ...controlMeasure,
   ...authorityManagement,
-  ...gis
+  ...gis,
+  ...mechatronics
 ]
 
 // for front mock

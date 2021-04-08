@@ -14,9 +14,9 @@
             <el-menu-item index="1">
               <span slot="title">模块授权</span>
             </el-menu-item>
-            <el-menu-item index="2">
+            <!-- <el-menu-item index="2">
               <span slot="title">按钮授权</span>
-            </el-menu-item>
+            </el-menu-item> -->
             <el-menu-item index="3">
               <span slot="title">数据授权</span>
             </el-menu-item>
@@ -26,7 +26,7 @@
           <div v-if="!!moduleVisible">
             <tree-bar :tree-data="moduleInfo" @extend-click="treeExtend = !treeExtend" @checkChange="checkChange"/>
           </div>
-          <div v-if="!!buttonVisible">
+          <!-- <div v-if="!!buttonVisible">
             <div class="buttons">
               <el-button type="success" @click="createEmpower">创建</el-button>
               <el-button type="primary" :disabled="updateDisabled" @click="updateClick">编辑</el-button>
@@ -46,7 +46,7 @@
               <el-table-column prop="type" label="类型" sortable width="180" />
               <el-table-column prop="identification" label="标识" />
             </el-table>
-          </div>
+          </div> -->
           <div v-if="!!dataVisible">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
               <el-form-item label="数据源">

@@ -11,6 +11,15 @@ export function getUploadList(data) {
   })
 }
 
+// 根据部门获取上传文件列表
+export function getUploadListByDept(data) {
+  return request({
+    url: `${FileUrl}/sysFileInfo/search`,
+    method: 'post',
+    data
+  })
+}
+
 // 更新文件信息
 export function updateDocument(data) {
   return request({
@@ -18,6 +27,15 @@ export function updateDocument(data) {
     data,
     method: 'post'
   })
+}
+
+// 预览文件
+export function previewDocument(fId) {
+  // return request({
+  //   url: `${FileUrl}/preview/?entityId=${fId}`,
+  //   method: 'post'
+  // })
+  window.open(`${FileUrl}/preview/?entityId=${fId}`)
 }
 
 // 下载文件

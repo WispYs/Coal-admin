@@ -3847,25 +3847,25 @@ const asyncRoutes = [
             path: '/system-management/task1',
             name: 'Task1',
             component: '/system-management/task-scheduling/task-config/index',
-            meta: { title: '任务配置' }
+            meta: { title: '任务配置', externalUrl: 'http://192.168.1.68:18020/jobgroup' }
           },
           {
             path: '/system-management/task2',
             name: 'Task2',
             component: '/system-management/task-scheduling/task-manage/index',
-            meta: { title: '任务管理' }
+            meta: { title: '任务管理', externalUrl: 'http://192.168.1.68:18020/jobinfo' }
           },
           {
             path: '/system-management/task3',
             name: 'Task3',
             component: '/system-management/task-scheduling/task-monitoring/index',
-            meta: { title: '任务监控' }
+            meta: { title: '任务监控', externalUrl: 'http://192.168.1.68:18020/' }
           },
           {
             path: '/system-management/task4',
             name: 'Task4',
             component: '/system-management/task-scheduling/task-log/index',
-            meta: { title: '任务调度日志' }
+            meta: { title: '任务调度日志', externalUrl: 'http://192.168.1.68:18020/joblog' }
           }
         ]
       },
