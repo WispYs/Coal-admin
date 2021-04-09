@@ -5,6 +5,7 @@
     width="500px"
     class="upload-dialog"
     :before-close="closeDialog"
+    :append-to-body="true"
   >
     <el-upload
       class="upload-content"
@@ -150,12 +151,22 @@ export default {
 
   .el-dialog {
     height: 400px;
+    .el-dialog__header {
+      border-bottom: 1px solid #ededed;
+      background: #f8f8f8;
+    }
     .el-dialog__body {
+      padding: 0;
+      height: calc(100% - 124px);
+      overflow: auto;
       .upload-content {
-        padding: 20px 70px;
+        padding: 30px 70px;
       }
      }
-   }
+    }
+    .el-dialog__footer {
+      border-top: 1px solid #ededed;
+    }
  }
 
 </style>

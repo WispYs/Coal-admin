@@ -163,9 +163,9 @@ export const DisKnowLedgeTableConfig = {
     { label: '报警阈值', field: 'alarm', layout: 'Text', require: true, placeholder: '请填写报警阈值' },
     { label: '能耗单位', field: 'unit', layout: 'Text', require: true, placeholder: '请填写能耗单位' },
     { label: '说明', field: 'explain', width: '120px', layout: 'Textarea', placeholder: '请填写说明' },
-    { label: '能耗公式', field: 'formula', layout: 'Textarea', placeholder: '请填写能耗公式' },
+    { label: '能耗公式', field: 'formula', layout: 'TextEditor', placeholder: '请填写能耗公式' },
     { label: '辅助决策', field: 'decision', layout: 'Textarea', placeholder: '请填写辅助决策' },
-    { label: '等级评定', field: 'evaluate', layout: 'Textarea', placeholder: '请填写等级评定' }
+    { label: '等级评定', field: 'evaluate', layout: 'TextEditor', placeholder: '请填写等级评定' }
   ]
 }
 export const DisKnowLedgeFilterConfig = {

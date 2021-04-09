@@ -10,7 +10,7 @@
         <el-form-item
           v-if="!item.disabled"
           :key="index"
-          :class="item.layout === 'Textarea' || item.layout === 'Upload' ? 'block-form' : ''"
+          :class="item.layout === 'Textarea' || item.layout === 'Upload' || item.layout === 'TextEditor' ? 'full-line' : ''"
           :label="`${item.label}：`"
           :prop="item.field"
         >
@@ -88,8 +88,15 @@
             <el-button type="primary" size="medium" @click="uploadFile">上传附件</el-button>
           </div>
 
+          <!-- text editor：tinymce -->
+          <tinymce
+            v-if="item.layout === 'TextEditor'"
+            v-model="formData[item.field]"
+            :height="300"
+            :toolbar="item.textEditorToolbar || defaultToolbar"
+            @submit-text-editor="value => submitTextEditor(value,item.field)"
+          />
           <span v-if="item.message" class="naozhewan">{{ item.message }}</span>
-
         </el-form-item>
       </template>
 
@@ -102,10 +109,13 @@
 </template>
 <script>
 import TreeSelect from '@/components/TreeSelect'
+import Tinymce from '@/components/Tinymce'
 import { getType } from '@/utils'
 
+const defaultToolbar = ['fontsizeselect fontselect forecolor backcolor  bold italic underline strikethrough removeformat undo redo']
+
 export default {
-  components: { TreeSelect },
+  components: { TreeSelect, Tinymce },
   props: {
     dialogVisible: {
       type: Boolean,
@@ -130,7 +140,8 @@ export default {
     return {
       submitLoading: false, // 提交按钮loading状态
       formData: {}, // 弹窗表单
-      formRules: {}
+      formRules: {},
+      defaultToolbar // 富文本编辑器默认工具栏配置
 
     }
   },
@@ -237,12 +248,18 @@ export default {
       console.log(value)
       this.formData[field] = Number(value) || 0
       console.log(this.formData)
+    },
+    // 提交富文本编辑器
+    submitTextEditor(value, field) {
+      console.log(value)
+      this.formData[field] = value
+      console.log(this.formData)
     }
   }
 }
 </script>
 <style lang="scss">
-.block-form {
+.full-line {
   .el-form-item__label {
     float: left;
   }
@@ -253,7 +270,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-.block-form {
+.full-line {
   display: block;
 }
 .file-title {

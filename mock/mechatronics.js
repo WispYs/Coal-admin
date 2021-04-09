@@ -83,9 +83,9 @@ const disKnowLedgeData = Mock.mock({
     'alarm|+1': [0.5, 0.13, 0.85],
     'unit|+1': ['Kwh/T.ah'],
     'explain|+1': ['每吨水百米扬程消耗的电能', '兆帕每小时风流量', '副井提升机'],
-    formula: '',
+    formula: '<p>x + y = z</p>',
     decision: '',
-    evaluate: ''
+    evaluate: '<p>C</p>'
   }]
 })
 
