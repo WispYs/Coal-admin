@@ -21,6 +21,7 @@
    * @param {boolean} disabled          不可在新增、编辑中修改的字段，默认false，值为true时表示该字段后台自动生成不可编辑
    * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump 色块显示
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
+   * @param {boolean} lazy              是否异步加载树形表格子节点数据，默认false，值为true时为异步
    */
 /**
    * FilterConfig
@@ -96,5 +97,80 @@ export const MechLargeEquipDetailFilterConfig = {
   actions: ['search', 'reset', 'create'],
   filters: [
     { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '属性名称，属性内容' }
+  ]
+}
+// 大型设备类型
+export const MechLargeEquipTypeTableConfig = {
+  actions: ['edit', 'delete', 'other'],
+  otherActionTitle: ['展开详情'],
+  checkbox: true,
+  rowKey: 'id',
+  columns: [
+    { label: '类型名称', field: 'name', layout: 'Text', require: true, placeholder: '请填写类型名称' },
+    { label: '排序', field: 'sort', layout: 'Text', placeholder: '请填写排序' },
+    { label: '备注', field: 'remark', layout: 'Text', require: true, placeholder: '请填写备注' },
+    { label: '录入时间', field: 'createDate', layout: 'DateTime', disabled: true, placeholder: '请填写录入时间' },
+    { label: '所属场所', field: 'area', layout: 'TreeSelect', hidden: true,
+      options: [
+        {
+          value: 1,
+          label: '顾桥矿',
+          children: [
+            { value: 2, label: '机关', children: [
+              { value: 3, label: '矿领导' },
+              { value: 17, label: '人力资源部' }
+            ] }
+          ]
+        }
+      ], placeholder: '请选择所属场所' }
+  ]
+}
+export const MechLargeEquipTypeFilterConfig = {
+  actions: ['search', 'reset', 'create'],
+  filters: [
+    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '类型名称' }
+  ]
+}
+// 维修知识库
+export const KnowLedgeTableConfig = {
+  actions: ['edit', 'delete'],
+  checkbox: true,
+  columns: [
+    { label: '所属场所', field: 'area', layout: 'Select', require: true,
+      options: [{ value: 1, label: '中央区' }], placeholder: '请选择所属场所' },
+    { label: '检查项目', field: 'project', layout: 'Text', require: true, placeholder: '请填写检查项目' },
+    { label: '检修位置', field: 'addr', layout: 'Text', require: true, placeholder: '请填写检修位置' },
+    { label: '检修周期', field: 'period', layout: 'Text', require: true, placeholder: '请填写检修周期' },
+    { label: '责任人', field: 'person', layout: 'Text', require: true, placeholder: '请填写责任人' },
+    { label: '检查检修标准', field: 'standard', width: '120px', layout: 'Textarea', placeholder: '请填写检查检修标准' },
+    { label: '备注', field: 'remark', width: '', layout: 'Textarea', placeholder: '请填写备注' }
+  ]
+}
+export const KnowLedgeFilterConfig = {
+  actions: ['search', 'reset', 'create', 'delete'],
+  filters: [
+    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '所属场所，检修位置' }
+  ]
+}
+// 设备能耗分析知识库
+export const DisKnowLedgeTableConfig = {
+  actions: ['edit', 'delete'],
+  checkbox: true,
+  columns: [
+    { label: '所属场所', field: 'area', layout: 'Select', require: true,
+      options: [{ value: 1, label: '中央区' }], placeholder: '请选择所属场所' },
+    { label: '参考国家标准', field: 'standard', width: '120px', layout: 'Text', require: true, placeholder: '请填写参考国家标准' },
+    { label: '报警阈值', field: 'alarm', layout: 'Text', require: true, placeholder: '请填写报警阈值' },
+    { label: '能耗单位', field: 'unit', layout: 'Text', require: true, placeholder: '请填写能耗单位' },
+    { label: '说明', field: 'explain', width: '120px', layout: 'Textarea', placeholder: '请填写说明' },
+    { label: '能耗公式', field: 'formula', layout: 'Textarea', placeholder: '请填写能耗公式' },
+    { label: '辅助决策', field: 'decision', layout: 'Textarea', placeholder: '请填写辅助决策' },
+    { label: '等级评定', field: 'evaluate', layout: 'Textarea', placeholder: '请填写等级评定' }
+  ]
+}
+export const DisKnowLedgeFilterConfig = {
+  actions: ['search', 'reset', 'create', 'delete'],
+  filters: [
+    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '参考国家标准，辅助决策' }
   ]
 }

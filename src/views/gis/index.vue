@@ -1,19 +1,11 @@
 <template>
   <div class="gis-container">
-    <!-- <TopBar :config="topConfig" /> -->
+    <TopBar :config="topConfig" />
 
-    <!-- <div class="side-wrapper">
+    <div class="side-wrapper">
       <div class="left-side-wrapper">
-        <el-button
-          class="side-item"
-          type="primary"
-          @click="openDrawer('jsDrawer', $event)"
-        >检索</el-button>
-        <el-button
-          class="side-item"
-          type="primary"
-          @click="openDrawer('zhDrawer', $event)"
-        >综合</el-button>
+        <el-button class="side-item" type="primary" @click="openDrawer('jsDrawer', $event)">检索</el-button>
+        <el-button class="side-item" type="primary" @click="openDrawer('zhDrawer', $event)">综合</el-button>
         <el-button class="side-item" type="primary">地测</el-button>
         <el-button class="side-item" type="primary">生产</el-button>
         <el-button class="side-item" type="primary">通防</el-button>
@@ -34,18 +26,8 @@
           style="height: 488px"
         >
           <div class="drawer-wrapper">
-            <el-input
-              v-model="searchValue"
-              placeholder="请输入内容"
-              size="small"
-              class="input-with-select"
-            >
-              <el-select
-                slot="prepend"
-                v-model="searchSelected"
-                size="small"
-                placeholder="全部"
-              >
+            <el-input v-model="searchValue" placeholder="请输入内容" size="small" class="input-with-select">
+              <el-select slot="prepend" v-model="searchSelected" size="small" placeholder="全部">
                 <el-option label="井巷项目" value="1" />
                 <el-option label="订单号" value="2" />
                 <el-option label="矿金深度" value="3" />
@@ -54,7 +36,6 @@
                 <el-button size="small" icon="el-icon-search" />
               </template>
             </el-input>
-
             <div class="js-tools-wrapper">
               <span class="js-tools">
                 <img class="js-tools-img" src="//www.baidu.com/img/flexible/logo/pc/result@2.png" alt="">
@@ -115,14 +96,9 @@
             </div>
             <p>当前矿井在采工作面4个，在掘工作面36个</p>
           </div>
-
           <el-tabs v-model="activeName">
             <el-tab-pane label="工作面" name="first">
-              <el-input
-                v-model="aqzkSearch"
-                size="small"
-                placeholder="请输入内容"
-              >
+              <el-input v-model="aqzkSearch" size="small" placeholder="请输入内容">
                 <el-select slot="prepend" v-model="gzmSelected" size="small" placeholder="类型">
                   <el-option
                     v-for="item in gzmOptions"
@@ -136,11 +112,7 @@
             </el-tab-pane>
             <el-tab-pane label="安全状况" name="second">
               <div style="margin-top: 15px;">
-                <el-input
-                  v-model="aqzkSearch"
-                  size="small"
-                  placeholder="请输入内容"
-                >
+                <el-input v-model="aqzkSearch" size="small" placeholder="请输入内容">
                   <el-button slot="append" icon="el-icon-search" />
                 </el-input>
               </div>
@@ -150,18 +122,9 @@
                   <img class="js-tools-img" src="//www.baidu.com/img/flexible/logo/pc/result@2.png" alt="">
                   1126(工作面)
                   <div class="work-wrapper">
-                    <el-tag effect="dark" size="mini" type="info">
-                      重大隐患0
-                    </el-tag>
-                    &nbsp;
-                    <el-tag effect="dark" size="mini" type="info">
-                      红线三违0
-                    </el-tag>
-                    &nbsp;
-                    <el-tag effect="dark" size="mini" type="info">
-                      重大风险0
-                    </el-tag>
-
+                    <el-tag effect="dark" size="mini" type="info">重大隐患0</el-tag>&nbsp;
+                    <el-tag effect="dark" size="mini" type="info">红线三违0</el-tag>&nbsp;
+                    <el-tag effect="dark" size="mini" type="info">重大风险0</el-tag>
                     <el-button
                       size="mini"
                       type="primary"
@@ -181,7 +144,6 @@
           </el-tabs>
         </el-drawer>
       </div>
-
       <div class="right-side-wrapper">
         <el-checkbox-group v-model="selecedtPaper" class="paper-wrapper">
           <el-checkbox-button
@@ -191,11 +153,11 @@
           >{{ paper }}</el-checkbox-button>
         </el-checkbox-group>
       </div>
-    </div> -->
+    </div>
 
     <div id="gis-wrapper" class="gis-wrapper" />
 
-    <!-- <el-dialog title="添加锚点信息" :visible.sync="locationVisible" width="30%">
+    <el-dialog title="添加锚点信息" :visible.sync="locationVisible" width="30%">
       <span>
         <el-form class="location-form" label-width="80px">
           <el-form-item label="类型">
@@ -225,7 +187,7 @@
         <el-button @click="locationVisible = false">取 消</el-button>
         <el-button type="primary" @click="saveLocation">确 定</el-button>
       </span>
-    </el-dialog> -->
+    </el-dialog>
 
     <el-dialog :title="dlgTitle" :visible.sync="outerVisible">
       <div style="padding: 15px; line-height: 22px;font-size: 15px;" v-html="dlgData" />
@@ -238,7 +200,6 @@
 <script>
 import TopBar from './components/top-bar'
 import { getViewPoint, getPointInfo } from '@/api/gis'
-import { GisViewPoint, PointInfo } from '@/data/gis-data'
 var model = null
 var api = null
 export default {
@@ -425,10 +386,8 @@ export default {
 
       // }
 
-      // this.randPoint(GisViewPoint)
-
       // 后台api
-      // this.randPoint(this.viewPointData)
+      this.randPoint(this.viewPointData)
       model.BIM365API.Extension.Point.openCluster()
       console.log(this.dataList)
       for (var i = 0; i < this.dataList.length; i++) {
@@ -456,27 +415,17 @@ export default {
 
     // 点击锚点获取详情
     __fetchPointInfo(id) {
-      // 后台api
-      // getPointInfo(id).then(response => {
-      //   const viewPointInfo = response.data
-      //   this.dlgTitle = `${viewPointInfo.name}详情`
-      //   this.dlgData = `设备编号：${viewPointInfo.id}<br/>` +
-      //                 `传感器类型：${viewPointInfo.type}<br/>` +
-      //                 `安装地点：${viewPointInfo.addr}<br/>` +
-      //                 `实时值：${viewPointInfo.num}<br/>` +
-      //                 `单位：%CH4<br/>` +
-      //                 `状态：正常<br/>` +
-      //                 `监测时间：${viewPointInfo.currDate}`
-      // })
-      const viewPointInfo = PointInfo
-      this.dlgTitle = `${viewPointInfo.name}详情`
-      this.dlgData = `设备编号：${viewPointInfo.id}<br/>` +
-                    `传感器类型：${viewPointInfo.type}<br/>` +
-                    `安装地点：${viewPointInfo.addr}<br/>` +
-                    `实时值：${viewPointInfo.num}<br/>` +
-                    `单位：%CH4<br/>` +
-                    `状态：正常<br/>` +
-                    `监测时间：${viewPointInfo.currDate}`
+      getPointInfo(id).then(response => {
+        const viewPointInfo = response.data
+        this.dlgTitle = `${viewPointInfo.name}详情`
+        this.dlgData = `设备编号：${viewPointInfo.id}<br/>` +
+                      `传感器类型：${viewPointInfo.type}<br/>` +
+                      `安装地点：${viewPointInfo.addr}<br/>` +
+                      `实时值：${viewPointInfo.num}<br/>` +
+                      `单位：%CH4<br/>` +
+                      `状态：正常<br/>` +
+                      `监测时间：${viewPointInfo.currDate}`
+      })
     },
     // 全屏
     fullScreen() {
@@ -533,6 +482,7 @@ export default {
       })
       return flag
     },
+    // 添加锚点
     locationFn(e) {
       const pos = api.Context.sheetGetPosition(e)
       pos.y = 0
@@ -554,9 +504,7 @@ export default {
     // 保存锚点信息
     saveLocation() {
       this.locationVisible = false
-      document
-        .querySelector('.gis-wrapper')
-        .removeEventListener('click', this.locationFn)
+      document.querySelector('.gis-wrapper').removeEventListener('click', this.locationFn)
     },
     // 定位指定元素
     zoomElement() {

@@ -21,6 +21,7 @@ export const TableConfig = {
    * @param {boolean} disabled          不可在新增、编辑中修改的字段，默认false，值为true时表示该字段后台自动生成不可编辑
    * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump 色块显示
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
+   * @param {boolean} lazy              是否异步加载树形表格子节点数据，默认false，值为true时为异步
    */
   actions: [],
   summary: false,

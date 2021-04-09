@@ -16,6 +16,30 @@ export function getEquipmentArea() {
     method: 'get'
   })
 }
+// 大型设备类型
+export function getLargeEquipmentType(params) {
+  return request({
+    url: '/large-equipment-type/list',
+    method: 'get',
+    params
+  })
+}
+// 维修知识库
+export function getKnowLedgeList(params) {
+  return request({
+    url: '/know-ledge/list',
+    method: 'get',
+    params
+  })
+}
+// 设备能耗分析知识库
+export function getDisKnowLedgeList(params) {
+  return request({
+    url: '/dissipation-know-ledge/list',
+    method: 'get',
+    params
+  })
+}
 
 /** ---- 设备管理 ---- **/
 

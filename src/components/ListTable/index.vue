@@ -11,7 +11,7 @@
     :summary-method="(param) => getSummaries(param, config.summaryField)"
     :cell-style="cellStyle"
     header-cell-class-name="pre-line"
-    lazy
+    :lazy="config.lazy"
     :load="loadTreeData"
     :row-key="config.rowKey"
     :tree-props="{children: 'children', hasChildren: 'hasChildren'}"

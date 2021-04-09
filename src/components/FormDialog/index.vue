@@ -5,7 +5,7 @@
     :width="config.width || '500px'"
     :before-close="closeDialog"
   >
-    <el-form ref="formData" class="dialog-container" :model="formData" :rules="formRules" label-width="110px" size="medium" :inline="true">
+    <el-form ref="formData" class="dialog-container" :model="formData" :rules="formRules" label-width="120px" size="medium" :inline="true">
       <template v-for="(item, index) in config.form">
         <el-form-item
           v-if="!item.disabled"
@@ -248,7 +248,7 @@ export default {
   }
   .el-form-item__content {
     display: block;
-    margin-left: 110px;
+    margin-left: 120px;
   }
 }
 </style>

@@ -26,6 +26,7 @@ export const AppTableConfig = {
    * @param {boolean} disabled          不可在新增、编辑中修改的字段，默认false，值为true时表示该字段后台自动生成不可编辑
    * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump 色块显示
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
+   * @param {boolean} lazy              是否异步加载树形表格子节点数据，默认false，值为true时为异步
   */
   actions: ['edit', 'delete'],
   checkbox: true,
@@ -252,6 +253,7 @@ export const OrganTableConfig = {
   actions: ['edit', 'delete'],
   rowKey: 'sysDeptId',
   checkbox: true,
+  lazy: true,
   columns: [
     { label: '名称', field: 'deptName', layout: 'Text', require: true, placeholder: '请填写名称' },
     { label: '编号', field: 'deptId', width: '80', layout: 'Text', disabled: true, placeholder: '请填写编号' },
@@ -349,41 +351,41 @@ export const RoleFilterConfig = {
 //   orderNumber: false,
 //   columns: [
 //     { label: '名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
-    // { label: '编号', field: 'identifier', width: 'auto', layout: 'Text', placeholder: '请选择编号' },
-    // { label: '类型', field: 'type', width: 'auto', layout: 'Text', placeholder: '请填写类型' },
-    // { label: '客户端类型', field: 'clientType', width: 'auto', layout: 'Select', require: true, options: [
-    //   { value: 1, label: 'PC端' },
-    //   { value: 2, label: '移动端' }
-    // ], placeholder: '请选择客户端类型' },
-    // { label: '显示', field: 'show', width: 'auto', layout: 'Radio', options: [
-    //   { value: 1, label: '可见' },
-    //   { value: 2, label: '隐藏' }
-    // ], placeholder: '请选择显示' },
-    // { label: '状态', field: 'state', width: 'auto', layout: 'Radio', options: [
-    //   { value: 1, label: '正常' },
-    //   { value: 2, label: '禁用' }
-    // ], placeholder: '请选择状态' },
-    // { label: '地址', field: 'adress', width: 'auto', layout: 'Text', placeholder: '请填写地址' },
-    // { label: '打开方式', field: 'openType', width: 'auto', layout: 'Select', options: [
-    //   { value: 1, label: '内部嵌入' },
-    //   { value: 2, label: '浏览器弹出' }
-    // ], placeholder: '请选择打开方式' },
-    // { label: '数据范围', field: 'dataRange', width: '140', layout: 'Select', options: [
-    //   { value: 1, label: '未知' },
-    //   { value: 2, label: '个人' },
-    //   { value: 3, label: '部门' },
-    //   { value: 4, label: '部门及子部门' },
-    //   { value: 5, label: '公共' },
-    //   { value: 6, label: '自定义' }
-    // ], placeholder: '请选择数据范围' },
-    // { label: '数据源', field: 'source', width: '140', layout: 'Select', options: [
-    //   { value: 1, label: '无' },
-    //   { value: 2, label: '默认数据源' },
-    //   { value: 3, label: '技术资源数据源' },
-    //   { value: 4, label: '采掘平面图数据源' },
-    //   { value: 5, label: '企业证照数据源' },
-    //   { value: 6, label: '特殊部门数据源' }
-    // ], placeholder: '请选择数据源' },
+// { label: '编号', field: 'identifier', width: 'auto', layout: 'Text', placeholder: '请选择编号' },
+// { label: '类型', field: 'type', width: 'auto', layout: 'Text', placeholder: '请填写类型' },
+// { label: '客户端类型', field: 'clientType', width: 'auto', layout: 'Select', require: true, options: [
+//   { value: 1, label: 'PC端' },
+//   { value: 2, label: '移动端' }
+// ], placeholder: '请选择客户端类型' },
+// { label: '显示', field: 'show', width: 'auto', layout: 'Radio', options: [
+//   { value: 1, label: '可见' },
+//   { value: 2, label: '隐藏' }
+// ], placeholder: '请选择显示' },
+// { label: '状态', field: 'state', width: 'auto', layout: 'Radio', options: [
+//   { value: 1, label: '正常' },
+//   { value: 2, label: '禁用' }
+// ], placeholder: '请选择状态' },
+// { label: '地址', field: 'adress', width: 'auto', layout: 'Text', placeholder: '请填写地址' },
+// { label: '打开方式', field: 'openType', width: 'auto', layout: 'Select', options: [
+//   { value: 1, label: '内部嵌入' },
+//   { value: 2, label: '浏览器弹出' }
+// ], placeholder: '请选择打开方式' },
+// { label: '数据范围', field: 'dataRange', width: '140', layout: 'Select', options: [
+//   { value: 1, label: '未知' },
+//   { value: 2, label: '个人' },
+//   { value: 3, label: '部门' },
+//   { value: 4, label: '部门及子部门' },
+//   { value: 5, label: '公共' },
+//   { value: 6, label: '自定义' }
+// ], placeholder: '请选择数据范围' },
+// { label: '数据源', field: 'source', width: '140', layout: 'Select', options: [
+//   { value: 1, label: '无' },
+//   { value: 2, label: '默认数据源' },
+//   { value: 3, label: '技术资源数据源' },
+//   { value: 4, label: '采掘平面图数据源' },
+//   { value: 5, label: '企业证照数据源' },
+//   { value: 6, label: '特殊部门数据源' }
+// ], placeholder: '请选择数据源' },
 //     { label: '排序', field: 'sort', layout: 'Text', width: 'auto', require: true, placeholder: '请填写排序' },
 //     { label: '备注', field: 'remark', layout: 'Textarea', width: 'auto', placeholder: '请填写备注' }
 //   ]
@@ -529,7 +531,7 @@ export const menuResourceConfig = {
 //   ]
 // }
 
-//菜单filter
+// 菜单filter
 export const MenuFilterConfig = {
   actions: ['search', 'create'],
   filters: [
@@ -552,7 +554,7 @@ export const dataDictionaryConfig = {
       options: [
         {
           value: 1,
-          label: '顾桥矿',
+          label: '顾桥矿'
         }
       ], placeholder: '请选择上级节点' },
     { label: '排序', field: 'sortNo', width: 'auto', layout: 'Text', require: true, placeholder: '请填写排序' },
@@ -564,7 +566,7 @@ export const dataDictionaryConfig = {
   ]
 }
 
-//菜单filter
+// 菜单filter
 export const dataDictionaryFilterConfig = {
   actions: ['search', 'create'],
   filters: [
