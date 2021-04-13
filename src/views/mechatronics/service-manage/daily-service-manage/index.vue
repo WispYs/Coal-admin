@@ -1,99 +1,117 @@
 <template>
   <div class="page-container">
-    <div class="filter-bar">
-      <div class="filter-bar__item">
-        <label>关键字：</label>
-        <el-input
-          v-model="keywords"
-          class="filter-item"
-          style="width:200px"
-          placeholder="所属场所、检修位置"
-          suffix-icon="el-icon-search"
-        />
-      </div>
-      <div class="filter-bar__item">
-        <el-button type="primary" size="medium" @click="search()">搜索</el-button>
-      </div>
+    <filter-bar
+      :config="DailyServiceFilterConfig"
+      @search-click="queryData"
+      @reset-click="queryData"
+    />
+    <list-table
+      :id="id"
+      :list="list"
+      :list-loading="listLoading"
+      :config="DailyServiceTableConfig"
+      height="calc(100% - 157px)"
+      @other-click="otherClick"
+    />
+    <div v-show="total>0" class="page-bottom">
+      <pagination
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.pagerows"
+        @pagination="__fetchData"
+      />
     </div>
-    <el-table
-      :data="tableData"
-      border
-      fit
-      :cell-style="cellStyle"
-      header-cell-class-name="pre-line"
-    >
-      <el-table-column align="center" label="序号" width="95" fixed>
-        <template slot-scope="scope">
-          {{ scope.$index+1 }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="site" align="center" label="所属场所" width="150px" />
-      <el-table-column prop="name" align="center" label="设备名称" />
-      <el-table-column prop="content" align="center" label="维检内容" width="220px" />
-      <el-table-column prop="date" align="center" label="检修时间" />
-      <el-table-column prop="period" align="center" label="检修周期" />
-      <el-table-column prop="earlyDay" align="center" label="管理预警天数" />
-      <el-table-column prop="alarmDay" align="center" label="管理报警天数" />
-      <el-table-column prop="person" align="center" label="责任人" />
-      <el-table-column prop="remark" align="center" label="备注" />
-      <el-table-column fixed="right" label="操作" width="260" align="center">
-        <el-button type="text" size="small" @click="edit()">日常维检</el-button>
-        <el-button type="text" size="small" @click="edit()">维检记录</el-button>
-        <el-button type="text" size="small" @click="edit()">编辑</el-button>
-        <el-button type="text" size="small" style="color: #f56c6c" @click="del()">删除</el-button>
-      </el-table-column>
-    </el-table>
+    <!-- 日常维检 -->
+    <daily-service
+      ref="dailyService"
+      :dialog-visible="dailyServiceVisible"
+      @close-dialog="dailyServiceVisible = false"
+      @submit="dailyServiceSubmit"
+    />
+    <!-- 维检记录 -->
+    <service-record
+      ref="serviceRecord"
+      :dialog-visible="serviceRecordVisible"
+      @close-dialog="serviceRecordVisible = false"
+    />
+
   </div>
 </template>
+
 <script>
+import { getDailyServiceList, createApplication, editApplication, getApplicationInfo, delApplication, getOrganTree } from '@/api/mechatronics'
+import FilterBar from '@/components/FilterBar'
+import ListTable from '@/components/ListTable'
+import Pagination from '@/components/Pagination'
+import DailyService from './components/DailyService'
+import ServiceRecord from './components/ServiceRecord'
+import { DailyServiceTableConfig, DailyServiceFilterConfig } from '@/data/mechatronics'
+
 export default {
+  components: { FilterBar, ListTable, Pagination, DailyService, ServiceRecord },
   data() {
     return {
-      keywords: '',
-      tableData: [
-        {
-          site: '中央区主井提升机房',
-          name: '主电机碳刷',
-          content: '请您及时人员对副井主电机碳刷...',
-          date: '2021.01.25',
-          period: '月',
-          earlyDay: 10,
-          alarmDay: 5,
-          person: '超级管理员',
-          remark: ''
-        }
-      ]
+      id: 'know-ledge',
+      list: [],
+      total: 0,
+      listQuery: {
+        page: 1,
+        pagerows: 10
+      },
+      filter: {}, // 筛选项
+      listLoading: true,
+      DailyServiceFilterConfig,
+      DailyServiceTableConfig,
+      dailyServiceVisible: false, // 日常维检
+      serviceRecordVisible: false // 维检记录
+
     }
   },
+
+  created() {
+    this.__fetchData()
+  },
   methods: {
-    search() {
-      console.log(this.keywords)
+    __fetchData() {
+      this.listLoading = true
+      const entity = {
+        ...this.filter
+      }
+      const sort = {
+        sort: {
+          asc: ['orderNum']
+        }
+      }
+      const query = Object.assign(this.listQuery, sort, { entity })
+      getDailyServiceList(query).then(response => {
+        this.listLoading = false
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
+      })
     },
-    edit() {
-      console.log('edit')
+    // 查询数据
+    queryData(filter) {
+      this.filter = Object.assign(this.filter, filter)
+      this.__fetchData()
     },
-    del() {
-      console.log('del')
+
+    // 日常维检，维检记录按钮
+    otherClick(row, index, item) {
+      if (item === '日常维检') {
+        this.dailyServiceVisible = true
+      } else if (item === '维检记录') {
+        this.serviceRecordVisible = true
+      }
     },
-    // 表格单元格样式
-    cellStyle() {
-      return 'font-size: 13px'
+
+    // 日常维检提交
+    dailyServiceSubmit(submitData) {
+      console.log(submitData)
+      this.dailyServiceVisible = false
+      this.$message.success('提交成功')
+      this.$refs.dailyService.resetForm()
     }
+
   }
 }
 </script>
-<style lang="scss" scoped>
-  .filter-bar {
-    margin-bottom: 10px;
-    &__item {
-      display: inline-block;
-      margin: 0 40px 15px 0;
-      font-size: 14px;
-      label {
-        font-weight: normal;
-        font-size: 14px;
-        margin-right: 4px;
-      }
-    }
-  }
-</style>

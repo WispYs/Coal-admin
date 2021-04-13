@@ -3,14 +3,14 @@ export const flowTableConfig = {
   checkbox: true,
   columns: [
     {
-      label: '流程名称', field: 'flowName', layout: 'Select', placeholder: '请选择流程名称',
+      label: '流程名称', field: 'definitionId', layout: 'Select', width: 'auto', placeholder: '请选择流程名称',
       options: [
         { value: 1, label: '影响单位审核' },
         { value: 2, label: '科技创新' }
       ]
     },
     {
-      label: '业务表', field: 'businessTable', layout: 'Select', placeholder: '请选择业务表',
+      label: '业务表', field: 'tableName', layout: 'Select', width: 'auto', placeholder: '请选择业务表',
       options: [
         { value: 1, label: '影响单位审核' },
         { value: 2, label: '科技创新' }

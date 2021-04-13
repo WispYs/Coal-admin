@@ -4,11 +4,11 @@
       <div class="buttons_item">
         <el-button type="primary" size="medium" @click="openDialog('create')"><i class="el-icon-plus el-icon--left" />创建
         </el-button>
-        <el-button type="primary" size="medium" plain :disabled="updateDisabled" @click="openDialog('edit')"><i class="el-icon-edit el-icon--left" />编辑
+        <!-- <el-button type="primary" size="medium" plain :disabled="updateDisabled" @click="openDialog('edit')"><i class="el-icon-edit el-icon--left" />编辑
         </el-button>
         <el-button type="danger" size="medium" plain :disabled="deleteDisabled" @click="deleteClick"><i class="el-icon-delete el-icon--left" />删除
         </el-button>
-        <el-button size="medium" plain @click="synchroClick"><i class="el-icon-refresh el-icon--left" />同步</el-button>
+        <el-button size="medium" plain @click="synchroClick"><i class="el-icon-refresh el-icon--left" />同步</el-button> -->
       </div>
     </div>
 
@@ -31,7 +31,7 @@
         size="small"
         plain
         :disabled="deleteDisabled"
-        @click="deleteBatches"
+        @click="deleteClick"
       >
         <i class="el-icon-delete el-icon--left" />批量删除
       </el-button>
@@ -46,6 +46,7 @@
     <form-dialog
       :config="initCreateConfig()"
       :dialog-visible="createDialogVisible"
+      @selectChange="selectChange"
       @close-dialog="createDialogVisible = false"
       @submit="createSubmit"
     />
@@ -61,6 +62,15 @@
 </template>
 
 <script>
+  import {
+    getAllUserList,
+    getOrganTree,
+    getNewsTypeList,
+    saveNewsType,
+    updateNewsType,
+    deleteNewsType,
+    getChildrenMsgList
+  } from '@/api/authority-management'
 import {
   NewsTypeConfig
 } from '@/data/authority-management'
@@ -89,63 +99,8 @@ export default {
         page: 1,
         pagerows: 10
       },
-      list: [{
-        ID: '1001',
-        name: '协同办公',
-        identifier: '010',
-        newsLevel: 2,
-        newsType: 2,
-        targetType: 2,
-        remindTarget: '测试',
-        remark: '工作流服务产生的'
-      }, {
-        ID: '1002',
-        name: '任务计划消息',
-        identifier: '006',
-        newsLevel: 1,
-        newsType: 1,
-        targetType: 1,
-        remindTarget: '',
-        remark: ''
-      }, {
-        ID: '1003',
-        name: '预警报警',
-        identifier: '001',
-        newsLevel: 3,
-        newsType: 3,
-        targetType: 3,
-        remindTarget: '',
-        remark: '',
-        children: [{
-          ID: '10030',
-          name: '系统报警',
-          identifier: '001006',
-          newsLevel: 1,
-          newsType: 3,
-          targetType: 2,
-          remindTarget: '',
-          remark: ''
-        }, {
-          ID: '10031',
-          name: '管理预警',
-          identifier: '001003',
-          newsLevel: 1,
-          newsType: 2,
-          targetType: 3,
-          remindTarget: '',
-          remark: ''
-        }]
-      }, {
-        ID: '1004',
-        name: '监测预警',
-        identifier: '005',
-        newsLevel: 1,
-        newsType: 2,
-        targetType: 3,
-        remindTarget: '测试2',
-        remark: ''
-      }]
-
+      list: [],
+      msgList:[]  //获取所有消息类型列表
     }
   },
   created() {
@@ -153,20 +108,54 @@ export default {
   },
   methods: {
     __fetchData() {
-      this.listLoading = false
-      this.total = this.list.length
+      this.listLoading = true
+      let query={
+        page: this.listQuery.page,
+        pagerows: this.listQuery.pagerows,
+        sort:{asc:["sort"]}
+      }
+      getNewsTypeList(query).then(response => {
+        this.listLoading = false
+        response.data.rows.forEach(it => {
+          if (it.parentCheck === 1) {
+            it.hasChildren = true
+          }
+        })
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
+      })
     },
     // 打开弹窗
     openDialog(name, row) {
       const visible = `${name}DialogVisible`
       this[visible] = true
       console.log(row)
+      let query = {
+        parentId: 0
+      }
+      getChildrenMsgList(query).then(response => {
+        console.log(response);
+        this.msgList = response.data
+        for(let m in response.data){
+          this.msgRecursion(this.msgList[m],response.data[m]);
+        }
+        console.log(this.msgList);
+        this.NewsTypeConfig.columns.forEach(it => {
+          if (it.field === "parentId") {
+            it.options = this.msgList
+          }
+        })
+      })
       if (row) {
         // 如果有数据，更新子组件的 formData
         this.$refs.editDialog.updataForm(row)
       } else if (this.selectData.length == 1) {
         this.$refs.editDialog.updataForm(this.selectData[0])
       }
+    },
+    msgRecursion(mList,_data){
+      mList.label = _data.typeName
+      mList.value = _data.sysMsgTypeId
     },
     // 初始化新建窗口配置
     initCreateConfig() {
@@ -187,8 +176,12 @@ export default {
       return editConfig
     },
     // 点击删除触发
-    deleteClick() {
-      this.$message.success('删除成功')
+    deleteClick(data) {
+      console.log(data);
+      deleteNewsType(data.sysMsgTypeId).then(response => {
+        this.__fetchData()
+        this.$message.success('删除成功')
+      })
     },
     // 点击同步触发
     synchroClick() {
@@ -211,12 +204,53 @@ export default {
     },
     // submit data
     createSubmit(submitData) {
-      this.createDialogVisible = false
-      this.$message.success('新建成功')
+      const query = Object.assign(submitData, {
+        sort: Number(submitData.sort) || 0
+      })
+      saveNewsType(query).then(response => {
+        this.createDialogVisible = false
+        this.__fetchData()
+        this.$refs.createDialog.resetForm()
+        this.$message.success('新建成功')
+      })
+
     },
     editSubmit(submitData) {
-      this.editDialogVisible = false
-      this.$message.success('编辑成功')
+      updateNewsType(submitData).then(response => {
+        console.log(response);
+        this.editDialogVisible = false
+        this.__fetchData()
+        this.$refs.editDialog.resetForm()
+        this.$message.success('编辑成功')
+      })
+    },
+    selectChange(item,row){
+      console.log(item,row);
+      console.log(row);
+      if(row == 1){
+        getAllUserList().then(response => {
+          console.log(response.data);
+          this.NewsTypeConfig.columns.forEach(it => {
+            if (it.field === 'targetValue') {
+              it.options = []
+            }
+          })
+        })
+      }else if(row == "部门"){
+        getOrganTree().then(response => {
+          this.NewsTypeConfig.columns.forEach(it => {
+            if (it.field === 'targetValue') {
+              it.options = response.data
+            }
+          })
+        })
+      }else if(row == 3){
+        this.NewsTypeConfig.columns.forEach(it => {
+          if (it.field === 'targetValue') {
+            it.options = []
+          }
+        })
+      }
     }
   }
 }

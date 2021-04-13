@@ -5,6 +5,7 @@ export const TableConfig = {
    *
    * @param {array}   actions           操作按钮，例如：['preview', 'edit', 'delete', 'upload', 'other']
    * @param {string}  otherActionTitle  其他特定操作按钮文本
+   * @param {number}  actionWidth       操作按钮表格长度，Number类型，默认为 160
    * @param {boolean} summary           是否需要合计数据
    * @param {array}   summaryField      合计字段
    * @param {boolean} inlineEdit        是否支持在表格行内直接编辑，默认不支持且编辑为弹窗形式
@@ -19,7 +20,8 @@ export const TableConfig = {
    * @param {array}   options           选择器配置项
    * @param {boolean} hidden            是否在表格中隐藏，默认false，值为true时只在新建、编辑中显示该字段
    * @param {boolean} disabled          不可在新增、编辑中修改的字段，默认false，值为true时表示该字段后台自动生成不可编辑
-   * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump 色块显示
+   * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump-有背景色块;underline-下划线可点击
+   * @param {string}  underlineText     表格内数据显示方式为underline时，下划线的文字
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
    * @param {boolean} lazy              是否异步加载树形表格子节点数据，默认false，值为true时为异步
    */
@@ -78,7 +80,10 @@ export const TableConfig = {
           label: '环,管'
         }
       ], placeholder: '请选择风险类型' },
-    { label: '负责人', field: 'proMan', width: '120', layout: 'Text', placeholder: '请填写负责人' },
+    { label: '风险描述', field: 'riskDescription', width: '120', layout: 'Textarea', placeholder: '请填写风险描述' },
+    { label: '管控措施', field: 'controlMeasures', width: '120', layout: 'Textarea', placeholder: '请填写管控措施' },
+    
+    { label: '责任人', field: 'proMan', width: '120', layout: 'Text', placeholder: '请填写责任人' },
     { label: '措施执行单位', field: 'organization', width: '150', layout: 'Text', placeholder: '请填写措施执行单位' },
     { label: '风险等级', field: 'riskLevel', width: '150', showType: 'colorLump', layout: 'Select',
       options: [
@@ -136,8 +141,8 @@ export const FilterConfig = {
    * @param {array} filters   筛选项
    * @param {array} options   选择器配置项
    */
-  actions: ['search', 'reset', 'create'],
+  actions: ['search','identificationEnd'],
   filters: [
-    { label: '负责人名称', field: 'name', width: '220', layout: 'Text', placeholder: '请输入负责人' }
+    { label: '责任人名称', field: 'name', width: '220', layout: 'Text', placeholder: '请输入责任人' }
   ]
 }

@@ -5,6 +5,7 @@ export const TableConfig = {
    *
    * @param {array}   actions           操作按钮，例如：['preview', 'edit', 'delete', 'upload', 'other']
    * @param {string}  otherActionTitle  其他特定操作按钮文本
+   * @param {number}  actionWidth       操作按钮表格长度，Number类型，默认为 160
    * @param {boolean} summary           是否需要合计数据
    * @param {array}   summaryField      合计字段
    * @param {boolean} inlineEdit        是否支持在表格行内直接编辑，默认不支持且编辑为弹窗形式
@@ -15,7 +16,8 @@ export const TableConfig = {
    * @param {string}  layout            表单类型
    * @param {string}  dateFormat        日期格式
    * @param {array}   options           选择器配置项
-   * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump 色块显示
+   * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump-有背景色块;underline-下划线可点击
+   * @param {string}  underlineText     表格内数据显示方式为underline时，下划线的文字
    */
   columns: [
     { label: '样品受理编号', field: 'acceptanceNo', width: '150', align: 'left', layout: 'Text', placeholder: '请填写样品受理编号' },
@@ -32,5 +34,4 @@ export const TableConfig = {
     { label: '备注', field: 'remarks', width: '100', layout: 'Text', placeholder: '请填写检验地点' }
   ]
 }
-
 

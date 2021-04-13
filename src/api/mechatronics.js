@@ -44,10 +44,57 @@ export function getDisKnowLedgeList(params) {
 /** ---- 设备管理 ---- **/
 
 /** ---- 检修管理 ---- **/
-
+// 检修计划
+export function getServicePlanList(params) {
+  return request({
+    url: '/service-plan/list',
+    method: 'get',
+    params
+  })
+}
+// 日常维检管理
+export function getDailyServiceList(params) {
+  return request({
+    url: '/service-plan/list',
+    method: 'get',
+    params
+  })
+}
+// 设备维修
+export function getEquipmentServiceList(params) {
+  return request({
+    url: '/equipment-service/list',
+    method: 'get',
+    params
+  })
+}
+// 备品备件
+export function getSparePartList(params) {
+  return request({
+    url: '/spare-part/list',
+    method: 'get',
+    params
+  })
+}
 /** ---- 供电管理 ---- **/
 
 /** ---- 运输管理 ---- **/
+// 典型故障知识库
+export function getTypicalFaultList(params) {
+  return request({
+    url: '/typical-fault/list',
+    method: 'get',
+    params
+  })
+}
+// 历史故障知识库
+export function getHistoryFaultList(params) {
+  return request({
+    url: '/history-fault/list',
+    method: 'get',
+    params
+  })
+}
 
 /** ---- 机电图件 ---- **/
 

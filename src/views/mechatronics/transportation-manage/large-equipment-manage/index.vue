@@ -1,104 +1,402 @@
 <template>
-  <div class="page-container">
-    <div class="filter-bar">
-      <div class="filter-bar__item">
-        <label>关键字：</label>
-        <el-input
-          v-model="keywords"
-          class="filter-item"
-          style="width:200px"
-          placeholder="设备编号、设备名称"
-          suffix-icon="el-icon-search"
+  <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
+    <tree-bar :has-menu="hasMenu" :tree-data="treeData" :menu-config="menuConfig" @handleNodeClick="handleNodeClick" />
+
+    <div class="tree-form-container">
+      <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
+        <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
+      </span>
+      <filter-bar
+        :config="MechLargeEquipFilterConfig"
+        @search-click="queryData"
+        @create-click="openDialog('create')"
+        @reset-click="queryData"
+      />
+      <!-- 表格 -->
+      <list-table
+        :id="id"
+        :list="list"
+        :list-loading="listLoading"
+        :config="MechLargeEquipTableConfig"
+        height="calc(100% - 157px)"
+        @edit-click="(row) => openDialog('edit', row)"
+        @other-click="(row) => openDetailDialog(row.area)"
+        @delete-click="deleteClick"
+        @submit-data="editSubmit"
+        @selection-change="selectionChange"
+      />
+
+      <div v-show="total>0" class="page-bottom">
+        <el-button
+          class="page-bottom__delete"
+          type="warning"
+          size="small"
+          plain
+          :disabled="deleteDisabled"
+          @click="deleteBatches"
+        >
+          <i class="el-icon-delete el-icon--left" />批量删除
+        </el-button>
+        <pagination
+          :total="total"
+          :page.sync="listQuery.page"
+          :limit.sync="listQuery.pagerows"
+          @pagination="__fetchData"
         />
       </div>
-      <div class="filter-bar__item">
-        <el-button type="primary" size="medium" @click="search()">搜索</el-button>
-      </div>
-    </div>
-    <el-table
-      :data="tableData"
-      border
-      fit
-      :cell-style="cellStyle"
-      header-cell-class-name="pre-line"
-    >
-      <el-table-column align="center" label="序号" width="95" fixed>
-        <template slot-scope="scope">
-          {{ scope.$index+1 }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="id" align="center" label="设备编号" width="200" />
-      <el-table-column prop="name" align="center" label="设备名称" />
-      <el-table-column prop="site" align="center" label="所属场所" />
-      <el-table-column prop="equipment" align="center" label="所属部件" />
-      <el-table-column prop="model" align="center" label="规格型号" />
-      <el-table-column prop="manufacturers" align="center" label="生产厂家" />
-      <el-table-column prop="uid" align="center" label="资产编号" />
-      <el-table-column prop="productDate" align="center" label="出厂日期" />
-      <el-table-column prop="deliveryDate" align="center" label="到货日期" />
-      <el-table-column prop="serviceDate" align="center" label="使用日期" />
-      <el-table-column prop="qrCode" align="center" label="二维码" />
-      <el-table-column prop="file" align="center" label="附件" />
-      <el-table-column fixed="right" label="操作" width="160" align="center">
-        <el-button type="text" size="small" @click="edit()">编辑</el-button>
-        <el-button type="text" size="small" style="color: #f56c6c" @click="del()">删除</el-button>
-      </el-table-column>
 
-    </el-table>
+      <!-- 新建弹窗 -->
+      <form-dialog
+        ref="createDialog"
+        :config="initCreateConfig()"
+        :dialog-visible="createDialogVisible"
+        @close-dialog="createDialogVisible = false"
+        @submit="createSubmit"
+      />
+      <!-- 编辑弹窗 -->
+      <form-dialog
+        ref="editDialog"
+        :config="initEditConfig()"
+        :dialog-visible="editDialogVisible"
+        @close-dialog="editDialogVisible = false"
+        @submit="editSubmit"
+      />
+
+      <!-- 展开详情 -->
+      <detail-dialog
+        :config="initDetailConfig()"
+        :dialog-visible="detailDialogVisible"
+        @close-dialog="detailDialogVisible = false"
+        @open-dialog="openDialog"
+      />
+
+      <!-- 详情新建弹窗 -->
+      <form-dialog
+        ref="createDetailDialog"
+        :config="initCreateDetailConfig()"
+        :dialog-visible="createDetailDialogVisible"
+        @close-dialog="createDetailDialogVisible = false"
+        @submit="createDetailSubmit"
+      />
+      <!-- 详情编辑弹窗 -->
+      <form-dialog
+        ref="editDetailDialog"
+        :config="initEditDetailConfig()"
+        :dialog-visible="editDetailDialogVisible"
+        @close-dialog="editDetailDialogVisible = false"
+        @submit="editDetailSubmit"
+      />
+    </div>
+
   </div>
 </template>
+
 <script>
+import { getLargeEquipmentList, createUser, getUserInfo, editUser, delUser, getEquipmentArea } from '@/api/mechatronics'
+import TreeBar from '@/components/TreeBar'
+import FilterBar from '@/components/FilterBar'
+import ListTable from '@/components/ListTable'
+import Pagination from '@/components/Pagination'
+import FormDialog from '@/components/FormDialog'
+import DetailDialog from './components/DetailDialog'
+import { MechLargeEquipTableConfig, MechLargeEquipFilterConfig, MechLargeEquipDetailFilterConfig, MechLargeEquipDetailTableConfig } from '@/data/mechatronics'
+
 export default {
+  components: {
+    TreeBar,
+    FilterBar,
+    ListTable,
+    Pagination,
+    FormDialog,
+    DetailDialog
+  },
   data() {
     return {
-      keywords: '',
-      tableData: [
+      id: 'large-equipment-manage',
+      list: [],
+      total: 0,
+      listQuery: {
+        page: 1,
+        pagerows: 10
+      },
+      filter: {}, // 筛选项
+      listLoading: true,
+      MechLargeEquipFilterConfig,
+      MechLargeEquipTableConfig,
+      MechLargeEquipDetailTableConfig,
+      MechLargeEquipDetailFilterConfig,
+      createDialogVisible: false,
+      editDialogVisible: false,
+      detailDialogVisible: false, // 特有属性详情
+      createDetailDialogVisible: false,
+      editDetailDialogVisible: false,
+      treeExtend: true,
+      hasMenu: true,
+      treeData: {
+        title: '',
+        list: []
+      },
+      // tree右键菜单配置
+      menuConfig: [
         {
-          id: 'GQ0100003',
-          name: '落地式提升机',
-          site: '提升机房',
-          equipment: '提升机',
-          model: 'JKMD5*4',
-          manufacturers: '中信重工',
-          uid: '01110313',
-          productDate: '2021.01.02',
-          deliveryDate: '2021.02.02',
-          serviceDate: '2021.02.04',
-          qrCode: '',
-          file: ''
+          menuName: '详情',
+          fn: this.treeDetail,
+          flag: true
         }
-      ]
+      ],
+      multipleSelection: [], // 多选项
+      deleteDisabled: true // 批量删除置灰
     }
   },
+
+  created() {
+    this.__fetchData()
+    this.__updateEquipAreaTree()
+  },
   methods: {
-    search() {
-      console.log(this.keywords)
+    // 接口获取所属场所
+    __updateEquipAreaTree() {
+      getEquipmentArea().then(response => {
+        console.log(response.data)
+        // 更新左侧树结构数据
+        this.treeData.list = response.data
+        // 更新新增、编辑config数据
+        const areaData = []
+        response.data.forEach(it => {
+          areaData.push({
+            label: it.label,
+            value: Number(it.value)
+          })
+        })
+        MechLargeEquipTableConfig.columns.forEach(it => {
+          if (it.field === 'area') {
+            it.options = areaData
+          }
+        })
+      })
     },
-    edit() {
-      console.log('edit')
+
+    __fetchData() {
+      this.listLoading = true
+      const filter = {
+        ...this.filter,
+        keywordField: ['workNumber', 'loginName', 'userName']
+      }
+      const query = Object.assign(this.listQuery, filter)
+      getLargeEquipmentList(query).then(response => {
+        this.listLoading = false
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
+      })
     },
-    del() {
-      console.log('del')
+    // 查询数据
+    queryData(filter) {
+      this.filter = Object.assign(this.filter, filter)
+      this.__fetchData()
     },
-    // 表格单元格样式
-    cellStyle() {
-      return 'font-size: 13px'
+    // 点击treeBar详情
+    treeDetail(tag) {
+      console.log(tag)
+      // 只有第一级的树型结构才有详情
+      if (tag.level === 1) {
+        const tagId = tag.data.value
+        this.openDetailDialog(tagId)
+        this.detailDialogVisible = true
+      } else {
+        this.$message({
+          message: '只有场所具备特有属性',
+          type: 'warning'
+        })
+      }
+    },
+    // 打开特有属性弹窗
+    openDetailDialog(id) {
+      console.log(id)
+      this.areaId = id
+      this.detailDialogVisible = true
+    },
+    // 初始化新建窗口配置
+    initCreateConfig() {
+      const createConfig = Object.assign({
+        title: '新建',
+        width: '800px',
+        form: this.MechLargeEquipTableConfig.columns
+      })
+      return createConfig
+    },
+    // 初始化编辑窗口配置
+    initEditConfig() {
+      const editConfig = Object.assign({
+        title: '编辑',
+        width: '800px',
+        form: this.MechLargeEquipTableConfig.columns
+      })
+      return editConfig
+    },
+    // 初始化详情窗口配置
+    initDetailConfig() {
+      const createConfig = Object.assign({
+        title: '详情',
+        width: '800px',
+        filter: this.MechLargeEquipDetailFilterConfig,
+        form: this.MechLargeEquipDetailTableConfig
+      })
+      return createConfig
+    },
+    // 初始化新建窗口配置
+    initCreateDetailConfig() {
+      const createConfig = Object.assign({
+        title: '新建',
+        width: '800px',
+        form: this.MechLargeEquipDetailTableConfig.columns
+      })
+      return createConfig
+    },
+    // 初始化编辑窗口配置
+    initEditDetailConfig() {
+      const editConfig = Object.assign({
+        title: '编辑',
+        width: '800px',
+        form: this.MechLargeEquipDetailTableConfig.columns
+      })
+      return editConfig
+    },
+    // 打开弹窗
+    openDialog(name, row) {
+      const visible = `${name}DialogVisible`
+      this[visible] = true
+
+      // 接口获取所属场所，更新config数据
+      this.__updateEquipAreaTree()
+
+      // 如果有数据，更新子组件的 formData
+      if (row) {
+        this.$refs[`${name}Dialog`].updataForm(row)
+        // getUserInfo(row.sysUserId).then(response => {
+        //   const info = Object.assign(response.data, {
+        //     sysDeptId: Number(response.data.sysDeptId) || 0,
+        //     sysRoleId: Number(response.data.sysRoleId) || 0
+        //   })
+        //   this.$refs.editDialog.updataForm(info)
+        // })
+      }
+    },
+    // 删除
+    deleteClick(row) {
+      this.$confirm('确定删除该设备?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(row.sysUserId)
+        delUser(row.sysUserId).then(response => {
+          console.log(response)
+          this.$message.success('删除成功')
+          this.__fetchData()
+        })
+      })
+    },
+    // 新增
+    createSubmit(submitData) {
+      console.log(submitData)
+
+      const query = Object.assign(submitData, {
+        sysRoleId: Number(submitData.sysRoleId) || 0,
+        sysDeptId: Number(submitData.sysDeptId) || 0
+      })
+      createUser(query).then(response => {
+        console.log(response)
+        this.createDialogVisible = false
+        this.$message.success('新建成功')
+        this.$refs.createDialog.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.createDialog.resetSubmitBtn()
+      })
+    },
+    // 编辑
+    editSubmit(submitData) {
+      const query = Object.assign(submitData)
+      editUser(query).then(response => {
+        console.log(response)
+        this.editDialogVisible = false
+        this.$message.success('编辑成功')
+        this.$refs.editDialog.resetForm()
+        this.__fetchData()
+      })
+    },
+    // 详情新增
+    createDetailSubmit(submitData) {
+      console.log(submitData)
+
+      const query = Object.assign(submitData, {
+
+      })
+      // createUser(query).then(response => {
+      //   console.log(response)
+      //   this.createDialogVisible = false
+      //   this.$message.success('新建成功')
+      //   this.$refs.createDialog.resetForm()
+      //   this.__fetchData()
+      // }).catch(err => {
+      //   console.log(err)
+      //   this.$refs.createDialog.resetSubmitBtn()
+      // })
+    },
+    // 详情编辑
+    editDetailSubmit(submitData) {
+      const query = Object.assign(submitData)
+      // editUser(query).then(response => {
+      //   console.log(response)
+      //   this.editDialogVisible = false
+      //   this.$message.success('编辑成功')
+      //   this.$refs.editDialog.resetForm()
+      //   this.__fetchData()
+      // })
+    },
+
+    // 改变所选项
+    selectionChange(val) {
+      this.multipleSelection = val
+      if (this.multipleSelection.length > 0) {
+        this.deleteDisabled = false
+      } else {
+        this.deleteDisabled = true
+      }
+      console.log(this.multipleSelection)
+    },
+
+    // 批量删除
+    deleteBatches() {
+      const selectId = []
+      this.multipleSelection.forEach(it => selectId.push(it.id))
+      console.log(selectId)
+      if (selectId.length === 0) {
+        this.$message.warning('请选择所删除的设备')
+        return false
+      }
+      this.$confirm('确定删除所选中设备?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(selectId)
+        this.__fetchData()
+        this.$message.success('删除成功')
+      })
+    },
+
+    // 点击树形菜单时触发
+    handleNodeClick(data) {
+      console.log(data)
+      const entity = {
+        sysDeptId: data.value
+      }
+      console.log(entity)
+      this.filter = Object.assign(this.filter, { entity })
+      this.__fetchData()
     }
   }
 }
 </script>
-<style lang="scss" scoped>
-  .filter-bar {
-    margin-bottom: 10px;
-    &__item {
-      display: inline-block;
-      margin: 0 40px 15px 0;
-      font-size: 14px;
-      label {
-        font-weight: normal;
-        font-size: 14px;
-        margin-right: 4px;
-      }
-    }
-  }
-</style>

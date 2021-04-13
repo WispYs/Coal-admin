@@ -89,6 +89,80 @@ const disKnowLedgeData = Mock.mock({
   }]
 })
 
+/** ---- 运输管理 ---- **/
+// 典型故障知识库
+const typicalFaultData = Mock.mock({
+  'items|3': [{
+    'area|+1': [1, 2, 3],
+    'fault|+1': [1, 2, 3],
+    'level|+1': [1, 2, 3],
+    phenomenon: '',
+    reason: '',
+    way: '',
+    remark: ''
+  }]
+})
+// 历史故障知识库
+const historyFaultData = Mock.mock({
+  'items|3': [{
+    'area|+1': [1, 2, 3],
+    'keyword|+1': ['副井更换主电机', '主井电控故障处理', '主井底积煤'],
+    'time|+1': ['2019-12-01', '2019-12-12', '2020-01-21'],
+    record: '',
+    reason: '',
+    way: ''
+  }]
+})
+// 检修计划
+const servicePlanData = Mock.mock({
+  'items|3': [{
+    'area|+1': [1, 2, 3],
+    'name|+1': ['主电机碳刷', '电气部分'],
+    'time|+1': ['2019-12-01', '2019-12-12', '2020-01-21'],
+    'period|+1': [1, 2, 3, 4],
+    'warning|+1': [10, 2],
+    'alarm|+1': [5, 0],
+    remind: '',
+    person: '管理员',
+    copyPerson: '',
+    copy: '',
+    maintain: '',
+    remark: ''
+  }]
+})
+// 设备维修
+const equipmentServiceData = Mock.mock({
+  'items|3': [{
+    'area|+1': [1, 2, 3],
+    'name|+1': ['主电机碳刷', '电气部分'],
+    'type|+1': [1, 2, 3, 4],
+    'fault|+1': ['中央泵房启动器...', ''],
+    condition: '',
+    'status|+1': [1, 2],
+    course: '',
+    result: '',
+    person: '',
+    'time|+1': ['2019-12-01', '2019-12-12', '2020-01-21'],
+    file: ''
+  }]
+})
+// 备品备件
+const SparePartData = Mock.mock({
+  'items|3': [{
+    'area|+1': ['1', '2', '3'],
+    'name|+1': ['主电机碳', '电气部分'],
+    'model|+1': ['CXJ2031'],
+    unit: '',
+    addr: '',
+    store: '',
+    sum: '',
+    warning: '',
+    person: '',
+    updater: '',
+    'status|1': [1, 2]
+  }]
+})
+
 module.exports = [
   // 大型设备列表
   {
@@ -153,6 +227,81 @@ module.exports = [
     type: 'get',
     response: config => {
       const items = disKnowLedgeData.items
+      return {
+        code: 200,
+        data: {
+          records: items.length,
+          rows: items
+        }
+      }
+    }
+  },
+  // 典型故障知识库
+  {
+    url: '/typical-fault/list',
+    type: 'get',
+    response: config => {
+      const items = typicalFaultData.items
+      return {
+        code: 200,
+        data: {
+          records: items.length,
+          rows: items
+        }
+      }
+    }
+  },
+  // 历史故障知识库
+  {
+    url: '/history-fault/list',
+    type: 'get',
+    response: config => {
+      const items = historyFaultData.items
+      return {
+        code: 200,
+        data: {
+          records: items.length,
+          rows: items
+        }
+      }
+    }
+  },
+  // 检修计划
+  {
+    url: '/service-plan/list',
+    type: 'get',
+    response: config => {
+      const items = servicePlanData.items
+      return {
+        code: 200,
+        data: {
+          records: items.length,
+          rows: items
+        }
+      }
+    }
+  },
+  // 设备维修
+  {
+    url: '/equipment-service/list',
+    type: 'get',
+    response: config => {
+      const items = equipmentServiceData.items
+      return {
+        code: 200,
+        data: {
+          records: items.length,
+          rows: items
+        }
+      }
+    }
+  },
+  // 查看备品备件
+  {
+    url: '/spare-part/list',
+    type: 'get',
+    response: config => {
+      const items = SparePartData.items
       return {
         code: 200,
         data: {

@@ -40,7 +40,6 @@ export const constantRoutes = [
       }
     ]
   },
-
   // 重定向路由
   {
     path: '/redirect',
@@ -52,7 +51,19 @@ export const constantRoutes = [
         component: () => import('@/views/redirect/index')
       }
     ]
+  },
+  // 404
+  {
+    path: '/404',
+    component: () => import('@/views/404'),
+    hidden: true
   }
+  // {
+  //   path: '*',
+  //   redirect: '/404',
+  //   hidden: true
+  // }
+
 ]
 
 const createRouter = () => new Router({

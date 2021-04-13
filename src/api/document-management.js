@@ -35,7 +35,7 @@ export function previewDocument(fId) {
   //   url: `${FileUrl}/preview/?entityId=${fId}`,
   //   method: 'post'
   // })
-  window.open(`${FileUrl}/preview/?entityId=${fId}`)
+  window.open(`${FileUrl}/preview?entityId=${fId}`)
 }
 
 // 下载文件

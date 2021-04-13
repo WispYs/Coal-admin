@@ -5,6 +5,7 @@ export const TableConfig = {
    *
    * @param {array}   actions           操作按钮，例如：['preview', 'edit', 'delete', 'upload', 'other']
    * @param {string}  otherActionTitle  其他特定操作按钮文本
+   * @param {number}  actionWidth       操作按钮表格长度，Number类型，默认为 160
    * @param {boolean} summary           是否需要合计数据
    * @param {array}   summaryField      合计字段
    * @param {boolean} inlineEdit        是否支持在表格行内直接编辑，默认不支持且编辑为弹窗形式
@@ -19,33 +20,24 @@ export const TableConfig = {
    * @param {array}   options           选择器配置项
    * @param {boolean} hidden            是否在表格中隐藏，默认false，值为true时只在新建、编辑中显示该字段
    * @param {boolean} disabled          不可在新增、编辑中修改的字段，默认false，值为true时表示该字段后台自动生成不可编辑
-   * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump 色块显示
+   * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump-有背景色块;underline-下划线可点击
+   * @param {string}  underlineText     表格内数据显示方式为underline时，下划线的文字
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
    * @param {boolean} lazy              是否异步加载树形表格子节点数据，默认false，值为true时为异步
    */
   actions: ['edit', 'delete'],
+  rowKey: 'aqglRiskTissueId',
   summary: false,
   summaryField: [],
+  checkbox: true,
+  lazy: true,
   columns: [
-    { label: '名称', field: 'name', width: '250', layout: 'Text', placeholder: '请填写名称' },
-    { label: '编号', field: 'id', width: '150', layout: 'Text', placeholder: '请填写编号' },
-    { label: '创建日期', field: 'createDate', width: '200', sortable: true, layout: 'DateTime', placeholder: '请选择日期' },
-    { label: '排序', field: 'sort', width: '150', layout: 'Select',
-      options: [
-        {
-          value: 1,
-          label: '1'
-        }, {
-          value: 2,
-          label: '2'
-        }, {
-          value: 3,
-          label: '3'
-        }, {
-          value: 4,
-          label: '4'
-        }
-      ], placeholder: '请选择排序' },
+    { label: '名称', field: 'aqglRiskTissueName', width: '200', layout: 'Text', placeholder: '请填写名称' },
+    { label: '编号', field: 'aqglRiskTissueId', width: '150', layout: 'Text', placeholder: '请填写编号' },
+    { label: '创建日期', field: 'createTime', width: '200', sortable: true, layout: 'DateTime', placeholder: '请选择日期' },
+    { label: '排序', field: 'orderNum', width: '150', layout: 'Text', placeholder: '请选择排序' },
+    { label: '上级节点', field: 'parentId', layout: 'TreeSelect', hidden: true,
+      options: [ ], placeholder: '请选择上级节点' },
     { label: '备注', field: 'remark', width: '', layout: 'Textarea', placeholder: '请填写备注' }
   ]
 }

@@ -14,7 +14,7 @@
       </span>
       <div class="upload-button">
         <!-- <el-button type="primary" size="medium" @click="openDailog"><i class="el-icon-plus el-icon--left" />新建文件</el-button> -->
-        <el-button type="success" size="medium" plain @click="uploadDialogVisible = true"><i class="el-icon-upload el-icon--left" />上传</el-button>
+        <el-button type="primary" size="medium" @click="uploadDialogVisible = true"><i class="el-icon-upload el-icon--left" />上传</el-button>
         <el-button size="medium" plain @click="refresh"><i class="el-icon-refresh el-icon--left" />刷新</el-button>
       </div>
       <el-table ref="multipleTable" :data="list" tooltip-effect="dark" style="width: 100%" height="calc(100% - 153px)" @selection-change="handleSelectionChange">
@@ -174,21 +174,21 @@ export default {
   },
   methods: {
     getFileType(row) {
-      const type = row.suffix
-      const img = ['png', 'jpg', 'jpeg'].includes(type)
-      const doc = ['doc', 'docx'].includes(type)
-      const xls = ['xls', 'xlsx'].includes(type)
-      if (img) {
-        return require(`@/assets/images/img.png`)
-      }
-      if (doc) {
-        return require(`@/assets/images/doc.png`)
-      }
-      if (xls) {
-        return require(`@/assets/images/xls.png`)
-      }
+      // const type = row.suffix
+      // const img = ['png', 'jpg', 'jpeg'].includes(type)
+      // const doc = ['doc', 'docx'].includes(type)
+      // const xls = ['xls', 'xlsx'].includes(type)
+      // if (img) {
+      //   return require(`@/assets/images/img.png`)
+      // }
+      // if (doc) {
+      //   return require(`@/assets/images/doc.png`)
+      // }
+      // if (xls) {
+      //   return require(`@/assets/images/xls.png`)
+      // }
 
-      return `@/assets/images/file.png`
+      return require(`@/assets/images/file.png`)
     },
     createFolder(tag) {
       this.dialogTitle = '添加'
@@ -228,23 +228,22 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(async() => {
-        const res = await deleteFolder(tag.data.value)
-        this._fetchTreeData()
-        this.$message.success(res.msg)
-      }).catch(() => {
+      }).then(() => {
+        deleteFolder(tag.data.value).then(res => {
+          this._fetchTreeData()
+          this.$message.success(res.msg)
+        })
       })
     },
     // 编辑提交
-    async editSubmit(submitData) {
-      const res = await updateDocument(submitData)
-      if (res) {
+    editSubmit(submitData) {
+      updateDocument(submitData).then(res => {
         const vm = this.$refs.editDialog
         vm.submitLoading = false
         this.editDialogVisible = false
         this.__fetchData()
         this.$message.success(res.msg)
-      }
+      })
     },
     initEditConfig() {
       const editConfig = Object.assign({
@@ -270,14 +269,10 @@ export default {
       this.dialogVisible = true
     },
     // 获取部门树
-    async _fetchDepartTreeData(pId = 0) {
-      const res = await getTree(pId)
-      if (res.result === 1) {
-        // res.data[0].deptName = '根目录'
-        this.treeData.list = res.data
-      }
+    _fetchDepartTreeData(pId = 0) {
+      getTree(pId).then(res => { this.treeData.list = res.data })
     },
-    async _fetchTreeData(fId = 0) {
+    _fetchTreeData(fId = 0) {
       // this.treeData.list = [
       //   {
       //     label: '根目录',
@@ -290,18 +285,16 @@ export default {
       //   }
       // ]
 
-      const res = await getFolderTree(fId)
       const _list = [{
         label: '根目录',
         value: 0,
         children: []
       }]
       this.treeData.list = _list
-      console.log(_list)
-      if (res.result === 1) {
+      getFolderTree(fId, this.$route.name).then(res => {
         _list[0].children = res.data
         this.treeData.list = _list
-      }
+      })
     },
     // 获取表格数据
     async __fetchData(tId = 0) {
@@ -396,15 +389,12 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(async() => {
+      }).then(() => {
         const data = selectId
-        const res = await deleteDocument(data)
-        if (res.result) {
+        deleteDocument(data).then(res => {
           this.__fetchData()
           this.$message.success(res.msg)
-        } else {
-          this.$message.success('删除失败')
-        }
+        })
       })
     },
     // 点击刷新时触发

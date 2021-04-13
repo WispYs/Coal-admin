@@ -2,6 +2,9 @@
   <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
     <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" />
     <div class="tree-form-container">
+      <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
+        <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
+      </span>
       <filter-bar
         :config="FilterConfig"
         @search-click="queryData"

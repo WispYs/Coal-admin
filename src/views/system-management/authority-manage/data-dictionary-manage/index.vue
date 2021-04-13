@@ -11,6 +11,7 @@
       :list-loading="listLoading"
       :config="dataDictionaryConfig"
       height="calc(100% - 148px)"
+      @load-tree-data="asyncData"
       @addIco="(row) => openDialog('create', row)"
       @editIco="(row) => openDialog('edit', row)"
       @deleteIco="deleteClick"
@@ -37,6 +38,7 @@
     </div>
     <!-- 新建弹窗 -->
     <form-dialog
+      ref="createDialog"
       :config="initCreateConfig()"
       :dialog-visible="createDialogVisible"
       @close-dialog="createDialogVisible = false"
@@ -106,7 +108,8 @@ export default {
       let query = {
         entity:{
           dictName: _filter,
-          dictValue: _filter
+          dictValue: _filter,
+          parentId: 0
         },
         sort:{
           asc:["sort"]
@@ -117,6 +120,12 @@ export default {
       getDictionaryList(query).then(response => {
         console.log(response);
         this.listLoading = false
+        response.data.rows.forEach(it => {
+          it.sysDictId = Number(it.sysDictId)
+          if (it.parentCheck === 1) {
+            it.hasChildren = true
+          }
+        })  
         this.list = response.data.rows
         this.total = Number(response.data.records)
       })
@@ -127,6 +136,9 @@ export default {
     // 查询数据
     queryData(filter) {
       this.__fetchData(filter.keyword)
+    },
+    asyncData(){
+
     },
     // 初始化新建窗口配置
     initCreateConfig() {
@@ -169,26 +181,12 @@ export default {
       getSelectSysDict().then(response => {
         console.log(response);
         let dictList = []
-        dictList = response.data
-        for(let d in response.data){
-          this.recursionDict(dictList[d],response.data[d])
-        }
         this.dataDictionaryConfig.columns.forEach(it => {
           if (it.field === 'parentId') {
-            it.options = dictList
+            it.options = response.data
           }
         })
       })
-    },
-    recursionDict(dict,data){
-      dict.label = data.dictName
-      dict.value = data.sysDictId
-      dict.children = data.sysDictList
-      if(!!data.sysDictList && data.sysDictList.length > 0){
-        for(let d in data.sysDictList){
-          this.recursionDict(dict.sysDictList[d],data.sysDictList[d])
-        }
-      }
     },
     // 删除
     deleteClick(id) {
@@ -213,6 +211,7 @@ export default {
         console.log(response);
         this.__fetchData()
         this.createDialogVisible = false
+        this.$refs.createDialog.resetForm()
         this.$message.success('新建成功')
       })
     },
@@ -225,6 +224,7 @@ export default {
         console.log(response);
         this.__fetchData()
         this.editDialogVisible = false
+        this.$refs.editDialog.resetForm()
         this.$message.success('编辑成功')
       })
       this.editDialogVisible = false

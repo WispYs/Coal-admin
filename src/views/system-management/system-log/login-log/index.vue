@@ -63,7 +63,10 @@ export default {
       console.log(_filter);
       this.listLoading = true
       let query={
-        entity: _filter,
+        entity: {
+          ..._filter,
+          category: "登录日志"
+        },
         page: Number(this.listQuery.page),
         pagerows: Number(this.listQuery.pagerows)
       }

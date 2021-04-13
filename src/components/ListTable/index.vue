@@ -106,11 +106,13 @@
           </template>
           <template v-else>
             <!-- showType 有值表示对表格内样式有特殊要求 -->
+            <!-- colorLump 单元格显示背景色 -->
             <template v-if="column.showType === 'colorLump'">
               <span class="color-lump" :class="lumpClassName(scope.row[column.field])">{{ filterField(column.options, scope.row[column.field]) }}</span>
             </template>
+            <!-- underline 单元格文字可点击 -->
             <template v-else-if="column.showType === 'underline'">
-              <span class="underline-text" @click="textClick">{{ scope.row[column.field] }}</span>
+              <span class="underline-text" @click="textClick(scope.row[column.field])">{{ column.underlineText || scope.row[column.field] }}</span>
             </template>
             <template v-else>
               <span v-if="column.options">
@@ -124,7 +126,7 @@
       </el-table-column>
     </template>
 
-    <el-table-column v-if="config.actions && config.actions.length > 0" fixed="right" label="操作" width="160" align="center">
+    <el-table-column v-if="config.actions && config.actions.length > 0" fixed="right" label="操作" :width="config.actionWidth || 160" align="center">
       <template slot-scope="scope">
         <template v-if="config.actions.indexOf('other') > -1">
           <el-button v-for="item in config.otherActionTitle" :key="item" type="text" size="small" @click="otherClick(scope.row, scope.$index,item)">{{ item }}</el-button>
@@ -224,7 +226,11 @@ export default {
         })
         return filters
       } else {
-        const filters = newOptions.filter(item => item.value === field)
+        const filters = newOptions.filter(item => {
+          // console.log(item.value, field)
+          return item.value === field
+        })
+
         return filters[0] ? filters[0].label : ''
       }
     },
@@ -239,8 +245,8 @@ export default {
       return classMap[str]
     },
     // 表格文本点击
-    textClick() {
-      this.$emit('text-click')
+    textClick(value) {
+      this.$emit('text-click', value)
     },
     // 上传附件
     uploadFile(row, index) {

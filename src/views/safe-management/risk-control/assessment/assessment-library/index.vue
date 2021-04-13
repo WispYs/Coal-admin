@@ -2,10 +2,14 @@
   <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
     <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" />
     <div class="tree-form-container">
+      <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
+        <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
+      </span>
       <filter-bar
         :config="FilterConfig"
         @search-click="queryData"
         @create-click="openDialog('create')"
+        @identificationEnd="identificationEnd"
         @reset-click="queryData"
       />
       <list-table
@@ -47,7 +51,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/assessment-library'
+import { getAqglRiskIdentifyList } from '@/api/assessment-library'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -73,6 +77,7 @@ export default {
       createDialogVisible: false,
       editDialogVisible: false,
       treeExtend: true,
+      riskFilterList:[],
       treeData: {
         title: '选择专业',
         list: [{
@@ -108,10 +113,13 @@ export default {
     __fetchData() {
       this.listLoading = true
       const query = Object.assign(this.listQuery, this.filter)
-      getList(query).then(response => {
+
+      getAqglRiskIdentifyList(query).then(response => {
+        console.log(response);
         this.listLoading = false
-        this.list = response.data.items
-        this.total = response.data.total
+        this.list = response.data.rows
+        this.total = response.data.records
+        console.log(this.list,this.total);
       })
     },
     // 查询数据
@@ -119,13 +127,16 @@ export default {
       this.filter = Object.assign(this.filter, filter)
       this.__fetchData()
     },
+    // 点击辨识结束按钮触发
+    identificationEnd(){
 
+    },
     // 初始化新建窗口配置
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '500px',
-        form: this.TableConfig.columns
+        width: '900px',
+        form: this.riskFilterList
       })
       return createConfig
     },
@@ -133,8 +144,8 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '500px',
-        form: this.TableConfig.columns
+        width: '800px',
+        form: this.riskFilterList
       })
       return editConfig
     },
@@ -142,6 +153,9 @@ export default {
     openDialog(name, row) {
       const visible = `${name}DialogVisible`
       this[visible] = true
+      this.riskFilterList = this.TableConfig.columns.filter((ele, index, arr) => {
+        return !!ele.field.indexOf("startTime") && !!ele.field.indexOf("endTime") && !!ele.field.indexOf("status")
+      })
       if (row) {
         // 如果有数据，更新子组件的 formData
         this.$refs.editDialog.updataForm(row)

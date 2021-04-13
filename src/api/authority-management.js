@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { SystemUrl } from './url'
+import { SystemUrl,InformationUrl } from './url'
 
 // 应用管理系统
 export function getApplicationList(data) {
@@ -40,6 +40,15 @@ export function delApplication(id) {
 export function getUserList(data) {
   return request({
     url: `${SystemUrl}/sysUser/search`,
+    method: 'post',
+    data
+  })
+}
+
+// 获取全部用户列表,并包含用户所属部门
+export function getAllUserList(data) {
+  return request({
+    url: `${SystemUrl}/sysUser/loadAllTreeUser`,
     method: 'post',
     data
   })
@@ -312,7 +321,7 @@ export function getDictionaryList(data) {
 // 查询全部数据字典
 export function getSelectSysDict(data) {
   return request({
-    url: SystemUrl + '/sysDict/selectCombox',
+    url: SystemUrl + '/sysDict/findDictTree',
     method: 'post',
     data
   })
@@ -349,6 +358,60 @@ export function deleteDict(id) {
 export function getLoginLogList(data) {
   return request({
     url: SystemUrl + '/sysLog/search',
+    method: 'post',
+    data
+  })
+}
+
+//获取消息类型
+export function getNewsTypeList(data) {
+  return request({
+    url: InformationUrl + '/sysMsgType/search',
+    method: 'post',
+    data
+  })
+}
+
+//获取所有消息类型
+export function getChildrenMsgList(data) {
+  return request({
+    url: InformationUrl + '/sysMsgType/baseSelectCombox',
+    method: 'post',
+    data
+  })
+}
+
+//创建消息类型
+export function saveNewsType(data) {
+  return request({
+    url: InformationUrl + '/sysMsgType/save',
+    method: 'post',
+    data
+  })
+}
+
+//修改消息类型
+export function updateNewsType(data) {
+  return request({
+    url: InformationUrl + '/sysMsgType/update',
+    method: 'post',
+    data
+  })
+}
+
+//删除消息类型
+export function deleteNewsType(id) {
+  return request({
+    url: InformationUrl + '/sysMsgType/delete/'+id,
+    method: 'delete',
+    id
+  })
+}
+
+//获取消息列表
+export function getMsgRecord(data) {
+  return request({
+    url: InformationUrl + '/sysMsgRecord/search',
     method: 'post',
     data
   })

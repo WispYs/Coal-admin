@@ -1404,119 +1404,119 @@ const asyncRoutes = [
     meta: { title: '安全管理', roles: ['admin', 'editor'], important: true },
     children: [
       {
-        path: '/safe-management/safe1',
+        path: '/safe-management/safeProduce-normalizing',
         name: 'Safe1',
         component: '/demo/index',
         meta: { title: '安全生产标准化' },
         children: [
           {
-            path: '/safe-management/safe1/safe1-1',
+            path: '/safe-management/safeProduce-normalizing/compliance-planning',
             name: 'Safe1-1',
             component: '/demo/index',
             meta: { title: '达标规划' },
             children: [
               {
-                path: '/safe-management/safe1/safe1-1/safe1-1-1',
+                path: '/safe-management/safeProduce-normalizing/compliance-planning/annual-plan',
                 name: 'Safe1-1-1',
-                component: '/demo/table/upload/index',
+                component: '/safe-management/safeProduce-normalizing/compliance-planning/annual-plan/index',
                 meta: { title: '年度规划' }
               },
               {
-                path: '/safe-management/safe1/safe1-1/safe1-1-2',
+                path: '/safe-management/safeProduce-normalizing/compliance-planning/quarterly-plan',
                 name: 'Safe1-1-2',
-                component: '/demo/table/upload/index',
+                component: '/safe-management/safeProduce-normalizing/compliance-planning/quarterly-plan/index',
                 meta: { title: '季度计划' }
               },
               {
-                path: '/safe-management/safe1/safe1-1/safe1-1-3',
+                path: '/safe-management/safeProduce-normalizing/compliance-planning/monthly-plan',
                 name: 'Safe1-1-3',
-                component: '/demo/table/upload/index',
+                component: '/safe-management/safeProduce-normalizing/compliance-planning/monthly-plan/index',
                 meta: { title: '月度计划' }
               }
             ]
           },
           {
-            path: '/safe-management/safe1/safe1-2',
+            path: '/safe-management/safeProduce-normalizing/standardizationScore-manage',
             name: 'Safe1-2',
             component: '/demo/index',
             meta: { title: '标准化评分管理' },
             children: [
               {
                 path:
-                  '/safe-management/standard-scoring-manager/security-commitment',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/safety-commitment',
                 name: 'Safe1-2-1',
                 component:
-                  '/safe-management/standard-scoring-manager/security-commitment/index',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/safety-commitment/index',
                 meta: { title: '理念目标和矿长安全承诺' }
               },
               {
-                path: '/safe-management/standard-scoring-manager/organization',
+                path: '/safe-management/safeProduce-normalizing/standardizationScore-manage/organization',
                 name: 'Safe1-2-2',
                 component:
-                  '/safe-management/standard-scoring-manager/organization/index',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/organization/index',
                 meta: { title: '组织机构' }
               },
               {
                 path:
-                  '/safe-management/standard-scoring-manager/security-manager-system',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/security-manager-system',
                 name: 'Safe1-2-3',
                 component:
-                  '/safe-management/standard-scoring-manager/security-manager-system/index',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/security-manager-system/index',
                 meta: { title: '安全生产责任制及安全管理制度' }
               },
               {
                 path:
-                  '/safe-management/standard-scoring-manager/person-quality',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/person-quality',
                 name: 'Safe1-2-4',
                 component:
-                  '/safe-management/standard-scoring-manager/person-quality/index',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/person-quality/index',
                 meta: { title: '从业人员素质' }
               },
               {
-                path: '/safe-management/standard-scoring-manager/safe-risk',
+                path: '/safe-management/safeProduce-normalizing/standardizationScore-manage/safe-risk',
                 name: 'Safe1-2-5',
                 component:
-                  '/safe-management/standard-scoring-manager/safe-risk/index',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/safe-risk/index',
                 meta: { title: '安全风险分级管控' }
               },
               {
                 path:
-                  '/safe-management/standard-scoring-manager/investigation-government',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/investigation-government',
                 name: 'Safe1-2-6',
                 component:
-                  '/safe-management/standard-scoring-manager/investigation-government/index',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/investigation-government/index',
                 meta: { title: '事故隐患排查治理' }
               },
               {
                 path:
-                  '/safe-management/standard-scoring-manager/quality-control-air',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/quality-control-air',
                 name: 'Safe1-2-7',
                 component:
-                  '/safe-management/standard-scoring-manager/quality-control-air/index',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/quality-control-air/index',
                 meta: { title: '质量控制_通风' }
               },
               {
                 path:
-                  '/safe-management/standard-scoring-manager/quailty-control-measure',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/quailty-control-measure',
                 name: 'Safe1-2-8',
                 component:
-                  '/safe-management/standard-scoring-manager/quailty-control-measure/index',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/quailty-control-measure/index',
                 meta: { title: '质量控制_地质灾害防治与测量' }
               },
               {
                 path:
-                  '/safe-management/standard-scoring-manager/quality-control-coalMining',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/quality-control-coalMining',
                 name: 'Safe1-2-9',
                 component:
-                  '/safe-management/standard-scoring-manager/quality-control-coalMining/index',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/quality-control-coalMining/index',
                 meta: { title: '质量控制_采煤' }
               },
               {
                 path:
-                  '/safe-management/standard-scoring-manager/quality-control-driving',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/quality-control-driving',
                 name: 'Safe1-2-10',
                 component:
-                  '/safe-management/standard-scoring-manager/quality-control-driving/index',
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/quality-control-driving/index',
                 meta: { title: '质量控制_掘进' }
               },
               {
@@ -1582,26 +1582,26 @@ const asyncRoutes = [
         ]
       },
       {
-        path: '/safe-management/safe2',
+        path: '/safe-management/safeRisk-gradeControl',
         name: 'Safe2',
         component: '/demo/index',
         meta: { title: '安全风险分级管控' },
         children: [
           {
-            path: '/safe-management/safe2-1',
+            path: '/safe-management/safeRisk-gradeControl/management-system',
             name: 'Safe2-1',
             component: '/demo/index',
             meta: { title: '管理制度' },
             children: [
               {
-                path: '/safe-management/safe2-1/safe2-1-1',
+                path: '/safe-management/safeRisk-gradeControl/management-system/management-system',
                 name: 'Safe2-1-1',
                 component: '/demo/table/upload/index',
                 meta: { title: '安全风险分级管理制度' }
               },
               {
                 path:
-                  '/safe-management/risk-control/management-system/organization',
+                  '/safe-management/safe1/safe1-1/safe1-1-1',
                 name: 'Organization',
                 component:
                   '/safe-management/risk-control/management-system/organization/index',
@@ -1998,6 +1998,7 @@ const asyncRoutes = [
     ]
   },
   // 应急救援
+  // 已录入
   {
     path: '/emergency-rescue',
     name: 'DemoEmergency',
@@ -2014,7 +2015,7 @@ const asyncRoutes = [
           {
             path: '/emergency-rescue/emergency1/emergency1-1',
             name: 'Emergency1-1',
-            component: '/demo/index',
+            component: '/emergency-rescue/emergency-rescue-guide/accident-management/index',
             meta: { title: '事故管理' }
           },
           {
@@ -2136,6 +2137,7 @@ const asyncRoutes = [
     ]
   },
   // 一通三防
+  // 已录入
   {
     path: '/prevention-management',
     name: 'DemoPrevention',
@@ -2143,6 +2145,7 @@ const asyncRoutes = [
     redirect: '/prevention-management/prevention1/prevention1-2',
     meta: { title: '一通三防', important: true },
     children: [
+      // 已录入
       {
         path: '/prevention-management/prevention1',
         name: 'Prevention1',
@@ -2375,6 +2378,7 @@ const asyncRoutes = [
           }
         ]
       },
+      // 已录入
       {
         path: '/prevention-management/prevention2',
         name: 'Prevention2',
@@ -2660,6 +2664,7 @@ const asyncRoutes = [
           }
         ]
       },
+      // 已录入
       {
         path: '/prevention-management/prevention3',
         name: 'Prevention3',
@@ -2729,6 +2734,7 @@ const asyncRoutes = [
           }
         ]
       },
+      // 已录入
       {
         path: '/prevention-management/prevention4',
         name: 'Prevention4',
@@ -2810,6 +2816,7 @@ const asyncRoutes = [
           }
         ]
       },
+      // 已录入
       {
         path: '/prevention-management/prevention5',
         name: 'Prevention5',
@@ -2930,6 +2937,7 @@ const asyncRoutes = [
           }
         ]
       },
+      // 已录入
       {
         path: '/prevention-management/prevention6',
         name: 'Prevention6',
@@ -2998,6 +3006,7 @@ const asyncRoutes = [
           }
         ]
       },
+      // 已录入
       {
         path: '/prevention-management/prevention7',
         name: 'Prevention7',

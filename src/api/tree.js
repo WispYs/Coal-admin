@@ -11,9 +11,9 @@ export function getTree(params) {
 }
 
 // 获取文件夹树
-export function getFolderTree(fId) {
+export function getFolderTree(fId, menuId) {
   return request({
-    url: `${FileUrl}/sysFileDict/recurse/${fId}`,
+    url: `${FileUrl}/sysFileDict/recurse/${menuId}`,
     method: 'get'
   })
 }

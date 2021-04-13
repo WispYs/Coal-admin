@@ -63,7 +63,14 @@ import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import FilterBar from '@/components/FilterBar'
 import { flowTableConfig, FlowFilterConfig } from '@/data/flow-management'
-import { getApplicationList } from '@/api/flow-management'
+import {
+  getFlowTableData,
+  findProcess,
+  findTable,
+  saveFlow,
+  delProcess,
+  updataProcess
+} from '@/api/flow-management'
 export default {
   components: { ListTable, Pagination, FormDialog, FilterBar },
   data() {
@@ -81,23 +88,57 @@ export default {
       },
       listLoading: true,
       multipleSelection: [], // 多选项
-      deleteDisabled: true // 批量删除置灰
+      deleteDisabled: true, // 批量删除置灰
+      tableData: [],
+      processData: []
     }
   },
   created() {
+    this.initOptions()
     this.__fetchData()
   },
   methods: {
     __fetchData() {
       this.listLoading = true
       const query = Object.assign(this.listQuery)
-      this.listLoading = false
-      this.list = []
-      // getApplicationList(query).then(response => {
+      getFlowTableData(query).then(res => {
+        this.listLoading = false
+        this.list = res.data.rows
+        this.total = Number(res.data.records)
+      })
+      // getFlowTableData(query).then(response => {
+      //   console.log(response)
       //   this.listLoading = false
       //   this.list = response.data.rows
       //   this.total = Number(response.data.records)
       // })
+    },
+    initOptions() {
+      findProcess().then(res => {
+        this.processData = res.data
+        for (const k in res.data) {
+          this.processData[k]['value'] = res.data[k]['id']
+          this.processData[k]['label'] = res.data[k]['name']
+        }
+        flowTableConfig.columns.forEach(it => {
+          if (it.field === 'definitionId') {
+            it.options = this.processData
+          }
+        })
+      })
+      findTable().then(res => {
+        this.tableData = res.data
+        for (const k in res.data) {
+          this.tableData[k]['value'] = res.data[k]['tableName']
+          this.tableData[k]['label'] = res.data[k]['description']
+        }
+        flowTableConfig.columns.forEach(it => {
+          if (it.field === 'tableName') {
+            it.options = this.tableData
+          }
+        })
+        console.log('flowTableConfig', flowTableConfig.columns)
+      })
     },
     // 初始化新建窗口配置
     initCreateConfig() {
@@ -124,27 +165,29 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(row.sysManageId)
-        // delApplication(row.sysManageId).then(response => {
-        //   console.log(response)
-        //   this.$message.success('删除成功')
-        //   this.__fetchData()
-        // })
+        delProcess(row.actFlowDeployId).then(res => {
+          this.$message.success('删除成功')
+          this.__fetchData()
+        })
       })
     },
     // 编辑
     editSubmit(submitData) {
-      console.log(submitData)
-      const query = Object.assign(submitData, {
-        orderNum: Number(submitData.orderNum) || 0
+      const data = {
+        actFlowDeployId: submitData.actFlowDeployId,
+        definitionId: submitData.definitionId,
+        definitionKey: submitData.definitionKey,
+        definitionName: submitData.definitionName,
+        parentId: submitData.parentId,
+        tableName: submitData.tableName
+      }
+
+      updataProcess(data).then(response => {
+        this.editDialogVisible = false
+        this.$message.success('编辑成功')
+        this.$refs.editDialog.resetForm()
+        this.__fetchData()
       })
-      // editApplication(query).then(response => {
-      //   console.log(response)
-      //   this.editDialogVisible = false
-      //   this.$message.success('编辑成功')
-      //   this.$refs.editDialog.resetForm()
-      //   this.__fetchData()
-      // })
     },
     // 改变所选项
     selectionChange(val) {
@@ -177,21 +220,25 @@ export default {
     },
     // 新建
     createSubmit(submitData) {
-      console.log(submitData)
-      const query = Object.assign(submitData, {
-        orderNum: Number(submitData.orderNum) || 0,
-        sysDeptId: Number(submitData.sysDeptId) || 0
+      const process = this.processData.filter(p => p.value === submitData.definitionId)[0]
+      const table = this.tableData.filter(t => t.tableName === submitData.tableName)[0]
+      const entity = {
+        definitionId: process.id,
+        definitionKey: process.key,
+        definitionName: process.name,
+        tableId: table.tableId,
+        tableName: table.tableName
+      }
+
+      saveFlow(entity).then(res => {
+        this.createDialogVisible = false
+        this.$message.success('新建成功')
+        this.$refs.createDialog.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.createDialog.resetSubmitBtn()
       })
-      // createApplication(query).then(response => {
-      //   console.log(response)
-      //   this.createDialogVisible = false
-      //   this.$message.success('新建成功')
-      //   this.$refs.createDialog.resetForm()
-      //   this.__fetchData()
-      // }).catch(err => {
-      //   console.log(err)
-      //   this.$refs.createDialog.resetSubmitBtn()
-      // })
     },
 
     // 打开弹窗
@@ -199,6 +246,10 @@ export default {
       console.log(name, row)
       const visible = `${name}DialogVisible`
       this[visible] = true
+
+      // if (process.result === 1) {
+      //   console.log(process.data)
+      // }
       // getOrganTree().then(response => {
       //   console.log(response.data)
       //   // 更新新增、编辑config数据
@@ -209,14 +260,14 @@ export default {
       //   })
       // })
       // // 如果有数据，更新子组件的 formData
-      // if (row) {
-      //   getApplicationInfo(row.sysManageId).then(response => {
-      //     const info = Object.assign(response.data, {
-      //       sysDeptId: Number(response.data.sysDeptId) || 0
-      //     })
-      //     this.$refs.editDialog.updataForm(info)
-      //   })
-      // }
+      if (row) {
+        this.$refs.editDialog.updataForm(row)
+        // updataProcess(data).then(response => {
+        //   const info = Object.assign(response.data, {
+        //     sysDeptId: Number(response.data.sysDeptId) || 0
+        //   })
+        // })
+      }
     }
   }
 }

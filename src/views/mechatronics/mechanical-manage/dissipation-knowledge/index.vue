@@ -12,7 +12,7 @@
       :list-loading="listLoading"
       :config="DisKnowLedgeTableConfig"
       height="calc(100% - 157px)"
-      @text-click="fileDialogVisible = true"
+      @text-click="opentextDialog"
       @edit-click="(row) => openDialog('edit', row)"
       @delete-click="deleteClick"
       @submit-data="editSubmit"
@@ -62,12 +62,13 @@
       @upload-submit="uploadSubmit"
     />
 
-    <!-- <operation-file
-      ref="fileDialog"
-      :dialog-visible="fileDialogVisible"
-      @upload-click="openUploadDialog"
-      @close-dialog="fileDialogVisible = false"
-    /> -->
+    <!-- 富文本内容弹窗 -->
+    <text-dialog
+      ref="textDialog"
+      :dialog-visible="textDialogVisible"
+      :html-value="htmlValue"
+      @close-dialog="textDialogVisible = false"
+    />
   </div>
 </template>
 
@@ -78,14 +79,14 @@ import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import { DisKnowLedgeTableConfig, DisKnowLedgeFilterConfig } from '@/data/mechatronics'
-// import OperationFile from './OperationFile'
+import TextDialog from './components/TextDialog'
 import UploadFile from '@/components/UploadFile'
 
 export default {
-  components: { FilterBar, ListTable, Pagination, FormDialog, UploadFile },
+  components: { FilterBar, ListTable, Pagination, FormDialog, UploadFile, TextDialog },
   data() {
     return {
-      id: 'mining-operation',
+      id: 'dissipation-knowledge',
       list: [],
       total: 0,
       listQuery: {
@@ -100,7 +101,8 @@ export default {
       editDialogVisible: false,
       multipleSelection: [], // 多选项
       deleteDisabled: true, // 批量删除置灰
-      fileDialogVisible: false,
+      textDialogVisible: false,
+      htmlValue: '', // textDialog弹窗html内容
       uploadRow: null,
       uploadDialogVisible: false
     }
@@ -150,6 +152,12 @@ export default {
         this.$refs.editDialog.updataForm(row)
       }
     },
+    // 打开能耗公式、等级评定弹窗
+    opentextDialog(value) {
+      this.htmlValue = value
+      this.textDialogVisible = true
+    },
+
     // 删除
     deleteClick(id) {
       this.$confirm('确定删除该规程?', '提示', {

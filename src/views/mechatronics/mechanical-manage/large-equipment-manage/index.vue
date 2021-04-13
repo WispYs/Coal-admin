@@ -1,6 +1,6 @@
 <template>
   <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
-    <tree-bar :tree-data="treeData" @handleNodeClick="handleNodeClick" />
+    <tree-bar :has-menu="hasMenu" :tree-data="treeData" :menu-config="menuConfig" @handleNodeClick="handleNodeClick" />
 
     <div class="tree-form-container">
       <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
@@ -20,7 +20,7 @@
         :config="MechLargeEquipTableConfig"
         height="calc(100% - 157px)"
         @edit-click="(row) => openDialog('edit', row)"
-        @other-click="detailDialogVisible = true"
+        @other-click="(row) => openDetailDialog(row.area)"
         @delete-click="deleteClick"
         @submit-data="editSubmit"
         @selection-change="selectionChange"
@@ -127,14 +127,23 @@ export default {
       MechLargeEquipDetailFilterConfig,
       createDialogVisible: false,
       editDialogVisible: false,
-      detailDialogVisible: false,
+      detailDialogVisible: false, // 特有属性详情
       createDetailDialogVisible: false,
       editDetailDialogVisible: false,
       treeExtend: true,
+      hasMenu: true,
       treeData: {
         title: '',
         list: []
       },
+      // tree右键菜单配置
+      menuConfig: [
+        {
+          menuName: '详情',
+          fn: this.treeDetail,
+          flag: true
+        }
+      ],
       multipleSelection: [], // 多选项
       deleteDisabled: true // 批量删除置灰
     }
@@ -152,9 +161,16 @@ export default {
         // 更新左侧树结构数据
         this.treeData.list = response.data
         // 更新新增、编辑config数据
+        const areaData = []
+        response.data.forEach(it => {
+          areaData.push({
+            label: it.label,
+            value: Number(it.value)
+          })
+        })
         MechLargeEquipTableConfig.columns.forEach(it => {
           if (it.field === 'area') {
-            it.options = response.data
+            it.options = areaData
           }
         })
       })
@@ -177,6 +193,27 @@ export default {
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
       this.__fetchData()
+    },
+    // 点击treeBar详情
+    treeDetail(tag) {
+      console.log(tag)
+      // 只有第一级的树型结构才有详情
+      if (tag.level === 1) {
+        const tagId = tag.data.value
+        this.openDetailDialog(tagId)
+        this.detailDialogVisible = true
+      } else {
+        this.$message({
+          message: '只有场所具备特有属性',
+          type: 'warning'
+        })
+      }
+    },
+    // 打开特有属性弹窗
+    openDetailDialog(id) {
+      console.log(id)
+      this.areaId = id
+      this.detailDialogVisible = true
     },
     // 初始化新建窗口配置
     initCreateConfig() {

@@ -1,94 +1,239 @@
 <template>
   <div class="page-container">
-    <div class="filter-bar">
-      <div class="filter-bar__item">
-        <label>关键字：</label>
-        <el-input
-          v-model="keywords"
-          class="filter-item"
-          style="width:200px"
-          placeholder="所属场所、检修位置"
-          suffix-icon="el-icon-search"
-        />
-      </div>
-      <div class="filter-bar__item">
-        <el-button type="primary" size="medium" @click="search()">搜索</el-button>
-      </div>
+    <filter-bar
+      :config="HistoryFaultFilterConfig"
+      @search-click="queryData"
+      @create-click="openDialog('create')"
+      @reset-click="queryData"
+    />
+    <list-table
+      :id="id"
+      :list="list"
+      :list-loading="listLoading"
+      :config="HistoryFaultTableConfig"
+      height="calc(100% - 157px)"
+      @edit-click="(row) => openDialog('edit', row)"
+      @delete-click="deleteClick"
+      @submit-data="editSubmit"
+      @selection-change="selectionChange"
+    />
+    <div v-show="total>0" class="page-bottom">
+      <el-button
+        class="page-bottom__delete"
+        type="warning"
+        size="small"
+        plain
+        :disabled="deleteDisabled"
+        @click="deleteBatches"
+      >
+        <i class="el-icon-delete el-icon--left" />批量删除
+      </el-button>
+      <pagination
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.pagerows"
+        @pagination="__fetchData"
+      />
     </div>
-    <el-table
-      :data="tableData"
-      border
-      fit
-      :cell-style="cellStyle"
-      header-cell-class-name="pre-line"
-    >
-      <el-table-column align="center" label="序号" width="95" fixed>
-        <template slot-scope="scope">
-          {{ scope.$index+1 }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="keywords" align="center" label="事故关键词" width="120" />
-      <el-table-column prop="site" align="center" label="所属场所" width="120" />
-      <el-table-column prop="date" align="center" label="时间" width="120" />
-      <el-table-column prop="phenomenon" align="center" label="故障记录" />
-      <el-table-column prop="reason" align="center" label="原因分析" />
-      <el-table-column prop="solution" align="center" label="防范措施" />
-      <el-table-column prop="file" align="center" label="附件" width="90" />
-      <el-table-column fixed="right" label="操作" width="160" align="center">
-        <el-button type="text" size="small" @click="edit()">编辑</el-button>
-        <el-button type="text" size="small" style="color: #f56c6c" @click="del()">删除</el-button>
-      </el-table-column>
 
-    </el-table>
+    <!-- 新建弹窗 -->
+    <form-dialog
+      ref="createDialog"
+      :config="initCreateConfig()"
+      :dialog-visible="createDialogVisible"
+      @close-dialog="createDialogVisible = false"
+      @submit="createSubmit"
+    />
+    <!-- 编辑弹窗 -->
+    <form-dialog
+      ref="editDialog"
+      :config="initEditConfig()"
+      :dialog-visible="editDialogVisible"
+      @close-dialog="editDialogVisible = false"
+      @submit="editSubmit"
+    />
+
   </div>
 </template>
+
 <script>
+import { getHistoryFaultList, createApplication, editApplication, getApplicationInfo, delApplication, getOrganTree } from '@/api/mechatronics'
+import FilterBar from '@/components/FilterBar'
+import ListTable from '@/components/ListTable'
+import Pagination from '@/components/Pagination'
+import FormDialog from '@/components/FormDialog'
+import { HistoryFaultTableConfig, HistoryFaultFilterConfig } from '@/data/mechatronics'
+
 export default {
+  components: { FilterBar, ListTable, Pagination, FormDialog },
   data() {
     return {
-      keywords: '',
-      tableData: [
-        {
-          keywords: '副井更换主电机',
-          site: '中央区抽风机房',
-          date: '2021.01.21',
-          phenomenon: '因副井主电机已连续运行11年，为保证...',
-          reason: '不足之处：拆除定子下半部分时没有取...',
-          solution: '施工中优点：提前在主轴上标定转子位置',
-          file: ''
-        }
-      ]
+      id: 'typical-fault',
+      list: [],
+      total: 0,
+      listQuery: {
+        page: 1,
+        pagerows: 10
+      },
+      filter: {}, // 筛选项
+      listLoading: true,
+      HistoryFaultFilterConfig,
+      HistoryFaultTableConfig,
+      createDialogVisible: false,
+      editDialogVisible: false,
+      multipleSelection: [], // 多选项
+      deleteDisabled: true // 批量删除置灰
+
     }
   },
+
+  created() {
+    this.__fetchData()
+  },
   methods: {
-    search() {
-      console.log(this.keywords)
+    __fetchData() {
+      this.listLoading = true
+      const entity = {
+        ...this.filter
+      }
+      const sort = {
+        sort: {
+          asc: ['orderNum']
+        }
+      }
+      const query = Object.assign(this.listQuery, sort, { entity })
+      getHistoryFaultList(query).then(response => {
+        this.listLoading = false
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
+      })
     },
-    edit() {
-      console.log('edit')
+    // 查询数据
+    queryData(filter) {
+      this.filter = Object.assign(this.filter, filter)
+      this.__fetchData()
     },
-    del() {
-      console.log('del')
+    // 初始化新建窗口配置
+    initCreateConfig() {
+      const createConfig = Object.assign({
+        title: '新建',
+        width: '800px',
+        form: this.HistoryFaultTableConfig.columns
+      })
+      return createConfig
     },
-    // 表格单元格样式
-    cellStyle() {
-      return 'font-size: 13px'
+    // 初始化编辑窗口配置
+    initEditConfig() {
+      const editConfig = Object.assign({
+        title: '编辑',
+        width: '800px',
+        form: this.HistoryFaultTableConfig.columns
+      })
+      return editConfig
+    },
+    // 打开弹窗
+    openDialog(name, row) {
+      console.log(name, row)
+      const visible = `${name}DialogVisible`
+      this[visible] = true
+      // getOrganTree().then(response => {
+      //   console.log(response.data)
+      //   // 更新新增、编辑config数据
+      //   HistoryFaultTableConfig.columns.forEach(it => {
+      //     if (it.field === 'sysDeptId') {
+      //       it.options = response.data
+      //     }
+      //   })
+      // })
+      // 如果有数据，更新子组件的 formData
+      if (row) {
+        getApplicationInfo(row.sysManageId).then(response => {
+          const info = Object.assign(response.data, {
+            sysDeptId: Number(response.data.sysDeptId) || 0
+          })
+          this.$refs.editDialog.updataForm(info)
+        })
+      }
+    },
+    // 删除
+    deleteClick(row) {
+      this.$confirm('确定删除该项?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(row.sysManageId)
+        delApplication(row.sysManageId).then(response => {
+          console.log(response)
+          this.$message.success('删除成功')
+          this.__fetchData()
+        })
+      })
+    },
+    // 新建
+    createSubmit(submitData) {
+      console.log(submitData)
+      const query = Object.assign(submitData, {
+        orderNum: Number(submitData.orderNum) || 0,
+        sysDeptId: Number(submitData.sysDeptId) || 0
+      })
+      createApplication(query).then(response => {
+        console.log(response)
+        this.createDialogVisible = false
+        this.$message.success('新建成功')
+        this.$refs.createDialog.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.createDialog.resetSubmitBtn()
+      })
+    },
+    // 编辑
+    editSubmit(submitData) {
+      console.log(submitData)
+      const query = Object.assign(submitData, {
+        orderNum: Number(submitData.orderNum) || 0
+      })
+      editApplication(query).then(response => {
+        console.log(response)
+        this.editDialogVisible = false
+        this.$message.success('编辑成功')
+        this.$refs.editDialog.resetForm()
+        this.__fetchData()
+      })
+    },
+
+    // 改变所选项
+    selectionChange(val) {
+      this.multipleSelection = val
+      if (this.multipleSelection.length > 0) {
+        this.deleteDisabled = false
+      } else {
+        this.deleteDisabled = true
+      }
+      console.log(this.multipleSelection)
+    },
+
+    // 批量删除
+    deleteBatches() {
+      const selectId = []
+      this.multipleSelection.forEach(it => selectId.push(it.id))
+      console.log(selectId)
+      if (selectId.length === 0) {
+        this.$message.warning('请选择所删除的文件')
+        return false
+      }
+      this.$confirm('确定删除所选中文件?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(selectId)
+        this.__fetchData()
+        this.$message.success('删除成功')
+      })
     }
+
   }
 }
 </script>
-<style lang="scss" scoped>
-  .filter-bar {
-    margin-bottom: 10px;
-    &__item {
-      display: inline-block;
-      margin: 0 40px 15px 0;
-      font-size: 14px;
-      label {
-        font-weight: normal;
-        font-size: 14px;
-        margin-right: 4px;
-      }
-    }
-  }
-</style>

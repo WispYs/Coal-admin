@@ -212,6 +212,12 @@
   @include primaryBg($primaryColor)
 }
 
+// calendar
+.el-calendar-table td.is-selected,
+.el-calendar-table .el-calendar-day:hover {
+  @include calendarBg($dropdownBg)
+}
+
 .app-wrapper {
 
   // 解决 el-date-picker 样式问题

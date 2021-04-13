@@ -25,6 +25,7 @@
             v-model="formData[item.field]"
             class="form-item"
             :placeholder="item.placeholder"
+            @change="(row) => selectChange(item,row)"
           >
             <el-option
               v-for="it in item.options"
@@ -166,7 +167,7 @@ export default {
         const typeMap = {
           'string': '',
           'array': [],
-          'number': 0,
+          'number': 1,
           'boolean': false,
           'null': null,
           'undefined': undefined
@@ -248,6 +249,12 @@ export default {
       console.log(value)
       this.formData[field] = Number(value) || 0
       console.log(this.formData)
+    },
+    selectChange(item, row) {
+      const $this = this
+      if (item.field == 'targetType' && item.label == '目标类型') {
+        this.$emit('selectChange', item, row)
+      }
     },
     // 提交富文本编辑器
     submitTextEditor(value, field) {
