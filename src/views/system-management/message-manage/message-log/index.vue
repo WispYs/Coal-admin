@@ -51,8 +51,13 @@ export default {
   methods: {
     __fetchData() {
       this.listLoading = true
-      // const query = Object.assign(this.listQuery, this.filter)
-      getMsgRecord(this.listQuery).then(response => {
+      const query ={
+        page: this.listQuery.page,
+        pagerows: this.listQuery.pagerows,
+        // entity: {parentId: 0},
+        // sort: {asc: ["orderNum"]}
+      }
+      getMsgRecord(query).then(response => {
         console.log(response);
         this.listLoading = false
         this.list = response.data.rows

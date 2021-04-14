@@ -63,7 +63,8 @@ import {
   getSelectSysDict,
   updateSysDict,
   saveSysDict,
-  deleteDict
+  deleteDict,
+  getDataDictionaryChildTree
 } from '@/api/authority-management'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
@@ -104,16 +105,15 @@ export default {
   methods: {
     __fetchData(_filter) {
       this.listLoading = true
-      console.log();
       let query = {
         entity:{
-          dictName: _filter,
-          dictValue: _filter,
           parentId: 0
         },
         sort:{
           asc:["sort"]
         },
+        keyword: _filter,
+        keywordField:['dictName','dictValue'],
         page: this.listQuery.page,
         pagerows: this.listQuery.pagerows
       }
@@ -121,12 +121,15 @@ export default {
         console.log(response);
         this.listLoading = false
         response.data.rows.forEach(it => {
-          it.sysDictId = Number(it.sysDictId)
+          console.log(it);
+          // it.sysDictId = Number(it.sysDictId)
+          console.log(it.parentCheck);
           if (it.parentCheck === 1) {
             it.hasChildren = true
           }
-        })  
+        })
         this.list = response.data.rows
+        console.log(this.list);
         this.total = Number(response.data.records)
       })
     },
@@ -137,8 +140,25 @@ export default {
     queryData(filter) {
       this.__fetchData(filter.keyword)
     },
-    asyncData(){
-
+    asyncData(tree, treeNode, resolve) {
+      console.log(tree, treeNode, resolve);
+      getDataDictionaryChildTree(tree.sysDictId).then(response => {
+        const childrenTree = []
+        response.data.forEach(it => {
+          const item = {
+            dictName: it.dictName,
+            sysDictId: Number(it.sysDictId),
+            dictValue: it.dictValue,
+            parentId: it.parentId,
+            sortNo: it.sortNo,
+            dictType: it.dictType,
+            remark: it.remark,
+            hasChildren: it.parentCheck == 1
+          }
+          childrenTree.push(item)
+        })
+        resolve(childrenTree)
+      })
     },
     // 初始化新建窗口配置
     initCreateConfig() {
@@ -189,14 +209,15 @@ export default {
       })
     },
     // 删除
-    deleteClick(id) {
+    deleteClick(data) {
       this.$confirm('确定删除该站点?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteDict(id).then(response => {
-          console.log(response);
+        deleteDict(data.sysDictId).then(response => {
+          // console.log(response);
+          this.__fetchData()
           this.$message.success('删除成功')
         })
       })
@@ -204,10 +225,7 @@ export default {
     // submit data
     createSubmit(submitData) {
       console.log(submitData)
-      let query ={
-        entity: submitData
-      }
-      saveSysDict(query).then(response => {
+      saveSysDict(submitData).then(response => {
         console.log(response);
         this.__fetchData()
         this.createDialogVisible = false
@@ -217,10 +235,7 @@ export default {
     },
     editSubmit(submitData) {
       console.log(submitData)
-      let query ={
-        entity: submitData
-      }
-      updateSysDict(query).then(response => {
+      updateSysDict(submitData).then(response => {
         console.log(response);
         this.__fetchData()
         this.editDialogVisible = false

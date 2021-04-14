@@ -104,12 +104,11 @@ export default {
     __fetchData(_filter) {
       this.listLoading = true
       let query={
-        entity:{
-          menuName: _filter
-        },
         sort:{
           asc:["sort"]
         },
+        keyword: _filter,
+        keywordField:['menuName'],
         page:this.listQuery.page,
         pagerows: this.listQuery.pagerows
       }
