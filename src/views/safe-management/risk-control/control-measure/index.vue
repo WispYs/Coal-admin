@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/control-measure'
+import { getAqglRiskMeasures } from '@/api/control-measure'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -94,11 +94,19 @@ export default {
   methods: {
     __fetchData() {
       this.listLoading = true
-      const query = Object.assign(this.listQuery, this.filter)
-      getList(query).then(response => {
+      const query = {
+        page: this.listQuery.page,
+        pagerows: this.listQuery.pagerows,
+        // entity: {
+        //   aqglRiskTissueId: id
+        // },
+        keyword: this.filter.name,
+        keywordField:['riskUserName']
+      }
+      getAqglRiskMeasures(query).then(response => {
         this.listLoading = false
-        this.list = response.data.items
-        this.total = response.data.total
+        this.list = response.data.rows
+        this.total = Number(response.data.records) 
       })
     },
     // 查询数据

@@ -6,7 +6,7 @@
     <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows"
       @pagination="pagination" />
     <!-- 新建弹窗 -->
-    <form-dialog :config="initCreateConfig()" :dialog-visible="createDialogVisible" @close-dialog="createDialogVisible = false"
+    <form-dialog ref="createDialog" :config="initCreateConfig()" :dialog-visible="createDialogVisible" @close-dialog="createDialogVisible = false"
       @submit="createSubmit" />
     <!-- 编辑弹窗 -->
     <form-dialog ref="editDialog" :config="initEditConfig()" :dialog-visible="editDialogVisible" @close-dialog="editDialogVisible = false"
@@ -137,7 +137,6 @@
         const visible = `${name}DialogVisible`
         this[visible] = true
         this.updateTableConfig()
-        console.log(row);
         if (row) {
           const rowObj = Object.assign(row, {
             parentId: Number(row.parentId)
@@ -151,13 +150,9 @@
           return !!ele.field.indexOf("aqglRiskTissueId") && !!ele.field.indexOf("createTime")
         })
         let query = {
-          "entity": {},
-          "selectedField": ["aqglRiskTissueName", "aqglRiskTissueId"],
-          "sort": {
-            "desc": ["orderNum"]
-          }
+          aqglRiskTissueId:''
         }
-        getRiskOrganizationSelect(query).then(response => {
+        getRiskOrganizationSelect().then(response => {
           console.log(response);
           this.OTableConfig.columns.forEach(it => {
             if (it.field === 'parentId') {
@@ -181,20 +176,23 @@
       },
       // submit data
       createSubmit(submitData) {
+        if(!submitData.parentId){
+          submitData.parentId = 0
+        }
         const query = Object.assign(submitData, {
           orderNum: Number(submitData.orderNum) || 0
         })
         saveAqglRiskTissue(query).then(response => {
-          // this.$refs.createDialog.resetForm()
           this.__fetchData()
+          this.$refs.createDialog.resetForm()
           this.createDialogVisible = false
           this.$message.success('新建成功')
         })
       },
       editSubmit(submitData) {
         updateAqglRiskTissue(submitData).then(response => {
-          // this.$refs.editDialog.resetForm()
           this.__fetchData()
+          this.$refs.editDialog.resetForm()
           this.editDialogVisible = false
           this.$message.success('编辑成功')
         })

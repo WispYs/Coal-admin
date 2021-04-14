@@ -2,8 +2,11 @@
   <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
     <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" />
     <div class="tree-form-container">
+      <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
+        <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
+      </span>
       <filter-bar
-        :config="FilterConfig"
+        :config="PreDesignFilterConfig"
         @search-click="queryData"
         @create-click="openDialog('create')"
         @reset-click="queryData"
@@ -12,7 +15,7 @@
         :id="id"
         :list="list"
         :list-loading="listLoading"
-        :config="TableConfig"
+        :config="PreDesignTableConfig"
         @edit-click="(row) => openDialog('edit', row)"
         @delete-click="deleteClick"
         @submit-data="editSubmit"
@@ -47,13 +50,13 @@
 </template>
 
 <script>
-import { getList } from '@/api/assessment-library'
+import { getAqglRiskIdentifyList } from '@/api/assessment-library'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import TreeBar from '@/components/TreeBar'
-import { TableConfig, FilterConfig } from '@/data/pre-design-list'
+import { PreDesignTableConfig, PreDesignFilterConfig } from '@/data/pre-design-list'
 
 export default {
   components: { FilterBar, ListTable, Pagination, FormDialog, TreeBar },
@@ -68,8 +71,8 @@ export default {
       },
       filter: {}, // 筛选项
       listLoading: true,
-      FilterConfig,
-      TableConfig,
+      PreDesignFilterConfig,
+      PreDesignTableConfig,
       createDialogVisible: false,
       editDialogVisible: false,
       treeExtend: true,
@@ -107,11 +110,21 @@ export default {
   methods: {
     __fetchData() {
       this.listLoading = true
-      const query = Object.assign(this.listQuery, this.filter)
-      getList(query).then(response => {
+      const query = {
+        page: this.listQuery.page,
+        pagerows: this.listQuery.pagerows,
+        entity: {
+          identifyTheType: "变化后"
+        },
+        keyword: this.filter.name,
+        keywordField:['riskUserName']
+      }
+      getAqglRiskIdentifyList(query).then(response => {
+        console.log(response);
         this.listLoading = false
-        this.list = response.data.items
-        this.total = response.data.total
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
+        console.log(this.list,this.total);
       })
     },
     // 查询数据
@@ -125,7 +138,7 @@ export default {
       const createConfig = Object.assign({
         title: '新建',
         width: '500px',
-        form: this.TableConfig.columns
+        form: this.PreDesignTableConfig.columns
       })
       return createConfig
     },
@@ -134,7 +147,7 @@ export default {
       const editConfig = Object.assign({
         title: '编辑',
         width: '500px',
-        form: this.TableConfig.columns
+        form: this.PreDesignTableConfig.columns
       })
       return editConfig
     },

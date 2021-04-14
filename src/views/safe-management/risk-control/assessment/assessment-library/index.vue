@@ -112,19 +112,29 @@ export default {
   methods: {
     __fetchData() {
       this.listLoading = true
-      const query = Object.assign(this.listQuery, this.filter)
+      const query = {
+        page: this.listQuery.page,
+        pagerows: this.listQuery.pagerows,
+        // entity: {
+        //   aqglRiskTissueId: id
+        // },
+        keyword: this.filter.name,
+        keywordField:['riskUserName']
+      }
+
 
       getAqglRiskIdentifyList(query).then(response => {
         console.log(response);
         this.listLoading = false
         this.list = response.data.rows
-        this.total = response.data.records
+        this.total = Number(response.data.records)
         console.log(this.list,this.total);
       })
     },
     // 查询数据
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
+      console.log(this.filter);
       this.__fetchData()
     },
     // 点击辨识结束按钮触发
@@ -180,6 +190,11 @@ export default {
     },
     editSubmit(submitData) {
       console.log(submitData)
+
+      // updateAqglRiskIdentify(submitData).then(response => {
+      //   console.log(response);
+
+      // })
       this.editDialogVisible = false
       this.$message.success('编辑成功')
     }
