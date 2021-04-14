@@ -9,6 +9,7 @@ export const TableConfig = {
    * @param {boolean} summary           是否需要合计数据
    * @param {array}   summaryField      合计字段
    * @param {boolean} inlineEdit        是否支持在表格行内直接编辑，默认不支持且编辑为弹窗形式
+   * @param {boolean} noSerialNum       是否隐藏表格序号，默认false，值为true时为隐藏序号
    * @param {array}   columns           每列参数
    * @param {boolean} sortable          是否需要排序
    * @param {string}  align             单元表格对齐方向，默认为'center'
@@ -37,7 +38,7 @@ export const TableConfig = {
     { label: '创建日期', field: 'createTime', width: '200', sortable: true, layout: 'DateTime', placeholder: '请选择日期' },
     { label: '排序', field: 'orderNum', width: '150', layout: 'Text', placeholder: '请选择排序' },
     { label: '上级节点', field: 'parentId', layout: 'TreeSelect', hidden: true,
-      options: [ ], placeholder: '请选择上级节点' },
+      options: [], placeholder: '请选择上级节点' },
     { label: '备注', field: 'remark', width: '', layout: 'Textarea', placeholder: '请填写备注' }
   ]
 }
@@ -51,5 +52,37 @@ export const FilterConfig = {
   actions: ['search', 'reset', 'create'],
   filters: [
     { label: '名称', field: 'name', width: '220', layout: 'Text', placeholder: '请输入名称' }
+  ]
+}
+
+// 隐患组织机构搜索
+export const HiddenTissueFilterConfig = {
+  actions: ['search', 'reset', 'create'],
+  filters: [
+    { label: '单位', field: 'name', width: '220', layout: 'Text', placeholder: '请输入单位' }
+  ]
+}
+
+// 隐患组织机构
+export const HiddenTissueConfig = {
+  actions: ['edit', 'delete'],
+  rowKey: 'code',
+  summary: false,
+  summaryField: [],
+  checkbox: true,
+  lazy: true,
+  columns: [
+    { label: '隐患组织id', field: 'aqglHiddenTissueId', width: '150', layout: 'Text', placeholder: '请填写隐患组织id', hidden: true },
+    { label: '单位', field: 'company', width: '200', layout: 'Text', placeholder: '请填写名称' },
+    { label: '编号', field: 'code', width: '150', layout: 'Text', placeholder: '请填写编号' },
+    // { label: '组织机构类型', field: 'unitId', width: 'auto', layout: 'Select', require: true,
+    //   options: [
+    //     { value: 1, label: '井工矿' },
+    //     { value: 2, label: '矿机构' },
+    //     { value: 3, label: '职务' }
+    //   ], placeholder: '请选择组织机构' },
+    { label: '排序', field: 'orderNum', width: '150', layout: 'Text', placeholder: '请选择排序' },
+    { label: '上级节点', field: 'parentId', layout: 'TreeSelect', hidden: true,
+      options: [], placeholder: '请选择上级节点' }
   ]
 }

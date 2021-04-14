@@ -9,6 +9,7 @@
    * @param {boolean} summary           是否需要合计数据
    * @param {array}   summaryField      合计字段
    * @param {boolean} inlineEdit        是否支持在表格行内直接编辑，默认不支持且编辑为弹窗形式
+   * @param {boolean} noSerialNum       是否隐藏表格序号，默认false，值为true时为隐藏序号
    * @param {array}   columns           每列参数
    * @param {boolean} sortable          是否需要排序
    * @param {string}  align             单元表格对齐方向，默认为'center'
@@ -39,8 +40,8 @@ export const MechLargeEquipTableConfig = {
   otherActionTitle: ['特有属性'],
   checkbox: true,
   columns: [
-    { label: '设备编号', field: 'eid', width: '120', layout: 'Text', require: true, placeholder: '请填写设备编号' },
-    { label: '设备名称', field: 'name', width: '120', layout: 'Text', require: true, placeholder: '请填写设备名称' },
+    { label: '设备编号', field: 'deviceCode', width: '120', layout: 'Text', require: true, placeholder: '请填写设备编号' },
+    { label: '设备名称', field: 'deviceName', width: '120', layout: 'Text', require: true, placeholder: '请填写设备名称' },
     { label: '所属场所', field: 'area', layout: 'Select', require: true,
       options: [
         {
@@ -62,44 +63,44 @@ export const MechLargeEquipTableConfig = {
           label: '通风机'
         }
       ], placeholder: '请选择所属部件' },
-    { label: '规格型号', field: 'model', width: '120', layout: 'Text', placeholder: '请填写规格型号' },
+    { label: '规格型号', field: 'std', width: '120', layout: 'Text', placeholder: '请填写规格型号' },
     { label: '生产厂家', field: 'factory', width: '90', layout: 'Text', placeholder: '请填写生产厂家' },
-    { label: '资产编号', field: 'uid', width: '120', layout: 'Text', placeholder: '请填写资产编号' },
-    { label: '出厂日期', field: 'createData', width: '120', sortable: true, layout: 'DateTime', require: true, placeholder: '请选择日期' },
-    { label: '到货日期', field: 'deliveryData', width: '120', sortable: true, layout: 'DateTime', require: true, placeholder: '请选择日期' },
-    { label: '使用日期', field: 'useDate', width: '120', sortable: true, layout: 'DateTime', placeholder: '请选择日期' },
-    { label: '原值', field: 'originalValue', width: '120', layout: 'Text', hidden: true, placeholder: '请填写原值' },
+    { label: '资产编号', field: 'assetsCode', width: '120', layout: 'Text', placeholder: '请填写资产编号' },
+    { label: '出厂日期', field: 'outFacTime', width: '120', sortable: true, layout: 'DateTime', require: true, placeholder: '请选择日期' },
+    { label: '到货日期', field: 'arrivalTime', width: '120', sortable: true, layout: 'DateTime', require: true, placeholder: '请选择日期' },
+    { label: '使用日期', field: 'useTime', width: '120', sortable: true, layout: 'DateTime', placeholder: '请选择日期' },
+    { label: '原值', field: 'rawValue', width: '120', layout: 'Text', hidden: true, placeholder: '请填写原值' },
     { label: '净值', field: 'netValue', width: '120', layout: 'Text', hidden: true, placeholder: '请填写净值' },
-    { label: '运行时长', field: 'runtime', width: '120', layout: 'Text', hidden: true, placeholder: '请填写运行时长' },
+    { label: '运行时长', field: 'runTime', width: '120', layout: 'Text', hidden: true, placeholder: '请填写运行时长' },
     { label: '附件', field: 'file', width: '120', layout: 'Upload', showType: 'underline', placeholder: '请上传附件' },
-    { label: '二维码', field: 'QRcode', width: '120', layout: 'Upload', showType: 'underline', disabled: true }
+    { label: '二维码', field: 'barCode', width: '120', layout: 'Upload', showType: 'underline', disabled: true }
   ]
 }
 export const MechLargeEquipFilterConfig = {
   actions: ['search', 'reset', 'create'],
   filters: [
-    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '设备编号，设备名称' }
+    { label: '关键字', field: 'kw', width: '220', layout: 'Text', placeholder: '设备编号，设备名称' }
   ]
 }
 export const MechLargeEquipDetailTableConfig = {
   actions: ['edit', 'delete'],
   checkbox: true,
   columns: [
-    { label: '属性名称', field: 'name', layout: 'Text', require: true, placeholder: '请填写属性名称' },
-    { label: '属性内容', field: 'info', layout: 'Text', require: true, placeholder: '请填写属性内容' },
-    { label: '排序', field: 'sort', layout: 'Text', require: true, placeholder: '请填写排序' }
+    { label: '属性名称', field: 'attrName', layout: 'Text', require: true, placeholder: '请填写属性名称' },
+    { label: '属性内容', field: 'attrVal', layout: 'Text', require: true, placeholder: '请填写属性内容' },
+    { label: '排序', field: 'sortNo', layout: 'Text', require: true, placeholder: '请填写排序' }
   ]
 }
 export const MechLargeEquipDetailFilterConfig = {
   actions: ['search', 'reset', 'create'],
   filters: [
-    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '属性名称，属性内容' }
+    { label: '关键字', field: 'kw', width: '220', layout: 'Text', placeholder: '属性名称，属性内容' }
   ]
 }
 // 大型设备类型
 export const MechLargeEquipTypeTableConfig = {
   actions: ['edit', 'delete', 'other'],
-  otherActionTitle: ['展开详情'],
+  otherActionTitle: ['特有属性'],
   checkbox: true,
   rowKey: 'id',
   columns: [
@@ -136,10 +137,10 @@ export const KnowLedgeTableConfig = {
     { label: '所属场所', field: 'area', layout: 'Select', require: true,
       options: [{ value: 1, label: '中央区' }], placeholder: '请选择所属场所' },
     { label: '检查项目', field: 'project', layout: 'Text', require: true, placeholder: '请填写检查项目' },
-    { label: '检修位置', field: 'addr', layout: 'Text', require: true, placeholder: '请填写检修位置' },
-    { label: '检修周期', field: 'period', layout: 'Text', require: true, placeholder: '请填写检修周期' },
-    { label: '责任人', field: 'person', layout: 'Text', require: true, placeholder: '请填写责任人' },
-    { label: '检查检修标准', field: 'standard', width: '120px', layout: 'Textarea', placeholder: '请填写检查检修标准' },
+    { label: '检修位置', field: 'pos', layout: 'Text', require: true, placeholder: '请填写检修位置' },
+    { label: '检修周期', field: 'cycle', layout: 'Text', require: true, placeholder: '请填写检修周期' },
+    { label: '责任人', field: 'dutyBy', layout: 'Text', require: true, placeholder: '请填写责任人' },
+    { label: '检查检修标准', field: 'norm', width: '120px', layout: 'Textarea', placeholder: '请填写检查检修标准' },
     { label: '备注', field: 'remark', width: '', layout: 'Textarea', placeholder: '请填写备注' }
   ]
 }

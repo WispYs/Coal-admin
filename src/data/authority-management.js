@@ -13,6 +13,7 @@ export const OTableConfig = {
    * @param {boolean} summary           是否需要合计数据
    * @param {array}   summaryField      合计字段
    * @param {boolean} inlineEdit        是否支持在表格行内直接编辑，默认不支持且编辑为弹窗形式
+   * @param {boolean} noSerialNum       是否隐藏表格序号，默认false，值为true时为隐藏序号
    * @param {array}   columns           每列参数
    * @param {boolean} sortable          是否需要排序
    * @param {string}  align             单元表格对齐方向，默认为'center'
@@ -40,7 +41,7 @@ export const OTableConfig = {
     { label: '创建日期', field: 'createTime', width: '200', sortable: true, layout: 'DateTime', placeholder: '请选择日期' },
     { label: '排序', field: 'orderNum', width: '150', layout: 'Text', placeholder: '请选择排序' },
     { label: '上级节点', field: 'parentId', layout: 'TreeSelect', hidden: true,
-      options: [ ], placeholder: '请选择上级节点' },
+      options: [], placeholder: '请选择上级节点' },
     { label: '备注', field: 'remark', width: '', layout: 'Textarea', placeholder: '请填写备注' }
   ]
 }
@@ -57,6 +58,7 @@ export const AppTableConfig = {
    * @param {boolean} summary           是否需要合计数据
    * @param {array}   summaryField      合计字段
    * @param {boolean} inlineEdit        是否支持在表格行内直接编辑，默认不支持且编辑为弹窗形式
+   * @param {boolean} noSerialNum       是否隐藏表格序号，默认false，值为true时为隐藏序号
    * @param {array}   columns           每列参数
    * @param {boolean} sortable          是否需要排序
    * @param {string}  align             单元表格对齐方向，默认为'center'
@@ -393,7 +395,7 @@ export const RoleFilterConfig = {
 //   otherActionTitle: [],
 //   rowKey: 'id',
 //   checkbox: true,
-//   orderNumber: false,
+//   noSerialNum: true,
 //   columns: [
 //     { label: '名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
 // { label: '编号', field: 'identifier', width: 'auto', layout: 'Text', placeholder: '请选择编号' },
@@ -442,7 +444,7 @@ export const menuResourceConfig = {
   otherActionTitle: [],
   rowKey: 'id',
   checkbox: true,
-  orderNumber: false,
+  noSerialNum: true,
   columns: [
     { label: '菜单名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
     { label: '前端路由', field: 'component', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
@@ -468,7 +470,7 @@ export const menuResourceConfig = {
 //   otherActionTitle: [],
 //   rowKey: 'id',
 //   checkbox: true,
-//   orderNumber: false,
+//   noSerialNum: true,
 //   columns: [
 //     { label: '模块名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
 //     { label: '客户端类型', field: 'clientType', width: 'auto', layout: 'Select', require: true, options: [
@@ -498,7 +500,7 @@ export const menuResourceConfig = {
 //   otherActionTitle: [],
 //   rowKey: 'id',
 //   checkbox: true,
-//   orderNumber: false,
+//   noSerialNum: true,
 //   columns: [
 //     { label: '菜单名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
 //     { label: '客户端类型', field: 'clientType', width: 'auto', layout: 'Select', require: true, options: [
@@ -543,7 +545,7 @@ export const menuResourceConfig = {
 //   otherActionTitle: [],
 //   rowKey: 'id',
 //   checkbox: true,
-//   orderNumber: false,
+//   noSerialNum: true,
 //   columns: [
 //     { label: '菜单名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
 //     { label: '所属模块', field: 'type', width: 'auto', layout: 'Select', options: [
@@ -588,14 +590,15 @@ export const MenuFilterConfig = {
 export const dataDictionaryConfig = {
   actions: ['editIco', 'deleteIco'],
   otherActionTitle: [],
-  rowKey: 'id',
+  rowKey: 'sysDictId',
   checkbox: true,
-  orderNumber: false,
+  noSerialNum: true,
+  lazy: true,
   columns: [
-    { label: '名称', field: 'dictName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
+    { label: '名称', field: 'dictName', width: '170', layout: 'Text', placeholder: '请填写名称' },
     { label: '编号', field: 'sysDictId', width: 'auto', layout: 'Text', placeholder: '请填写编号' },
     { label: '值', field: 'dictValue', width: 'auto', layout: 'Text', placeholder: '请填写值' },
-    { label: '上级节点', field: 'parentId', layout: 'TreeSelect', require: true, hidden: true,
+    { label: '上级节点', field: 'parentId', layout: 'TreeSelect', hidden: true,
       options: [
         {
           value: 1,
@@ -679,7 +682,7 @@ export const NewsTypeConfig = {
         }
       ], placeholder: '请选择最近更新' },
     { label: '消息级别', field: 'dictName', layout: 'Select', width: 'auto', options: [
-      { value: "通知", label: '通知' },
+      { value: '通知', label: '通知' },
       { value: '协同', label: '协同' },
       { value: '报警', label: '报警' }
     ], placeholder: '请选择消息级别' },

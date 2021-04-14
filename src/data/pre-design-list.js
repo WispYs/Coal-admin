@@ -1,4 +1,4 @@
-export const TableConfig = {
+export const PreDesignTableConfig = {
   /**
    * 这种表格配置表对整个项目而言耦合性较高，后续每次对表格有特殊要求都需要修改
    * 而且由于某些字段需要前端方法处理，所以这个配置也应由前端定义交给后端，然后再通过接口动态调用
@@ -9,6 +9,7 @@ export const TableConfig = {
    * @param {boolean} summary           是否需要合计数据
    * @param {array}   summaryField      合计字段
    * @param {boolean} inlineEdit        是否支持在表格行内直接编辑，默认不支持且编辑为弹窗形式
+   * @param {boolean} noSerialNum       是否隐藏表格序号，默认false，值为true时为隐藏序号
    * @param {array}   columns           每列参数
    * @param {boolean} sortable          是否需要排序
    * @param {string}  align             单元表格对齐方向，默认为'center'
@@ -82,7 +83,7 @@ export const TableConfig = {
       ], placeholder: '请选择风险类型' },
     { label: '风险描述', field: 'riskDescription', width: '120', layout: 'Textarea', placeholder: '请填写风险描述' },
     { label: '管控措施', field: 'controlMeasures', width: '120', layout: 'Textarea', placeholder: '请填写管控措施' },
-    
+
     { label: '责任人', field: 'proMan', width: '120', layout: 'Text', placeholder: '请填写责任人' },
     { label: '措施执行单位', field: 'organization', width: '150', layout: 'Text', placeholder: '请填写措施执行单位' },
     { label: '风险等级', field: 'riskLevel', width: '150', showType: 'colorLump', layout: 'Select',
@@ -135,13 +136,13 @@ export const TableConfig = {
   ]
 }
 
-export const FilterConfig = {
+export const PreDesignFilterConfig = {
   /**
    * @param {array} actions   操作按钮
    * @param {array} filters   筛选项
    * @param {array} options   选择器配置项
    */
-  actions: ['search','identificationEnd'],
+  actions: ['search', 'identificationEnd'],
   filters: [
     { label: '责任人名称', field: 'name', width: '220', layout: 'Text', placeholder: '请输入责任人' }
   ]

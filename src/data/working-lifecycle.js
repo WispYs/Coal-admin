@@ -9,6 +9,7 @@ export const TableConfig = {
    * @param {boolean} summary           是否需要合计数据
    * @param {array}   summaryField      合计字段
    * @param {boolean} inlineEdit        是否支持在表格行内直接编辑，默认不支持且编辑为弹窗形式
+   * @param {boolean} noSerialNum       是否隐藏表格序号，默认false，值为true时为隐藏序号
    * @param {array}   columns           每列参数
    * @param {boolean} sortable          是否需要排序
    * @param {string}  align             单元表格对齐方向，默认为'center'

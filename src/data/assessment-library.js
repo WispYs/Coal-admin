@@ -9,6 +9,7 @@ export const TableConfig = {
    * @param {boolean} summary           是否需要合计数据
    * @param {array}   summaryField      合计字段
    * @param {boolean} inlineEdit        是否支持在表格行内直接编辑，默认不支持且编辑为弹窗形式
+   * @param {boolean} noSerialNum       是否隐藏表格序号，默认false，值为true时为隐藏序号
    * @param {array}   columns           每列参数
    * @param {boolean} sortable          是否需要排序
    * @param {string}  align             单元表格对齐方向，默认为'center'
@@ -32,51 +33,39 @@ export const TableConfig = {
     { label: '专业', field: 'majorId', width: '120', layout: 'Select', require: true,
       options: [
         {
-          value: '安检',
+          value: '1',
           label: '安检'
         }, {
-          value: '采煤',
+          value: '2',
           label: '采煤'
         }, {
-          value: '机电运输',
+          value: '3',
           label: '机电运输'
         }, {
-          value: '一通三防',
+          value: '4',
           label: '一通三防'
         }, {
-          value: '掘进（中央区）',
+          value: '5',
           label: '掘进（中央区）'
         }
       ], placeholder: '请选择专业' },
-    { label: '风险点', field: 'risk', width: '150', layout: 'Select', require: true,
-      options: [
-        {
-          value: 1,
-          label: 'b26445d84562'
-        }, {
-          value: 2,
-          label: '1126(1)工作面'
-        }, {
-          value: 3,
-          label: '东区副井提升系统'
-        }, {
-          value: 4,
-          label: '中央区副井提升系统'
-        }
-      ], placeholder: '请选择风险点' },
+    { label: '风险点', field: 'risk', width: '150', layout: 'Text', require: true, placeholder: '请选择风险点' },
     { label: '风险类型', field: 'riskTypeId', width: '90', layout: 'Select', require: true,
       options: [
         {
-          value: 1,
+          value: '1',
           label: '环'
         }, {
-          value: 2,
+          value: '2',
           label: '机'
         }, {
-          value: 3,
+          value: '3',
           label: '管'
         }, {
-          value: 4,
+          value: '4',
+          label: '环,管'
+        }, {
+          value: '5',
           label: '环,管'
         }
       ], placeholder: '请选择风险类型' },
@@ -85,32 +74,32 @@ export const TableConfig = {
     { label: '发生事故的可能性', field: 'accidentHappensId', width: '120', layout: 'Select',
       options: [
         {
-          value: 1,
+          value: '1',
           label: '没有风险'
         }, {
-          value: 2,
+          value: '2',
           label: '轻度风险'
         }, {
-          value: 3,
+          value: '3',
           label: '较大风险'
         }, {
-          value: 4,
+          value: '4',
           label: '重大风险'
         }
       ], placeholder: '请选择发生事故的可能性' },
     { label: '发生事故的后果严重性', field: 'accidentHappensId', width: '120', layout: 'Select',
       options: [
         {
-          value: 1,
+          value: '1',
           label: '没有风险'
         }, {
-          value: 2,
+          value: '2',
           label: '轻度风险'
         }, {
-          value: 3,
+          value: '3',
           label: '较大风险'
         }, {
-          value: 4,
+          value: '4',
           label: '重大风险'
         }
       ], placeholder: '请选择发生事故的后果严重性' },
@@ -118,16 +107,16 @@ export const TableConfig = {
     { label: '风险等级', field: 'riskGradeId', width: '150', showType: 'colorLump', layout: 'Select', require: true,
       options: [
         {
-          value: 1,
+          value: '1',
           label: '没有风险'
         }, {
-          value: 2,
+          value: '2',
           label: '轻度风险'
         }, {
-          value: 3,
+          value: '3',
           label: '较大风险'
         }, {
-          value: 4,
+          value: '4',
           label: '重大风险'
         }
       ], placeholder: '请选择风险等级' },
@@ -135,7 +124,7 @@ export const TableConfig = {
     { label: '人数上限', field: 'personMax', width: '120', layout: 'Text', placeholder: '请填写人数上限' },
     { label: '责任人', field: 'riskUserName', width: '120', layout: 'Text', require: true, placeholder: '请填写负责人' },
     { label: '措施执行单位', field: 'executeUnit', width: '150', layout: 'Text', placeholder: '请填写措施执行单位' },
-    { label: '辨别类型', field: 'identifyTheTypeId', width: '150', layout: 'Select', require: true,
+    { label: '辨别类型', field: 'identifyTheType', width: '150', layout: 'Select', require: true,
       options: [
         {
           value: 1,
@@ -175,7 +164,7 @@ export const FilterConfig = {
    * @param {array} filters   筛选项
    * @param {array} options   选择器配置项
    */
-  actions: ['search','create','identificationEnd'],
+  actions: ['search', 'create', 'identificationEnd'],
   filters: [
     { label: '负责人', field: 'name', width: '220', layout: 'Text', placeholder: '请输入负责人' }
   ]

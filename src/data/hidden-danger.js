@@ -9,6 +9,7 @@ export const MechanismTableConfig = {
    * @param {boolean} summary           是否需要合计数据
    * @param {array}   summaryField      合计字段
    * @param {boolean} inlineEdit        是否支持在表格行内直接编辑，默认不支持且编辑为弹窗形式
+   * @param {boolean} noSerialNum       是否隐藏表格序号，默认false，值为true时为隐藏序号
    * @param {array}   columns           每列参数
    * @param {boolean} sortable          是否需要排序
    * @param {string}  align             单元表格对齐方向，默认为'center'
@@ -64,10 +65,9 @@ export const MechanismTableConfig = {
             ] }
           ]
         }
-      ], placeholder: '请选择上级节点' },
+      ], placeholder: '请选择上级节点' }
   ]
 }
-
 
 export const MechanismFilterConfig = {
   /**
@@ -75,8 +75,57 @@ export const MechanismFilterConfig = {
    * @param {array} filters   筛选项
    * @param {array} options   选择器配置项
    */
-  actions: ['search','create'],
+  actions: ['search', 'create'],
   filters: [
     { label: '单位', field: 'name', width: '220', layout: 'Text', placeholder: '请输入单位' }
+  ]
+}
+
+// 隐患责任体系
+export const liabilitySystemFilterConfig = {
+  /**
+   * @param {array} actions   操作按钮
+   * @param {array} filters   筛选项
+   * @param {array} options   选择器配置项
+   */
+  actions: ['search', 'create'],
+  filters: [
+    { label: '责任人/职位', field: 'name', width: '220', layout: 'Text', placeholder: '请输入责任人/职位' }
+  ]
+}
+
+// 事故隐患登记 搜索
+export const dangeRegistrationFilterConfig = {
+  /**
+   * @param {array} actions   操作按钮
+   * @param {array} filters   筛选项
+   * @param {array} options   选择器配置项
+   */
+  actions: ['search', 'create', 'import'],
+  filters: [
+    { label: '隐患内容/整改意见', field: 'name', width: '220', layout: 'Text', placeholder: '隐患内容 整改意见' }
+  ]
+}
+
+// 事故隐患登记
+export const dangeRegistConfig = {
+  actions: ['edit', 'delete'],
+  summary: false,
+  summaryField: [],
+  columns: [
+    { label: '隐患级别', field: 'unit', width: 'auto', layout: 'Text', require: true, placeholder: '请选择单位' },
+    { label: '隐患状态', field: 'num', width: 'auto', layout: 'Text', require: true, placeholder: '请填写编号' },
+    { label: '检查时间', field: 'organizationType', width: 'auto', layout: 'DateTime', placeholder: '请选择组织机构类型' },
+    { label: '检查人员', field: 'sort', width: 'auto', layout: 'Text', require: true, placeholder: '请填写排序' },
+    { label: '隐患部门', field: 'parentId', layout: 'Text', require: true, placeholder: '请选择上级节点' },
+    { label: '责任人员', field: 'unit', width: 'auto', layout: 'Text', require: true, placeholder: '请选择单位' },
+    { label: '检查地点', field: 'num', width: 'auto', layout: 'Text', require: true, placeholder: '请填写编号' },
+    { label: '限改时间', field: 'organizationType', width: 'auto', layout: 'Text', placeholder: '请选择组织机构类型' },
+    { label: '督办人', field: 'sort', width: 'auto', layout: 'Text', require: true, placeholder: '请填写排序' },
+    { label: '督办单位', field: 'parentId', layout: 'Text', require: true, placeholder: '请选择上级节点' },
+    { label: '状态说明', field: 'unit', width: 'auto', layout: 'Text', require: true, placeholder: '请选择单位' },
+    { label: '隐患内容', field: 'num', width: 'auto', layout: 'Text', require: true, placeholder: '请填写编号' },
+    { label: '整改措施', field: 'organizationType', width: 'auto', layout: 'Text', placeholder: '请选择组织机构类型' },
+    { label: '整改预案', field: 'sort', width: 'auto', layout: 'Text', require: true, placeholder: '请填写排序' }
   ]
 }

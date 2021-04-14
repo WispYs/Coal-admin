@@ -9,6 +9,7 @@ export const TableConfig = {
    * @param {boolean} summary           是否需要合计数据
    * @param {array}   summaryField      合计字段
    * @param {boolean} inlineEdit        是否支持在表格行内直接编辑，默认不支持且编辑为弹窗形式
+   * @param {boolean} noSerialNum       是否隐藏表格序号，默认false，值为true时为隐藏序号
    * @param {array}   columns           每列参数
    * @param {boolean} sortable          是否需要排序
    * @param {string}  align             单元表格对齐方向，默认为'center'
@@ -48,5 +49,20 @@ export const FilterConfig = {
   actions: ['search', 'reset', 'create'],
   filters: [
     { label: '负责人名称', field: 'name', width: '220', layout: 'Text', placeholder: '负责人、职位' }
+  ]
+}
+
+export const liabilitySystem = {
+  actions: ['edit', 'delete'],
+  summary: false,
+  summaryField: [],
+  checkbox: true,
+  columns: [
+    { label: '负责人', field: 'personUserName', width: '200', layout: 'Text', placeholder: '请填写负责人' },
+    { label: '组织', field: 'aqglHiddenTissueId', width: '200', layout: 'TreeSelect',
+      options: [], placeholder: '请选择所属组织' },
+    { label: '职位', field: 'position', width: '200', layout: 'Text', placeholder: '请填写职位' },
+    { label: '责任和义务', field: 'dutyObligation', width: '', layout: 'Textarea', placeholder: '请填写责任和义务' },
+    { label: '创建时间', field: 'createTime', width: '200', sortable: true, layout: 'DateTime', placeholder: '请选择日期' }
   ]
 }
