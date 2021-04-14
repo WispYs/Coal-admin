@@ -47,7 +47,7 @@
   </el-dialog>
 </template>
 <script>
-import { getUserList, addRoleUser, getOrganTree } from '@/api/authority-management'
+import { getEquipmentAreaList, delEquipmentArea } from '@/api/mechatronics'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -106,24 +106,24 @@ export default {
         keywordField: ['workNumber', 'loginName', 'userName']
       }
       const query = Object.assign(this.listQuery, filter)
-      this.listLoading = false
-      this.list = [
-        {
-          name: '控制系统',
-          info: '西门子逻辑系统',
-          sort: 1
-        }, {
-          name: '连接方式',
-          info: '以太网',
-          sort: 2
-        }
-      ]
-      this.total = 2
-      // getLargeEquipmentList(query).then(response => {
-      //   this.listLoading = false
-      //   this.list = response.data.rows
-      //   this.total = Number(response.data.records)
-      // })
+      getEquipmentAreaList(query).then(response => {
+        this.listLoading = false
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
+      })
+      // this.listLoading = false
+      // this.list = [
+      //   {
+      //     name: '控制系统',
+      //     info: '西门子逻辑系统',
+      //     sort: 1
+      //   }, {
+      //     name: '连接方式',
+      //     info: '以太网',
+      //     sort: 2
+      //   }
+      // ]
+      // this.total = 2
     },
     // 查询数据
     queryData(filter) {
@@ -144,11 +144,11 @@ export default {
       }).then(() => {
         console.log(row.sysUserId)
         this.$message.success('删除成功')
-        // delUser(row.sysUserId).then(response => {
-        //   console.log(response)
-        //   this.$message.success('删除成功')
-        //   this.__fetchData()
-        // })
+        delEquipmentArea(row.sysUserId).then(response => {
+          console.log(response)
+          this.$message.success('删除成功')
+          this.__fetchData()
+        })
       })
     },
 

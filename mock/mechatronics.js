@@ -4,21 +4,21 @@ const Mock = require('mockjs')
 // 大型设备列表
 const largeEquipmentData = Mock.mock({
   'items|3': [{
-    'eid|+1': ['GQ100001', 'GQ100002', 'GQ100003'],
-    'name|+1': ['落地式多绳摩擦提升机', '落地式多绳摩擦提升机', '落地式多绳摩擦提升机'],
+    'deviceCode|+1': ['GQ100001', 'GQ100002', 'GQ100003'],
+    'deviceName|+1': ['落地式多绳摩擦提升机', '落地式多绳摩擦提升机', '落地式多绳摩擦提升机'],
     'area|+1': [1, 2, 3],
     'part|+1': [1, 2, 3],
-    'model|1': ['JKLD5*4'],
+    'std|1': ['JKLD5*4'],
     factory: '中信重工',
-    'uid|+1': ['001021221', '001021223', '001021226'],
-    createData: '',
-    deliveryData: '',
-    useDate: '2021-01-31',
-    originalValue: 120,
+    'assetsCode|+1': ['001021221', '001021223', '001021226'],
+    outFacTime: '',
+    arrivalTime: '',
+    useTime: '2021-01-31',
+    rawValue: 120,
     netValue: 120,
-    runtime: 60,
+    runTime: 60,
     file: '无附件',
-    QRcode: '二维码'
+    barCode: '二维码'
 
   }]
 })
@@ -166,8 +166,8 @@ const SparePartData = Mock.mock({
 module.exports = [
   // 大型设备列表
   {
-    url: '/large-equipment-manage/list',
-    type: 'get',
+    url: '/device/detail/list',
+    type: 'post',
     response: config => {
       const items = largeEquipmentData.items
       return {

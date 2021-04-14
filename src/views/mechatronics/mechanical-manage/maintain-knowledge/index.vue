@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { getKnowLedgeList, createApplication, editApplication, getApplicationInfo, delApplication, getOrganTree } from '@/api/mechatronics'
+import { getKnowLedgeList, createKnowLedge, editKnowLedge, getKnowLedgeInfo, delKnowLedge, getOrganTree } from '@/api/mechatronics'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -89,19 +89,37 @@ export default {
 
   created() {
     this.__fetchData()
+    this.__updateEquipAreaTree()
   },
   methods: {
+    // 接口获取所属场所
+    __updateEquipAreaTree() {
+      // getOrganTree().then(response => {
+      //   console.log(response.data)
+      //   // 更新左侧树结构数据
+      //   this.treeData.list = response.data
+      //   // 更新新增、编辑config数据
+      //   const areaData = []
+      //   response.data.forEach(it => {
+      //     areaData.push({
+      //       label: it.label,
+      //       value: Number(it.value)
+      //     })
+      //   })
+      //   MechLargeEquipTableConfig.columns.forEach(it => {
+      //     if (it.field === 'area') {
+      //       it.options = areaData
+      //     }
+      //   })
+      // })
+    },
     __fetchData() {
       this.listLoading = true
-      const entity = {
-        ...this.filter
+      const filter = {
+        ...this.filter,
+        keywordField: ['workNumber', 'loginName', 'userName']
       }
-      const sort = {
-        sort: {
-          asc: ['orderNum']
-        }
-      }
-      const query = Object.assign(this.listQuery, sort, { entity })
+      const query = Object.assign(this.listQuery, filter)
       getKnowLedgeList(query).then(response => {
         this.listLoading = false
         this.list = response.data.rows
@@ -136,21 +154,13 @@ export default {
       console.log(name, row)
       const visible = `${name}DialogVisible`
       this[visible] = true
-      getOrganTree().then(response => {
-        console.log(response.data)
-        // 更新新增、编辑config数据
-        KnowLedgeTableConfig.columns.forEach(it => {
-          if (it.field === 'sysDeptId') {
-            it.options = response.data
-          }
-        })
-      })
+
+      // 接口获取所属场所，更新config数据
+      this.__updateEquipAreaTree()
       // 如果有数据，更新子组件的 formData
       if (row) {
-        getApplicationInfo(row.sysManageId).then(response => {
-          const info = Object.assign(response.data, {
-            sysDeptId: Number(response.data.sysDeptId) || 0
-          })
+        getKnowLedgeInfo(row.sysManageId).then(response => {
+          const info = Object.assign(response.data)
           this.$refs.editDialog.updataForm(info)
         })
       }
@@ -162,8 +172,8 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(row.sysManageId)
-        delApplication(row.sysManageId).then(response => {
+        console.log(row.id)
+        delKnowLedge(row.id).then(response => {
           console.log(response)
           this.$message.success('删除成功')
           this.__fetchData()
@@ -173,11 +183,8 @@ export default {
     // 新建
     createSubmit(submitData) {
       console.log(submitData)
-      const query = Object.assign(submitData, {
-        orderNum: Number(submitData.orderNum) || 0,
-        sysDeptId: Number(submitData.sysDeptId) || 0
-      })
-      createApplication(query).then(response => {
+      const query = Object.assign(submitData)
+      createKnowLedge(query).then(response => {
         console.log(response)
         this.createDialogVisible = false
         this.$message.success('新建成功')
@@ -191,10 +198,8 @@ export default {
     // 编辑
     editSubmit(submitData) {
       console.log(submitData)
-      const query = Object.assign(submitData, {
-        orderNum: Number(submitData.orderNum) || 0
-      })
-      editApplication(query).then(response => {
+      const query = Object.assign(submitData)
+      editKnowLedge(query).then(response => {
         console.log(response)
         this.editDialogVisible = false
         this.$message.success('编辑成功')

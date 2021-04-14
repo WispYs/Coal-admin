@@ -80,8 +80,10 @@
       <!-- <el-button v-if="config.actions.indexOf('reset') > -1" type="primary" size="medium" @click="reset()">重置</el-button> -->
       <!-- <el-button v-if="config.actions.indexOf('create') > -1" type="primary" size="medium" @click="create()">新建</el-button> -->
       <el-button v-if="config.actions.indexOf('create') > -1" type="primary" size="medium" icon="el-icon-plus" @click="create()">新建</el-button>
+      <el-button v-if="config.actions.indexOf('import') > -1" type="primary" size="medium" icon="el-icon-download" @click="importExcel()">导入</el-button>
       <el-button v-if="config.actions.indexOf('export') > -1" type="primary" size="medium" icon="el-icon-download" @click="exportExcel()">导出</el-button>
       <el-button v-if="config.actions.indexOf('identificationEnd') > -1" type="primary" size="medium" icon="el-icon-circle-close" @click="identificationEnd()">辨识结束</el-button>
+
     </div>
     <!-- <div v-if="config.actions && config.actions.length > 0" class="filter-bar__item" style="display:block;">
       <el-button v-if="config.actions.indexOf('delete') > -1" type="danger" size="medium" plain @click="deleteBatches()">批量删除</el-button>
@@ -161,6 +163,9 @@ export default {
     },
     create() {
       this.$emit('create-click')
+    },
+    importExcel(){
+      this.$emit('import-click')
     },
     exportExcel() {
       this.$emit('export-click')

@@ -201,7 +201,7 @@ export default {
     // 更新组件内 form 数据
     updataForm(form) {
       this.formData = Object.assign(this.formData, form)
-      console.log(this.formData)
+      console.log(this.formData)  
     },
 
     // 当提交失败的时候重置按钮状态

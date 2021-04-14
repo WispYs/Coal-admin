@@ -24,7 +24,7 @@
       width="55"
       align="center"
     />
-    <el-table-column v-if="config.orderNumber" align="center" label="序号" width="95" fixed>
+    <el-table-column v-if="!config.noSerialNum" align="center" label="序号" width="95" fixed>
       <template slot-scope="scope">
         {{ scope.$index+1 }}
       </template>

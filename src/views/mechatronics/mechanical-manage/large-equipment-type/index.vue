@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { getLargeEquipmentType, createOrgan, getOrganInfo, editOrgan, getOrganTree, getOrganChildTree, delOrgan } from '@/api/mechatronics'
+import { getLargeEquipmentType, createLargeEquipmentType, getLargeEquipmentTypeInfo, editLargeEquipmentType, getOrganTree, delLargeEquipmentType } from '@/api/mechatronics'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -153,12 +153,7 @@ export default {
       const query = Object.assign(this.listQuery, filter)
       getLargeEquipmentType(query).then(response => {
         this.listLoading = false
-        response.data.rows.forEach(it => {
-          it.sysDeptId = Number(it.sysDeptId)
-          if (it.parentCheck === 1) {
-            it.hasChildren = true
-          }
-        })
+
         this.list = response.data.rows
         console.log(this.list)
         this.total = Number(response.data.records)
@@ -227,13 +222,10 @@ export default {
       // 如果有数据，更新子组件的 formData
       if (row) {
         this.$refs[`${name}Dialog`].updataForm(row)
-        // getOrganInfo(row.sysDeptId).then(response => {
-        //   const info = Object.assign(response.data, {
-        //     parentId: Number(response.data.parentId) || 0,
-        //     deptType: Number(response.data.deptType) || 0
-        //   })
-        //   this.$refs.editDialog.updataForm(info)
-        // })
+        getLargeEquipmentTypeInfo(row.sysDeptId).then(response => {
+          const info = Object.assign(response.data)
+          this.$refs.editDialog.updataForm(info)
+        })
       }
     },
     // 删除
@@ -243,7 +235,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        delOrgan(row.sysDeptId).then(response => {
+        delLargeEquipmentType(row.sysDeptId).then(response => {
           console.log(response)
           this.$message.success('删除成功')
           this.__fetchData()
@@ -253,10 +245,8 @@ export default {
     // 新增
     createSubmit(submitData) {
       console.log(submitData)
-      const query = Object.assign(submitData, {
-        parentId: Number(submitData.parentId) || 0
-      })
-      createOrgan(query).then(response => {
+      const query = Object.assign(submitData)
+      createLargeEquipmentType(query).then(response => {
         console.log(response)
         this.createDialogVisible = false
         this.$message.success('新建成功')
@@ -270,7 +260,7 @@ export default {
     // 编辑
     editSubmit(submitData) {
       const query = Object.assign(submitData)
-      editOrgan(query).then(response => {
+      editLargeEquipmentType(query).then(response => {
         console.log(response)
         this.editDialogVisible = false
         this.$message.success('编辑成功')

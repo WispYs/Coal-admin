@@ -92,7 +92,17 @@
 </template>
 
 <script>
-import { getLargeEquipmentList, createUser, getUserInfo, editUser, delUser, getEquipmentArea } from '@/api/mechatronics'
+import {
+  getLargeEquipmentList,
+  createLargeEquipment,
+  getLargeEquipmentInfo,
+  editLargeEquipment,
+  delLargeEquipment,
+  getEquipmentAreaList,
+  getEquipmentAreaInfo,
+  createEquipmentArea,
+  editEquipmentArea
+} from '@/api/mechatronics'
 import TreeBar from '@/components/TreeBar'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
@@ -156,24 +166,24 @@ export default {
   methods: {
     // 接口获取所属场所
     __updateEquipAreaTree() {
-      getEquipmentArea().then(response => {
-        console.log(response.data)
-        // 更新左侧树结构数据
-        this.treeData.list = response.data
-        // 更新新增、编辑config数据
-        const areaData = []
-        response.data.forEach(it => {
-          areaData.push({
-            label: it.label,
-            value: Number(it.value)
-          })
-        })
-        MechLargeEquipTableConfig.columns.forEach(it => {
-          if (it.field === 'area') {
-            it.options = areaData
-          }
-        })
-      })
+      // getEquipmentAreaList().then(response => {
+      //   console.log(response.data)
+      //   // 更新左侧树结构数据
+      //   this.treeData.list = response.data
+      //   // 更新新增、编辑config数据
+      //   const areaData = []
+      //   response.data.forEach(it => {
+      //     areaData.push({
+      //       label: it.label,
+      //       value: Number(it.value)
+      //     })
+      //   })
+      //   MechLargeEquipTableConfig.columns.forEach(it => {
+      //     if (it.field === 'area') {
+      //       it.options = areaData
+      //     }
+      //   })
+      // })
     },
 
     __fetchData() {
@@ -204,17 +214,12 @@ export default {
         this.detailDialogVisible = true
       } else {
         this.$message({
-          message: '只有场所具备特有属性',
+          message: '只有所属场所具备特有属性',
           type: 'warning'
         })
       }
     },
-    // 打开特有属性弹窗
-    openDetailDialog(id) {
-      console.log(id)
-      this.areaId = id
-      this.detailDialogVisible = true
-    },
+
     // 初始化新建窗口配置
     initCreateConfig() {
       const createConfig = Object.assign({
@@ -266,20 +271,33 @@ export default {
       const visible = `${name}DialogVisible`
       this[visible] = true
 
-      // 接口获取所属场所，更新config数据
-      this.__updateEquipAreaTree()
+      let getListFn = null // 获取详情的接口方法
+      let editRef = null // 编辑弹窗的ref
+      // 如果打开特有属性的新增编辑弹窗
+      if (name.indexOf('Detail') > -1) {
+        getListFn = getEquipmentAreaInfo
+        editRef = 'editDetailDialog'
+      } else {
+        // 接口获取所属场所，更新config数据
+        this.__updateEquipAreaTree()
+        getListFn = getLargeEquipmentInfo
+        editRef = 'editDialog'
+      }
 
       // 如果有数据，更新子组件的 formData
       if (row) {
         this.$refs[`${name}Dialog`].updataForm(row)
-        // getUserInfo(row.sysUserId).then(response => {
-        //   const info = Object.assign(response.data, {
-        //     sysDeptId: Number(response.data.sysDeptId) || 0,
-        //     sysRoleId: Number(response.data.sysRoleId) || 0
-        //   })
-        //   this.$refs.editDialog.updataForm(info)
-        // })
+        getListFn(row.id).then(response => {
+          const info = Object.assign(response.data)
+          this.$refs[editRef].updataForm(info)
+        })
       }
+    },
+    // 打开特有属性弹窗
+    openDetailDialog(id) {
+      console.log(id)
+      this.areaId = id
+      this.detailDialogVisible = true
     },
     // 删除
     deleteClick(row) {
@@ -288,8 +306,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(row.sysUserId)
-        delUser(row.sysUserId).then(response => {
+        delLargeEquipment(row.id).then(response => {
           console.log(response)
           this.$message.success('删除成功')
           this.__fetchData()
@@ -300,11 +317,8 @@ export default {
     createSubmit(submitData) {
       console.log(submitData)
 
-      const query = Object.assign(submitData, {
-        sysRoleId: Number(submitData.sysRoleId) || 0,
-        sysDeptId: Number(submitData.sysDeptId) || 0
-      })
-      createUser(query).then(response => {
+      const query = Object.assign(submitData)
+      createLargeEquipment(query).then(response => {
         console.log(response)
         this.createDialogVisible = false
         this.$message.success('新建成功')
@@ -318,7 +332,7 @@ export default {
     // 编辑
     editSubmit(submitData) {
       const query = Object.assign(submitData)
-      editUser(query).then(response => {
+      editLargeEquipment(query).then(response => {
         console.log(response)
         this.editDialogVisible = false
         this.$message.success('编辑成功')
@@ -333,27 +347,27 @@ export default {
       const query = Object.assign(submitData, {
 
       })
-      // createUser(query).then(response => {
-      //   console.log(response)
-      //   this.createDialogVisible = false
-      //   this.$message.success('新建成功')
-      //   this.$refs.createDialog.resetForm()
-      //   this.__fetchData()
-      // }).catch(err => {
-      //   console.log(err)
-      //   this.$refs.createDialog.resetSubmitBtn()
-      // })
+      createEquipmentArea(query).then(response => {
+        console.log(response)
+        this.createDetailDialogVisible = false
+        this.$message.success('新建成功')
+        this.$refs.createDetailDialog.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.createDetailDialog.resetSubmitBtn()
+      })
     },
     // 详情编辑
     editDetailSubmit(submitData) {
       const query = Object.assign(submitData)
-      // editUser(query).then(response => {
-      //   console.log(response)
-      //   this.editDialogVisible = false
-      //   this.$message.success('编辑成功')
-      //   this.$refs.editDialog.resetForm()
-      //   this.__fetchData()
-      // })
+      editEquipmentArea(query).then(response => {
+        console.log(response)
+        this.editDetailDialogVisible = false
+        this.$message.success('编辑成功')
+        this.$refs.editDetailDialog.resetForm()
+        this.__fetchData()
+      })
     },
 
     // 改变所选项
@@ -391,7 +405,7 @@ export default {
     handleNodeClick(data) {
       console.log(data)
       const entity = {
-        sysDeptId: data.value
+        part: data.value
       }
       console.log(entity)
       this.filter = Object.assign(this.filter, { entity })
