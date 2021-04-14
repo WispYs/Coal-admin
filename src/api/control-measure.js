@@ -1,10 +1,10 @@
 import request from '@/utils/request'
+import { SafeManagement } from './url'
 
-export function getList(params) {
+export function getAqglRiskMeasures(data) {
   return request({
-    url: '/control-measure/list',
-    method: 'get',
-    params
+    url: SafeManagement + '/aqglRiskMeasures/search',
+    method: 'post',
+    data
   })
 }
-

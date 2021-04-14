@@ -54,3 +54,57 @@ export function deleteAqglRiskTissue(id){
     id
   })
 }
+
+// 获取隐患组织机构  分页
+export function getAqglHiddenTissue(data){
+  return request({
+    url: SafeManagement + '/aqglHiddenTissue/search',
+    method: 'post',
+    data
+  })
+}
+
+// 保存隐患组织机构
+export function saveAqglHiddenTissue(data){
+  return request({
+    url: SafeManagement + '/aqglHiddenTissue/save',
+    method: 'post',
+    data
+  })
+}
+
+// 更新隐患组织机构
+export function updateaqglHiddenTissue(data){
+  return request({
+    url: SafeManagement + '/aqglHiddenTissue/update',
+    method: 'post',
+    data
+  })
+}
+
+// 删除隐患组织机构
+export function deleteaqglHiddenTissue(id){
+  return request({
+    url: SafeManagement + '/aqglHiddenTissue/delete/' + id,
+    method: 'delete',
+    id
+  })
+}
+
+// 获取隐患组织机构树
+export function getAqglHiddenTissueTree(data){
+  return request({
+    url: SafeManagement + '/aqglHiddenTissue/getAqglHiddenTissueTree',
+    method: 'post',
+    data
+  })
+}
+
+// 获取指定隐患组织下的子节点,返回数据中parentCheck为1代表有子节点,0与之相反
+export function getHiddenTissueChildTree(id){
+  return request({
+    url: SafeManagement + '/aqglHiddenTissue/findParentId?parentId=' + id,
+    method: 'post',
+    id
+  })
+}

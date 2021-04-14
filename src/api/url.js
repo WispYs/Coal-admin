@@ -13,3 +13,6 @@ export const InformationUrl = 'http://192.168.1.23:8000/message'
 export const FlowUrl = 'http://192.168.1.23:8000/flow'
 
 export const SafeManagement = 'http://192.168.1.23:8000/biz'
+
+export const MechaUrl = 'http://192.168.1.82:8881/tomo-datasource'
+

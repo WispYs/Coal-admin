@@ -345,11 +345,20 @@ export function updateSysDict(data) {
   })
 }
 
+// 根据id获取子数据字典
+export function getDataDictionaryChildTree(id) {
+  return request({
+    url: SystemUrl + '/sysDict/findParentId?parentId=' + id,
+    method: 'post',
+    id
+  })
+}
+
 // 删除数据字典
 export function deleteDict(id) {
   return request({
-    url: SystemUrl + '/sysDict/delete?entityId=' + id,
-    method: 'post',
+    url: SystemUrl + '/sysDict/delete/' + id,
+    method: 'delete',
     id
   })
 }
