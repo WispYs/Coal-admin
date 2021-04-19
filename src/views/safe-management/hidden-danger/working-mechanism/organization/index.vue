@@ -1,6 +1,7 @@
 <template>
   <div class="page-container">
-    <filter-bar :config="HiddenTissueFilterConfig" @search-click="queryData" @create-click="openDialog('create')" @reset-click="queryData" />
+    <filter-bar :config="HiddenTissueFilterConfig" @search-click="queryData" @create-click="openDialog('create')"
+      @reset-click="queryData" />
     <list-table :id="id" :list="list" :list-loading="listLoading" :config="HiddenTissueConfig" @load-tree-data="asyncData"
       @edit-click="(row) => openDialog('edit', row)" @delete-click="deleteClick" @submit-data="editSubmit" />
     <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows"
@@ -21,8 +22,12 @@
     getHiddenTissueChildTree,
     saveAqglHiddenTissue,
     updateaqglHiddenTissue,
-    deleteaqglHiddenTissue
+    deleteaqglHiddenTissue,
+    getAqglHiddenTissueById
   } from '@/api/organization'
+  import {
+    getsysDictListById
+  } from '@/api/hidden-danger'
   import FilterBar from '@/components/FilterBar'
   import ListTable from '@/components/ListTable'
   import Pagination from '@/components/Pagination'
@@ -58,8 +63,35 @@
     },
     created() {
       this.__fetchData()
+      this.__fetchSelectList()
     },
     methods: {
+      __fetchSelectList() {
+        const query = {
+          parentId: 10076
+        }
+        getsysDictListById(query.parentId).then(response => {
+          let selectList = response.data
+          for (let m in response.data) {
+            this.getIterationData(selectList[m], response.data[m])
+          }
+          this.HiddenTissueConfig.columns.forEach(it => {
+            if (it.field === 'unitId') {
+              it.options = selectList
+            }
+          })
+        })
+      },
+      getIterationData(_m, _d) {
+        _m.label = _d.dictName
+        _m.value = _d.sysDictId
+        _m.children = _d.sysDictList
+        if (_d.sysDictList.length > 0) {
+          for (let m in _d.sysDictList) {
+            this.getIterationData(_m.children[m], _d.sysDictList[m])
+          }
+        }
+      },
       __fetchData(_filter) {
         this.listLoading = true
         const query = {
@@ -69,7 +101,7 @@
             parentId: 0
           },
           keyword: _filter,
-          keywordField:['company'],
+          keywordField: ['company'],
           sort: {
             asc: ["orderNum"]
           }
@@ -107,11 +139,11 @@
         })
       },
       // 获取对应隐患组织下的子组织树,不传代表查全部隐患组织树
-      __getHiddenTissueTree(){
+      __getHiddenTissueTree() {
         const query = {
-          aqglHiddenTissueId:''
+          aqglHiddenTissueId: ''
         }
-        getAqglHiddenTissueTree(query).then(response =>{
+        getAqglHiddenTissueTree(query).then(response => {
           console.log(response);
           this.HiddenTissueConfig.columns.forEach(it => {
             if (it.field === 'parentId') {
@@ -134,7 +166,7 @@
         const createConfig = Object.assign({
           title: '新建',
           width: '800px',
-          form: this.riskFilterList
+          form: this.HiddenTissueConfig.columns
         })
         return createConfig
       },
@@ -143,7 +175,7 @@
         const editConfig = Object.assign({
           title: '编辑',
           width: '800px',
-          form: this.riskFilterList
+          form: this.HiddenTissueConfig.columns
         })
         return editConfig
       },
@@ -151,16 +183,15 @@
       openDialog(name, row) {
         const visible = `${name}DialogVisible`
         this[visible] = true
-        this.riskFilterList = this.HiddenTissueConfig.columns.filter((ele, index, arr) => {
-          return !!ele.field.indexOf("aqglHiddenTissueId") && !!ele.field.indexOf("code")
-        })
         this.__getHiddenTissueTree()
         if (row) {
-          const rowObj = Object.assign(row, {
-            parentId: Number(row.parentId)
+          getAqglHiddenTissueById(row.aqglHiddenTissueId).then(response =>{
+            const info = Object.assign(response.data, {
+              parentId: Number(response.data.parentId) || 0,
+              orderNum: Number(response.data.orderNum) || 0
+            })
+            this.$refs.editDialog.updataForm(info)
           })
-          // 如果有数据，更新子组件的 formData
-          this.$refs.editDialog.updataForm(rowObj)
         }
       },
       // 删除
@@ -178,7 +209,7 @@
       },
       // submit data
       createSubmit(submitData) {
-        if(!submitData.parentId){
+        if (!submitData.parentId) {
           submitData.parentId = 0
         }
         const query = Object.assign(submitData, {

@@ -160,12 +160,10 @@ export default {
     },
     // submit data
     createSubmit(submitData) {
-      console.log(submitData)
       this.createDialogVisible = false
       this.$message.success('新建成功')
     },
     editSubmit(submitData) {
-      console.log(submitData)
       this.editDialogVisible = false
       this.$message.success('编辑成功')
     }

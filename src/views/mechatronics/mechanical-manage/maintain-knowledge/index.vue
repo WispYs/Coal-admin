@@ -159,8 +159,10 @@ export default {
       this.__updateEquipAreaTree()
       // 如果有数据，更新子组件的 formData
       if (row) {
-        getKnowLedgeInfo(row.sysManageId).then(response => {
-          const info = Object.assign(response.data)
+        getKnowLedgeInfo(row.id).then(response => {
+          const info = Object.assign(response.data, {
+            dutyBy: response.data.dutyBy + ''
+          })
           this.$refs.editDialog.updataForm(info)
         })
       }
@@ -197,7 +199,6 @@ export default {
     },
     // 编辑
     editSubmit(submitData) {
-      console.log(submitData)
       const query = Object.assign(submitData)
       editKnowLedge(query).then(response => {
         console.log(response)

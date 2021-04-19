@@ -1,70 +1,51 @@
 <template>
   <div class="page-container">
     <div class="filter-bar">
-      <div class="filter-bar__item">
-        <label>关键字：</label>
-        <el-input
-          v-model="keywords"
-          class="filter-item"
-          style="width:200px"
-          placeholder="隐患内容、整改意见"
-          suffix-icon="el-icon-search"
-        />
-      </div>
-      <div class="filter-bar__item">
-        <el-button type="primary" size="medium" @click="search()">搜索</el-button>
-      </div>
+      <filter-bar :config="reformFilterConfig" @search-click="queryData" style="display: inline-block;"/>
+      <!-- <div style="display: inline-block;">
+        <div class="filter-bar__item filter_button">
+          <el-button icon="el-icon-check" type="primary" size="medium" :disabled="hiddenAcceptanceDisabled" @click="hiddenAcceptance()">延期审批</el-button>
+        </div>
+      </div> -->
     </div>
-    <el-table
-      :data="tableData"
-      border
-      fit
-      :cell-style="cellStyle"
-      header-cell-class-name="pre-line"
-    >
-      <el-table-column align="center" label="序号" width="95" fixed>
-        <template slot-scope="scope">
-          {{ scope.$index+1 }}
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="status" align="center" label="隐患状态" width="160">
-        <template slot-scope="scope">
-          <span class="color-lump blue">{{ scope.row.status }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="checkDate" align="center" label="检查时间" width="140" />
-      <el-table-column prop="classes" align="center" label="检查班次" width="140" />
-      <el-table-column prop="checkType" align="center" label="检查类别" width="140" />
-      <el-table-column prop="checkOrganization" align="center" label="检查单位" width="140" />
-      <el-table-column prop="person" align="center" label="检查人员" width="90" />
-      <el-table-column prop="accompanyPerson" align="center" label="陪同人员" width="90" />
-      <el-table-column prop="organization" align="center" label="隐患部门" width="160" />
-      <el-table-column prop="proMan" align="center" label="责任人员" width="90" />
-      <el-table-column prop="addr" align="center" label="检查地点" width="180" />
-      <el-table-column prop="dangerType" align="center" label="隐患类别" width="90" />
-      <el-table-column prop="level" align="center" label="隐患级别" width="160">
-        <template slot-scope="scope">
-          <span class="color-lump orange">{{ scope.row.level }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="changeDate" align="center" label="限改时间" width="140" />
-      <el-table-column prop="statusExplain" align="center" label="状态说明" />
-      <el-table-column prop="review" align="center" label="复查单位" />
-      <el-table-column prop="content" align="center" label="隐患内容" />
-      <el-table-column fixed="right" label="操作" width="160" align="center">
-        <el-button type="text" size="small" @click="edit()">编辑</el-button>
-        <el-button type="text" size="small" style="color: #f56c6c" @click="del()">删除</el-button>
-      </el-table-column>
-
-    </el-table>
+    <!-- 表格 -->
+    <list-table
+      :id="id"
+      :list="tableData"
+      :list-loading="listLoading"
+      :config="delayApprovalTableConfig"
+      height="calc(100% - 157px)"
+      @selection-change="selectionChange"
+    />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows"
+      @pagination="__fetchData" />
   </div>
 </template>
 <script>
+import ListTable from '@/components/ListTable'
+import { delayApprovalTableConfig,reformFilterConfig } from '@/data/hidden-danger'
+import Pagination from '@/components/Pagination'
+import FilterBar from '@/components/FilterBar'
 export default {
+  components: {
+    ListTable,
+    Pagination,
+    FilterBar
+  },
   data() {
     return {
-      keywords: '',
+      id:"reform",
+      listLoading: true,
+      delayApprovalTableConfig,
+      reformFilterConfig,
+      list: [],
+      listQuery: {
+        page: 1,
+        pagerows: 10
+      },
+      total:1,
+      selectCheckbox:[],
+      hiddenAcceptanceDisabled: true,
       tableData: [
         {
           level: '一般隐患C',
@@ -88,19 +69,37 @@ export default {
       ]
     }
   },
+  created() {
+    this.__fetchData()
+  },
   methods: {
-    search() {
-      console.log(this.keywords)
+    __fetchData(){
+      this.listLoading = false
+      // const filter = {
+      //   ...this.filter,
+      //   keywordField: ['workNumber', 'loginName', 'userName']
+      // }
+      // const query = Object.assign(this.listQuery, filter)
+      // getUserList(query).then(response => {
+      //   this.listLoading = false
+      //   this.list = response.data.rows
+      //   this.total = Number(response.data.records)
+      // })
     },
-    edit() {
-      console.log('edit')
+    queryData() {
+      // console.log(this.keywords)
+      this.__fetchData()
     },
-    del() {
-      console.log('del')
+    hiddenAcceptance(){
+
     },
-    // 表格单元格样式
-    cellStyle() {
-      return 'font-size: 13px'
+    selectionChange(row){
+      this.selectCheckbox= row
+      if(this.selectCheckbox.length == 1){
+        this.hiddenAcceptanceDisabled = false
+      }else{
+        this.hiddenAcceptanceDisabled = true
+      }
     }
   }
 }
@@ -135,5 +134,8 @@ export default {
     &.red {
       background: $redColor;
     }
+  }
+  .filter_button{
+    margin: 0 22px 15px 0;
   }
 </style>

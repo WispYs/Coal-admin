@@ -13,7 +13,7 @@
       :config="MechLargeEquipTypeTableConfig"
       height="calc(100% - 157px)"
       @edit-click="(row) => openDialog('edit', row)"
-      @other-click="detailDialogVisible = true"
+      @other-click="(row) => openDetailDialog(row.area)"
       @delete-click="deleteClick"
       @submit-data="editSubmit"
       @selection-change="selectionChange"
@@ -55,6 +55,7 @@
     />
     <!-- 展开详情 -->
     <detail-dialog
+      ref="detailDialog"
       :config="initDetailConfig()"
       :dialog-visible="detailDialogVisible"
       @close-dialog="detailDialogVisible = false"
@@ -82,7 +83,17 @@
 </template>
 
 <script>
-import { getLargeEquipmentType, createOrgan, getOrganInfo, editOrgan, getOrganTree, getOrganChildTree, delOrgan } from '@/api/mechatronics'
+import {
+  getLargeEquipmentType,
+  createLargeEquipmentType,
+  getLargeEquipmentTypeInfo,
+  editLargeEquipmentType,
+  getOrganTree,
+  delLargeEquipmentType,
+  getEquipmentAreaInfo,
+  createEquipmentArea,
+  editEquipmentArea
+} from '@/api/mechatronics'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -153,12 +164,7 @@ export default {
       const query = Object.assign(this.listQuery, filter)
       getLargeEquipmentType(query).then(response => {
         this.listLoading = false
-        response.data.rows.forEach(it => {
-          it.sysDeptId = Number(it.sysDeptId)
-          if (it.parentCheck === 1) {
-            it.hasChildren = true
-          }
-        })
+
         this.list = response.data.rows
         console.log(this.list)
         this.total = Number(response.data.records)
@@ -221,20 +227,29 @@ export default {
       const visible = `${name}DialogVisible`
       this[visible] = true
 
-      // 接口获取组织机构树，更新config数据
-      this.__updateOrganTree()
+      let getListFn = null // 获取详情的接口方法
+      // 如果打开特有属性的新增编辑弹窗
+      if (name.indexOf('Detail') > -1) {
+        getListFn = getEquipmentAreaInfo
+      } else {
+        // 接口获取组织机构树，更新config数据
+        this.__updateOrganTree()
+        getListFn = getLargeEquipmentTypeInfo
+      }
 
       // 如果有数据，更新子组件的 formData
       if (row) {
-        this.$refs[`${name}Dialog`].updataForm(row)
-        // getOrganInfo(row.sysDeptId).then(response => {
-        //   const info = Object.assign(response.data, {
-        //     parentId: Number(response.data.parentId) || 0,
-        //     deptType: Number(response.data.deptType) || 0
-        //   })
-        //   this.$refs.editDialog.updataForm(info)
-        // })
+        getListFn(row.id).then(response => {
+          const info = Object.assign(response.data)
+          this.$refs[`${name}Dialog`].updataForm(info)
+        })
       }
+    },
+    // 打开特有属性弹窗
+    openDetailDialog(id) {
+      console.log(id)
+      this.detailDialogVisible = true
+      this.$refs.detailDialog.queryData({ id })
     },
     // 删除
     deleteClick(row) {
@@ -243,7 +258,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        delOrgan(row.sysDeptId).then(response => {
+        delLargeEquipmentType(row.id).then(response => {
           console.log(response)
           this.$message.success('删除成功')
           this.__fetchData()
@@ -253,10 +268,8 @@ export default {
     // 新增
     createSubmit(submitData) {
       console.log(submitData)
-      const query = Object.assign(submitData, {
-        parentId: Number(submitData.parentId) || 0
-      })
-      createOrgan(query).then(response => {
+      const query = Object.assign(submitData)
+      createLargeEquipmentType(query).then(response => {
         console.log(response)
         this.createDialogVisible = false
         this.$message.success('新建成功')
@@ -270,7 +283,7 @@ export default {
     // 编辑
     editSubmit(submitData) {
       const query = Object.assign(submitData)
-      editOrgan(query).then(response => {
+      editLargeEquipmentType(query).then(response => {
         console.log(response)
         this.editDialogVisible = false
         this.$message.success('编辑成功')
@@ -282,30 +295,28 @@ export default {
     createDetailSubmit(submitData) {
       console.log(submitData)
 
-      const query = Object.assign(submitData, {
-
+      const query = Object.assign(submitData)
+      createEquipmentArea(query).then(response => {
+        console.log(response)
+        this.createDetailDialogVisible = false
+        this.$message.success('新建成功')
+        this.$refs.createDetailDialog.resetForm()
+        this.$refs.detailDialog.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.createDetailDialog.resetSubmitBtn()
       })
-      // createUser(query).then(response => {
-      //   console.log(response)
-      //   this.createDialogVisible = false
-      //   this.$message.success('新建成功')
-      //   this.$refs.createDialog.resetForm()
-      //   this.__fetchData()
-      // }).catch(err => {
-      //   console.log(err)
-      //   this.$refs.createDialog.resetSubmitBtn()
-      // })
     },
     // 详情编辑
     editDetailSubmit(submitData) {
       const query = Object.assign(submitData)
-      // editUser(query).then(response => {
-      //   console.log(response)
-      //   this.editDialogVisible = false
-      //   this.$message.success('编辑成功')
-      //   this.$refs.editDialog.resetForm()
-      //   this.__fetchData()
-      // })
+      editEquipmentArea(query).then(response => {
+        console.log(response)
+        this.editDetailDialogVisible = false
+        this.$message.success('编辑成功')
+        this.$refs.editDetailDialog.resetForm()
+        this.$refs.detailDialog.__fetchData()
+      })
     },
 
     // 改变所选项

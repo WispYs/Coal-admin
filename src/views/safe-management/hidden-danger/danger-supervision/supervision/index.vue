@@ -1,70 +1,69 @@
 <template>
-  <div class="page-container">
-    <div class="filter-bar">
-      <div class="filter-bar__item">
-        <label>关键字：</label>
-        <el-input
-          v-model="keywords"
-          class="filter-item"
-          style="width:200px"
-          placeholder="隐患内容、整改意见"
-          suffix-icon="el-icon-search"
-        />
+  <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
+    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @handleNodeClick="handleNodeClick" />
+    <div class="tree-form-container">
+      <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
+        <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
+      </span>
+      <div class="filter-bar">
+        <filter-bar :config="reformFilterConfig" @search-click="queryData" style="display: inline-block;" />
+        <div style="display: inline-block;">
+          <div class="filter-bar__item filter_button">
+            <el-button style="padding: 10px 10px;" icon="el-icon-check" type="primary" size="medium" :disabled="hiddenAcceptanceDisabled" @click="hiddenAcceptance()">督办隐患</el-button>
+          </div>
+          <div class="filter-bar__item filter_button">
+            <el-button style="padding: 10px 10px;" icon="el-icon-check" type="primary" size="medium" :disabled="hiddenAcceptanceDisabled" @click="hiddenAcceptance()">取消督办</el-button>
+          </div>
+        </div>
       </div>
-      <div class="filter-bar__item">
-        <el-button type="primary" size="medium" @click="search()">搜索</el-button>
-      </div>
+      <!-- 表格 -->
+      <list-table :id="id" :list="tableData" :list-loading="listLoading" :config="supervisionTableConfig" height="calc(100% - 157px)"
+        @selection-change="selectionChange" />
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows"
+        @pagination="__fetchData" />
     </div>
-    <el-table
-      :data="tableData"
-      border
-      fit
-      :cell-style="cellStyle"
-      header-cell-class-name="pre-line"
-    >
-      <el-table-column align="center" label="序号" width="95" fixed>
-        <template slot-scope="scope">
-          {{ scope.$index+1 }}
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="status" align="center" label="隐患状态" width="160">
-        <template slot-scope="scope">
-          <span class="color-lump blue">{{ scope.row.status }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="superviseStatus" align="center" label="督办状态" width="140" />
-      <el-table-column prop="checkDate" align="center" label="检查时间" width="140" />
-      <el-table-column prop="classes" align="center" label="检查班次" width="140" />
-      <el-table-column prop="checkType" align="center" label="检查类别" width="140" />
-      <el-table-column prop="person" align="center" label="检查人员" width="90" />
-      <el-table-column prop="organization" align="center" label="隐患部门" width="160" />
-      <el-table-column prop="proMan" align="center" label="责任人员" width="90" />
-      <el-table-column prop="addr" align="center" label="检查地点" width="180" />
-      <el-table-column prop="content" align="center" label="隐患内容" />
-      <el-table-column prop="dangerType" align="center" label="隐患类别" width="90" />
-      <el-table-column prop="level" align="center" label="隐患级别" width="160">
-        <template slot-scope="scope">
-          <span class="color-lump orange">{{ scope.row.level }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column fixed="right" label="操作" width="160" align="center">
-        <el-button type="text" size="small" @click="edit()">编辑</el-button>
-        <el-button type="text" size="small" style="color: #f56c6c" @click="del()">删除</el-button>
-      </el-table-column>
-
-    </el-table>
   </div>
 </template>
 <script>
-export default {
-  data() {
-    return {
-      keywords: '',
-      tableData: [
-        {
+  import {
+    getsysDictListById
+  } from '@/api/hidden-danger'
+  import {
+    supervisionTableConfig,
+    reformFilterConfig
+  } from '@/data/hidden-danger'
+  import ListTable from '@/components/ListTable'
+  import Pagination from '@/components/Pagination'
+  import FilterBar from '@/components/FilterBar'
+  import TreeBar from '@/components/TreeBar'
+  export default {
+    components: {
+      ListTable,
+      Pagination,
+      FilterBar,
+      TreeBar
+    },
+    data() {
+      return {
+        id: "reform",
+        listLoading: true,
+        supervisionTableConfig,
+        reformFilterConfig,
+        list: [],
+        listQuery: {
+          page: 1,
+          pagerows: 10
+        },
+        total: 1,
+        selectCheckbox: [],
+        hiddenAcceptanceDisabled: true,
+        treeData: {
+          title: '所有督办',
+          list: []
+        },
+        treeExtend: true,
+        tableData: [{
           level: '一般隐患C',
-          superviseStatus: '',
           status: '待修复',
           checkDate: '2021.01.27',
           classes: '',
@@ -81,35 +80,91 @@ export default {
           content: '',
           measure: '',
           files: ''
+        }]
+      }
+    },
+    created() {
+      this.__fetchData()
+      this.__fetchSupervise()
+    },
+    methods: {
+      __fetchSupervise() {
+        const query = {
+          parentId: 10112
         }
-      ]
-    }
-  },
-  methods: {
-    search() {
-      console.log(this.keywords)
-    },
-    edit() {
-      console.log('edit')
-    },
-    del() {
-      console.log('del')
-    },
-    // 表格单元格样式
-    cellStyle() {
-      return 'font-size: 13px'
+        getsysDictListById(query.parentId).then(response => {
+          console.log(response);
+          let selectList = response.data
+          for (let m in response.data) {
+            this.getIterationData(selectList[m], response.data[m])
+          }
+          console.log(selectList);
+          this.treeData.list = selectList
+          // this.TableConfig.columns.forEach(it => {
+
+          //   if (it.field === 'riskGradeId') {
+          //     it.options = selectList
+          //     console.log(it);
+          //   }
+          // })
+        })
+
+      },
+      getIterationData(_m, _d) {
+        _m.label = _d.dictName
+        _m.value = _d.sysDictId
+        _m.children = _d.sysDictList
+        if (_d.sysDictList.length > 0) {
+          for (let m in _d.sysDictList) {
+            this.getIterationData(_m.children[m], _d.sysDictList[m])
+          }
+        }
+      },
+      __fetchData() {
+        this.listLoading = false
+        // const filter = {
+        //   ...this.filter,
+        //   keywordField: ['workNumber', 'loginName', 'userName']
+        // }
+        // const query = Object.assign(this.listQuery, filter)
+        // getUserList(query).then(response => {
+        //   this.listLoading = false
+        //   this.list = response.data.rows
+        //   this.total = Number(response.data.records)
+        // })
+      },
+      queryData() {
+        // console.log(this.keywords)
+        this.__fetchData()
+      },
+      hiddenAcceptance() {
+
+      },
+      handleNodeClick(){
+
+      },
+      selectionChange(row) {
+        this.selectCheckbox = row
+        if (this.selectCheckbox.length == 1) {
+          this.hiddenAcceptanceDisabled = false
+        } else {
+          this.hiddenAcceptanceDisabled = true
+        }
+      }
     }
   }
-}
 </script>
 <style lang="scss" scoped>
-@import '~@/assets/styles/variables.scss';
+  @import '~@/assets/styles/variables.scss';
+
   .filter-bar {
     margin-bottom: 10px;
+
     &__item {
       display: inline-block;
       margin: 0 40px 15px 0;
       font-size: 14px;
+
       label {
         font-weight: normal;
         font-size: 14px;
@@ -117,20 +172,29 @@ export default {
       }
     }
   }
+
   .color-lump {
     padding: 10px 20px;
     color: $whiteColor;
+
     &.green {
       background: $greenColor;
     }
+
     &.blue {
       background: $primaryColor;
     }
+
     &.orange {
       background: $orangeColor;
     }
+
     &.red {
       background: $redColor;
     }
+  }
+
+  .filter_button {
+    margin: 0 22px 15px 0;
   }
 </style>

@@ -2,6 +2,7 @@ import { getRoutes } from '@/api/route'
 import { getToken } from '@/utils/auth'
 import Layout from '@/layout'
 import { constantRoutes } from '@/router'
+import MenuMain from '@/layout/components/MenuMain'
 
 /**
  * 通过用户角色判断是否有权限
@@ -30,11 +31,17 @@ export function filterAsyncRoutes(routes, roles) {
     if (tmp.component === 'Layout') {
       tmp.component = Layout
     } else {
-      let sub_view = tmp.component || ''
-      sub_view = sub_view.replace(/^\/*/g, '')
-      // ESlint 报错
-      // tmp.component = () => import(`@/views/${sub_view}`)
-      tmp.component = loadView(sub_view)
+      const showChildren = tmp.children ? tmp.children.filter(item => !item.hidden) : []
+      if (showChildren && showChildren.length !== 0) {
+        // 如果次级菜单有子菜单，则设置该菜单component为公共组件MenuMain，用于缓存
+        tmp.component = MenuMain
+      } else {
+        let sub_view = tmp.component || ''
+        sub_view = sub_view.replace(/^\/*/g, '')
+        // ESlint 报错
+        // tmp.component = () => import(`@/views/${sub_view}`)
+        tmp.component = loadView(sub_view)
+      }
     }
     if (hasPermission(roles, tmp)) {
       if (tmp.children) {

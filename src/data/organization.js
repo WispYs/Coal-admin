@@ -1,4 +1,4 @@
-export const TableConfig = {
+export const OTableConfig = {
   /**
    * 这种表格配置表对整个项目而言耦合性较高，后续每次对表格有特殊要求都需要修改
    * 而且由于某些字段需要前端方法处理，所以这个配置也应由前端定义交给后端，然后再通过接口动态调用
@@ -25,20 +25,25 @@ export const TableConfig = {
    * @param {string}  underlineText     表格内数据显示方式为underline时，下划线的文字
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
    * @param {boolean} lazy              是否异步加载树形表格子节点数据，默认false，值为true时为异步
+   * @param {boolean} multiple          下拉选择是否多选,默认false，值为true时多选
    */
   actions: ['edit', 'delete'],
   rowKey: 'aqglRiskTissueId',
   summary: false,
   summaryField: [],
-  checkbox: true,
+  checkbox: false,
+  noSerialNum: true,
   lazy: true,
   columns: [
     { label: '名称', field: 'aqglRiskTissueName', width: '200', layout: 'Text', placeholder: '请填写名称' },
-    { label: '编号', field: 'aqglRiskTissueId', width: '150', layout: 'Text', placeholder: '请填写编号' },
-    { label: '创建日期', field: 'createTime', width: '200', sortable: true, layout: 'DateTime', placeholder: '请选择日期' },
+    { label: '编号', field: 'aqglRiskTissueId', width: '150', layout: 'Text', disabled: true, placeholder: '请填写编号' },
+    { label: '创建日期', field: 'createTime', width: '200', sortable: true, layout: 'DateTime', disabled: true, placeholder: '请选择日期' },
     { label: '排序', field: 'orderNum', width: '150', layout: 'Text', placeholder: '请选择排序' },
     { label: '上级节点', field: 'parentId', layout: 'TreeSelect', hidden: true,
-      options: [], placeholder: '请选择上级节点' },
+      options: [{
+        value: 1,
+        label: '顾桥矿'
+      }], placeholder: '请选择上级节点' },
     { label: '备注', field: 'remark', width: '', layout: 'Textarea', placeholder: '请填写备注' }
   ]
 }
@@ -69,20 +74,17 @@ export const HiddenTissueConfig = {
   rowKey: 'code',
   summary: false,
   summaryField: [],
-  checkbox: true,
+  checkbox: false,
+  noSerialNum: true,
   lazy: true,
   columns: [
-    { label: '隐患组织id', field: 'aqglHiddenTissueId', width: '150', layout: 'Text', placeholder: '请填写隐患组织id', hidden: true },
+    { label: '隐患组织id', field: 'aqglHiddenTissueId', width: '150', layout: 'Text', disabled: true, placeholder: '请填写隐患组织id', hidden: true },
     { label: '单位', field: 'company', width: '200', layout: 'Text', placeholder: '请填写名称' },
-    { label: '编号', field: 'code', width: '150', layout: 'Text', placeholder: '请填写编号' },
-    // { label: '组织机构类型', field: 'unitId', width: 'auto', layout: 'Select', require: true,
-    //   options: [
-    //     { value: 1, label: '井工矿' },
-    //     { value: 2, label: '矿机构' },
-    //     { value: 3, label: '职务' }
-    //   ], placeholder: '请选择组织机构' },
+    { label: '编号', field: 'code', width: '150', layout: 'Text', disabled: true, placeholder: '请填写编号' },
+    { label: '组织机构类型', field: 'unitId', width: 'auto', layout: 'Select', require: true,
+      options: [], placeholder: '请选择组织机构' },
     { label: '排序', field: 'orderNum', width: '150', layout: 'Text', placeholder: '请选择排序' },
     { label: '上级节点', field: 'parentId', layout: 'TreeSelect', hidden: true,
-      options: [], placeholder: '请选择上级节点' }
+      options: [{ value: 1, label: '隐患组织机构' }], placeholder: '请选择上级节点' }
   ]
 }

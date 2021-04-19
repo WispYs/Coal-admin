@@ -45,7 +45,6 @@
           @pagination="__fetchData"
         />
       </div>
-
       <!-- 新建弹窗 -->
       <form-dialog
         ref="createDialog"
@@ -91,7 +90,7 @@
 </template>
 
 <script>
-import { getSparePartList, createUser, getUserInfo, editUser, delUser, getEquipmentArea } from '@/api/mechatronics'
+import { getSparePartList, createSparePart, getSparePartInfo, editSparePart, delSparePart, getEquipmentArea, createSpareReceive, createSpareStore } from '@/api/mechatronics'
 import TreeBar from '@/components/TreeBar'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
@@ -223,22 +222,27 @@ export default {
       // 如果有数据，更新子组件的 formData
       if (row) {
         this.$refs[`${name}Dialog`].updataForm(row)
-        // getUserInfo(row.sysUserId).then(response => {
-        //   const info = Object.assign(response.data, {
-        //     sysDeptId: Number(response.data.sysDeptId) || 0,
-        //     sysRoleId: Number(response.data.sysRoleId) || 0
-        //   })
-        //   this.$refs.editDialog.updataForm(info)
-        // })
+        getSparePartInfo(row.id).then(response => {
+          const info = Object.assign(response.data, {
+            dutyBy: response.data.dutyBy + '',
+            updateBy: response.data.updateBy + '',
+            status: response.data.status + ''
+          })
+          this.$refs.editDialog.updataForm(info)
+        })
       }
     },
     // 领用，入库，明细按钮
     otherClick(row, index, item) {
+      const info = { id: row.id }
       if (item === '领用') {
+        this.$refs.receiveDialog.updataForm(info)
         this.receiveDialogVisible = true
       } else if (item === '入库') {
+        this.$refs.storeDialog.updataForm(info)
         this.storeDialogVisible = true
       } else if (item === '明细') {
+        this.$refs.detailDialog.updataForm(info)
         this.detailDialogVisible = true
       }
     },
@@ -249,8 +253,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(row.sysUserId)
-        delUser(row.sysUserId).then(response => {
+        delSparePart(row.id).then(response => {
           console.log(response)
           this.$message.success('删除成功')
           this.__fetchData()
@@ -259,14 +262,8 @@ export default {
     },
     // 新增
     createSubmit(submitData) {
-      console.log(submitData)
-
-      const query = Object.assign(submitData, {
-        sysRoleId: Number(submitData.sysRoleId) || 0,
-        sysDeptId: Number(submitData.sysDeptId) || 0
-      })
-      createUser(query).then(response => {
-        console.log(response)
+      const query = Object.assign(submitData)
+      createSparePart(query).then(response => {
         this.createDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDialog.resetForm()
@@ -279,34 +276,42 @@ export default {
     // 编辑
     editSubmit(submitData) {
       const query = Object.assign(submitData)
-      editUser(query).then(response => {
-        console.log(response)
+      editSparePart(query).then(response => {
         this.editDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDialog.resetForm()
         this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.editDialog.resetSubmitBtn()
       })
     },
     // 领用
     receiveSubmit(submitData) {
       const query = Object.assign(submitData)
-      editUser(query).then(response => {
+      createSpareReceive(query).then(response => {
         console.log(response)
         this.receiveDialogVisible = false
         this.$message.success('领用成功')
         this.$refs.receiveDialog.resetForm()
         this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.receiveDialog.resetSubmitBtn()
       })
     },
     // 入库
     storeSubmit(submitData) {
       const query = Object.assign(submitData)
-      editUser(query).then(response => {
+      createSpareStore(query).then(response => {
         console.log(response)
         this.storeDialogVisible = false
         this.$message.success('入库成功')
         this.$refs.storeDialog.resetForm()
         this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.storeDialog.resetSubmitBtn()
       })
     },
 

@@ -1,6 +1,7 @@
 <template>
   <el-table
     :id="id"
+    ref="listTable"
     v-loading="listLoading"
     :data="normalizedList"
     element-loading-text="Loading"
@@ -39,7 +40,6 @@
         :prop="column.field"
         :sortable="column.sortable"
       >
-
         <template slot-scope="scope">
           <template v-if="config.inlineEdit && scope.row.edit">
 
@@ -219,6 +219,7 @@ export default {
       this.refactorOptions(options, newOptions)
       // 判断值是不是数组
       // 暂不考虑传值为对象的情况（后续对接）
+      if (field === undefined || field === null) return
       if (field.constructor === Array) {
         const filters = []
         field.forEach(f => {
@@ -227,8 +228,7 @@ export default {
         return filters
       } else {
         const filters = newOptions.filter(item => {
-          // console.log(item.value, field)
-          return item.value === field
+          return item.value == field
         })
 
         return filters[0] ? filters[0].label : ''
@@ -258,6 +258,7 @@ export default {
       console.log(row, index)
     },
     otherClick(row, index, item) {
+      console.log(row, index, item);
       this.$emit('other-click', row, index, item)
     },
     // 编辑
@@ -279,6 +280,7 @@ export default {
       // 刷新数据
       this.$emit('update')
     },
+
     cancelSubmit(row) {
       this.$emit('update')
     },
@@ -289,12 +291,17 @@ export default {
 
     // treeSelect 值改变
     getTreeSelect(value) {
-      console.log(value)
+      console.log('getTreeSelect', value)
     },
 
     // 加载树形结构数据
     loadTreeData(tree, treeNode, resolve) {
       this.$emit('load-tree-data', tree, treeNode, resolve)
+    },
+    // 异步更新树状表格数据,重新触发表格的loadTreeData函数
+    refreshLoadTree(parentId) {
+      // 根据父级id更新节点数据
+      this.$set(this.$refs.listTable.store.states.lazyTreeNodeMap, parentId, [])
     },
 
     // 计算合计总工时
@@ -334,6 +341,7 @@ export default {
       return 'font-size: 13px'
     },
     selectionChange(val) {
+		console.log(val);
       this.$emit('selection-change', val)
     },
     addIco(row, index) {

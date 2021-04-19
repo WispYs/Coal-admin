@@ -4,11 +4,6 @@
       <div class="buttons_item">
         <el-button type="primary" size="medium" @click="openDialog('create')"><i class="el-icon-plus el-icon--left" />创建
         </el-button>
-        <!-- <el-button type="primary" size="medium" plain :disabled="updateDisabled" @click="openDialog('edit')"><i class="el-icon-edit el-icon--left" />编辑
-        </el-button>
-        <el-button type="danger" size="medium" plain :disabled="deleteDisabled" @click="deleteClick"><i class="el-icon-delete el-icon--left" />删除
-        </el-button>
-        <el-button size="medium" plain @click="synchroClick"><i class="el-icon-refresh el-icon--left" />同步</el-button> -->
       </div>
     </div>
 
@@ -69,7 +64,8 @@
     saveNewsType,
     updateNewsType,
     deleteNewsType,
-    getChildrenMsgList
+    getChildrenMsgList,
+    getSelectRoleList
   } from '@/api/authority-management'
 import {
   NewsTypeConfig
@@ -110,9 +106,12 @@ export default {
     __fetchData() {
       this.listLoading = true
       let query={
+        entity:{
+          parentId: 0
+        },
         page: this.listQuery.page,
         pagerows: this.listQuery.pagerows,
-        sort:{asc:["sort"]}
+        // sort:{asc:["sort"]}
       }
       getNewsTypeList(query).then(response => {
         this.listLoading = false
@@ -227,12 +226,18 @@ export default {
     selectChange(item,row){
       console.log(item,row);
       console.log(row);
-      if(row == 1){
+      if(row == "用户"){
         getAllUserList().then(response => {
           console.log(response.data);
+          let selectList = response.data
+          for (let m in response.data) {
+            this.getIterationData(selectList[m], response.data[m])
+            selectList[m].label = response.data[m].name
+            selectList[m].value = response.data[m].id
+          }
           this.NewsTypeConfig.columns.forEach(it => {
             if (it.field === 'targetValue') {
-              it.options = []
+              it.options = selectList
             }
           })
         })
@@ -244,11 +249,19 @@ export default {
             }
           })
         })
-      }else if(row == 3){
-        this.NewsTypeConfig.columns.forEach(it => {
-          if (it.field === 'targetValue') {
-            it.options = []
+      }else if(row == "角色"){
+        const query ={}
+        getSelectRoleList(query).then(response => {
+          let selectList = response.data
+          for (let m in response.data) {
+            selectList[m].label = response.data[m].roleName
+            selectList[m].value = response.data[m].sysRoleId
           }
+          this.NewsTypeConfig.columns.forEach(it => {
+            if (it.field === 'targetValue') {
+              it.options = selectList
+            }
+          })
         })
       }
     }

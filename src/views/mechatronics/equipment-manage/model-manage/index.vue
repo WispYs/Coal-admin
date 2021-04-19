@@ -18,17 +18,25 @@
           />
         </div>
         <div class="filter-bar__item">
-          <el-button type="primary" size="medium" @click="search()"
-            >搜索</el-button
-          >
+          <el-button
+            type="primary"
+            size="medium"
+            @click="search()"
+          >搜索</el-button>
         </div>
       </div>
       <el-table
+        ref="multipleTable"
+        v-loading="listLoading"
         :data="tableData"
         border
         fit
+        row-key="id"
+        :load="load"
+        lazy
         :cell-style="cellStyle"
         header-cell-class-name="pre-line"
+        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
       >
         <el-table-column align="center" label="序号" width="95" fixed>
           <template slot-scope="scope">
@@ -48,86 +56,151 @@
             size="small"
             style="color: #f56c6c"
             @click="del()"
-            >删除</el-button
-          >
+          >删除</el-button>
         </el-table-column>
       </el-table>
     </div>
   </div>
 </template>
 <script>
-import TreeBar from "@/components/TreeBar";
+import TreeBar from '@/components/TreeBar'
 export default {
   components: { TreeBar },
   data() {
     return {
       treeExtend: true,
       treeData: {
-        title: "选择专业",
+        title: '选择专业',
         list: [
           {
-            label: "专业",
+            label: '专业',
             children: [
               {
-                label: "安检"
+                label: '安检'
               },
               {
-                label: "采煤"
+                label: '采煤'
               },
               {
-                label: "掘进（中央区）"
+                label: '掘进（中央区）'
               },
               {
-                label: "掘进（南区）"
+                label: '掘进（南区）'
               },
               {
-                label: "机电运输"
+                label: '机电运输'
               },
               {
-                label: "一通三防"
+                label: '一通三防'
               },
               {
-                label: "地面设施"
+                label: '地面设施'
               },
               {
-                label: "维护"
+                label: '维护'
               },
               {
-                label: "地质灾害防治"
+                label: '地质灾害防治'
               }
             ]
           }
         ]
       },
-      keywords: "",
+      keywords: '',
+      listLoading: false,
       tableData: [
         {
-          name: "采煤机",
-          code: "02",
-          unit: "台",
-          model: "GQ022114",
-          createTime: "2021.01.25",
-          remark: ""
+          id: '1',
+          name: '采煤机',
+          code: '02',
+          unit: '台',
+          model: 'GQ022114',
+          createTime: '2021.01.25',
+          hasChildren: true,
+          remark: ''
         }
-      ]
-    };
+      ],
+      maps: new Map()
+    }
   },
   methods: {
     search() {
-      console.log(this.keywords);
+      console.log(this.keywords)
     },
     edit() {
-      console.log("edit");
+      console.log('edit')
+      console.log(this.tableData)
+      this.refreshLoadTree('1')
     },
     del() {
-      console.log("del");
+      console.log('del')
     },
     // 表格单元格样式
     cellStyle() {
-      return "font-size: 13px";
+      return 'font-size: 13px'
+    },
+    load(tree, treeNode, resolve, data) {
+      this.listLoading = true
+      // 将当前选中节点数据存储到map中
+      this.maps.set(tree.id, { tree, treeNode, resolve })
+      const newData = data || [
+        {
+          id: '2',
+          name: '采煤机',
+          code: '12',
+          unit: '台',
+          model: 'GQ022114',
+          createTime: '2021.01.25',
+          remark: ''
+        }, {
+          id: '3',
+          name: '采煤机',
+          code: '13',
+          unit: '台',
+          model: 'GQ022114',
+          createTime: '2021.01.25',
+          remark: ''
+        }
+      ]
+      setTimeout(() => {
+        resolve(newData)
+        this.listLoading = false
+      }, 1000)
+    },
+    // 重新触发树形表格的loadTree函数(因项目中需要多次触发loadTree方法，故封装成一个方法)
+    refreshLoadTree(parentId) {
+      // 根据父级id取出对应节点数据
+      console.log(this.maps)
+      console.log(this.maps.get(parentId))
+      const { tree, treeNode, resolve } = this.maps.get(parentId)
+
+      this.$set(this.$refs.multipleTable.store.states.lazyTreeNodeMap, parentId, [])
+      if (tree) {
+        const data = [
+          {
+            id: '2',
+            name: '挖煤机',
+            code: '12',
+            unit: '台',
+            model: 'GQ022114',
+            createTime: '2021.01.25',
+            remark: ''
+          }, {
+            id: '3',
+            name: '采煤机',
+            code: '13',
+            unit: '台',
+            model: 'GQ022114',
+            createTime: '2021.01.25',
+            remark: ''
+          }
+        ]
+        this.load(tree, treeNode, resolve, data)
+      }
     }
+
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .filter-bar {

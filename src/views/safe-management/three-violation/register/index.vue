@@ -1,133 +1,220 @@
 <template>
   <div class="page-container">
-    <div class="filter-bar">
-      <div class="filter-bar__item">
-        <label>关键字：</label>
-        <el-input
-          v-model="keywords"
-          class="filter-item"
-          style="width:200px"
-          placeholder="违章违纪事实、检查部门、责任人"
-          suffix-icon="el-icon-search"
-        />
-      </div>
-      <div class="filter-bar__item">
-        <el-button type="primary" size="medium" @click="search()">搜索</el-button>
-      </div>
+    <filter-bar :config="threeViolationFilterConfig" @search-click="queryData" @create-click="openDialog('create')"
+      @refresh-click="queryData" @import-click="importClick"/>
+    <list-table :id="id" :list="list" :list-loading="listLoading" :config="threeViolationConfig" @edit-click="(row) => openDialog('edit', row)"
+      @delete-click="deleteClick" @submit-data="editSubmit" @other-click="otherClick"/>
+    <div v-show="total > 0" class="page-bottom">
+      <el-button class="page-bottom__delete" type="warning" size="small" plain :disabled="deleteDisabled" @click="deleteClick">
+        <i class="el-icon-delete el-icon--left" />批量删除
+      </el-button>
+      <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows"
+        @pagination="pagination" />
     </div>
-    <el-table
-      :data="tableData"
-      border
-      fit
-      :cell-style="cellStyle"
-      header-cell-class-name="pre-line"
-    >
-      <el-table-column align="center" label="序号" width="95" fixed>
-        <template slot-scope="scope">
-          {{ scope.$index+1 }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="checkOrganization" align="center" label="检查部门" width="140" />
-      <el-table-column prop="person" align="center" label="检查人员" width="90" />
-      <el-table-column prop="classes" align="center" label="检查班次" width="140" />
-      <el-table-column prop="checkDate" align="center" label="检查时间" width="140" />
-      <el-table-column prop="dutyOrganization" align="center" label="责任单位" width="120" />
-      <el-table-column prop="level" align="center" label="严重级别" width="140">
-        <template slot-scope="scope">
-          <span class="color-lump green">{{ scope.row.level }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="remark" align="center" label="备注" width="140" />
-      <el-table-column prop="proMan" align="center" label="违章人员" width="90" />
-      <el-table-column prop="violation" align="center" label="违章违纪" width="180" />
-      <el-table-column prop="result" align="center" label="处理结果" width="90" />
-      <el-table-column prop="yearViolations" align="center" label="年度三违" />
-      <el-table-column prop="deduct" align="center" label="违章扣分" />
-      <el-table-column prop="files" align="center" label="附件" />
-      <el-table-column fixed="right" label="操作" width="160" align="center">
-        <el-button type="text" size="small" @click="edit()">编辑</el-button>
-        <el-button type="text" size="small" style="color: #f56c6c" @click="del()">删除</el-button>
-      </el-table-column>
-    </el-table>
+    <!-- 新建弹窗 -->
+    <form-dialog ref="createDialog" :config="initCreateConfig()" :dialog-visible="createDialogVisible" @close-dialog="createDialogVisible = false"
+      @submit="createSubmit" />
+    <!-- 编辑弹窗 -->
+    <form-dialog ref="editDialog" :config="initEditConfig()" :dialog-visible="editDialogVisible" @close-dialog="editDialogVisible = false"
+      @submit="editSubmit" />
+    <detailed-information ref="threeViolationsDetailed" :registerInfo="registerInfo" :dialog-visible="detailedInformationDisabled"
+        @close-dialog="detailedInformationDisabled = false">
+    </detailed-information>
   </div>
 </template>
+
 <script>
-export default {
-  data() {
-    return {
-      keywords: '',
-      tableData: [
-        {
-          level: '一般',
-          status: '待修复',
-          checkDate: '2021.01.27',
-          classes: '',
-          checkType: '',
-          remark: '',
-          checkOrganization: '掘进五区区直',
-          dutyOrganization: '',
-          person: '徐长春',
-          accompanyPerson: '',
-          proMan: '',
-          violation: '1163（3）轨顺',
-          yearViolations: '',
-          result: '',
-          changeDate: '2021.01.31',
-          statusExplain: '',
-          review: '',
-          content: '',
-          deduct: '',
-          files: ''
+  import {
+    getsysDictListById,
+    getAqglThreeRegisterList,
+    getAqglThreeRegisterById,
+    saveAqglThreeRegister,
+    updateAqglThreeRegister,
+    deleteaqglThreeRegister
+  } from '@/api/hidden-danger'
+  import {
+    threeViolationFilterConfig,
+    threeViolationConfig
+  } from '@/data/hidden-danger'
+  import FilterBar from '@/components/FilterBar'
+  import ListTable from '@/components/ListTable'
+  import Pagination from '@/components/Pagination'
+  import FormDialog from '@/components/FormDialog'
+  import DetailedInformation from './components/detailed-information'
+  export default {
+    components: {
+      FilterBar,
+      ListTable,
+      Pagination,
+      FormDialog,
+      DetailedInformation
+    },
+    data() {
+      return {
+        id: 'organization',
+        list: [],
+        total: 0,
+        listQuery: {
+          page: 1,
+          pagerows: 10
+        },
+        filter: {}, // 筛选项
+        listLoading: true,
+        threeViolationFilterConfig,
+        threeViolationConfig,
+        deleteDisabled: true,
+        createDialogVisible: false,
+        editDialogVisible: false,
+        detailedInformationDisabled: false,
+        registerInfo: {}
+      }
+    },
+    created() {
+      this.__fetchData()
+      this.__fetchSelectList()
+    },
+    methods: {
+      __fetchSelectList() {
+        const query = [{
+          parentId: 10088
+        }, {
+          parentId: 10042
+        }, {
+          parentId: 10122
+        }, {
+          parentId: 24
+        }]
+        for (let q in query) {
+          getsysDictListById(query[q].parentId).then(response => {
+            console.log(response);
+            let selectList = response.data
+            for (let m in response.data) {
+              this.getIterationData(selectList[m], response.data[m])
+            }
+            console.log(selectList);
+            this.threeViolationConfig.columns.forEach(it => {
+              if (query[q].parentId == 10088) {
+                if (it.field === 'examineShiftId') {
+                  it.options = selectList
+                }
+              } else if (query[q].parentId == 10042) {
+                if (it.field === 'examinePathId') {
+                  it.options = selectList
+                }
+              } else if (query[q].parentId == 10122) {
+                if (it.field === 'flag') {
+                  it.options = selectList
+                }
+              } else if (query[q].parentId == 24) {
+                if (it.field === 'grade') {
+                  it.options = selectList
+                }
+              }
+            })
+          })
         }
-      ]
-    }
-  },
-  methods: {
-    search() {
-      console.log(this.keywords)
-    },
-    edit() {
-      console.log('edit')
-    },
-    del() {
-      console.log('del')
-    },
-    // 表格单元格样式
-    cellStyle() {
-      return 'font-size: 13px'
-    }
-  }
-}
-</script>
-<style lang="scss" scoped>
-@import '~@/assets/styles/variables.scss';
-  .filter-bar {
-    margin-bottom: 10px;
-    &__item {
-      display: inline-block;
-      margin: 0 40px 15px 0;
-      font-size: 14px;
-      label {
-        font-weight: normal;
-        font-size: 14px;
-        margin-right: 4px;
+      },
+      getIterationData(_m, _d) {
+        _m.label = _d.dictName
+        _m.value = _d.sysDictId
+        _m.children = _d.sysDictList
+        if (_d.sysDictList.length > 0) {
+          for (let m in _d.sysDictList) {
+            this.getIterationData(_m.children[m], _d.sysDictList[m])
+          }
+        }
+      },
+      __fetchData() {
+        this.listLoading = true
+        const query = {
+          page: this.listQuery.page,
+          pagerows: this.listQuery.pagerows,
+          keyword: this.filter.name,
+          keywordField: ['disciplinary', 'examineDept', 'unit']
+        }
+        getAqglThreeRegisterList(query).then(response => {
+          console.log(response);
+          this.listLoading = false
+          this.list = response.data.rows
+          this.total = Number(response.data.records)
+        })
+      },
+      otherClick(row, index, item){
+        console.log(row, index, item);
+        this.registerInfo = row
+        this.detailedInformationDisabled = true
+      },
+      // 查询数据
+      queryData(filter) {
+        this.filter = Object.assign(this.filter, filter)
+        this.__fetchData()
+      },
+      importClick(){
+        this.$message.info("尚未开发，敬请期待")
+      },
+      pagination(data) {
+        this.listQuery.page = data.page
+        this.listQuery.pagerows = data.pagerows
+        this.__fetchData()
+      },
+      // 初始化新建窗口配置
+      initCreateConfig() {
+        const createConfig = Object.assign({
+          title: '新建',
+          width: '800px',
+          form: this.threeViolationConfig.columns
+        })
+        return createConfig
+      },
+      // 初始化编辑窗口配置
+      initEditConfig() {
+        const editConfig = Object.assign({
+          title: '编辑',
+          width: '800px',
+          form: this.threeViolationConfig.columns
+        })
+        return editConfig
+      },
+      // 打开弹窗
+      openDialog(name, row) {
+        const visible = `${name}DialogVisible`
+        this[visible] = true
+        if (row) {
+          getAqglThreeRegisterById(row.aqglThreeRegisterId).then(response => {
+            this.$refs.editDialog.updataForm(response.data)
+          })
+        }
+      },
+      // 删除
+      deleteClick(row) {
+        this.$confirm('确定删除该组织结构?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteaqglThreeRegister(row.aqglThreeRegisterId).then(response => {
+            this.$message.success('删除成功')
+            this.__fetchData()
+          })
+        })
+      },
+      // submit data
+      createSubmit(submitData) {
+        saveAqglThreeRegister(submitData).then(response => {
+          this.__fetchData()
+          this.$refs.createDialog.resetForm()
+          this.createDialogVisible = false
+          this.$message.success('新建成功')
+        })
+      },
+      editSubmit(submitData) {
+        updateAqglThreeRegister(submitData).then(response => {
+          this.__fetchData()
+          this.$refs.editDialog.resetForm()
+          this.editDialogVisible = false
+          this.$message.success('编辑成功')
+        })
       }
     }
   }
-  .color-lump {
-    padding: 10px 20px;
-    color: $whiteColor;
-    &.green {
-      background: $greenColor;
-    }
-    &.blue {
-      background: $primaryColor;
-    }
-    &.orange {
-      background: $orangeColor;
-    }
-    &.red {
-      background: $redColor;
-    }
-  }
-</style>
+</script>

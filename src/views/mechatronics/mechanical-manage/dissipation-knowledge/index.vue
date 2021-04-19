@@ -38,6 +38,7 @@
     </div>
     <!-- 新建弹窗 -->
     <form-dialog
+      ref="createDialog"
       :config="initCreateConfig()"
       :dialog-visible="createDialogVisible"
       @upload-click="openUploadDialog"
@@ -73,7 +74,7 @@
 </template>
 
 <script>
-import { getDisKnowLedgeList } from '@/api/mechatronics'
+import { getDisKnowLedgeList, createDisKnowLedge, editDisKnowLedge, getDisKnowLedgeInfo, delDisKnowLedge } from '@/api/mechatronics'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -113,7 +114,11 @@ export default {
   methods: {
     __fetchData() {
       this.listLoading = true
-      const query = Object.assign(this.listQuery, this.filter)
+      const filter = {
+        ...this.filter,
+        keywordField: ['workNumber', 'loginName', 'userName']
+      }
+      const query = Object.assign(this.listQuery, filter)
       getDisKnowLedgeList(query).then(response => {
         this.listLoading = false
         this.list = response.data.rows
@@ -148,8 +153,10 @@ export default {
       const visible = `${name}DialogVisible`
       this[visible] = true
       if (row) {
-        // 如果有数据，更新子组件的 formData
-        this.$refs.editDialog.updataForm(row)
+        getDisKnowLedgeInfo(row.id).then(response => {
+          const info = Object.assign(response.data)
+          this.$refs.editDialog.updataForm(info)
+        })
       }
     },
     // 打开能耗公式、等级评定弹窗
@@ -159,25 +166,44 @@ export default {
     },
 
     // 删除
-    deleteClick(id) {
-      this.$confirm('确定删除该规程?', '提示', {
+    deleteClick(row) {
+      this.$confirm('确定删除该项?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success('删除成功')
+        console.log(row.id)
+        delDisKnowLedge(row.id).then(response => {
+          console.log(response)
+          this.$message.success('删除成功')
+          this.__fetchData()
+        })
       })
     },
     // submit data
     createSubmit(submitData) {
       console.log(submitData)
-      this.createDialogVisible = false
-      this.$message.success('新建成功')
+      const query = Object.assign(submitData)
+      createDisKnowLedge(query).then(response => {
+        console.log(response)
+        this.createDialogVisible = false
+        this.$message.success('新建成功')
+        this.$refs.createDialog.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.createDialog.resetSubmitBtn()
+      })
     },
     editSubmit(submitData) {
-      console.log(submitData)
-      this.editDialogVisible = false
-      this.$message.success('编辑成功')
+      const query = Object.assign(submitData)
+      editDisKnowLedge(query).then(response => {
+        console.log(response)
+        this.editDialogVisible = false
+        this.$message.success('编辑成功')
+        this.$refs.editDialog.resetForm()
+        this.__fetchData()
+      })
     },
 
     // 改变所选项

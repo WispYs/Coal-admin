@@ -50,6 +50,7 @@
         ref="createDialog"
         :config="initCreateConfig()"
         :dialog-visible="createDialogVisible"
+        @upload-click="openUploadDialog"
         @close-dialog="createDialogVisible = false"
         @submit="createSubmit"
       />
@@ -58,12 +59,21 @@
         ref="editDialog"
         :config="initEditConfig()"
         :dialog-visible="editDialogVisible"
+        @upload-click="openUploadDialog"
         @close-dialog="editDialogVisible = false"
         @submit="editSubmit"
+      />
+      <!-- 上传附件 -->
+      <upload-file
+        :dialog-visible="uploadDialogVisible"
+        :multiple="false"
+        @close-dialog="uploadDialogVisible = false"
+        @upload-submit="uploadSubmit"
       />
 
       <!-- 展开详情 -->
       <detail-dialog
+        ref="detailDialog"
         :config="initDetailConfig()"
         :dialog-visible="detailDialogVisible"
         @close-dialog="detailDialogVisible = false"
@@ -108,7 +118,9 @@ import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
+import UploadFile from '@/components/UploadFile'
 import DetailDialog from './components/DetailDialog'
+import { parseTime } from '@/utils'
 import { MechLargeEquipTableConfig, MechLargeEquipFilterConfig, MechLargeEquipDetailFilterConfig, MechLargeEquipDetailTableConfig } from '@/data/mechatronics'
 
 export default {
@@ -118,6 +130,7 @@ export default {
     ListTable,
     Pagination,
     FormDialog,
+    UploadFile,
     DetailDialog
   },
   data() {
@@ -154,6 +167,8 @@ export default {
           flag: true
         }
       ],
+      uploadRow: null, // 上传文件信息
+      uploadDialogVisible: false,
       multipleSelection: [], // 多选项
       deleteDisabled: true // 批量删除置灰
     }
@@ -195,6 +210,11 @@ export default {
       const query = Object.assign(this.listQuery, filter)
       getLargeEquipmentList(query).then(response => {
         this.listLoading = false
+        response.data.rows.forEach(it => {
+          it.arrivalTime = parseTime(it.arrivalTime)
+          it.outFacTime = parseTime(it.outFacTime)
+          it.useTime = parseTime(it.useTime)
+        })
         this.list = response.data.rows
         this.total = Number(response.data.records)
       })
@@ -272,32 +292,32 @@ export default {
       this[visible] = true
 
       let getListFn = null // 获取详情的接口方法
-      let editRef = null // 编辑弹窗的ref
       // 如果打开特有属性的新增编辑弹窗
       if (name.indexOf('Detail') > -1) {
         getListFn = getEquipmentAreaInfo
-        editRef = 'editDetailDialog'
       } else {
         // 接口获取所属场所，更新config数据
         this.__updateEquipAreaTree()
         getListFn = getLargeEquipmentInfo
-        editRef = 'editDialog'
       }
 
       // 如果有数据，更新子组件的 formData
       if (row) {
-        this.$refs[`${name}Dialog`].updataForm(row)
         getListFn(row.id).then(response => {
-          const info = Object.assign(response.data)
-          this.$refs[editRef].updataForm(info)
+          const info = Object.assign(response.data, {
+            arrivalTime: parseTime(response.data.arrivalTime),
+            outFacTime: parseTime(response.data.outFacTime),
+            useTime: parseTime(response.data.useTime)
+          })
+          this.$refs[`${name}Dialog`].updataForm(info)
         })
       }
     },
     // 打开特有属性弹窗
     openDetailDialog(id) {
       console.log(id)
-      this.areaId = id
       this.detailDialogVisible = true
+      this.$refs.detailDialog.queryData({ id })
     },
     // 删除
     deleteClick(row) {
@@ -340,19 +360,27 @@ export default {
         this.__fetchData()
       })
     },
+    // 打开上传文件组件
+    openUploadDialog(row) {
+      this.uploadDialogVisible = true
+      this.uploadRow = row
+    },
+    // 上传文件控件成功回调
+    uploadSubmit(fileList) {
+      console.log(fileList)
+      this.uploadDialogVisible = false
+    },
     // 详情新增
     createDetailSubmit(submitData) {
       console.log(submitData)
 
-      const query = Object.assign(submitData, {
-
-      })
+      const query = Object.assign(submitData)
       createEquipmentArea(query).then(response => {
         console.log(response)
         this.createDetailDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDetailDialog.resetForm()
-        this.__fetchData()
+        this.$refs.detailDialog.__fetchData()
       }).catch(err => {
         console.log(err)
         this.$refs.createDetailDialog.resetSubmitBtn()
@@ -366,7 +394,7 @@ export default {
         this.editDetailDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDetailDialog.resetForm()
-        this.__fetchData()
+        this.$refs.detailDialog.__fetchData()
       })
     },
 

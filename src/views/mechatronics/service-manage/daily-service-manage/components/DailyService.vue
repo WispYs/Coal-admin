@@ -9,33 +9,33 @@
       <el-form-item label="所属场所" prop="area">
         <el-input v-model="formData.area" style="200px;" disabled class="form-item" placeholder="请填写所属场所" />
       </el-form-item>
-      <el-form-item label="所属计划" prop="plan">
-        <el-input v-model="formData.plan" style="200px;" disabled class="form-item" placeholder="请填写所属计划" />
+      <el-form-item label="所属计划" prop="deviceName">
+        <el-input v-model="formData.deviceName" style="200px;" disabled class="form-item" placeholder="请填写所属计划" />
       </el-form-item>
-      <el-form-item label="维检时间" prop="time">
+      <el-form-item label="维检时间" prop="oveTime">
         <el-date-picker
-          v-model="formData.time"
+          v-model="formData.oveTime"
           class="form-item"
           value-format="yyyy-MM-dd"
           type="date"
           placeholder="请选择维检时间"
         />
       </el-form-item>
-      <el-form-item label="维检情况" prop="condition" class="full-line">
+      <el-form-item label="维检情况" prop="oveContent" class="full-line">
         <el-input
-          v-model="formData.condition"
+          v-model="formData.oveContent"
           type="textarea"
           placeholder="请填写维检情况"
           style="width: 100%"
         />
       </el-form-item>
-      <el-form-item label="维检结果" prop="result" class="full-line">
-        <el-radio-group v-model="formData.result">
+      <el-form-item label="维检结果" prop="oveResult" class="full-line">
+        <el-radio-group v-model="formData.oveResult">
           <el-radio-button :label="1">正常</el-radio-button>
           <el-radio-button :label="0">异常</el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <template v-if="!formData.result">
+      <template v-if="!formData.oveResult">
         <el-form-item label="故障主题" prop="subject" class="full-line">
           <el-input
             v-model="formData.subject"
@@ -53,12 +53,7 @@
           />
         </el-form-item>
         <el-form-item label="指定维修人" prop="server" class="full-line">
-          <el-input
-            v-model="formData.server"
-            type="textarea"
-            placeholder="请填写指定维修人"
-            style="width: 100%"
-          />
+          <el-input v-model="formData.server" style="200px;" class="form-item" placeholder="请填写指定维修人" />
         </el-form-item>
       </template>
 
@@ -83,23 +78,23 @@ export default {
     return {
       formData: {
         area: '中央区主井提升机房',
-        plan: '主电机碳刷',
-        time: '',
-        condition: '',
-        result: 1,
+        deviceName: '主电机碳刷',
+        oveTime: '',
+        oveContent: '',
+        oveResult: 1,
         subject: '',
         fault: '',
         server: ''
       },
       submitLoading: false, // 提交按钮loading状态
       formRules: {
-        time: [
+        oveTime: [
           { required: true, message: '请选择维检时间', trigger: 'blur' }
         ],
-        condition: [
+        oveContent: [
           { required: true, message: '请填写维检情况', trigger: 'blur' }
         ],
-        result: [
+        oveResult: [
           { required: true, message: '请选择维检结果', trigger: 'blur' }
         ],
         subject: [
@@ -119,7 +114,6 @@ export default {
     // 更新组件内 form 数据
     updataForm(form) {
       this.formData = Object.assign(this.formData, form)
-      console.log(this.formData)
     },
 
     // 当提交失败的时候重置按钮状态
@@ -139,6 +133,7 @@ export default {
       this.$refs.formData.validate((valid) => {
         if (valid) {
           this.submitLoading = true
+          console.log(this.formData)
           this.$emit('submit', this.formData)
         } else {
           console.log('error submit!!')

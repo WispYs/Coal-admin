@@ -10,7 +10,7 @@
               <div v-if="(item.date.split('-')[1]).indexOf(data.day.split('-')[1])!=-1">
                 <div v-if="(item.date.split('-')[2]).indexOf(data.day.split('-')[2])!=-1">
                   <div class="event-content" @click="eventClick(item)">
-                    <div v-for="(it, i) in handleEvent(item.title)" :key="i" class="event-title">{{ it }}</div>
+                    <div v-for="(it, i) in handleEvent(item.title)" :key="i" class="event-title" :title="it">{{ it }}</div>
                     <b v-if="item.title.length > 3">+{{ item.title.length - 3 }} more</b>
                   </div>
                 </div>
@@ -98,6 +98,10 @@ export default {
   color: #666;
   font-size: 10px;
   line-height: 16px;
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
   margin-top: 1px;
   color: #fff;
   padding: 0 6px;

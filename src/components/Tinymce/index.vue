@@ -5,11 +5,12 @@
       <el-button icon="el-icon-upload" size="mini" type="primary" @click="uploadDialogVisible = true">
         上传图片
       </el-button>
-      <el-button size="mini" type="primary" @click="onSubmit">保存</el-button>
+      <!-- <el-button size="mini" type="primary" @click="onSubmit">保存</el-button> -->
 
     </div>
     <upload-file
       :accept="accept"
+      :data="uploadData"
       :dialog-visible="uploadDialogVisible"
       @close-dialog="uploadDialogVisible = false"
       @upload-submit="uploadSubmit"
@@ -21,8 +22,9 @@
 import UploadFile from '@/components/UploadFile'
 import { Plugins, Toolbar, FontFormats, FontSizeFormats } from './config'
 import load from './loadScript'
+import { getImg } from '@/api/tinymce'
 
-const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
+const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.5/tinymce.min.js'
 
 export default {
   name: 'Tinymce',
@@ -65,7 +67,12 @@ export default {
       hasChange: false,
       hasInit: false,
       tinymceId: this.id,
-      fullscreen: false
+      fullscreen: false,
+      uploadData: {
+        sysFileDictId: 0,
+        // menuId: this.$route.name
+        menuId: 90022
+      }
     }
   },
   computed: {
@@ -78,10 +85,12 @@ export default {
     }
   },
   watch: {
-    value(val) {
+    value(val, oldVal) {
+      this.hasChange = val === oldVal
       if (!this.hasChange && this.hasInit) {
-        this.$nextTick(() =>
-          window.tinymce.get(this.tinymceId).setContent(val || ''))
+        this.$nextTick(() => {
+          window.tinymce.get(this.tinymceId).setContent(val || '')
+        })
       }
     }
   },
@@ -156,6 +165,10 @@ export default {
           //   e.execCommand('fontSize', false, '22')
           // })
         }
+        // images_upload_handler: (blobInfo, success, failure) => {
+        //   const img = 'data:image/jpeg;base64,' + blobInfo.base64()
+        //   success(img)
+        // }
       })
     },
     destroyTinymce() {
@@ -177,7 +190,11 @@ export default {
     // 上传文件提交
     uploadSubmit(fileList) {
       console.log(fileList)
-      fileList.forEach(it => window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${it.url}" >`))
+      fileList.forEach(it => {
+        getImg(it.path).then(res => {
+          window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${res.data.url}" >`)
+        })
+      })
       this.uploadDialogVisible = false
     },
     // 富文本编辑器内容提交

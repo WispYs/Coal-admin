@@ -110,7 +110,7 @@ export default {
           parentId: 0
         },
         sort:{
-          asc:["sort"]
+          asc:["sortNo"]
         },
         keyword: _filter,
         keywordField:['dictName','dictValue'],
@@ -224,7 +224,12 @@ export default {
     },
     // submit data
     createSubmit(submitData) {
-      console.log(submitData)
+      if(!submitData.parentId){
+        submitData.parentId = 0
+      }
+      const query = Object.assign(submitData, {
+        sortNo: Number(submitData.sortNo) || 0
+      })
       saveSysDict(submitData).then(response => {
         console.log(response);
         this.__fetchData()

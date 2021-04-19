@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { getUserList, createUser, getUserInfo, editUser, delUser, resetUserPassword, getOrganTree } from '@/api/authority-management'
+import { getUserList, createUser, getUserInfo, editUser, delUser, resetUserPassword, getOrganTree,getSelectRoleList } from '@/api/authority-management'
 import TreeBar from '@/components/TreeBar'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
@@ -115,8 +115,9 @@ export default {
   },
 
   created() {
-    this.__fetchData()
     this.__updateOrganTree()
+    this.__fetchRole()
+    this.__fetchData()
   },
   methods: {
     // 接口获取组织机构树
@@ -133,7 +134,37 @@ export default {
         })
       })
     },
-
+    getIterationData(_m, _d) {
+      _m.children = _d.sysDictList
+      if (_d.sysDictList.length > 0) {
+        for (let m in _d.sysDictList) {
+          this.getIterationData(_m.children[m], _d.sysDictList[m])
+        }
+      }
+    },
+    __fetchRole(){
+      const query ={
+        entity:{},
+        selectedField:"",
+        sort:""
+      }
+      getSelectRoleList(query).then(response => {
+        console.log(response.data)
+        let selectList = response.data
+        for (let m in response.data) {
+          selectList[m].label = response.data[m].roleName
+          selectList[m].value = response.data[m].sysRoleId
+        }
+        console.log(selectList);
+        // 更新新增、编辑config数据
+        this.UserTableConfig.columns.forEach(it => {
+          if (it.field === 'sysRoleId') {
+            it.options = selectList
+          }
+        })
+        console.log(this.UserTableConfig.columns);
+      })
+    },
     __fetchData() {
       this.listLoading = true
       const filter = {
@@ -224,7 +255,9 @@ export default {
       })
     },
     editSubmit(submitData) {
+      console.log(submitData);
       const query = Object.assign(submitData)
+      console.log(query);
       editUser(query).then(response => {
         console.log(response)
         this.editDialogVisible = false

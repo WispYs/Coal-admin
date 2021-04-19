@@ -22,6 +22,7 @@
     />
     <list-table
       :id="id"
+      ref="organTable"
       :list="list"
       :list-loading="listLoading"
       :config="OrganTableConfig"
@@ -86,6 +87,7 @@
 
 <script>
 import { getOrganList, createOrgan, getOrganInfo, editOrgan, getOrganTree, getOrganChildTree, delOrgan } from '@/api/authority-management'
+import { getsysDictListById } from '@/api/hidden-danger'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -118,18 +120,48 @@ export default {
       createDialogVisible: false,
       editDialogVisible: false,
       multipleSelection: [], // 多选项
-      deleteDisabled: true // 批量删除置灰
+      deleteDisabled: true, // 批量删除置灰
+      mapArr: [], // 存储异步加载的树状节点数据数组
+      oldParentId: '' // 编辑节点前树状节点id
     }
   },
   created() {
     this.__fetchData()
+    this.__fetchType()
   },
 
   methods: {
+    __fetchType() {
+      const query = {
+        parentId: 10076
+      }
+      getsysDictListById(query.parentId).then(response => {
+        let selectList = response.data
+        for (let m in response.data) {
+          this.getIterationData(selectList[m], response.data[m])
+        }
+        this.OrganTableConfig.columns.forEach(it => {
+          if (it.field === 'deptType') {
+            it.options = selectList
+          }
+        })
+        console.log(this.OrganTableConfig);
+      })
+    },
+    getIterationData(_m, _d) {
+      _m.label = _d.dictName
+      _m.value = _d.sysDictId
+      _m.children = _d.sysDictList
+      if (_d.sysDictList.length > 0) {
+        for (let m in _d.sysDictList) {
+          this.getIterationData(_m.children[m], _d.sysDictList[m])
+        }
+      }
+    },
     // 接口获取组织机构树，更新config数据
     __updateOrganTree() {
       getOrganTree().then(response => {
-        OrganTableConfig.columns.forEach(it => {
+        this.OrganTableConfig.columns.forEach(it => {
           if (it.field === 'parentId') {
             it.options = response.data
           }
@@ -153,26 +185,27 @@ export default {
       getOrganList(query).then(response => {
         this.listLoading = false
         response.data.rows.forEach(it => {
-          it.sysDeptId = Number(it.sysDeptId)
           if (it.parentCheck === 1) {
             it.hasChildren = true
           }
         })
         this.list = response.data.rows
-        console.log(this.list)
         this.total = Number(response.data.records)
       })
     },
 
     // 异步获取树子节点数据
     asyncData(tree, treeNode, resolve) {
+      // 将当前选中节点数据存储到mapArr中
+      this.mapArr[tree.sysDeptId] = { tree, treeNode, resolve }
+
       getOrganChildTree(tree.sysDeptId).then(response => {
-        console.log(response.data)
         const childrenTree = []
         response.data.forEach(it => {
           const item = {
             deptName: it.deptName,
             sysDeptId: Number(it.sysDeptId),
+            parentId: it.parentId,
             shortName: it.shortName,
             deptType: it.deptType,
             sort: it.sort,
@@ -182,26 +215,22 @@ export default {
           }
           childrenTree.push(item)
         })
+        console.log(childrenTree);
         resolve(childrenTree)
       })
-      // setTimeout(() => {
-      //   resolve([{
-      //     deptName: '矿领导',
-      //     deptId: '001010',
-      //     shortName: '矿领导',
-      //     deptType: 3,
-      //     sort: 2,
-      //     createTime: '2020.07.21'
-      //   }, {
-      //     deptName: '办公室',
-      //     deptId: '001012',
-      //     shortName: '办公室',
-      //     deptType: 2,
-      //     sort: 186,
-      //     createTime: '2020.12.19'
-      //   }])
-      // }, 1000)
     },
+    // 重新触发树形表格的loadTree函数
+    refreshLoadTree(parentId) {
+      const mapsData = this.mapArr[parentId]
+
+      // 如果mapsData不为undefined，则表示之前打开过树形结构
+      if (mapsData) {
+        const { tree, treeNode, resolve } = mapsData
+        this.asyncData(tree, treeNode, resolve)
+      }
+      this.$refs.organTable.refreshLoadTree(parentId)
+    },
+
     // 查询数据
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
@@ -252,7 +281,7 @@ export default {
         type: 'warning'
       }).then(() => {
         delOrgan(row.sysDeptId).then(response => {
-          console.log(response)
+          this.refreshLoadTree(row.parentId)
           this.$message.success('删除成功')
           this.__fetchData()
         })
@@ -262,14 +291,11 @@ export default {
     },
     // 新增
     createSubmit(submitData) {
-      console.log(submitData)
-      const query = Object.assign(submitData, {
-        parentId: Number(submitData.parentId) || 0
-      })
+      const query = Object.assign(submitData)
       createOrgan(query).then(response => {
-        console.log(response)
         this.createDialogVisible = false
         this.$message.success('新建成功')
+        this.refreshLoadTree(submitData.parentId)
         this.$refs.createDialog.resetForm()
         this.__fetchData()
       }).catch(err => {
@@ -281,11 +307,17 @@ export default {
     editSubmit(submitData) {
       const query = Object.assign(submitData)
       editOrgan(query).then(response => {
-        console.log(response)
+        // 更新编辑前后父节点数据
+        this.refreshLoadTree(submitData.parentId)
+        this.refreshLoadTree(this.oldParentId)
+
         this.editDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDialog.resetForm()
         this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.editDialog.resetSubmitBtn()
       })
     },
     // 定义导出Excel表格事件

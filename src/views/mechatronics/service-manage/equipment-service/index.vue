@@ -45,7 +45,6 @@
           @pagination="__fetchData"
         />
       </div>
-
       <!-- 新建弹窗 -->
       <form-dialog
         ref="createDialog"
@@ -83,14 +82,12 @@
         @close-dialog="uploadDialogVisible = false"
         @upload-submit="uploadSubmit"
       />
-
     </div>
-
   </div>
 </template>
 
 <script>
-import { getEquipmentServiceList, createUser, getUserInfo, editUser, delUser, getEquipmentArea } from '@/api/mechatronics'
+import { getEquipmentServiceList, createEquipmentService, getEquipmentServiceInfo, editEquipmentService, delEquipmentService } from '@/api/mechatronics'
 import TreeBar from '@/components/TreeBar'
 import FilterBar from './components/FilterBar'
 import ListTable from '@/components/ListTable'
@@ -100,6 +97,7 @@ import UploadFile from '@/components/UploadFile'
 import ServiceProgress from './components/ServiceProgress'
 import CheckSpare from './components/CheckSpare'
 import { EquipmentServiceTableConfig, EquipmentServiceFilterConfig } from '@/data/mechatronics'
+import { parseTime } from '@/utils'
 
 export default {
   components: {
@@ -114,7 +112,7 @@ export default {
   },
   data() {
     return {
-      id: 'service-progress',
+      id: 'equipment-service',
       list: [],
       total: 0,
       listQuery: {
@@ -160,6 +158,9 @@ export default {
       const query = Object.assign(this.listQuery, filter)
       getEquipmentServiceList(query).then(response => {
         this.listLoading = false
+        response.data.rows.forEach(it => {
+          it.handleTime = parseTime(it.handleTime)
+        })
         this.list = response.data.rows
         this.total = Number(response.data.records)
       })
@@ -197,13 +198,15 @@ export default {
       // 如果有数据，更新子组件的 formData
       if (row) {
         this.$refs[`${name}Dialog`].updataForm(row)
-        // getUserInfo(row.sysUserId).then(response => {
-        //   const info = Object.assign(response.data, {
-        //     sysDeptId: Number(response.data.sysDeptId) || 0,
-        //     sysRoleId: Number(response.data.sysRoleId) || 0
-        //   })
-        //   this.$refs.editDialog.updataForm(info)
-        // })
+        getEquipmentServiceInfo(row.id).then(response => {
+          const info = Object.assign(response.data, {
+            handleTime: parseTime(response.data.handleTime),
+            oveType: response.data.oveType + '',
+            status: response.data.status + '',
+            handleBy: response.data.handleBy + ''
+          })
+          this.$refs.editDialog.updataForm(info)
+        })
       }
     },
     // 删除
@@ -213,9 +216,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(row.sysUserId)
-        delUser(row.sysUserId).then(response => {
-          console.log(response)
+        delEquipmentService(row.id).then(response => {
           this.$message.success('删除成功')
           this.__fetchData()
         })
@@ -223,14 +224,8 @@ export default {
     },
     // 新增
     createSubmit(submitData) {
-      console.log(submitData)
-
-      const query = Object.assign(submitData, {
-        sysRoleId: Number(submitData.sysRoleId) || 0,
-        sysDeptId: Number(submitData.sysDeptId) || 0
-      })
-      createUser(query).then(response => {
-        console.log(response)
+      const query = Object.assign(submitData)
+      createEquipmentService(query).then(response => {
         this.createDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDialog.resetForm()
@@ -243,8 +238,7 @@ export default {
     // 编辑
     editSubmit(submitData) {
       const query = Object.assign(submitData)
-      editUser(query).then(response => {
-        console.log(response)
+      editEquipmentService(query).then(response => {
         this.editDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDialog.resetForm()

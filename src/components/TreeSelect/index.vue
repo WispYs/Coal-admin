@@ -56,7 +56,7 @@ export default {
     },
     /* 初始值 */
     value: {
-      type: Number,
+      type: [Number, String],
       default: () => null
     },
     /* 可清空选项 */

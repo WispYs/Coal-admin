@@ -241,7 +241,7 @@ export default {
         const vm = this.$refs.editDialog
         vm.submitLoading = false
         this.editDialogVisible = false
-        this.__fetchData()
+        this.__fetchData(submitData.sysFileDictId)
         this.$message.success(res.msg)
       })
     },
@@ -367,7 +367,9 @@ export default {
     },
     // 点击预览时触发
     previewClick(row) {
-      previewDocument(row.sysFileInfoId)
+      previewDocument(row.sysFileInfoId).then(res => {
+        console.log(res)
+      })
     },
     // 下载文件
     downloadClick(row) {
@@ -399,7 +401,7 @@ export default {
     },
     // 点击刷新时触发
     refresh() {
-      this.__fetchData()
+      this.__fetchData(this.selectTree)
     },
     // 点击树结构时触发
     handleNodeClick(_data) {

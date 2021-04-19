@@ -4,19 +4,13 @@
       <div class="chart-container__filter">
         <div class="filter-item">
           <span>年度：</span>
-          <el-select v-model="filterYear" placeholder="请选择" @change="selectYear">
-            <el-option
-              v-for="item in years"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
+          <el-date-picker
+            v-model="filterYear"
+            @change="yearChange"
+            type="year"
+            placeholder="选择年">
+          </el-date-picker>
         </div>
-        <!-- <div class="filter-item">
-          <span>总数量：</span>
-          <span style="color: red">{{ lineCount }}</span>
-        </div> -->
       </div>
       <h3>年度隐患统计趋势图</h3>
       <line-chart v-loading="loading" :cdata="lineData" />
@@ -31,7 +25,7 @@
         </div>
         <div class="chart-row">
           <div class="chart-item chart-title tip">结论</div>
-          <div class="chart-item chart-total tip">出现隐患最多的月份是1月，共计218人次。</div>
+          <div class="chart-item chart-total tip">{{riskYearContent}}</div>
         </div>
       </div>
     </div>
@@ -43,52 +37,42 @@
             <el-date-picker
               v-model="riskDate"
               type="daterange"
+              @change="DateChange"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
             />
           </div>
-          <!-- <div class="filter-item">
-            <span>风险专业：</span>
-            <el-select v-model="riskProfession" placeholder="请选择" @change="selectRisk">
-              <el-option
-                v-for="item in professionData"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </div> -->
         </div>
         <h3>按【检查类别】统计</h3>
-        <pie-chart v-loading="loading" :cdata="pieData" />
+        <pie-chart v-loading="loading" :cdata="riskList" />
       </div>
       <div class="chart-container--right">
         <div class="bar-filter">
           <div class="filter-item">
             <span>分析类型：</span>
-            <el-radio-group v-model="riskDimension">
-              <el-radio-button label="隐患级别" />
-              <el-radio-button label="隐患部门" />
-              <el-radio-button label="隐患状态" />
+            <el-radio-group v-model="riskDimension" @change="radioChange">
+              <el-radio-button :label="1">隐患级别</el-radio-button>
+              <el-radio-button :label="2">隐患部门</el-radio-button>
+              <el-radio-button :label="3">隐患状态</el-radio-button>
             </el-radio-group>
           </div>
         </div>
         <h3>按【检查类别】统计</h3>
-        <bar-chart v-loading="loading" :cdata="barData" />
+        <bar-chart v-loading="loading" :cdata="barList" />
       </div>
       <div class="chart-detail bar-detail">
         <div class="chart-row">
           <div class="chart-item chart-title">指标</div>
-          <div v-for="(item, index) in barData.name" :key="index" class="chart-item">{{ item }}</div>
+          <div v-for="(item, index) in riskList" :key="index" class="chart-item">{{ item.name }}</div>
         </div>
         <div class="chart-row">
           <div class="chart-item chart-title">数量</div>
-          <div v-for="(item, index) in barData.value" :key="index" class="chart-item">{{ item }}</div>
+          <div v-for="(item, index) in riskList" :key="index" class="chart-item">{{ item.value }}</div>
         </div>
         <div class="chart-row">
           <div class="chart-item chart-title tip">结论</div>
-          <div class="chart-item chart-total tip">2020年12月全矿共查出隐患{{ riskTotal }}人次，查出一般隐患C隐患1261人次，占比97.90%。查出一般隐患B隐患27人次，占比2.10%。一般隐患A0人次，占比0.00%。重大隐患0人次，占比0.00%。</div>
+          <div class="chart-item chart-total tip">{{riskContent}}</div>
         </div>
       </div>
     </div>
@@ -96,7 +80,11 @@
 </template>
 
 <script>
-import { getLineData } from '@/api/dashboard'
+import {
+    getHiddenRegisterYearCount,
+    getsysDictListById,
+    gethiddenRegisterCount
+  } from '@/api/hidden-danger'
 import LineChart from './components/LineChart'
 import BarChart from './components/BarChart'
 import PieChart from './components/PieChart'
@@ -115,80 +103,175 @@ export default {
         value: []
       },
       lineCount: 0,
-      barData: {
-        name: [],
-        value: []
+      barList: {
+        xAxisData: [],
+        seriesData: []
       },
       riskTotal: 0,
-      pieData: null,
-      riskDate: [],
-      professionData: [
-        { value: '安检', label: '安检' },
-        { value: '采煤', label: '采煤' },
-        { value: '一通三防', label: '一通三防' },
-        { value: '机电运输', label: '机电运输' }
-      ],
+      riskList:[],
+      riskDate: ['2021-04-01', '2021-04-30'],
+      startTime: '2021-04-01',
+      endTime: '2021-04-30',
       riskProfession: '',
-      years: [
-        { value: '2020', label: '2020年' },
-        { value: '2019', label: '2019年' },
-        { value: '2018', label: '2018年' },
-        { value: '2017', label: '2017年' },
-        { value: '2016', label: '2016年' }
-      ],
-      filterYear: '2020',
-      filterTime: [],
-      riskDimension: '隐患级别'
+      filterYear: '2021',
+      riskDimension: 1,
+      riskYearContent: '',
+      riskContent: ''
     }
   },
   mounted() {
-    // this.lineData = {
-    //   name: [],
-    //   value: []
-    // }
     this.__fetchLineData()
+    this.__fetchSelectList()
   },
   methods: {
+    yearChange(year) {
+      let date = new Date(year);
+      this.filterYear = date.getFullYear().toString()
+      this.__fetchLineData()
+    },
     __fetchLineData() {
-      this.loading = true
-      getLineData().then(response => {
-        this.loading = false
-        this.lineCount = response.data.lineCount
-        const line = response.data.lineData
-        const bar = response.data.barData2
-        const pie = response.data.barData2
-        this.riskTotal = response.data.barCount2
-        const lineName = []
-        const lineValue = []
-        const barName = []
-        const barValue = []
-        line.forEach(item => {
-          lineName.push(item.month + '月')
-          lineValue.push(item.value)
-        })
-        this.lineData = {
-          name: lineName,
-          value: lineValue
+      this.lineData.name = []
+      this.lineData.value = []
+      let lineLsit= []
+      let maxCount= {}
+      let num = 1
+      const query={
+        year: this.filterYear
+      }
+      getHiddenRegisterYearCount(query).then(response =>{
+        if(response.data.length > 0){
+          lineLsit =response.data
+          for(let i = 0; i < lineLsit.length; i++){
+            this.lineData.name.push(lineLsit[i].month)
+            this.lineData.value.push(lineLsit[i].count)
+            if(num == 1){
+              maxCount = lineLsit[i]
+              num++
+            }else{
+              if(lineLsit[i].count > maxCount.count){
+                maxCount = lineLsit[i]
+              }
+            }
+          }
+          console.log(maxCount);
+          this.riskYearContent = "出现违章最多的月份是"+ maxCount.month + '共计' + maxCount.count + '人次。'
+        }else{
+          this.riskYearContent = ''
         }
-        bar.forEach(item => {
-          barName.push(item.name)
-          barValue.push(item.value)
-        })
-        this.barData = {
-          name: barName,
-          value: barValue
-        }
-        this.pieData = pie
+        this.loading =false
       })
     },
-    // 改变筛选年份
-    selectYear(val) {
-      this.__fetchLineData()
+    __fetchSelectList() {
+      this.riskList = []
+      let parentId = ''
+      if (this.riskDimension == 1) {
+        // 隐患级别
+        parentId = Number(10106)
+      } else if (this.riskDimension == 3) {
+        // 隐患状态
+        parentId = Number(10115)
+      }
+      const query = {
+        parentId: parentId
+      }
+      getsysDictListById(query.parentId).then(response => {
+        response.data.forEach(item => {
+          this.riskList.push({
+            name: item.dictName,
+            value: 0
+          })
+        })
+        this.riskCount()
+      })
     },
-    // 改变筛选年份
-    selectRisk(val) {
-      this.__fetchLineData()
-    }
+    riskCount() {
+      const query = {
+        beginTime: this.startTime,
+        endTime: this.endTime,
+        type: this.riskDimension
+      }
+      gethiddenRegisterCount(query).then(response => {
+        console.log(query);
+        this.barList.xAxisData = []
+        this.barList.seriesData = []
+        this.riskContent =''
+        this.riskTotal = 0
+        if (response.data.length > 0) {
+          response.data.forEach(Ditem => {
+            if (Ditem) {
+              if(this.riskDimension != 2){
+                this.riskList.forEach(Ritem => {
+                  if (Ditem.month == Ritem.name) {
+                    Ritem.value = Ditem.count
+                    this.riskTotal = this.riskTotal + Ditem.count
+                  }
+                })
+              }else{
+                console.log(this.riskList);
+                this.riskList.push({
+                  name: Ditem.month,
+                  value: Ditem.count
+                })
+                this.riskTotal = this.riskTotal + Ditem.count
+              }
+            }
+          })
+          this.riskContent = '全矿共查出隐患' + this.riskTotal + '人次,'
+          if(this.riskDimension == 1){
+            for (let r of this.riskList) {
+              if(this.riskTotal == 0){
+                this.riskContent = this.riskContent + '查出' + r.name + r.value + '人次,占比0%。'
+              }else{
+                this.riskContent = this.riskContent + '查出' + r.name + r.value + '人次,占比' + r.value/this.riskTotal*100 + '%。'
+              }
+              this.barList.xAxisData.push(r.name)
+              this.barList.seriesData.push(r.value)
+            }
+          }else if(this.riskDimension == 2){
+            for (let r of this.riskList) {
+              if(this.riskTotal == 0){
+                this.riskContent = this.riskContent + '查出' + r.name + r.value + '人次,占比0%。'
+              }else{
+                this.riskContent = this.riskContent + '查出' + r.name + r.value + '人次,占比' + r.value/this.riskTotal*100 + '%。'
+              }
+              this.barList.xAxisData.push(r.name)
+              this.barList.seriesData.push(r.value)
+            }
+          }else if(this.riskDimension == 3){
+            for (let r of this.riskList) {
+              if(this.riskTotal == 0){
+                this.riskContent = this.riskContent + '查出' + r.name + '违规' + r.value + '人次,占比0%。'
+              }else{
+                this.riskContent = this.riskContent + '查出' + r.name + '违规' + r.value + '人次,占比' + r.value/this.riskTotal*100 + '%。'
+              }
+              this.barList.xAxisData.push(r.name)
+              this.barList.seriesData.push(r.value)
+            }
+          }
+        } else {
+          this.riskList= []
+        }
+      })
+    },
+    radioChange(val){
+      this.riskDimension = val
+      this.__fetchSelectList()
+    },
+    DateChange(date){
+      if (!date) {
+        this.startTime = ''
+        this.endTime = ''
+      } else {
+        this.startTime = this.dateConversion(date[0])
+        this.endTime = this.dateConversion(date[1])
+      }
+      this.riskCount()
+    },
+    dateConversion(data) {
+      var d = new Date(data);
+      var datetime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+      return datetime
+    },
   }
 }
 </script>
@@ -239,7 +322,7 @@ export default {
       overflow: hidden;
       .chart-item {
         float: left;
-        width: calc((100% - 146px) / 4);
+        width: calc((100% - 146px) / 6);
         height: 22px;
         line-height: 22px;
         font-size: 13px;

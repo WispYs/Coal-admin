@@ -36,8 +36,8 @@
       <!-- tree-select  -->
       <tree-select
         v-if="item.layout === 'TreeSelect'"
-        v-model="filterForm[item.field]"
         ref="treeSelect"
+        v-model="filterForm[item.field]"
         class="form-item"
         :value="filterForm[item.field]"
         :placeholder="item.placeholder"
@@ -80,10 +80,11 @@
       <!-- <el-button v-if="config.actions.indexOf('reset') > -1" type="primary" size="medium" @click="reset()">重置</el-button> -->
       <!-- <el-button v-if="config.actions.indexOf('create') > -1" type="primary" size="medium" @click="create()">新建</el-button> -->
       <el-button v-if="config.actions.indexOf('create') > -1" type="primary" size="medium" icon="el-icon-plus" @click="create()">新建</el-button>
-      <el-button v-if="config.actions.indexOf('import') > -1" type="primary" size="medium" icon="el-icon-download" @click="importExcel()">导入</el-button>
+      <el-button v-if="config.actions.indexOf('import') > -1" type="primary" size="medium" icon="el-icon-upload2" @click="importExcel()">导入</el-button>
+      <!-- <el-button v-if="config.actions.indexOf('edit') > -1" type="primary" size="medium" icon="el-icon-edit" @click="edit()">编辑</el-button> -->
+      <el-button v-if="config.actions.indexOf('refresh') > -1" type="primary" size="medium" @click="refresh()"><i class="el-icon-refresh el-icon--left" />刷新</el-button>
       <el-button v-if="config.actions.indexOf('export') > -1" type="primary" size="medium" icon="el-icon-download" @click="exportExcel()">导出</el-button>
       <el-button v-if="config.actions.indexOf('identificationEnd') > -1" type="primary" size="medium" icon="el-icon-circle-close" @click="identificationEnd()">辨识结束</el-button>
-
     </div>
     <!-- <div v-if="config.actions && config.actions.length > 0" class="filter-bar__item" style="display:block;">
       <el-button v-if="config.actions.indexOf('delete') > -1" type="danger" size="medium" plain @click="deleteBatches()">批量删除</el-button>
@@ -164,13 +165,16 @@ export default {
     create() {
       this.$emit('create-click')
     },
-    importExcel(){
+    importExcel() {
       this.$emit('import-click')
+    },
+    refresh() {
+      this.$emit('refresh-click')
     },
     exportExcel() {
       this.$emit('export-click')
     },
-    identificationEnd(){
+    identificationEnd() {
       this.$emit('identificationEnd')
     },
     deleteBatches() {
@@ -185,10 +189,10 @@ export default {
       })
     },
     getTreeSelect(value, field) {
-      console.log(value);
-      if(!value){
-        this.filterForm.sysDeptId= ''
-      }else{
+      console.log(value)
+      if (!value) {
+        this.filterForm.sysDeptId = ''
+      } else {
         this.filterForm.sysDeptId = Number(value)
       }
       this.$emit('search-click', this.__getFilter(), this.filterForm)

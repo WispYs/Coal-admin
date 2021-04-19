@@ -23,7 +23,7 @@ export default {
   watch: {
     cdata: {
       handler(newData) {
-        console.log(newData)
+        // console.log(newData)
         this.options = {
           tooltip: {
             trigger: 'item'

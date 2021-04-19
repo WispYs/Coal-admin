@@ -25,6 +25,7 @@
    * @param {string}  underlineText     表格内数据显示方式为underline时，下划线的文字
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
    * @param {boolean} lazy              是否异步加载树形表格子节点数据，默认false，值为true时为异步
+   * @param {boolean} multiple          下拉选择是否多选,默认false，值为true时多选
    */
 /**
    * FilterConfig
@@ -45,7 +46,7 @@ export const MechLargeEquipTableConfig = {
     { label: '所属场所', field: 'area', layout: 'Select', require: true,
       options: [
         {
-          value: 1,
+          value: '1',
           label: '中央区'
 
         }
@@ -53,13 +54,13 @@ export const MechLargeEquipTableConfig = {
     { label: '所属部件', field: 'part', width: '90', layout: 'Select', require: true,
       options: [
         {
-          value: 1,
+          value: '1',
           label: '提升机'
         }, {
-          value: 2,
+          value: '2',
           label: '空气压缩机'
         }, {
-          value: 3,
+          value: '3',
           label: '通风机'
         }
       ], placeholder: '请选择所属部件' },
@@ -104,19 +105,19 @@ export const MechLargeEquipTypeTableConfig = {
   checkbox: true,
   rowKey: 'id',
   columns: [
-    { label: '类型名称', field: 'name', layout: 'Text', require: true, placeholder: '请填写类型名称' },
-    { label: '排序', field: 'sort', layout: 'Text', placeholder: '请填写排序' },
+    { label: '类型名称', field: 'typeName', layout: 'Text', require: true, placeholder: '请填写类型名称' },
+    { label: '排序', field: 'sortNo', layout: 'Text', placeholder: '请填写排序' },
     { label: '备注', field: 'remark', layout: 'Text', require: true, placeholder: '请填写备注' },
     { label: '录入时间', field: 'createDate', layout: 'DateTime', disabled: true, placeholder: '请填写录入时间' },
     { label: '所属场所', field: 'area', layout: 'TreeSelect', hidden: true,
       options: [
         {
-          value: 1,
+          value: '1',
           label: '顾桥矿',
           children: [
-            { value: 2, label: '机关', children: [
-              { value: 3, label: '矿领导' },
-              { value: 17, label: '人力资源部' }
+            { value: '2', label: '机关', children: [
+              { value: '3', label: '矿领导' },
+              { value: '17', label: '人力资源部' }
             ] }
           ]
         }
@@ -126,7 +127,7 @@ export const MechLargeEquipTypeTableConfig = {
 export const MechLargeEquipTypeFilterConfig = {
   actions: ['search', 'reset', 'create'],
   filters: [
-    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '类型名称' }
+    { label: '关键字', field: 'kw', width: '220', layout: 'Text', placeholder: '类型名称' }
   ]
 }
 // 维修知识库
@@ -135,11 +136,30 @@ export const KnowLedgeTableConfig = {
   checkbox: true,
   columns: [
     { label: '所属场所', field: 'area', layout: 'Select', require: true,
-      options: [{ value: 1, label: '中央区' }], placeholder: '请选择所属场所' },
+      options: [{ value: '1', label: '中央区' }], placeholder: '请选择所属场所' },
     { label: '检查项目', field: 'project', layout: 'Text', require: true, placeholder: '请填写检查项目' },
     { label: '检修位置', field: 'pos', layout: 'Text', require: true, placeholder: '请填写检修位置' },
-    { label: '检修周期', field: 'cycle', layout: 'Text', require: true, placeholder: '请填写检修周期' },
-    { label: '责任人', field: 'dutyBy', layout: 'Text', require: true, placeholder: '请填写责任人' },
+    { label: '检修周期', field: 'cycle', layout: 'Select', require: true,
+      options: [
+        {
+          value: '1',
+          label: '年'
+        }, {
+          value: '2',
+          label: '月'
+        }, {
+          value: '3',
+          label: '日'
+        }
+      ], placeholder: '请填写检修周期' },
+    { label: '责任人', field: 'dutyBy', layout: 'Select', require: true,
+      options: [
+        {
+          value: '1',
+          label: '康师傅'
+
+        }
+      ], placeholder: '请填写责任人' },
     { label: '检查检修标准', field: 'norm', width: '120px', layout: 'Textarea', placeholder: '请填写检查检修标准' },
     { label: '备注', field: 'remark', width: '', layout: 'Textarea', placeholder: '请填写备注' }
   ]
@@ -147,7 +167,7 @@ export const KnowLedgeTableConfig = {
 export const KnowLedgeFilterConfig = {
   actions: ['search', 'reset', 'create', 'delete'],
   filters: [
-    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '所属场所，检修位置' }
+    { label: '关键字', field: 'kw', width: '220', layout: 'Text', placeholder: '所属场所，检修位置' }
   ]
 }
 // 设备能耗分析知识库
@@ -156,20 +176,21 @@ export const DisKnowLedgeTableConfig = {
   checkbox: true,
   columns: [
     { label: '所属场所', field: 'area', layout: 'Select', require: true,
-      options: [{ value: 1, label: '中央区' }], placeholder: '请选择所属场所' },
-    { label: '参考国家标准', field: 'standard', width: '120px', layout: 'Text', require: true, placeholder: '请填写参考国家标准' },
-    { label: '报警阈值', field: 'alarm', layout: 'Text', require: true, placeholder: '请填写报警阈值' },
-    { label: '能耗单位', field: 'unit', layout: 'Text', require: true, placeholder: '请填写能耗单位' },
-    { label: '说明', field: 'explain', width: '120px', layout: 'Textarea', placeholder: '请填写说明' },
+      options: [{ value: '1', label: '中央区' }], placeholder: '请选择所属场所' },
+    { label: '参考国家标准', field: 'norm', width: '120px', layout: 'Text', require: true, placeholder: '请填写参考国家标准' },
+    { label: '报警阈值', field: 'alarmVal', layout: 'Text', require: true, placeholder: '请填写报警阈值' },
+    { label: '能耗单位', field: 'energyUnit', layout: 'Text', require: true, placeholder: '请填写能耗单位' },
     { label: '能耗公式', field: 'formula', layout: 'TextEditor', showType: 'underline', underlineText: '展开公式', placeholder: '请填写能耗公式' },
     { label: '辅助决策', field: 'decision', layout: 'Textarea', placeholder: '请填写辅助决策' },
-    { label: '等级评定', field: 'evaluate', layout: 'TextEditor', showType: 'underline', underlineText: '等级评定', placeholder: '请填写等级评定' }
+    { label: '等级评定', field: 'assess', layout: 'TextEditor', showType: 'underline', underlineText: '等级评定', placeholder: '请填写等级评定' },
+    { label: '说明', field: 'remark', width: '120px', layout: 'Textarea', placeholder: '请填写说明' }
+
   ]
 }
 export const DisKnowLedgeFilterConfig = {
   actions: ['search', 'reset', 'create', 'delete'],
   filters: [
-    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '参考国家标准，辅助决策' }
+    { label: '关键字', field: 'kw', width: '220', layout: 'Text', placeholder: '参考国家标准，辅助决策' }
   ]
 }
 
@@ -182,20 +203,20 @@ export const TypicalFaultTableConfig = {
   checkbox: true,
   columns: [
     { label: '所属场所', field: 'area', layout: 'Select', require: true,
-      options: [{ value: 1, label: '中央区' }], placeholder: '请选择所属场所' },
+      options: [{ value: '1', label: '中央区' }], placeholder: '请选择所属场所' },
     { label: '故障种类', field: 'fault', layout: 'Select', require: true,
       options: [
-        { value: 1, label: '机械' },
-        { value: 2, label: '电气' },
-        { value: 3, label: '液压' },
-        { value: 4, label: '综合' }
+        { value: '1', label: '机械' },
+        { value: '2', label: '电气' },
+        { value: '3', label: '液压' },
+        { value: '4', label: '综合' }
       ], placeholder: '请填写故障种类' },
     { label: '故障程度分级', field: 'level', layout: 'Select', require: true,
       options: [
-        { value: 1, label: '工人级' },
-        { value: 2, label: '区队级' },
-        { value: 3, label: '科室级' },
-        { value: 4, label: '矿长级' }
+        { value: '1', label: '工人级' },
+        { value: '2', label: '区队级' },
+        { value: '3', label: '科室级' },
+        { value: '4', label: '矿长级' }
       ], placeholder: '请填写故障种类' },
     { label: '故障现象', field: 'phenomenon', layout: 'Textarea', placeholder: '请填写故障现象' },
     { label: '故障原因', field: 'reason', layout: 'Textarea', placeholder: '请填写故障原因' },
@@ -216,7 +237,7 @@ export const HistoryFaultTableConfig = {
   columns: [
     { label: '事故关键词', field: 'keyword', layout: 'Text', require: true, placeholder: '请填写事故关键词' },
     { label: '所属场所', field: 'area', layout: 'Select', require: true,
-      options: [{ value: 1, label: '中央区' }], placeholder: '请选择所属场所' },
+      options: [{ value: '1', label: '中央区' }], placeholder: '请选择所属场所' },
     { label: '时间', field: 'time', layout: 'DateTime', require: true, placeholder: '请选择时间' },
     { label: '故障记录', field: 'record', layout: 'Textarea', require: true, placeholder: '请填写故障记录' },
     { label: '原因分析', field: 'reason', layout: 'Textarea', require: true, placeholder: '请填写原因分析' },
@@ -237,30 +258,42 @@ export const ServicePlanTableConfig = {
   checkbox: true,
   columns: [
     { label: '所属场所', field: 'area', layout: 'Select', width: '120px', require: true,
-      options: [{ value: 1, label: '中央区' }], placeholder: '请选择所属场所' },
-    { label: '设备名称', field: 'name', layout: 'Text', require: true, placeholder: '请填写设备名称' },
-    { label: '检修时间', field: 'time', layout: 'DateTime', width: '100px', require: true, placeholder: '请选择检修时间' },
-    { label: '检修周期', field: 'period', layout: 'Select', require: true,
+      options: [{ value: '1', label: '中央区' }], placeholder: '请选择所属场所' },
+    { label: '设备名称', field: 'deviceName', layout: 'Text', require: true, placeholder: '请填写设备名称' },
+    { label: '维检内容', field: 'maintContent', layout: 'Textarea', require: true, placeholder: '请填写维检内容' },
+    { label: '检修时间', field: 'oveTime', layout: 'DateTime', width: '100px', require: true, placeholder: '请选择检修时间' },
+    { label: '检修周期', field: 'cycle', layout: 'Select', require: true,
       options: [
-        { value: 1, label: '年' },
-        { value: 2, label: '月' },
-        { value: 3, label: '周' },
-        { value: 4, label: '日' }
+        { value: '1', label: '年' },
+        { value: '2', label: '月' },
+        { value: '3', label: '周' },
+        { value: '4', label: '日' }
       ], placeholder: '请选择检修周期' },
-    { label: '管理预警天数', field: 'warning', layout: 'Text', width: '110px', require: true, placeholder: '请填写管理预警天数' },
-    { label: '管理报警天数', field: 'alarm', layout: 'Text', width: '110px', require: true, placeholder: '请填写管理报警天数' },
-    { label: '多次提醒次数', field: 'remind', layout: 'Text', width: '110px', require: true, placeholder: '请填写多次提醒次数' },
-    { label: '责任人', field: 'person', layout: 'Text', require: true, placeholder: '请填写责任人' },
-    { label: '抄送人', field: 'copyPerson', layout: 'Text', require: true, placeholder: '请填写抄送人' },
-    { label: '抄送内容', field: 'copy', layout: 'Text', require: true, placeholder: '请填写抄送内容' },
-    { label: '维检内容', field: 'maintain', layout: 'Textarea', require: true, placeholder: '请填写维检内容' },
-    { label: '备注', field: 'remark', layout: 'Textarea', require: true, placeholder: '请填写备注' }
+    { label: '管理预警天数', field: 'earlySecond', layout: 'Text', width: '110px', require: true, placeholder: '请填写管理预警天数' },
+    { label: '管理报警天数', field: 'alarmSecond', layout: 'Text', width: '110px', require: true, placeholder: '请填写管理报警天数' },
+    { label: '多次提醒次数', field: 'remindNum', layout: 'Text', width: '110px', require: true, placeholder: '请填写多次提醒次数' },
+    { label: '责任人', field: 'dutyBy', layout: 'Select', require: true,
+      options: [
+        { value: '1', label: '超级管理员' },
+        { value: '2', label: '管理员' },
+        { value: '3', label: '操作工' },
+        { value: '4', label: '访客' }
+      ], placeholder: '请填写责任人' },
+    { label: '抄送人', field: 'ccBy', layout: 'Select', require: true,
+      options: [
+        { value: '1', label: '超级管理员' },
+        { value: '2', label: '管理员' },
+        { value: '3', label: '操作工' },
+        { value: '4', label: '访客' }
+      ], placeholder: '请填写抄送人' },
+    { label: '抄送内容', field: 'ccContent', layout: 'Text', placeholder: '请填写抄送内容' },
+    { label: '备注', field: 'remark', layout: 'Textarea', placeholder: '请填写备注' }
   ]
 }
 export const ServicePlanFilterConfig = {
   actions: ['search', 'reset', 'create', 'delete'],
   filters: [
-    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '所属场所，设备名称' }
+    { label: '关键字', field: 'kw', width: '220', layout: 'Text', placeholder: '所属场所，设备名称' }
   ]
 }
 // 日常维检管理
@@ -269,21 +302,27 @@ export const DailyServiceTableConfig = {
   otherActionTitle: ['日常维检', '维检记录'],
   columns: [
     { label: '所属场所', field: 'area', layout: 'Select', width: '120px', require: true,
-      options: [{ value: 1, label: '中央区' }], placeholder: '请选择所属场所' },
-    { label: '设备名称', field: 'name', layout: 'Text', require: true, placeholder: '请填写设备名称' },
-    { label: '维检内容', field: 'maintain', layout: 'Textarea', require: true, placeholder: '请填写维检内容' },
-    { label: '检修时间', field: 'time', layout: 'DateTime', width: '100px', require: true, placeholder: '请选择检修时间' },
-    { label: '检修周期', field: 'period', layout: 'Select', require: true,
+      options: [{ value: '1', label: '中央区' }], placeholder: '请选择所属场所' },
+    { label: '设备名称', field: 'deviceName', layout: 'Text', require: true, placeholder: '请填写设备名称' },
+    { label: '维检内容', field: 'maintContent', layout: 'Textarea', require: true, placeholder: '请填写维检内容' },
+    { label: '检修时间', field: 'oveTime', layout: 'DateTime', width: '100px', require: true, placeholder: '请选择检修时间' },
+    { label: '检修周期', field: 'cycle', layout: 'Select', require: true,
       options: [
-        { value: 1, label: '年' },
-        { value: 2, label: '月' },
-        { value: 3, label: '周' },
-        { value: 4, label: '日' }
+        { value: '1', label: '年' },
+        { value: '2', label: '月' },
+        { value: '3', label: '周' },
+        { value: '4', label: '日' }
       ], placeholder: '请选择检修周期' },
-    { label: '管理预警天数', field: 'warning', layout: 'Text', width: '110px', require: true, placeholder: '请填写管理预警天数' },
-    { label: '管理报警天数', field: 'alarm', layout: 'Text', width: '110px', require: true, placeholder: '请填写管理报警天数' },
-    { label: '责任人', field: 'person', layout: 'Text', require: true, placeholder: '请填写责任人' },
-    { label: '备注', field: 'remark', layout: 'Textarea', require: true, placeholder: '请填写备注' }
+    { label: '管理预警天数', field: 'earlySecond', layout: 'Text', width: '110px', require: true, placeholder: '请填写管理预警天数' },
+    { label: '管理报警天数', field: 'alarmSecond', layout: 'Text', width: '110px', require: true, placeholder: '请填写管理报警天数' },
+    { label: '责任人', field: 'dutyBy', layout: 'Select', require: true,
+      options: [
+        { value: '1', label: '超级管理员' },
+        { value: '2', label: '管理员' },
+        { value: '3', label: '操作工' },
+        { value: '4', label: '访客' }
+      ], placeholder: '请填写责任人' },
+    { label: '备注', field: 'kw', layout: 'Textarea', require: true, placeholder: '请填写备注' }
   ]
 }
 export const DailyServiceFilterConfig = {
@@ -299,43 +338,61 @@ export const EquipmentServiceTableConfig = {
   checkbox: true,
   columns: [
     { label: '所属场所', field: 'area', layout: 'Select', width: '120px', require: true,
-      options: [{ value: 1, label: '中央区' }], placeholder: '请选择所属场所' },
+      options: [{ value: '1', label: '中央区' }], placeholder: '请选择所属场所' },
     { label: '设备名称', field: 'name', layout: 'Text', require: true, placeholder: '请填写设备名称' },
-    { label: '类型', field: 'type', layout: 'Select', require: true,
-      options: [{ value: 1, label: '日常维检' }], placeholder: '请选择类型' },
-    { label: '故障主题', field: 'fault', layout: 'Textarea', require: true, placeholder: '请填写故障主题' },
-    { label: '故障情况', field: 'condition', layout: 'Textarea', placeholder: '请填写故障情况' },
+    { label: '类型', field: 'oveType', layout: 'Select', require: true,
+      options: [{ value: '1', label: '日常维检' }], placeholder: '请选择类型' },
+    { label: '故障主题', field: 'faultTheme', layout: 'Textarea', require: true, placeholder: '请填写故障主题' },
+    { label: '故障情况', field: 'situation', layout: 'Textarea', placeholder: '请填写故障情况' },
     { label: '状态', field: 'status', layout: 'Select', width: '100px', require: true, showType: 'colorLump',
-      options: [{ value: 1, label: '已处理' }, { value: 2, label: '未处理' }], placeholder: '请选择状态' },
-    { label: '处理过程', field: 'course', layout: 'Text', width: '100px', placeholder: '请填写处理过程' },
-    { label: '处理结果', field: 'result', layout: 'Text', width: '100px', placeholder: '请填写处理结果' },
-    { label: '处理人', field: 'person', layout: 'Text', placeholder: '请填写处理人' },
-    { label: '处理时间', field: 'time', layout: 'DateTime', width: '100px', require: true, placeholder: '请选择处理时间' },
+      options: [{ value: '1', label: '已处理' }, { value: '2', label: '未处理' }], placeholder: '请选择状态' },
+    { label: '处理过程', field: 'handleProc', layout: 'Text', width: '100px', placeholder: '请填写处理过程' },
+    { label: '处理结果', field: 'handleResult', layout: 'Text', width: '100px', placeholder: '请填写处理结果' },
+    { label: '处理人', field: 'handleBy', layout: 'Select',
+      options: [
+        { value: '1', label: '超级管理员' },
+        { value: '2', label: '管理员' },
+        { value: '3', label: '操作工' },
+        { value: '4', label: '访客' }
+      ], placeholder: '请填写处理人' },
+    { label: '处理时间', field: 'handleTime', layout: 'DateTime', width: '100px', require: true, placeholder: '请选择处理时间' },
     { label: '附件', field: 'file', layout: 'Upload', placeholder: '请上传附件' }
   ]
 }
 export const EquipmentServiceFilterConfig = {
   actions: ['search', 'reset', 'create', 'checkSpare'],
   filters: [
-    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '故障主题，故障情况' }
+    { label: '关键字', field: 'kw', width: '220', layout: 'Text', placeholder: '故障主题，故障情况' }
   ]
 }
 // 查看备品备件
 export const CheckSpareTableConfig = {
   columns: [
-    { label: '所属场所', field: 'area', layout: 'Select', width: '120px', require: true,
+    { label: '所属场所', field: 'areas', layout: 'Select', width: '120px', require: true,
       options: [{ value: 1, label: '中央区' }], placeholder: '请选择所属场所' },
-    { label: '备件名称', field: 'name', layout: 'Text', require: true, placeholder: '请填写名称' },
-    { label: '规格型号', field: 'model', layout: 'Text', require: true, placeholder: '请填写规格型号' },
+    { label: '备件名称', field: 'spareName', layout: 'Text', require: true, placeholder: '请填写名称' },
+    { label: '规格型号', field: 'std', layout: 'Text', require: true, placeholder: '请填写规格型号' },
     { label: '计量单位', field: 'unit', layout: 'Text', placeholder: '请填写计量单位' },
-    { label: '使用地点', field: 'addr', layout: 'Text', placeholder: '请填写使用地点' },
-    { label: '存放位置', field: 'store', layout: 'Text', placeholder: '请填写存放位置' },
-    { label: '当前数量', field: 'sum', layout: 'Text', placeholder: '请填写当前数量' },
-    { label: '预警数量限制', field: 'warning', layout: 'Text', placeholder: '请填写预警数量限制' },
-    { label: '责任人', field: 'person', layout: 'Text', placeholder: '请填写处理人' },
-    { label: '更新人', field: 'updater', layout: 'Text', placeholder: '请填写处理人' },
+    { label: '使用地点', field: 'area', layout: 'Text', placeholder: '请填写使用地点' },
+    { label: '存放位置', field: 'storagePos', layout: 'Text', placeholder: '请填写存放位置' },
+    { label: '当前数量', field: 'currNum', layout: 'Text', placeholder: '请填写当前数量' },
+    { label: '预警数量限制', field: 'aralmMaxLimit', layout: 'Text', placeholder: '请填写预警数量限制' },
+    { label: '责任人', field: 'dutyBy', layout: 'Select',
+      options: [
+        { value: '1', label: '超级管理员' },
+        { value: '2', label: '管理员' },
+        { value: '3', label: '操作工' },
+        { value: '4', label: '访客' }
+      ], placeholder: '请填写处理人' },
+    { label: '更新人', field: 'updateBy', layout: 'Select',
+      options: [
+        { value: '1', label: '超级管理员' },
+        { value: '2', label: '管理员' },
+        { value: '3', label: '操作工' },
+        { value: '4', label: '访客' }
+      ], placeholder: '请填写处理人' },
     { label: '状态', field: 'status', layout: 'Select', width: '100px', require: true, showType: 'colorLump',
-      options: [{ value: 1, label: '已处理' }, { value: 2, label: '未处理' }], placeholder: '请选择状态' }
+      options: [{ value: '1', label: '已处理' }, { value: '2', label: '未处理' }], placeholder: '请选择状态' }
   ]
 }
 // 备品备件
@@ -345,42 +402,92 @@ export const SparePartTableConfig = {
   actionWidth: 200,
   checkbox: true,
   columns: [
-    { label: '所属场所', field: 'area', layout: 'Select', width: '120px', require: true,
+    { label: '所属场所', field: 'areas', layout: 'Select', width: '120px', require: true,
       options: [{ value: '1', label: '主井' }, { value: '2', label: '副井' }], placeholder: '请选择所属场所' },
-    { label: '备件名称', field: 'name', layout: 'Text', require: true, placeholder: '请填写名称' },
-    { label: '规格型号', field: 'model', layout: 'Text', require: true, placeholder: '请填写规格型号' },
+    { label: '备件名称', field: 'spareName', layout: 'Text', require: true, placeholder: '请填写名称' },
+    { label: '规格型号', field: 'std', layout: 'Text', require: true, placeholder: '请填写规格型号' },
     { label: '计量单位', field: 'unit', layout: 'Text', placeholder: '请填写计量单位' },
-    { label: '使用地点', field: 'addr', layout: 'Text', placeholder: '请填写使用地点' },
-    { label: '存放位置', field: 'store', layout: 'Text', placeholder: '请填写存放位置' },
-    { label: '当前数量', field: 'sum', layout: 'Text', placeholder: '请填写当前数量' },
-    { label: '预警数量限制', field: 'warning', layout: 'Text', placeholder: '请填写预警数量限制' },
-    { label: '责任人', field: 'person', layout: 'Text', placeholder: '请填写处理人' },
-    { label: '更新人', field: 'updater', layout: 'Text', placeholder: '请填写处理人' },
+    { label: '使用地点', field: 'area', layout: 'Text', placeholder: '请填写使用地点' },
+    { label: '存放位置', field: 'storagePos', layout: 'Text', placeholder: '请填写存放位置' },
+    { label: '当前数量', field: 'currNum', layout: 'Text', placeholder: '请填写当前数量' },
+    { label: '预警数量限制', field: 'aralmMaxLimit', layout: 'Text', placeholder: '请填写预警数量限制' },
+    { label: '责任人', field: 'dutyBy', layout: 'Select',
+      options: [
+        { value: '1', label: '超级管理员' },
+        { value: '2', label: '管理员' },
+        { value: '3', label: '操作工' },
+        { value: '4', label: '访客' }
+      ], placeholder: '请填写处理人' },
+    { label: '更新人', field: 'updateBy', layout: 'Select',
+      options: [
+        { value: '1', label: '超级管理员' },
+        { value: '2', label: '管理员' },
+        { value: '3', label: '操作工' },
+        { value: '4', label: '访客' }
+      ], placeholder: '请填写处理人' },
     { label: '状态', field: 'status', layout: 'Select', width: '100px', require: true, showType: 'colorLump',
-      options: [{ value: 1, label: '已处理' }, { value: 2, label: '未处理' }], placeholder: '请选择状态' }
+      options: [{ value: '1', label: '已处理' }, { value: 2, label: '未处理' }], placeholder: '请选择状态' }
   ]
 }
 export const SparePartFilterConfig = {
   actions: ['search', 'reset', 'create'],
   filters: [
-    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '所属场所' }
+    { label: '关键字', field: 'kw', width: '220', layout: 'Text', placeholder: '所属场所' }
   ]
 }
 // 备品备用 - 领用
 export const ReceiveTableConfig = {
   columns: [
-    { label: '用途', field: 'use', layout: 'Text', require: true, placeholder: '请填写用途' },
-    { label: '领用数量', field: 'sum', layout: 'Text', require: true, placeholder: '请填写领用数量' },
-    { label: '领用人', field: 'recipient', layout: 'Text', require: true, placeholder: '请填写领用人' },
-    { label: '领用时间', field: 'time', layout: 'DateTime', require: true, placeholder: '请选择领用时间' }
+    { label: '用途', field: 'useDesc', layout: 'Text', require: true, placeholder: '请填写用途' },
+    { label: '领用数量', field: 'pickNum', layout: 'Text', require: true, placeholder: '请填写领用数量' },
+    { label: '领用人', field: 'pickBy', layout: 'Select', require: true,
+      options: [
+        { value: '1', label: '超级管理员' },
+        { value: '2', label: '管理员' },
+        { value: '3', label: '操作工' },
+        { value: '4', label: '访客' }
+      ], placeholder: '请填写领用人' },
+    { label: '领用时间', field: 'pickTime', layout: 'DateTime', require: true, placeholder: '请选择领用时间' }
   ]
 }
 // 备品备用 - 入库
 export const StoreTableConfig = {
   columns: [
-    { label: '入库数量', field: 'sum', layout: 'Text', require: true, placeholder: '请填写入库数量' },
-    { label: '入库人', field: 'person', layout: 'Text', require: true, placeholder: '请填写入库人' },
-    { label: '入库时间', field: 'time', layout: 'DateTime', require: true, placeholder: '请选择入库时间' }
+    { label: '入库数量', field: 'storageNum', layout: 'Text', require: true, placeholder: '请填写入库数量' },
+    { label: '入库人', field: 'storageBy', layout: 'Select', require: true,
+      options: [
+        { value: '1', label: '超级管理员' },
+        { value: '2', label: '管理员' },
+        { value: '3', label: '操作工' },
+        { value: '4', label: '访客' }
+      ], placeholder: '请填写入库人' },
+    { label: '入库时间', field: 'storageTime', layout: 'DateTime', require: true, placeholder: '请选择入库时间' }
   ]
 }
 
+/** ---- 设备管理 ---- **/
+// 供应商管理
+export const SupplierTableConfig = {
+  actions: ['edit', 'delete'],
+  checkbox: true,
+  columns: [
+    { label: '供应商', field: 'supplier', layout: 'Text', require: true, placeholder: '请填写供应商' },
+    { label: '联系电话', field: 'telephone', layout: 'Text', placeholder: '请填写联系电话' },
+    { label: '地址', field: 'addr', layout: 'Text', placeholder: '请填写地址' },
+    { label: '邮编', field: 'postcode', layout: 'Text', placeholder: '请填写邮编' },
+    { label: '传真', field: 'fax', layout: 'Text', placeholder: '请填写传真' },
+    { label: '网址', field: 'url', layout: 'Text', placeholder: '请填写网址' },
+    { label: '联系人', field: 'person', layout: 'Text', placeholder: '请填写联系人' },
+    { label: '联系人职务', field: 'position', layout: 'Text', placeholder: '请填写联系人职务' },
+    { label: '联系人电话', field: 'contact', layout: 'Text', placeholder: '请填写联系人电话' },
+    { label: '联系人手机', field: 'phone', layout: 'Text', placeholder: '请填写联系人手机' },
+    { label: '联系人邮箱', field: 'email', layout: 'Text', placeholder: '请填写联系人邮箱' },
+    { label: '备注', field: 'remark', layout: 'Textarea', placeholder: '请填写备注' }
+  ]
+}
+export const SupplierFilterConfig = {
+  actions: ['search', 'reset', 'create', 'delete', 'import'],
+  filters: [
+    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '供应商名称' }
+  ]
+}

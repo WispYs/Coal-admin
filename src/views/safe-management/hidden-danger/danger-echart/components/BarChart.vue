@@ -20,8 +20,11 @@ export default {
       options: {}
     }
   },
+  created() {
+  },
   watch: {
     cdata: {
+      deep: true,
       handler(newData) {
         this.options = {
           tooltip: {
@@ -40,7 +43,7 @@ export default {
           },
           xAxis: [{
             type: 'category',
-            data: newData.name,
+            data: newData.xAxisData,
             axisTick: {
               alignWithLabel: true
             }
@@ -61,7 +64,7 @@ export default {
               show: true,
               position: 'inside'
             },
-            data: newData.value
+            data: newData.seriesData
           }]
         }
       }

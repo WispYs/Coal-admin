@@ -11,6 +11,7 @@
       class="upload-content"
       drag
       :data="data"
+      :headers="headers"
       :multiple="multiple"
       :accept="acceptList"
       :action="action"
@@ -33,6 +34,8 @@
   </el-dialog>
 </template>
 <script>
+import { BaseUrl } from '@/api/url'
+import store from '@/store'
 export default {
   filters: {
     filterAccept: n => n.join('/')
@@ -59,10 +62,12 @@ export default {
     return {
       // action: 'https://jsonplaceholder.typicode.com/posts/'
       // action: 'https://httpbin.org/post',
-      action: 'http://192.168.1.139:18000/sysFileInfo/save',
+      // action: 'http://192.168.1.139:18000/sysFileInfo/save',
+      action: `${BaseUrl}/file/sysFileInfo/save`,
       uploadStatus: false, // 上传状态
       uploadFileList: [], // 上传成功的列表
-      preloadNum: 0 // 预加载文件数量
+      preloadNum: 0, // 预加载文件数量
+      headers: {}
     }
   },
   computed: {
@@ -77,6 +82,9 @@ export default {
       }
       return acceptList
     }
+  },
+  created() {
+    if (store.getters.token) this.headers['Authorization'] = 'admin'
   },
   methods: {
     // 上传文件之前的钩子，返回 false 则停止上传
@@ -105,7 +113,7 @@ export default {
       const fileObj = {
         uid: file.uid,
         name: file.name,
-        // url: response.files.file,
+        path: response.data.uploadPath,
         uploadSuccess: true // 上传成功
       }
       this.uploadFileList.push(fileObj)

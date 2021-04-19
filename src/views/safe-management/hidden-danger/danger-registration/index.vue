@@ -4,7 +4,7 @@
       :config="dangeRegistrationFilterConfig"
       @search-click="queryData"
       @create-click="openDialog('create')"
-      @reset-click="queryData"
+      @import-click="importClick"
       @export-click="handelExport"
     />
     <list-table
@@ -13,7 +13,6 @@
       :list-loading="listLoading"
       :config="dangeRegistConfig"
       height="calc(100% - 157px)"
-      @load-tree-data="asyncData"
       @edit-click="(row) => openDialog('edit', row)"
       @delete-click="deleteClick"
       @submit-data="editSubmit"
@@ -43,6 +42,7 @@
       ref="createDialog"
       :config="initCreateConfig()"
       :dialog-visible="createDialogVisible"
+      @upload-click="openUploadDialog"
       @close-dialog="createDialogVisible = false"
       @submit="createSubmit"
     />
@@ -51,20 +51,39 @@
       ref="editDialog"
       :config="initEditConfig()"
       :dialog-visible="editDialogVisible"
+      @upload-click="openUploadDialog"
       @close-dialog="editDialogVisible = false"
       @submit="editSubmit"
     />
-
+    <!-- 上传附件 -->
+    <upload-file
+      :dialog-visible="uploadDialogVisible"
+      :multiple="false"
+      @close-dialog="uploadDialogVisible = false"
+      @upload-submit="uploadSubmit"
+    />
   </div>
 </template>
 
 <script>
-import { getOrganList, createOrgan, getOrganInfo, editOrgan, getOrganTree, getOrganChildTree, delOrgan } from '@/api/authority-management'
+import {
+    getsysDictListById,
+    getAqglHiddenRegister,
+    getAqglHiddenRegisterById,
+    updateAqglHiddenRegister,
+    saveAqglHiddenRegister,
+    deleteAqglHiddenRegister
+  } from '@/api/hidden-danger'
+import {
+  getAqglHiddenTissueTree
+  } from '@/api/organization'
+import { getOrganTree } from '@/api/authority-management'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
-import { dangeRegistrationFilterConfig  , dangeRegistConfig} from '@/data/hidden-danger'
+import UploadFile from '@/components/UploadFile'
+import { dangeRegistrationFilterConfig , dangeRegistConfig} from '@/data/hidden-danger'
 import exportExcel from '@/utils/export-excel'
 
 export default {
@@ -72,7 +91,8 @@ export default {
     FilterBar,
     ListTable,
     Pagination,
-    FormDialog
+    FormDialog,
+    UploadFile
   },
   data() {
     return {
@@ -90,71 +110,109 @@ export default {
       createDialogVisible: false,
       editDialogVisible: false,
       multipleSelection: [], // 多选项
-      deleteDisabled: true // 批量删除置灰
+      deleteDisabled: true ,// 批量删除置灰
+      uploadRow: null,
+      uploadDialogVisible: false
     }
   },
   created() {
+    this.__fetchUnit()
+    this.__fetchHiddenUnit()
     this.__fetchData()
+    this.__fetchSelectList()
   },
 
   methods: {
-    // 接口获取组织机构树，更新config数据
-    __updateOrganTree() {
+    __fetchUnit(){
       getOrganTree().then(response => {
-        dangeRegistConfig.columns.forEach(it => {
-          if (it.field === 'parentId') {
+        // 更新新增、编辑config数据
+        this.dangeRegistConfig.columns.forEach(it => {
+          if(it.field === 'examineUnit'){
+            it.options = response.data
+          }else if(it.field === 'reviewUnitId'){
             it.options = response.data
           }
         })
-        console.log(dangeRegistConfig)
       })
     },
-    // 获取组织机构列表
+    __fetchHiddenUnit(){
+      const query = {
+        aqglHiddenTissueId: ''
+      }
+      getAqglHiddenTissueTree(query).then(response => {
+        this.dangeRegistConfig.columns.forEach(it => {
+          if (it.field === 'hiddenDeptId') {
+            it.options = response.data
+          }
+        })
+      })
+    },
+    __fetchSelectList() {
+      const query = [{
+        parentId: 10088
+      }, {
+        parentId: 10092
+      },{
+        parentId: 10042
+      },{
+        parentId: 10097
+      },{
+        parentId: 10106
+      }]
+      for (let q in query) {
+        getsysDictListById(query[q].parentId).then(response => {
+          let selectList = response.data
+          for (let m in response.data) {
+            this.getIterationData(selectList[m], response.data[m])
+          }
+          this.dangeRegistConfig.columns.forEach(it => {
+            if (query[q].parentId == 10088) {
+              if (it.field === 'examineShiftId') {
+                it.options = selectList
+              }
+            }else if (query[q].parentId == 10092) {
+              if (it.field === 'examineTypeId') {
+                it.options = selectList
+              }
+            }else if (query[q].parentId == 10042) {
+              if (it.field === 'examinePathId') {
+                it.options = selectList
+              }
+            }else if (query[q].parentId == 10097) {
+              if (it.field === 'hiddenTypeId') {
+                it.options = selectList
+              }
+            }else if (query[q].parentId == 10106) {
+              if (it.field === 'hiddenGrade') {
+                it.options = selectList
+              }
+            }
+          })
+        })
+      }
+    },
+    getIterationData(_m, _d) {
+      _m.label = _d.dictName
+      _m.value = _d.sysDictId
+      _m.children = _d.sysDictList
+      if (_d.sysDictList.length > 0) {
+        for (let m in _d.sysDictList) {
+          this.getIterationData(_m.children[m], _d.sysDictList[m])
+        }
+      }
+    },
     __fetchData() {
       this.listLoading = false
-      // 初次加载只获取根节点数据
-      const entity = {
-        'parentId': 0
+      const query={
+        page: this.listQuery.page,
+        pagerows: this.listQuery.pagerows,
+        keyword: this.filter.name,
+        keywordField:['hiddenStatus','hiddenGrade']
       }
-      const filter = {
-        ...this.filter,
-        ...{ entity },
-        keywordField: ['deptName', 'shortName']
-      }
-      const query = Object.assign(this.listQuery, filter)
-      getOrganList(query).then(response => {
+      getAqglHiddenRegister(query).then(response => {
         this.listLoading = false
-        response.data.rows.forEach(it => {
-          it.sysDeptId = Number(it.sysDeptId)
-          if (it.parentCheck === 1) {
-            it.hasChildren = true
-          }
-        })
         this.list = response.data.rows
-        console.log(this.list)
         this.total = Number(response.data.records)
-      })
-    },
-
-    // 异步获取树子节点数据
-    asyncData(tree, treeNode, resolve) {
-      getOrganChildTree(tree.sysDeptId).then(response => {
-        console.log(response.data)
-        const childrenTree = []
-        response.data.forEach(it => {
-          const item = {
-            deptName: it.deptName,
-            sysDeptId: Number(it.sysDeptId),
-            shortName: it.shortName,
-            deptType: it.deptType,
-            sort: it.sort,
-            createTime: it.createTime,
-            remark: it.remark,
-            hasChildren: it.parentCheck === 1
-          }
-          childrenTree.push(item)
-        })
-        resolve(childrenTree)
       })
     },
     // 查询数据
@@ -184,20 +242,16 @@ export default {
     openDialog(name, row) {
       const visible = `${name}DialogVisible`
       this[visible] = true
-
-      // 接口获取组织机构树，更新config数据
-      this.__updateOrganTree()
-
       // 如果有数据，更新子组件的 formData
       if (row) {
-        getOrganInfo(row.sysDeptId).then(response => {
-          const info = Object.assign(response.data, {
-            parentId: Number(response.data.parentId) || 0,
-            deptType: Number(response.data.deptType) || 0
-          })
-          this.$refs.editDialog.updataForm(info)
+        getAqglHiddenRegisterById(row.aqglHiddenRegisterId).then(response => {
+          this.$refs.editDialog.updataForm(response.data)
         })
       }
+    },
+    // 导入
+    importClick(){
+      this.$message.info("敬请期待")
     },
     // 删除
     deleteClick(row) {
@@ -206,8 +260,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        delOrgan(row.sysDeptId).then(response => {
-          console.log(response)
+        deleteAqglHiddenRegister(row.aqglHiddenRegisterId).then(response => {
           this.$message.success('删除成功')
           this.__fetchData()
         })
@@ -217,26 +270,19 @@ export default {
     },
     // 新增
     createSubmit(submitData) {
-      console.log(submitData)
-      const query = Object.assign(submitData, {
-        parentId: Number(submitData.parentId) || 0
-      })
-      createOrgan(query).then(response => {
-        console.log(response)
+      saveAqglHiddenRegister(submitData).then(response => {
         this.createDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDialog.resetForm()
         this.__fetchData()
       }).catch(err => {
-        console.log(err)
         this.$refs.createDialog.resetSubmitBtn()
       })
     },
     // 编辑
     editSubmit(submitData) {
       const query = Object.assign(submitData)
-      editOrgan(query).then(response => {
-        console.log(response)
+      updateAqglHiddenRegister(query).then(response => {
         this.editDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDialog.resetForm()
@@ -258,14 +304,12 @@ export default {
       } else {
         this.deleteDisabled = true
       }
-      console.log(this.multipleSelection)
     },
 
     // 批量删除
     deleteBatches() {
       const selectId = []
       this.multipleSelection.forEach(it => selectId.push(it.id))
-      console.log(selectId)
       if (selectId.length === 0) {
         this.$message.warning('请选择所删除的文件')
         return false
@@ -275,10 +319,19 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(selectId)
         this.__fetchData()
         this.$message.success('删除成功')
       })
+    },
+    openUploadDialog(row) {
+      this.$message.info("敬请期待")
+      return
+      this.uploadDialogVisible = true
+      this.uploadRow = row
+    },
+    // 上传文件控件成功回调
+    uploadSubmit(fileList) {
+      this.uploadDialogVisible = false
     }
   }
 }

@@ -21,6 +21,7 @@ export default {
   },
   watch: {
     cdata: {
+      deep: true,
       handler(newData) {
         this.options = {
           grid: {

@@ -1,12 +1,13 @@
 <template>
   <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
-    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" />
+    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @handleNodeClick="handleNodeClick"/>
     <div class="tree-form-container">
       <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
         <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
       </span>
       <filter-bar
         :config="PreDesignFilterConfig"
+        @identificationEnd="identificationEnd"
         @search-click="queryData"
         @create-click="openDialog('create')"
         @reset-click="queryData"
@@ -16,9 +17,7 @@
         :list="list"
         :list-loading="listLoading"
         :config="PreDesignTableConfig"
-        @edit-click="(row) => openDialog('edit', row)"
-        @delete-click="deleteClick"
-        @submit-data="editSubmit"
+        @selection-change="selectionChange"
       />
       <pagination
         v-show="total>0"
@@ -29,37 +28,23 @@
       />
 
     </div>
-
-    <!-- 新建弹窗 -->
-    <form-dialog
-      :config="initCreateConfig()"
-      :dialog-visible="createDialogVisible"
-      @close-dialog="createDialogVisible = false"
-      @submit="createSubmit"
-    />
-    <!-- 编辑弹窗 -->
-    <form-dialog
-      ref="editDialog"
-      :config="initEditConfig()"
-      :dialog-visible="editDialogVisible"
-      @close-dialog="editDialogVisible = false"
-      @submit="editSubmit"
-    />
-
   </div>
 </template>
 
 <script>
 import { getAqglRiskIdentifyList } from '@/api/assessment-library'
+import {
+    getsysDictListById,
+    endRiskRecognize
+  } from '@/api/hidden-danger'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
-import FormDialog from '@/components/FormDialog'
 import TreeBar from '@/components/TreeBar'
 import { PreDesignTableConfig, PreDesignFilterConfig } from '@/data/pre-design-list'
 
 export default {
-  components: { FilterBar, ListTable, Pagination, FormDialog, TreeBar },
+  components: { FilterBar, ListTable, Pagination, TreeBar },
   data() {
     return {
       id: 'assessment-library',
@@ -73,48 +58,95 @@ export default {
       listLoading: true,
       PreDesignFilterConfig,
       PreDesignTableConfig,
-      createDialogVisible: false,
-      editDialogVisible: false,
       treeExtend: true,
       treeData: {
         title: '选择专业',
-        list: [{
-          label: '专业',
-          children: [{
-            label: '安检'
-          }, {
-            label: '采煤'
-          }, {
-            label: '掘进（中央区）'
-          }, {
-            label: '掘进（南区）'
-          }, {
-            label: '机电运输'
-          }, {
-            label: '一通三防'
-          }, {
-            label: '地面设施'
-          }, {
-            label: '维护'
-          }, {
-            label: '地质灾害防治'
-          }]
-        }]
-      }
-
+        list: []
+      },
+      checkBox: []
     }
   },
   created() {
+    this.__fetchSelectList()
     this.__fetchData()
   },
   methods: {
+    __fetchSelectList() {
+      const query = [{
+        parentId: 10028
+      }, {
+        parentId: 10042
+      }, {
+        parentId: 18
+      }, {
+        parentId: 10054
+      }, {
+        parentId: 10060
+      }, {
+        parentId: 10066
+      }, {
+        parentId: 17
+      }]
+      for (let q in query) {
+        getsysDictListById(query[q].parentId).then(response => {
+          let selectList = response.data
+          for (let m in response.data) {
+            this.getIterationData(selectList[m], response.data[m])
+          }
+          this.PreDesignTableConfig.columns.forEach(it => {
+            if (query[q].parentId == 10028) {
+              if (it.field === 'majorId') {
+                this.treeData.list = selectList
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 10042) {
+              if (it.field === 'riskId') {
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 18) {
+              if (it.field === 'riskTypeId') {
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 10054) {
+              if (it.field === 'accidentPossibilityId') {
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 10060) {
+              if (it.field === 'accidentHappensId') {
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 10066) {
+              if (it.field === 'identifyTheTypeId') {
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 17) {
+              if (it.field === 'riskGradeId') {
+                it.options = selectList
+                console.log(it);
+              }
+            }
+          })
+        })
+      }
+    },
+    getIterationData(_m, _d) {
+      _m.label = _d.dictName
+      _m.value = _d.sysDictId
+      _m.children = _d.sysDictList
+      if (_d.sysDictList.length > 0) {
+        for (let m in _d.sysDictList) {
+          this.getIterationData(_m.children[m], _d.sysDictList[m])
+        }
+      }
+    },
     __fetchData() {
       this.listLoading = true
       const query = {
         page: this.listQuery.page,
         pagerows: this.listQuery.pagerows,
         entity: {
-          identifyTheType: "施工前"
+          identifyTheTypeId: "10069",
+          majorId: this.filter.majorId
         },
         keyword: this.filter.name,
         keywordField:['riskUserName']
@@ -132,57 +164,22 @@ export default {
       this.filter = Object.assign(this.filter, filter)
       this.__fetchData()
     },
-
-    // 初始化新建窗口配置
-    initCreateConfig() {
-      const createConfig = Object.assign({
-        title: '新建',
-        width: '500px',
-        form: this.PreDesignTableConfig.columns
+    selectionChange(row){
+      this.checkBox = row
+    },
+    // 点击树形菜单时触发
+    handleNodeClick(data) {
+      const majorId = data.value
+      this.filter = Object.assign(this.filter, { majorId })
+      this.__fetchData()
+    },
+    // 点击辨识结束按钮触发
+    identificationEnd() {
+      endRiskRecognize(this.checkBox[0].aqglRiskIdentifyId).then(response =>{
+        this.__fetchData()
+        this.$message.success("辨识结束")
       })
-      return createConfig
-    },
-    // 初始化编辑窗口配置
-    initEditConfig() {
-      const editConfig = Object.assign({
-        title: '编辑',
-        width: '500px',
-        form: this.PreDesignTableConfig.columns
-      })
-      return editConfig
-    },
-    // 打开弹窗
-    openDialog(name, row) {
-      const visible = `${name}DialogVisible`
-      this[visible] = true
-      if (row) {
-        // 如果有数据，更新子组件的 formData
-        this.$refs.editDialog.updataForm(row)
-      }
-    },
-
-    // 删除
-    deleteClick(id) {
-      this.$confirm('确定删除该条风险?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$message.success('删除成功')
-      })
-    },
-    // submit data
-    createSubmit(submitData) {
-      console.log(submitData)
-      this.createDialogVisible = false
-      this.$message.success('新建成功')
-    },
-    editSubmit(submitData) {
-      console.log(submitData)
-      this.editDialogVisible = false
-      this.$message.success('编辑成功')
     }
-
   }
 }
 </script>

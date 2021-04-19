@@ -69,11 +69,6 @@ export default {
       default: () => ({})
     }
 
-    // 弹窗表单
-    // formData: {
-    //   type: Object,
-    //   default: () => ({})
-    // }
   },
   data() {
     return {
@@ -96,7 +91,7 @@ export default {
     }
   },
   created() {
-    this.__fetchData()
+    // this.__fetchData()
   },
   methods: {
     __fetchData() {
@@ -111,23 +106,11 @@ export default {
         this.list = response.data.rows
         this.total = Number(response.data.records)
       })
-      // this.listLoading = false
-      // this.list = [
-      //   {
-      //     name: '控制系统',
-      //     info: '西门子逻辑系统',
-      //     sort: 1
-      //   }, {
-      //     name: '连接方式',
-      //     info: '以太网',
-      //     sort: 2
-      //   }
-      // ]
-      // this.total = 2
     },
     // 查询数据
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
+      console.log(this.filter)
       this.__fetchData()
     },
 
@@ -142,9 +125,8 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(row.sysUserId)
         this.$message.success('删除成功')
-        delEquipmentArea(row.sysUserId).then(response => {
+        delEquipmentArea(row.id).then(response => {
           console.log(response)
           this.$message.success('删除成功')
           this.__fetchData()
@@ -153,9 +135,7 @@ export default {
     },
 
     closeDialog() {
-      this.keyword = ''
-      this.content = ''
-      this.sysDeptId = ''
+      this.filter = {}
       this.$emit('close-dialog')
     },
 

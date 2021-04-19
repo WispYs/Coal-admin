@@ -47,7 +47,7 @@
   </el-dialog>
 </template>
 <script>
-import { getUserList, addRoleUser, getOrganTree } from '@/api/authority-management'
+import { getEquipmentAreaList, delEquipmentArea } from '@/api/mechatronics'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -69,11 +69,6 @@ export default {
       default: () => ({})
     }
 
-    // 弹窗表单
-    // formData: {
-    //   type: Object,
-    //   default: () => ({})
-    // }
   },
   data() {
     return {
@@ -96,7 +91,7 @@ export default {
     }
   },
   created() {
-    this.__fetchData()
+    // this.__fetchData()
   },
   methods: {
     __fetchData() {
@@ -106,28 +101,16 @@ export default {
         keywordField: ['workNumber', 'loginName', 'userName']
       }
       const query = Object.assign(this.listQuery, filter)
-      this.listLoading = false
-      this.list = [
-        {
-          name: '控制系统',
-          info: '西门子逻辑系统',
-          sort: 1
-        }, {
-          name: '连接方式',
-          info: '以太网',
-          sort: 2
-        }
-      ]
-      this.total = 2
-      // getLargeEquipmentList(query).then(response => {
-      //   this.listLoading = false
-      //   this.list = response.data.rows
-      //   this.total = Number(response.data.records)
-      // })
+      getEquipmentAreaList(query).then(response => {
+        this.listLoading = false
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
+      })
     },
     // 查询数据
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
+      console.log(this.filter)
       this.__fetchData()
     },
 
@@ -142,20 +125,18 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(row.sysUserId)
         this.$message.success('删除成功')
-        // delUser(row.sysUserId).then(response => {
-        //   console.log(response)
-        //   this.$message.success('删除成功')
-        //   this.__fetchData()
-        // })
+        delEquipmentArea(row.id).then(response => {
+          console.log(response)
+          this.$message.success('删除成功')
+          this.__fetchData()
+        })
       })
     },
 
     closeDialog() {
-      this.keyword = ''
-      this.content = ''
-      this.sysDeptId = ''
+      this.filter = {}
+      console.log(this.filter)
       this.$emit('close-dialog')
     },
 

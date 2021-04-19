@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-04-08 13:33:51
+ * @Last Modified time: 2021-04-19 11:08:43
  */
 
 /**
@@ -2016,13 +2016,45 @@ const asyncRoutes = [
             path: '/emergency-rescue/emergency1/emergency1-1',
             name: 'Emergency1-1',
             component: '/emergency-rescue/emergency-rescue-guide/accident-management/index',
-            meta: { title: '事故管理' }
+            meta: { title: '事故管理' },
+            children: [
+              {
+                path: '/emergency-rescue/emergency1/emergency1-1/rescue-process-overview',
+                name: 'Emergency1-3',
+                component: '/emergency-rescue/emergency-rescue-guide/accident-management/rescue-process-overview/index',
+                meta: { title: '救援过程总览' },
+                hidden: true
+              },
+              {
+                path: '/emergency-rescue/emergency1/emergency1-1/incident-handling-process',
+                name: 'Emergency1-4',
+                component: '/emergency-rescue/emergency-rescue-guide/accident-management/incident-handling-process/index',
+                meta: { title: '事故处理流程' },
+                hidden: true
+              }
+            ]
           },
           {
             path: '/emergency-rescue/emergency1/emergency1-2',
             name: 'Emergency1-2',
-            component: '/demo/index',
-            meta: { title: '应急流程管理' }
+            component: '/emergency-rescue/emergency-rescue-guide/emergency-process-management/index',
+            meta: { title: '应急流程管理' },
+            children: [
+              {
+                path: '/emergency-rescue/emergency1/emergency1-2/edit-process',
+                name: 'Emergency1-5',
+                component: '/emergency-rescue/emergency-rescue-guide/emergency-process-management/edit-process/index',
+                meta: { title: '应急流程编辑' },
+                hidden: true
+              },
+              {
+                path: '/emergency-rescue/emergency1/emergency1-2/preview-process',
+                name: 'Emergency1-6',
+                component: '/emergency-rescue/emergency-rescue-guide/emergency-process-management/preview-process/index',
+                meta: { title: '应急流程预览' },
+                hidden: true
+              }
+            ]
           }
         ]
       },
@@ -2041,6 +2073,15 @@ const asyncRoutes = [
           {
             path: '/emergency-rescue/rescue-plan/special-plan',
             name: 'EmergencySpecialPlan',
+            children: [
+              {
+                path: '/emergency-rescue/rescue-plan/special-plan/preview',
+                name: 'Emergency3-122',
+                component: '/emergency-rescue/rescue-plan/special-plan/preview/index',
+                meta: { title: '预览' },
+                hidden: true
+              }
+            ],
             component: '/emergency-rescue/rescue-plan/special-plan/index',
             meta: { title: '专项预案' }
           },
@@ -2061,55 +2102,55 @@ const asyncRoutes = [
           {
             path: '/emergency-rescue/emergency3/emergency3-1',
             name: 'Emergency3-1',
-            component: '/demo/index',
+            component: '/emergency-rescue/emergency-rescue-support/emergency-rescue-organization/index',
             meta: { title: '应急通讯组织机构' }
           },
           {
             path: '/emergency-rescue/emergency3/emergency3-2',
             name: 'Emergency3-2',
-            component: '/demo/index',
+            component: '/emergency-rescue/emergency-rescue-support/emergency-communication/index',
             meta: { title: '应急通讯' }
           },
           {
             path: '/emergency-rescue/emergency3/emergency3-3',
             name: 'Emergency3-3',
-            component: '/demo/index',
+            component: '/emergency-rescue/emergency-rescue-support/emergency-response-team/index',
             meta: { title: '应急队伍' }
           },
           {
             path: '/emergency-rescue/emergency3/emergency3-4',
             name: 'Emergency3-4',
-            component: '/demo/index',
+            component: '/emergency-rescue/emergency-rescue-support/emergency-experts/index',
             meta: { title: '应急专家' }
           },
           {
             path: '/emergency-rescue/emergency3/emergency3-5',
             name: 'Emergency3-5',
-            component: '/demo/index',
+            component: '/emergency-rescue/emergency-rescue-support/emergency-supplies/index',
             meta: { title: '应急物资' }
           },
           {
             path: '/emergency-rescue/emergency3/emergency3-6',
             name: 'Emergency3-6',
-            component: '/demo/index',
+            component: '/emergency-rescue/emergency-rescue-support/emergency-vehicles/index',
             meta: { title: '应急车辆' }
           },
           {
             path: '/emergency-rescue/emergency3/emergency3-7',
             name: 'Emergency3-7',
-            component: '/demo/index',
+            component: '/emergency-rescue/emergency-rescue-support/emergency-medical/index',
             meta: { title: '应急医疗' }
           },
           {
             path: '/emergency-rescue/emergency3/emergency3-8',
             name: 'Emergency3-8',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '应急避险' }
           },
           {
             path: '/emergency-rescue/emergency3/emergency3-9',
             name: 'Emergency3-9',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '应急处置权' }
           }
         ]

@@ -28,6 +28,7 @@ export const OTableConfig = {
    * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump 色块显示
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
    * @param {boolean} lazy              是否异步加载树形表格子节点数据，默认false，值为true时为异步
+   * @param {boolean} multiple          下拉选择是否多选,默认false，值为true时多选
    */
   actions: ['edit', 'delete'],
   rowKey: 'aqglRiskTissueId',
@@ -134,58 +135,11 @@ export const UserTableConfig = {
       rule: [
         { validator: validatePhone, trigger: 'blur' }
       ], placeholder: '请填写手机号码' },
-    // { label: '电话', field: 'telephone', width: '100', layout: 'Text', hidden: true, placeholder: '请填写电话' },
     { label: '邮箱', field: 'email', layout: 'Text', hidden: true, placeholder: '请填写邮箱' },
-    // { label: '入职时间', field: 'enterTime', width: '100', layout: 'DateTime', hidden: true, placeholder: '请选择入职时间' },
-    // { label: '性别', field: 'gender', width: '70', layout: 'Radio', hidden: true,
-    //   options: [
-    //     { value: 1, label: '男' },
-    //     { value: 2, label: '女' }
-    //   ], placeholder: '请选择状态' },
     { label: '部门', field: 'sysDeptId', layout: 'TreeSelect', require: true,
-      options: [
-        {
-          value: 1,
-          label: '顾桥矿',
-          children: [
-            { value: 2, label: '机关', children: [
-              { value: 3, label: '矿领导' },
-              { value: 4, label: '办公室', children: [
-                { value: 5, label: '部门', children: [
-                  { value: 6, label: '安全部门' },
-                  { value: 7, label: '监管部门' },
-                  { value: 8, label: '采掘部门' },
-                  { value: 9, label: '生产部门' },
-                  { value: 10, label: '调度部门' },
-                  { value: 11, label: '防控部门' },
-                  { value: 12, label: '应急部门' }
-                ] },
-                { value: 13, label: '办公室科室（中央区）' },
-                { value: 14, label: '办公室科室（南区）' },
-                { value: 15, label: '办公室科室（西区）' },
-                { value: 16, label: '办公室科室（东区）' }
-              ] },
-              { value: 17, label: '人力资源部' }
-            ] }
-          ]
-        }
-      ], placeholder: '请选择部门' },
-    // { label: '职务', field: 'position', width: '90', layout: 'Text', placeholder: '请填写职务' },
-    // { label: '岗位工种', field: 'workType', layout: 'Text', placeholder: '请填写职务' },
-    // { label: '排序', field: 'sort', width: '60', layout: 'Text', hidden: true, placeholder: '请填写排序' },
+      options: [], placeholder: '请选择部门' },
     { label: '角色', field: 'sysRoleId', layout: 'Select',
-      options: [
-        { value: 1, label: '影响单位审核' },
-        { value: 2, label: '科技创新' }
-      ], placeholder: '请选择角色' }
-    // { label: '状态', field: 'status', width: '70', layout: 'Radio',
-    //   options: [
-    //     { value: 1, label: '正常' },
-    //     { value: 2, label: '锁定' }
-    //   ], placeholder: '请选择状态' },
-    // { label: '人员定位卡号', field: 'card', width: '100', layout: 'Text', hidden: true, placeholder: '请填写人员定位卡号' },
-    // { label: '备注信息', field: 'remark', width: '100', layout: 'Textarea', hidden: true, placeholder: '请填写备注信息' }
-
+      options: [{value:1,label:"555"}], placeholder: '请选择角色' }
   ]
 }
 
@@ -307,34 +261,34 @@ export const OrganTableConfig = {
     { label: '简称', field: 'shortName', layout: 'Text', placeholder: '请填写简称' },
     { label: '类型', field: 'deptType', layout: 'Select', require: true,
       options: [
-        { value: 1, label: '井工矿' },
-        { value: 2, label: '矿机构' },
-        { value: 3, label: '职务' }
+        { value: '1', label: '井工矿' },
+        { value: '2', label: '矿机构' },
+        { value: '3', label: '职务' }
       ], placeholder: '请选择类型' },
     { label: '上级节点', field: 'parentId', layout: 'TreeSelect', require: true, hidden: true,
       options: [
         {
-          value: 1,
+          value: '1',
           label: '顾桥矿',
           children: [
-            { value: 2, label: '机关', children: [
-              { value: 3, label: '矿领导' },
-              { value: 4, label: '办公室', children: [
-                { value: 5, label: '部门', children: [
-                  { value: 6, label: '安全部门' },
-                  { value: 7, label: '监管部门' },
-                  { value: 8, label: '采掘部门' },
-                  { value: 9, label: '生产部门' },
-                  { value: 10, label: '调度部门' },
-                  { value: 11, label: '防控部门' },
-                  { value: 12, label: '应急部门' }
+            { value: '2', label: '机关', children: [
+              { value: '3', label: '矿领导' },
+              { value: '4', label: '办公室', children: [
+                { value: '5', label: '部门', children: [
+                  { value: '6', label: '安全部门' },
+                  { value: '7', label: '监管部门' },
+                  { value: '8', label: '采掘部门' },
+                  { value: '9', label: '生产部门' },
+                  { value: '10', label: '调度部门' },
+                  { value: '11', label: '防控部门' },
+                  { value: '12', label: '应急部门' }
                 ] },
-                { value: 13, label: '办公室科室（中央区）' },
-                { value: 14, label: '办公室科室（南区）' },
-                { value: 15, label: '办公室科室（西区）' },
-                { value: 16, label: '办公室科室（东区）' }
+                { value: '13', label: '办公室科室（中央区）' },
+                { value: '14', label: '办公室科室（南区）' },
+                { value: '15', label: '办公室科室（西区）' },
+                { value: '16', label: '办公室科室（东区）' }
               ] },
-              { value: 17, label: '人力资源部' }
+              { value: '17', label: '人力资源部' }
             ] }
           ]
         }
@@ -599,12 +553,7 @@ export const dataDictionaryConfig = {
     { label: '编号', field: 'sysDictId', width: 'auto', layout: 'Text', placeholder: '请填写编号' },
     { label: '值', field: 'dictValue', width: 'auto', layout: 'Text', placeholder: '请填写值' },
     { label: '上级节点', field: 'parentId', layout: 'TreeSelect', hidden: true,
-      options: [
-        {
-          value: 1,
-          label: '顾桥矿'
-        }
-      ], placeholder: '请选择上级节点' },
+      options: [], placeholder: '请选择上级节点' },
     { label: '排序', field: 'sortNo', width: 'auto', layout: 'Text', require: true, placeholder: '请填写排序' },
     { label: '类型', field: 'dictType', width: 'auto', layout: 'Radio', options: [
       { value: 1, label: '类别' },
@@ -644,6 +593,28 @@ export const AddMemberConfig = {
     { label: '登录名', field: 'loginName', layout: 'Select', placeholder: '请选择登录名' },
     { label: '姓名', field: 'name', layout: 'Text', placeholder: '请填写姓名' },
     { label: '部门', field: 'department', layout: 'Text', placeholder: '请填写所在部门' }
+  ]
+}
+
+// 消息模板过滤
+export const NewsTemplateFilterConfig = {
+  actions: ['search','create'],
+  filters: [
+    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '模板名称' }
+  ]
+}
+
+// 消息模板
+export const NewsTemplateConfig = {
+  actions: ['edit', 'delete'],
+  otherActionTitle: [],
+  rowKey: 'ID',
+  checkbox: true,
+  columns: [
+    { label: '模板名称', field: 'templateName', layout: 'Text', width: '200', require: true, placeholder: '请填写模板内容' },
+    { label: '模板内容', field: 'templateContent', layout: 'TextEditor', showType: 'underline', underlineText: '模板内容', placeholder: '请填写模板内容' },
+    { label: '排序', field: 'sort', width: 'auto', layout: 'Text', placeholder: '请填写排序' },
+    { label: '备注', field: 'remark', layout: 'Textarea', width: '270', placeholder: '请填写状态' }
   ]
 }
 
@@ -722,7 +693,7 @@ export const NewsTypeConfig = {
 export const MsgFilterConfig = {
   actions: ['search'],
   filters: [
-    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '工号、姓名、登录名' }
+    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '标题，消息类型' }
   ]
 }
 

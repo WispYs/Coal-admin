@@ -33,7 +33,8 @@
     aqglRiskSystemList,
     saveAqglRiskSystem,
     deleteAqglRiskTissue,
-    updateAqglRiskSystem
+    updateAqglRiskSystem,
+    getaqglRiskSystemById
   } from '@/api/liability-system'
   import {
     getRiskOrganizationSelect
@@ -106,7 +107,7 @@
             aqglRiskTissueId: id
           },
           keyword: _filter,
-          keywordField:['riskName','position']
+          keywordField:['hiddenContent','rectifyMeasure']
         }
         aqglRiskSystemList(query).then(response => {
           console.log(response);
@@ -134,7 +135,7 @@
         const createConfig = Object.assign({
           title: '新建',
           width: '500px',
-          form: this.riskFilterList
+          form: this.TableConfig.columns
         })
         return createConfig
       },
@@ -143,7 +144,7 @@
         const editConfig = Object.assign({
           title: '编辑',
           width: '500px',
-          form: this.riskFilterList
+          form: this.TableConfig.columns
         })
         return editConfig
       },
@@ -151,16 +152,16 @@
       openDialog(name, row) {
         const visible = `${name}DialogVisible`
         this[visible] = true
-        this.riskFilterList = this.TableConfig.columns.filter((ele, index, arr) => {
-          return !!ele.field.indexOf("createTime")
-        })
         if (row) {
-          console.log(row);
-          const rowObj = Object.assign(row, {
-            aqglRiskTissueId: Number(row.aqglRiskTissueId)
+          row.aqglRiskSystemId = Number(row.aqglRiskSystemId)
+          row.aqglRiskTissueId = Number(row.aqglRiskTissueId)
+          getaqglRiskSystemById(row.aqglRiskSystemId).then(response => {
+            const info = Object.assign(response.data, {
+              aqglRiskTissueId: Number(response.data.aqglRiskTissueId) || 0
+            })
+            console.log(info);
+            this.$refs.editDialog.updataForm(info)
           })
-          // 如果有数据，更新子组件的 formData
-          this.$refs.editDialog.updataForm(row)
         }
       },
       // 删除
@@ -180,16 +181,15 @@
       // submit data
       createSubmit(submitData) {
         saveAqglRiskSystem(submitData).then(response => {
-          // this.$refs.createDialog.resetForm()
+          this.$refs.createDialog.resetForm()
           this.__fetchData()
           this.createDialogVisible = false
           this.$message.success('新建成功')
         })
       },
       editSubmit(submitData) {
-        console.log(submitData)
         updateAqglRiskSystem(submitData).then(response =>{
-          console.log(response);
+          this.$refs.editDialog.resetForm()
           this.__fetchData()
           this.editDialogVisible = false
           this.$message.success('编辑成功')

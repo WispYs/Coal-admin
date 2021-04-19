@@ -25,6 +25,7 @@ export const TableConfig = {
    * @param {string}  underlineText     表格内数据显示方式为underline时，下划线的文字
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
    * @param {boolean} lazy              是否异步加载树形表格子节点数据，默认false，值为true时为异步
+   * @param {boolean} multiple          下拉选择是否多选,默认false，值为true时多选
    */
   actions: ['edit', 'delete'],
   summary: false,

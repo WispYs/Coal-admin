@@ -10,6 +10,15 @@ export function aqglRiskSystemList(data) {
   })
 }
 
+// 根据id获取风险责任体系
+export function getaqglRiskSystemById(id) {
+  return request({
+    url: SafeManagement + '/aqglRiskSystem/get/' + id,
+    method: 'get',
+    id
+  })
+}
+
 // 保存风险责任体系对象
 export function saveAqglRiskSystem(data) {
   return request({
@@ -46,6 +55,14 @@ export function getAqglHiddenSystem(data) {
   })
 }
 
+// 根据id获取患者责任体系
+export function getaqglHiddenSystemById(id) {
+  return request({
+    url: SafeManagement + '/aqglHiddenSystem/get/' + id,
+    method: 'get',
+    id
+  })
+}
 
 // 创建患者责任体系
 export function saveaqglHiddenSystem(data) {

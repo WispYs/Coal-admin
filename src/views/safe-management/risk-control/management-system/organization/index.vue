@@ -3,8 +3,13 @@
     <filter-bar :config="FilterConfig" @search-click="queryData" @create-click="openDialog('create')" @reset-click="queryData" />
     <list-table :id="id" :list="list" :list-loading="listLoading" :config="OTableConfig" @load-tree-data="asyncData" @edit-click="(row) => openDialog('edit', row)"
       @delete-click="deleteClick" @submit-data="editSubmit" />
-    <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows"
-      @pagination="pagination" />
+    <div v-show="total > 0" class="page-bottom">
+      <!-- <el-button class="page-bottom__delete" type="warning" size="small" plain :disabled="deleteDisabled" @click="deleteClick">
+        <i class="el-icon-delete el-icon--left" />批量删除
+      </el-button> -->
+      <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows"
+        @pagination="pagination" />
+    </div>
     <!-- 新建弹窗 -->
     <form-dialog ref="createDialog" :config="initCreateConfig()" :dialog-visible="createDialogVisible" @close-dialog="createDialogVisible = false"
       @submit="createSubmit" />
@@ -21,16 +26,16 @@
     saveAqglRiskTissue,
     updateAqglRiskTissue,
     deleteAqglRiskTissue,
-    getRiskTissueChildTree
+    getRiskTissueChildTree,
+    getAqglRiskTissueById
   } from '@/api/organization'
   import FilterBar from '@/components/FilterBar'
   import ListTable from '@/components/ListTable'
   import Pagination from '@/components/Pagination'
   import FormDialog from '@/components/FormDialog'
   import {
-    FilterConfig
+    FilterConfig,OTableConfig
   } from '@/data/organization'
-  import { OTableConfig } from '@/data/authority-management'
   export default {
     components: {
       FilterBar,
@@ -51,9 +56,9 @@
         listLoading: true,
         FilterConfig,
         OTableConfig,
+        deleteDisabled: true,
         createDialogVisible: false,
-        editDialogVisible: false,
-        riskFilterList: [],
+        editDialogVisible: false
       }
     },
     created() {
@@ -75,7 +80,6 @@
         }
         getRiskOrganization(query).then(response => {
           response.data.rows.forEach(it => {
-            console.log(it);
             it.aqglRiskTissueId = Number(it.aqglRiskTissueId)
             if (it.parentCheck === 1) {
               it.hasChildren = true
@@ -88,7 +92,6 @@
       },
       asyncData(tree, treeNode, resolve){
         getRiskTissueChildTree(tree.aqglRiskTissueId).then(response => {
-          console.log(response.data)
           const childrenTree = []
           response.data.forEach(it => {
             const item = {
@@ -119,7 +122,7 @@
         const createConfig = Object.assign({
           title: '新建',
           width: '800px',
-          form: this.riskFilterList
+          form: this.OTableConfig.columns
         })
         return createConfig
       },
@@ -128,7 +131,7 @@
         const editConfig = Object.assign({
           title: '编辑',
           width: '800px',
-          form: this.riskFilterList
+          form: this.OTableConfig.columns
         })
         return editConfig
       },
@@ -138,22 +141,19 @@
         this[visible] = true
         this.updateTableConfig()
         if (row) {
-          const rowObj = Object.assign(row, {
-            parentId: Number(row.parentId)
+          getAqglRiskTissueById(row.aqglRiskTissueId).then(response => {
+            const info = Object.assign(response.data, {
+              parentId: Number(response.data.parentId) || 0
+            })
+            this.$refs.editDialog.updataForm(info)
           })
-          // 如果有数据，更新子组件的 formData
-          this.$refs.editDialog.updataForm(rowObj)
         }
       },
       updateTableConfig() {
-        this.riskFilterList = this.OTableConfig.columns.filter((ele, index, arr) => {
-          return !!ele.field.indexOf("aqglRiskTissueId") && !!ele.field.indexOf("createTime")
-        })
         let query = {
           aqglRiskTissueId:''
         }
         getRiskOrganizationSelect().then(response => {
-          console.log(response);
           this.OTableConfig.columns.forEach(it => {
             if (it.field === 'parentId') {
               it.options = response.data
@@ -190,6 +190,12 @@
         })
       },
       editSubmit(submitData) {
+        if(!submitData.parentId){
+          submitData.parentId = 0
+        }
+        const query = Object.assign(submitData, {
+          orderNum: Number(submitData.orderNum) || 0
+        })
         updateAqglRiskTissue(submitData).then(response => {
           this.__fetchData()
           this.$refs.editDialog.resetForm()

@@ -10,6 +10,15 @@ export function getRiskOrganization(data) {
   })
 }
 
+// 根据id获取风险组织机构
+export function getAqglRiskTissueById(id) {
+  return request({
+    url: SafeManagement + '/aqglRiskTissue/get/' + id,
+    method: 'get',
+    id
+  })
+}
+
 // 获取对应风险组织下所有子组织,以树形结构返回,不传代表查全部风险组织树
 export function getRiskOrganizationSelect(data){
   return request({
@@ -61,6 +70,15 @@ export function getAqglHiddenTissue(data){
     url: SafeManagement + '/aqglHiddenTissue/search',
     method: 'post',
     data
+  })
+}
+
+// 根据id获取隐患组织机构
+export function getAqglHiddenTissueById(id){
+  return request({
+    url: SafeManagement + '/aqglHiddenTissue/get/' + id,
+    method: 'get',
+    id
   })
 }
 

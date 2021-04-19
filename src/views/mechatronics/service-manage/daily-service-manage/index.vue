@@ -39,19 +39,20 @@
 </template>
 
 <script>
-import { getDailyServiceList, createApplication, editApplication, getApplicationInfo, delApplication, getOrganTree } from '@/api/mechatronics'
+import { getDailyServiceList } from '@/api/mechatronics'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import DailyService from './components/DailyService'
 import ServiceRecord from './components/ServiceRecord'
 import { DailyServiceTableConfig, DailyServiceFilterConfig } from '@/data/mechatronics'
+import { parseTime } from '@/utils'
 
 export default {
   components: { FilterBar, ListTable, Pagination, DailyService, ServiceRecord },
   data() {
     return {
-      id: 'know-ledge',
+      id: 'daily-service',
       list: [],
       total: 0,
       listQuery: {
@@ -77,14 +78,15 @@ export default {
       const entity = {
         ...this.filter
       }
-      const sort = {
-        sort: {
-          asc: ['orderNum']
-        }
-      }
-      const query = Object.assign(this.listQuery, sort, { entity })
+      const query = Object.assign(this.listQuery, { entity })
       getDailyServiceList(query).then(response => {
         this.listLoading = false
+        response.data.rows.forEach(it => {
+          it.createTime = parseTime(it.createTime)
+          it.oveTime = parseTime(it.oveTime)
+          it.dutyBy = it.dutyBy + ''
+          it.ccBy = it.ccBy + ''
+        })
         this.list = response.data.rows
         this.total = Number(response.data.records)
       })
@@ -98,8 +100,15 @@ export default {
     // 日常维检，维检记录按钮
     otherClick(row, index, item) {
       if (item === '日常维检') {
+        const info = {
+          id: row.id,
+          area: row.area,
+          deviceName: row.deviceName
+        }
+        this.$refs.dailyService.updataForm(info)
         this.dailyServiceVisible = true
       } else if (item === '维检记录') {
+        this.$refs.serviceRecord.updataForm(row.id)
         this.serviceRecordVisible = true
       }
     },
@@ -109,7 +118,7 @@ export default {
       console.log(submitData)
       this.dailyServiceVisible = false
       this.$message.success('提交成功')
-      this.$refs.dailyService.resetForm()
+      // this.$refs.dailyService.resetForm()
     }
 
   }

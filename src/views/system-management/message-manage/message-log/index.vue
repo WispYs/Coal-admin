@@ -54,6 +54,8 @@ export default {
       const query ={
         page: this.listQuery.page,
         pagerows: this.listQuery.pagerows,
+        keyword: this.filter.keyword,
+        keywordField: ['dictName','title',"notifyWay"],
         // entity: {parentId: 0},
         // sort: {asc: ["orderNum"]}
       }
@@ -66,13 +68,9 @@ export default {
     },
     // 查询数据
     queryData(filter) {
-      if (filter) {
-        this.$message.success('查询成功')
-        this.filter = Object.assign(this.filter, filter)
-        this.__fetchData()
-      } else {
-        this.$message.error('请输入查询内容')
-      }
+      this.filter = Object.assign(this.filter, filter)
+      console.log(this.filter);
+      this.__fetchData()
     },
     // 初始化新建窗口配置
     initCreateConfig() {

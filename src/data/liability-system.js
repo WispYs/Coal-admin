@@ -25,6 +25,7 @@ export const TableConfig = {
    * @param {string}  underlineText     表格内数据显示方式为underline时，下划线的文字
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
    * @param {boolean} lazy              是否异步加载树形表格子节点数据，默认false，值为true时为异步
+   * @param {boolean} multiple          下拉选择是否多选,默认false，值为true时多选
    */
   actions: ['edit', 'delete'],
   summary: false,
@@ -36,7 +37,7 @@ export const TableConfig = {
       options: [], placeholder: '请选择所属组织' },
     { label: '职位', field: 'position', width: '200', layout: 'Text', placeholder: '请填写职位' },
     { label: '责任和义务', field: 'dutyoObligations', width: '', layout: 'Textarea', placeholder: '请填写责任和义务' },
-    { label: '创建时间', field: 'createTime', width: '200', sortable: true, layout: 'DateTime', placeholder: '请选择日期' }
+    { label: '创建时间', field: 'createTime', width: '200', sortable: true, layout: 'DateTime', disabled:true, placeholder: '请选择日期' }
   ]
 }
 
@@ -60,7 +61,7 @@ export const liabilitySystem = {
   columns: [
     { label: '负责人', field: 'personUserName', width: '200', layout: 'Text', placeholder: '请填写负责人' },
     { label: '组织', field: 'aqglHiddenTissueId', width: '200', layout: 'TreeSelect',
-      options: [], placeholder: '请选择所属组织' },
+      options: [{value: 1, label: '隐患组织机构'}], placeholder: '请选择所属组织' },
     { label: '职位', field: 'position', width: '200', layout: 'Text', placeholder: '请填写职位' },
     { label: '责任和义务', field: 'dutyObligation', width: '', layout: 'Textarea', placeholder: '请填写责任和义务' },
     { label: '创建时间', field: 'createTime', width: '200', sortable: true, layout: 'DateTime', placeholder: '请选择日期' }

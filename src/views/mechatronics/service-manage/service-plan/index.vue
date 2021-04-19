@@ -67,14 +67,14 @@
 </template>
 
 <script>
-import { getServicePlanList, createUser, getUserInfo, editUser, delUser, getEquipmentArea } from '@/api/mechatronics'
+import { getServicePlanList, createServicePlan, getServicePlanInfo, editServicePlan, delServicePlan, getEquipmentArea } from '@/api/mechatronics'
 import TreeBar from '@/components/TreeBar'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import { ServicePlanTableConfig, ServicePlanFilterConfig } from '@/data/mechatronics'
-
+import { parseTime } from '@/utils'
 export default {
   components: {
     TreeBar,
@@ -115,24 +115,24 @@ export default {
   methods: {
     // 接口获取所属场所
     __updateEquipAreaTree() {
-      getEquipmentArea().then(response => {
-        console.log(response.data)
-        // 更新左侧树结构数据
-        this.treeData.list = response.data
-        // 更新新增、编辑config数据
-        const areaData = []
-        response.data.forEach(it => {
-          areaData.push({
-            label: it.label,
-            value: Number(it.value)
-          })
-        })
-        ServicePlanTableConfig.columns.forEach(it => {
-          if (it.field === 'area') {
-            it.options = areaData
-          }
-        })
-      })
+      // getEquipmentArea().then(response => {
+      //   console.log(response.data)
+      //   // 更新左侧树结构数据
+      //   this.treeData.list = response.data
+      //   // 更新新增、编辑config数据
+      //   const areaData = []
+      //   response.data.forEach(it => {
+      //     areaData.push({
+      //       label: it.label,
+      //       value: Number(it.value)
+      //     })
+      //   })
+      //   ServicePlanTableConfig.columns.forEach(it => {
+      //     if (it.field === 'area') {
+      //       it.options = areaData
+      //     }
+      //   })
+      // })
     },
 
     __fetchData() {
@@ -144,6 +144,12 @@ export default {
       const query = Object.assign(this.listQuery, filter)
       getServicePlanList(query).then(response => {
         this.listLoading = false
+        response.data.rows.forEach(it => {
+          it.createTime = parseTime(it.createTime)
+          it.oveTime = parseTime(it.oveTime)
+          it.dutyBy = it.dutyBy + ''
+          it.ccBy = it.ccBy + ''
+        })
         this.list = response.data.rows
         this.total = Number(response.data.records)
       })
@@ -184,13 +190,16 @@ export default {
       // 如果有数据，更新子组件的 formData
       if (row) {
         this.$refs[`${name}Dialog`].updataForm(row)
-        // getUserInfo(row.sysUserId).then(response => {
-        //   const info = Object.assign(response.data, {
-        //     sysDeptId: Number(response.data.sysDeptId) || 0,
-        //     sysRoleId: Number(response.data.sysRoleId) || 0
-        //   })
-        //   this.$refs.editDialog.updataForm(info)
-        // })
+        getServicePlanInfo(row.id).then(response => {
+          const info = Object.assign(response.data, {
+            createTime: parseTime(response.data.createTime),
+            oveTime: parseTime(response.data.oveTime),
+            cycle: response.data.cycle + '',
+            dutyBy: response.data.dutyBy + '',
+            ccBy: response.data.ccBy + ''
+          })
+          this.$refs.editDialog.updataForm(info)
+        })
       }
     },
     // 删除
@@ -200,9 +209,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(row.sysUserId)
-        delUser(row.sysUserId).then(response => {
-          console.log(response)
+        delServicePlan(row.id).then(response => {
           this.$message.success('删除成功')
           this.__fetchData()
         })
@@ -210,14 +217,8 @@ export default {
     },
     // 新增
     createSubmit(submitData) {
-      console.log(submitData)
-
-      const query = Object.assign(submitData, {
-        sysRoleId: Number(submitData.sysRoleId) || 0,
-        sysDeptId: Number(submitData.sysDeptId) || 0
-      })
-      createUser(query).then(response => {
-        console.log(response)
+      const query = Object.assign(submitData)
+      createServicePlan(query).then(response => {
         this.createDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDialog.resetForm()
@@ -230,8 +231,7 @@ export default {
     // 编辑
     editSubmit(submitData) {
       const query = Object.assign(submitData)
-      editUser(query).then(response => {
-        console.log(response)
+      editServicePlan(query).then(response => {
         this.editDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDialog.resetForm()
@@ -272,11 +272,9 @@ export default {
 
     // 点击树形菜单时触发
     handleNodeClick(data) {
-      console.log(data)
       const entity = {
         sysDeptId: data.value
       }
-      console.log(entity)
       this.filter = Object.assign(this.filter, { entity })
       this.__fetchData()
     }

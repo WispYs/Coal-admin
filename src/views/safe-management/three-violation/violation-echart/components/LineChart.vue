@@ -19,8 +19,11 @@ export default {
       options: {}
     }
   },
+  created() {
+  },
   watch: {
     cdata: {
+      deep: true,
       handler(newData) {
         this.options = {
           grid: {
@@ -38,8 +41,8 @@ export default {
             type: 'value'
           },
           series: [{
-            data: newData.value,
-            type: 'line'
+            type: 'line',
+            data: newData.value
           }]
         }
       }

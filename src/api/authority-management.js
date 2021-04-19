@@ -237,6 +237,16 @@ export function deleteRoleUser(data) {
   })
 }
 
+//获取全部角色列表
+export function getSelectRoleList(data) {
+  return request({
+    url: SystemUrl + '/sysRole/baseSelectCombox',
+    method: 'post',
+    data
+  })
+}
+
+
 // 更新对象信息
 export function updateRole(data) {
   return request({
@@ -425,3 +435,49 @@ export function getMsgRecord(data) {
     data
   })
 }
+
+//获取消息模板列表
+export function getMsgTemplateList(data) {
+  return request({
+    url: InformationUrl + '/sysMsgTemplate/search',
+    method: 'post',
+    data
+  })
+}
+
+//保存消息模板
+export function saveMsgTemplate(data) {
+  return request({
+    url: InformationUrl + '/sysMsgTemplate/save',
+    method: 'post',
+    data
+  })
+}
+
+//根据id获取消息模板
+export function getMsgTemplate(id) {
+  return request({
+    url: InformationUrl + '/sysMsgTemplate/get/' + id,
+    method: 'get',
+    id
+  })
+}
+
+//更新消息模板
+export function updateMsgTemplate(data) {
+  return request({
+    url: InformationUrl + '/sysMsgTemplate/update',
+    method: 'post',
+    data
+  })
+}
+
+//删除消息模板
+export function delMsgTemplate(id) {
+  return request({
+    url: InformationUrl + '/sysMsgTemplate/delete/'+ id,
+    method: 'delete',
+    id
+  })
+}
+

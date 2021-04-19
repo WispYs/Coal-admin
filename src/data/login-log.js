@@ -19,6 +19,7 @@ export const TableConfig = {
    * @param {array}   options           选择器配置项
    * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump-有背景色块;underline-下划线可点击
    * @param {string}  underlineText     表格内数据显示方式为underline时，下划线的文字
+   * @param {boolean} multiple          下拉选择是否多选,默认false，值为true时多选
    */
   // actions: ['preview', 'edit', 'delete'],
   columns: [
@@ -42,18 +43,7 @@ export const FilterConfig = {
   actions: [],
   filters: [
     { label: '部门', field: 'sysDeptId', width: '150', layout: 'TreeSelect',
-      options: [
-        {
-          value: 1,
-          label: '顾桥煤矿'
-        }, {
-          value: 2,
-          label: '调度一所科直'
-        }, {
-          value: 3,
-          label: '通风一队队直'
-        }
-      ], placeholder: '请选择部门' },
+      options: [], placeholder: '请选择部门' },
     { label: '姓名', field: 'user', width: '150', layout: 'Text', placeholder: '请输入姓名' },
     { label: '开始时间', field: 'startDate', width: '150', layout: 'date', placeholder: '请选择开始时间' },
     { label: '结束时间', field: 'endDate', width: '150', layout: 'date', placeholder: '请输入结束时间' }

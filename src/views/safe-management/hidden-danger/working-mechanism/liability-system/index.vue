@@ -37,7 +37,8 @@
     getAqglHiddenSystem,
     saveaqglHiddenSystem,
     updateAqglHiddenSystem,
-    deleteaqglHiddenSystem
+    deleteaqglHiddenSystem,
+    getaqglHiddenSystemById
   } from '@/api/liability-system'
   import FilterBar from '@/components/FilterBar'
   import ListTable from '@/components/ListTable'
@@ -140,7 +141,7 @@
         const createConfig = Object.assign({
           title: '新建',
           width: '800px',
-          form: this.riskFilterList
+          form: this.liabilitySystem.columns
         })
         return createConfig
       },
@@ -149,7 +150,7 @@
         const editConfig = Object.assign({
           title: '编辑',
           width: '800px',
-          form: this.riskFilterList
+          form: this.liabilitySystem.columns
         })
         return editConfig
       },
@@ -161,8 +162,16 @@
           return !!ele.field.indexOf("createTime")
         })
         if (row) {
+          getaqglHiddenSystemById(row.aqglHiddenSystemId).then(response =>{
+            console.log(response.data);
+            const info = Object.assign(response.data, {
+              aqglHiddenTissueId: Number(response.data.aqglHiddenTissueId) || 0
+            })
+            console.log(info);
+            this.$refs.editDialog.updataForm(info)
+          })
           // 如果有数据，更新子组件的 formData
-          this.$refs.editDialog.updataForm(row)
+          // this.$refs.editDialog.updataForm(row)
         }
       },
       // 删除

@@ -24,6 +24,7 @@
             v-if="item.layout === 'Select'"
             v-model="formData[item.field]"
             class="form-item"
+            :multiple="item.multiple"
             :placeholder="item.placeholder"
             @change="(row) => selectChange(item,row)"
           >
@@ -92,6 +93,7 @@
           <!-- text editor：tinymce -->
           <tinymce
             v-if="item.layout === 'TextEditor'"
+            ref="tinymce"
             v-model="formData[item.field]"
             :height="300"
             :toolbar="item.textEditorToolbar || defaultToolbar"
@@ -160,7 +162,7 @@ export default {
       // 方案一：获取options中的实例数据，判断数据类型
       // 方案二：直接在config表中添加type字段标记数据类型
       // 暂时采用方案一，尽量不在配置表中加字段，后续有问题修改
-      if (item.options) {
+      if (item.options && item.options.length > 0) {
         // 获取options中的实例数据
         const exampleValue = item.options[0].value
         const type = getType(exampleValue)
@@ -201,7 +203,7 @@ export default {
     // 更新组件内 form 数据
     updataForm(form) {
       this.formData = Object.assign(this.formData, form)
-      console.log(this.formData)  
+      console.log(this.formData)
     },
 
     // 当提交失败的时候重置按钮状态
@@ -220,6 +222,12 @@ export default {
       if (treeSelectComponents) {
         treeSelectComponents.forEach(it => {
           it.clearHandle()
+        })
+      }
+      const tinymceComponents = this.$refs.tinymce
+      if (tinymceComponents) {
+        tinymceComponents.forEach(it => {
+          it.setContent('')
         })
       }
     },
@@ -246,19 +254,15 @@ export default {
     },
     // treeSelect 值改变
     getTreeSelect(value, field) {
-      console.log(value)
       this.formData[field] = Number(value) || 0
       console.log(this.formData)
     },
     selectChange(item, row) {
-      const $this = this
-      if (item.field == 'targetType' && item.label == '目标类型') {
-        this.$emit('selectChange', item, row)
-      }
+      console.log(item)
+      this.$emit('selectChange', item, row)
     },
     // 提交富文本编辑器
     submitTextEditor(value, field) {
-      console.log(value)
       this.formData[field] = value
       console.log(this.formData)
     }

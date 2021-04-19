@@ -113,6 +113,8 @@ const historyFaultData = Mock.mock({
     way: ''
   }]
 })
+
+/** ---- 检修管理 ---- **/
 // 检修计划
 const servicePlanData = Mock.mock({
   'items|3': [{
@@ -160,6 +162,26 @@ const SparePartData = Mock.mock({
     person: '',
     updater: '',
     'status|1': [1, 2]
+  }]
+})
+
+/** ---- 设备管理 ---- **/
+// 供应商管理
+const supplierData = Mock.mock({
+  'items|3': [{
+    area: 1,
+    'supplier|+1': ['安徽普特', '安徽三正', '安徽巨正'],
+    telephone: '',
+    addr: '',
+    postcode: '',
+    fax: '',
+    url: '',
+    person: '',
+    position: '',
+    contact: '',
+    phone: '',
+    email: '',
+    remark: ''
   }]
 })
 
@@ -302,6 +324,21 @@ module.exports = [
     type: 'get',
     response: config => {
       const items = SparePartData.items
+      return {
+        code: 200,
+        data: {
+          records: items.length,
+          rows: items
+        }
+      }
+    }
+  },
+  // 供应商管理
+  {
+    url: '/supplier/list',
+    type: 'post',
+    response: config => {
+      const items = supplierData.items
       return {
         code: 200,
         data: {

@@ -109,8 +109,9 @@ export default {
     },
 
     // 更新数据
-    updataForm(data) {
-      this.recordData = Object.assign(this.recordData, data)
+    updataForm(id) {
+      console.log(id)
+      this.recordData = Object.assign(this.recordData)
     }
 
   }
