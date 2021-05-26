@@ -1,66 +1,83 @@
 <template>
   <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
-    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" />
+    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @handleNodeClick="handleNodeClick" />
     <div class="tree-form-container">
-      <filter-bar
-        :config="FilterConfig"
-        @search-click="queryData"
-        @create-click="openDialog('create')"
-        @reset-click="queryData"
-      />
-      <list-table
-        :id="id"
-        :list="list"
-        :list-loading="listLoading"
-        :config="TableConfig"
-        @edit-click="(row) => openDialog('edit', row)"
-        @other-click="openDetail"
-        @delete-click="deleteClick"
-        @submit-data="editSubmit"
-      />
-      <pagination
-        v-show="total>0"
-        :total="total"
-        :page.sync="listQuery.page"
-        :limit.sync="listQuery.pagerows"
-        @pagination="__fetchData"
-      />
-
+      <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
+        <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
+      </span>
+      <filter-bar :config="controlMeasureFilterConfig" @search-click="queryData" @create-click="openDialog('create')" />
+      <list-table :id="id" :list="list" :list-loading="listLoading" :config="controlMeasureConfig" height="calc(100% - 157px)" @other-click="workable" />
+      <div v-show="total > 0" class="page-bottom">
+        <pagination
+          v-show="total>0"
+          :total="total"
+          :page.sync="listQuery.page"
+          :limit.sync="listQuery.pagerows"
+          @pagination="__fetchData"
+        />
+      </div>
     </div>
-
+    <!-- 展开详情 -->
+    <detail-dialog
+      ref="detailDialog"
+      :config="initDetailConfig()"
+      :dialog-visible="detailDialogVisible"
+      @close-dialog="detailDialogVisible = false"
+      @open-dialog="openDialog"
+    />
     <!-- 新建弹窗 -->
     <form-dialog
-      :config="initCreateConfig()"
-      :dialog-visible="createDialogVisible"
-      @close-dialog="createDialogVisible = false"
-      @submit="createSubmit"
+      ref="createDetailDialog"
+      :config="initCreateDetailConfig()"
+      :dialog-visible="createDetailDialogVisible"
+      @close-dialog="createDetailDialogVisible = false"
+      @submit="createDetailSubmit"
     />
-    <!-- 编辑弹窗 -->
+    <!-- 详情编辑弹窗 -->
     <form-dialog
-      ref="editDialog"
-      :config="initEditConfig()"
-      :dialog-visible="editDialogVisible"
-      @close-dialog="editDialogVisible = false"
-      @submit="editSubmit"
+      ref="editDetailDialog"
+      :config="initEditDetailConfig()"
+      :dialog-visible="editDetailDialogVisible"
+      @close-dialog="editDetailDialogVisible = false"
+      @submit="editDetailSubmit"
     />
-
   </div>
 </template>
 
 <script>
-import { getAqglRiskMeasures } from '@/api/control-measure'
+import {
+  getAqglRiskIdentifyList,
+  saveRiskMeasures,
+  getRiskMeasuresById,
+  editRiskMeasures
+} from '@/api/assessment-library'
+import {
+  getsysDictListById
+} from '@/api/hidden-danger'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import TreeBar from '@/components/TreeBar'
-import { TableConfig, FilterConfig } from '@/data/control-measure'
+import DetailDialog from './components/DetailDialog/index.vue'
+import {
+  controlMeasureConfig,
+  controlMeasureFilterConfig,
+  controlMeasureImplementationConfig
+} from '@/data/control-measure'
 
 export default {
-  components: { FilterBar, ListTable, Pagination, FormDialog, TreeBar },
+  components: {
+    FilterBar,
+    ListTable,
+    Pagination,
+    FormDialog,
+    TreeBar,
+    DetailDialog
+  },
   data() {
     return {
-      id: 'control-measure',
+      id: 'assessment-library',
       list: [],
       total: 0,
       listQuery: {
@@ -69,67 +86,142 @@ export default {
       },
       filter: {}, // 筛选项
       listLoading: true,
-      FilterConfig,
-      TableConfig,
-      createDialogVisible: false,
-      editDialogVisible: false,
+      controlMeasureConfig,
+      controlMeasureFilterConfig,
+      controlMeasureImplementationConfig,
       treeExtend: true,
       treeData: {
-        title: '选择风险类别',
-        list: [{
-          label: '分类',
-          children: [{
-            label: '作业活动'
-          }, {
-            label: '设备设施'
-          }]
-        }]
-      }
-
+        title: '选择风险类型',
+        list: []
+      },
+      detailDialogVisible: false,
+      editDetailDialogVisible: false,
+      createDetailDialogVisible: false
     }
   },
   created() {
     this.__fetchData()
+    this.__fetchSelectList()
   },
   methods: {
+    __fetchSelectList() {
+      const query = [{
+        parentId: 10028
+      }, {
+        parentId: 10042
+      }, {
+        parentId: 18
+      }, {
+        parentId: 10054
+      }, {
+        parentId: 10060
+      }, {
+        parentId: 10066
+      }, {
+        parentId: 17
+      }]
+      for (const q in query) {
+        getsysDictListById(query[q].parentId).then(response => {
+          const selectList = []
+          for (const m in response.data) {
+            selectList.push({
+              value: response.data[m].sysDictId,
+              label: response.data[m].dictName
+            })
+          }
+          this.controlMeasureConfig.columns.forEach(it => {
+            if (query[q].parentId == 10028) {
+              if (it.field === 'majorId') {
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 10042) {
+              if (it.field === 'riskId') {
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 18) {
+              if (it.field === 'riskTypeId') {
+                this.treeData.list = selectList
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 10054) {
+              if (it.field === 'accidentPossibilityId') {
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 10060) {
+              if (it.field === 'accidentHappensId') {
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 10066) {
+              if (it.field === 'identifyTheTypeId') {
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 17) {
+              if (it.field === 'riskGradeId') {
+                it.options = selectList
+              }
+            }
+          })
+        })
+      }
+    },
     __fetchData() {
       this.listLoading = true
       const query = {
         page: this.listQuery.page,
         pagerows: this.listQuery.pagerows,
-        // entity: {
-        //   aqglRiskTissueId: id
-        // },
+        entity: {
+          riskTypeId: this.filter.majorId,
+          riskGradeId: '10075'
+        },
         keyword: this.filter.name,
-        keywordField:['riskUserName']
+        keywordField: ['risk', 'identifyTheType']
       }
-      getAqglRiskMeasures(query).then(response => {
+      getAqglRiskIdentifyList(query).then(response => {
+        if (response.data.rows.length > 0) {
+          this.listLoading = false
+          this.list = response.data.rows
+          for (const _l in this.list) {
+            this.list[_l].riskTypeId = this.list[_l].riskTypeId.split(',')
+          }
+          this.total = Number(response.data.records)
+        } else {
+          if (this.listQuery.page > 0) {
+            this.listQuery.page = this.listQuery.page - 1
+            this.__fetchData()
+          } else {
+            this.listLoading = false
+            this.list = []
+            this.total = 0
+          }
+        }
+      }).catch(err => {
         this.listLoading = false
-        this.list = response.data.rows
-        this.total = Number(response.data.records) 
       })
     },
-    // 查询数据
-    queryData(filter) {
-      this.filter = Object.assign(this.filter, filter)
-      this.__fetchData()
+    // 初始化详情窗口配置
+    initDetailConfig() {
+      const createConfig = Object.assign({
+        title: '物探明细',
+        width: '900px',
+        form: this.controlMeasureImplementationConfig
+      })
+      return createConfig
     },
-
-    // 初始化新建窗口配置
-    initCreateConfig() {
+    // 初始化新建明细窗口配置
+    initCreateDetailConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '500px',
-        form: this.TableConfig.columns
+        width: '1000px',
+        form: this.controlMeasureImplementationConfig.columns
       })
       return createConfig
     },
     // 初始化编辑窗口配置
-    initEditConfig() {
+    initEditDetailConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '500px',
-        form: this.TableConfig.columns
+        width: '1000px',
+        form: this.controlMeasureImplementationConfig.columns
       })
       return editConfig
     },
@@ -138,36 +230,56 @@ export default {
       const visible = `${name}DialogVisible`
       this[visible] = true
       if (row) {
-        // 如果有数据，更新子组件的 formData
-        this.$refs.editDialog.updataForm(row)
+        getRiskMeasuresById(row.aqglRiskMeasuresId).then(response => {
+          const info = Object.assign(response.data)
+          this.$refs[`${name}Dialog`].updataForm(info)
+        })
       }
     },
-
-    // 落实情况
-    openDetail() {
-      this.$message.success('落实情况')
+    // 查询数据
+    queryData(filter) {
+      this.filter = Object.assign(this.filter, filter)
+      this.__fetchData()
     },
-
-    // 删除
-    deleteClick(id) {
-      this.$confirm('确定删除该条风险?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$message.success('删除成功')
+    // 点击树形菜单时触发
+    handleNodeClick(data) {
+      const majorId = data.value
+      this.filter = Object.assign(this.filter, { majorId })
+      this.__fetchData()
+    },
+    // 点击落实情况触发
+    workable(data) {
+      this.aqglRiskIdentifyId = data.aqglRiskIdentifyId
+      this.detailDialogVisible = true
+      this.$refs.detailDialog.queryData(data.aqglRiskIdentifyId)
+    },
+    createDetailSubmit(submitData) {
+      const query = Object.assign(submitData, {
+        aqglRiskIdentifyId: this.aqglRiskIdentifyId
+      })
+      saveRiskMeasures(submitData).then(response => {
+        this.createDetailDialogVisible = false
+        this.$refs.createDetailDialog.resetForm()
+        this.$refs.detailDialog.__fetchData()
+        this.$message.success('新建成功')
+      }).catch(err => {
+        this.$refs.createDetailDialog.resetSubmitBtn()
       })
     },
-    // submit data
-    createSubmit(submitData) {
-      this.createDialogVisible = false
-      this.$message.success('新建成功')
-    },
-    editSubmit(submitData) {
-      this.editDialogVisible = false
-      this.$message.success('编辑成功')
+    // 明细详情编辑
+    editDetailSubmit(submitData) {
+      const query = Object.assign(submitData, {
+        aqglRiskIdentifyId: this.aqglRiskIdentifyId
+      })
+      editRiskMeasures(query).then(response => {
+        this.editDetailDialogVisible = false
+        this.$message.success('编辑成功')
+        this.$refs.editDetailDialog.resetForm()
+        this.$refs.detailDialog.__fetchData()
+      }).catch(err => {
+        this.$refs.editDetailDialog.resetSubmitBtn()
+      })
     }
-
   }
 }
 </script>

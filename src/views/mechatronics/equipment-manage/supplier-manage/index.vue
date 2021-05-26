@@ -4,7 +4,7 @@
       :config="SupplierFilterConfig"
       @search-click="queryData"
       @create-click="openDialog('create')"
-      @import-click="importClick"
+      @import-click="uploadDialogVisible = true"
       @reset-click="queryData"
     />
     <list-table
@@ -53,6 +53,14 @@
       @close-dialog="editDialogVisible = false"
       @submit="editSubmit"
     />
+    <!-- 上传附件 -->
+    <upload-file
+      ref="uploadFile"
+      :dialog-visible="uploadDialogVisible"
+      @get-template="getTemplate"
+      @close-dialog="uploadDialogVisible = false"
+      @upload-submit="uploadSubmit"
+    />
 
   </div>
 </template>
@@ -63,10 +71,11 @@ import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
+import UploadFile from '@/components/UploadFile'
 import { SupplierTableConfig, SupplierFilterConfig } from '@/data/mechatronics'
 
 export default {
-  components: { FilterBar, ListTable, Pagination, FormDialog },
+  components: { FilterBar, ListTable, Pagination, FormDialog, UploadFile },
   data() {
     return {
       id: 'know-ledge',
@@ -76,6 +85,7 @@ export default {
         page: 1,
         pagerows: 10
       },
+      currentNum: 0, // 当前页数据数量，用于判断删除后是否跳转到上一页
       filter: {}, // 筛选项
       listLoading: true,
       SupplierFilterConfig,
@@ -83,60 +93,41 @@ export default {
       createDialogVisible: false,
       editDialogVisible: false,
       multipleSelection: [], // 多选项
-      deleteDisabled: true // 批量删除置灰
+      deleteDisabled: true, // 批量删除置灰
+      uploadDialogVisible: false
 
     }
   },
 
   created() {
     this.__fetchData()
-    this.__updateEquipAreaTree()
   },
   methods: {
-    // 接口获取所属场所
-    __updateEquipAreaTree() {
-      // getOrganTree().then(response => {
-      //   console.log(response.data)
-      //   // 更新左侧树结构数据
-      //   this.treeData.list = response.data
-      //   // 更新新增、编辑config数据
-      //   const areaData = []
-      //   response.data.forEach(it => {
-      //     areaData.push({
-      //       label: it.label,
-      //       value: Number(it.value)
-      //     })
-      //   })
-      //   MechLargeEquipTableConfig.columns.forEach(it => {
-      //     if (it.field === 'area') {
-      //       it.options = areaData
-      //     }
-      //   })
-      // })
-    },
     __fetchData() {
       this.listLoading = true
       const filter = {
         ...this.filter,
-        keywordField: ['workNumber', 'loginName', 'userName']
+        keywordField: ['supName']
       }
       const query = Object.assign(this.listQuery, filter)
       getSupplierList(query).then(response => {
         this.listLoading = false
         this.list = response.data.rows
         this.total = Number(response.data.records)
+        this.currentNum = response.data.rows.length
       })
     },
     // 查询数据
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
+      this.$set(this.listQuery, 'page', 1)
       this.__fetchData()
     },
     // 初始化新建窗口配置
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.SupplierTableConfig.columns
       })
       return createConfig
@@ -145,7 +136,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.SupplierTableConfig.columns
       })
       return editConfig
@@ -156,14 +147,24 @@ export default {
       const visible = `${name}DialogVisible`
       this[visible] = true
 
-      // 接口获取所属场所，更新config数据
-      this.__updateEquipAreaTree()
       // 如果有数据，更新子组件的 formData
       if (row) {
-        getSupplierInfo(row.sysManageId).then(response => {
+        getSupplierInfo(row.id).then(response => {
           const info = Object.assign(response.data)
           this.$refs.editDialog.updataForm(info)
         })
+      }
+    },
+    // 删除当前页最后一条数据后跳转到前一页
+    /**
+     * @params{number} num 删除数量
+     */
+    changeCurrentPage(num) {
+      this.currentNum = this.currentNum - num
+      if (this.currentNum <= 0) {
+        if (this.listQuery.page > 1) {
+          this.$set(this.listQuery, 'page', this.listQuery.page - 1)
+        }
       }
     },
     // 删除
@@ -177,16 +178,15 @@ export default {
         delSupplier(row.id).then(response => {
           console.log(response)
           this.$message.success('删除成功')
+          this.changeCurrentPage(1)
           this.__fetchData()
         })
       })
     },
     // 新建
     createSubmit(submitData) {
-      console.log(submitData)
       const query = Object.assign(submitData)
       createSupplier(query).then(response => {
-        console.log(response)
         this.createDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDialog.resetForm()
@@ -198,10 +198,8 @@ export default {
     },
     // 编辑
     editSubmit(submitData) {
-      console.log(submitData)
       const query = Object.assign(submitData)
       editSupplier(query).then(response => {
-        console.log(response)
         this.editDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDialog.resetForm()
@@ -212,6 +210,21 @@ export default {
     // 导入
     importClick() {
 
+    },
+    // 获取下载模板基本信息
+    getTemplate() {
+      const info = {
+        name: '供应商信息',
+        url: '1'
+      }
+      this.$refs.uploadFile.updateTemplate(info)
+    },
+
+    // 上传文件控件成功回调
+    uploadSubmit(fileList) {
+      console.log(fileList)
+      this.$refs[this.dialogRef].updateFile(fileList)
+      this.uploadDialogVisible = false
     },
 
     // 改变所选项
@@ -240,8 +253,9 @@ export default {
         type: 'warning'
       }).then(() => {
         console.log(selectId)
-        this.__fetchData()
         this.$message.success('删除成功')
+        this.changeCurrentPage(selectId.length)
+        this.__fetchData()
       })
     }
 

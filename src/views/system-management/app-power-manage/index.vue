@@ -1,14 +1,18 @@
 <template>
   <div class="page-container">
-    <app-power-filter-bar
+    <!-- <app-power-filter-bar
       :update-disabled="updateDisabled"
       :delete-disabled="deleteDisabled"
       @openDialog="openDialog"
       @deleteClick="deleteClick"
       @synchroClick="synchroClick"
       @queryData="queryData"
+    /> -->
+    <filter-bar
+      :config="AppPowerFilterConfig"
+      @search-click="queryData"
+      @create-click="openDialog('create')"
     />
-
     <list-table
       :id="id"
       :list="list"
@@ -16,8 +20,8 @@
       :config="AppPowerConfig"
       @selectionChange="selectionChange"
       @addIco="(row) => openDialog('create', row)"
-      @editIco="(row) => openDialog('edit', row)"
-      @deleteIco="deleteClick"
+      @edit-click="(row) => openDialog('edit', row)"
+      @delete-click="deleteClick"
     />
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
@@ -41,17 +45,17 @@
 </template>
 
 <script>
-import { AppPowerConfig } from '@/data/authority-management'
+import { AppPowerConfig, AppPowerFilterConfig } from '@/data/authority-management'
+import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import FormDialog from '@/components/FormDialog/index.vue'
 import Pagination from '@/components/Pagination'
-import AppPowerFilterBar from './components/app-power-filter-bar/index.vue'
 export default {
   components: {
     ListTable,
     FormDialog,
-    AppPowerFilterBar,
-    Pagination
+    Pagination,
+    FilterBar
   },
   data() {
     return {
@@ -63,6 +67,7 @@ export default {
         pagerows: 10
       },
       AppPowerConfig,
+      AppPowerFilterConfig,
       list: [{
         moduleName: '系统管理',
         moduleUrl: '/system-mange',
@@ -120,7 +125,7 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '创建',
-        width: '800px',
+        width: '1000px',
         form: this.AppPowerConfig.columns
       })
       return createConfig
@@ -129,7 +134,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.AppPowerConfig.columns
       })
       return editConfig

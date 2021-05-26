@@ -51,7 +51,7 @@
             </el-col>
             <el-col :span="24">
               <span class="info-tit">严重级别：</span>
-              <span>{{ registerInfo.grade }}</span>
+              <span>{{ registerInfo.gradeName }}</span>
             </el-col>
             <el-col :span="8">
               <span class="info-tit">处理结果：</span>
@@ -67,7 +67,11 @@
             </el-col>
             <el-col :span="24">
               <span class="info-tit">附件：</span>
-              <span>{{ registerInfo.eventId }}</span>
+              <el-tooltip v-for="img in fileMap['eventId']" :key="img.eventId" effect="light" :content="img.fileName" placement="top">
+                <div class="upload-img-wrapper" @click="download(img.url)">
+                  <img class="upload-img" :src="img.imgUrl" alt="">
+                </div>
+              </el-tooltip>
             </el-col>
           </el-row>
         </div>
@@ -80,24 +84,53 @@
 
 </template>
 <script>
+import {
+  getAqglThreeRegisterById
+} from '@/api/hidden-danger'
 export default {
   props: {
     dialogVisible: {
       type: Boolean,
       default: false
-    },
-    registerInfo:{
-      type: Object,
-      default: () => ({})
     }
   },
   data() {
     return {
-      
+      registerInfo:{},
+      fileMap: {}, // 存储附件url地址
     }
   },
   methods: {
-    // 更新父组件 xxxxxDialogVisible 的值
+    __fetchData(id){
+      getAqglThreeRegisterById(id).then(response =>{
+        this.registerInfo= response.data
+        Object.keys(response.data).forEach(async it => {
+          if(it == 'eventId'){
+            // 根据id动态获取附件信息，存储在fileMap中
+            this.fileMap[it] = await this.getFileUrls(this.registerInfo[it])
+            console.log(this.fileMap);
+          }
+          // 数据层次太多，render函数没有自动更新，需手动强制刷新
+          this.$forceUpdate()
+        })
+      })
+    },
+    // 根据附件字段Id获取图片url
+    getFileUrls(str) {
+      if (str) {
+        const eventId = str.split(',')
+        return new Promise((resolve, reject) => {
+          this.$store.dispatch('upload/getFileUrl', eventId).then((data) => {
+            resolve(data)
+          }).catch((err) => {
+            reject(err)
+          })
+        })
+      }
+    },
+    download(url) {
+      window.open(url)
+    },
     closeDialog() {
       this.$emit('close-dialog')
     }
@@ -110,50 +143,18 @@ export default {
     margin: 30px auto;
     .info-list{
       .el-col{
-        padding: 10px 0
+        padding: 10px 0;
+        .upload-img-wrapper {
+          display: inline-block;
+          position: relative;
+          cursor: pointer;
+          margin: 0 8px 10px 0;
+          .upload-img{
+            width: 100px;
+            height: 100px;
+          }
+        }
       }
     }
   }
-// @import '~@/assets/styles/theme.scss';
-// @import '~@/assets/styles/variables.scss';
-// .service-progress-container {
-//   padding: 20px 30px;
-//   .progress-item {
-//     margin-bottom: 20px;
-//     &__title {
-//       position: relative;
-//       margin-bottom: 10px;
-//       line-height: 20px;
-//       @include primaryColor($primaryColor);
-//       &::after {
-//         content: '';
-//         width: 3px;
-//         height: 16px;
-//         @include primaryBg($primaryColor);
-//         position: absolute;
-//         top: 2px;
-//         left: -8px;
-//       }
-//     }
-//     &__info {
-//       margin: 0;
-//       color: #121212;
-//       font-size: 13px;
-//       padding-left: 20px;
-//       .info-list {
-//         margin-bottom: 4px;
-//       }
-//       .info-tit {
-//         color: #999;
-//       }
-//       .info-card {
-//         font-size: 13px;
-//         b {
-//           @include primaryColor($primaryColor);
-//         }
-//       }
-//     }
-//   }
-// }
-
 </style>

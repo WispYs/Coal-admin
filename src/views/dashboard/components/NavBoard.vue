@@ -1,13 +1,13 @@
 <template>
   <div class="swiper-content">
-    <el-carousel indicator-position="outside" arrow="never" :autoplay="false">
-      <el-carousel-item v-for="item in 2" :key="item">
+    <el-carousel :indicator-position="collectMenu.length > 1 ? 'outside' : 'none'" arrow="never" :autoplay="false">
+      <el-carousel-item v-for="(item,index) in collectMenu" :key="index">
         <div class="nav-board">
-          <div v-for="it in navData" :key="it.title" class="nav-board__item">
+          <div v-for="it in item" :key="it.title" class="nav-board__item" @click="$router.push({path: it.path})">
             <div class="item-icon">
-              <img :src="it.icon" alt="" :width="it.width">
+              <img :src="it.icon" alt="">
             </div>
-            <span class="item-tit">{{ it.title }}</span>
+            <span class="item-tit" :title="it.title">{{ it.title }}</span>
           </div>
         </div>
       </el-carousel-item>
@@ -17,23 +17,62 @@
 <script>
 export default {
   props: {
-    title: {
-      type: String,
-      default: () => '标题栏'
+    // 资源数据 - 快捷导航
+    resourceData: {
+      type: Array,
+      default: () => ([])
     }
   },
   data() {
     return {
-      navData: [
-        { title: '任务调度', icon: require('@/assets/images/nav_icon_1.png') },
-        { title: '大数据分析', icon: require('@/assets/images/nav_icon_2.png') },
-        { title: 'GIS一张图', icon: require('@/assets/images/nav_icon_3.png') },
-        { title: '消息管理', icon: require('@/assets/images/nav_icon_4.png'), width: '38px' },
-        { title: '一通三防', icon: require('@/assets/images/nav_icon_5.png') },
-        { title: '生产调度', icon: require('@/assets/images/nav_icon_6.png'), width: '30px' },
-        { title: '用户中心', icon: require('@/assets/images/nav_icon_7.png') },
-        { title: '系统管理', icon: require('@/assets/images/nav_icon_8.png') }
-      ]
+      collectMenu: []
+    }
+  },
+  watch: {
+    resourceData: {
+      handler(val) {
+        const collectMenu = []
+        val.forEach((it, index) => {
+          collectMenu.push({
+            ...JSON.parse(it.menuResource),
+            icon: require(`@/assets/images/nav_icon_${index % 8 + 1}.png`)
+          })
+        })
+        this.groupCollectMenu(collectMenu)
+      },
+      immediate: true
+    }
+  },
+  created() {
+    // const collectMenu = [
+    //   { title: '任务调度', icon: require('@/assets/images/nav_icon_1.png') },
+    //   { title: '大数据分析', icon: require('@/assets/images/nav_icon_2.png') },
+    //   { title: 'GIS一张图', icon: require('@/assets/images/nav_icon_3.png') },
+    //   { title: '消息管理', icon: require('@/assets/images/nav_icon_4.png') },
+    //   { title: '一通三防', icon: require('@/assets/images/nav_icon_5.png') },
+    //   { title: '生产调度', icon: require('@/assets/images/nav_icon_6.png') },
+    //   { title: '机电运输', icon: require('@/assets/images/nav_icon_1.png') },
+    //   { title: '采集管理', icon: require('@/assets/images/nav_icon_2.png') }
+    // ]
+  },
+  methods: {
+    groupCollectMenu(collectMenu) {
+      console.log(collectMenu)
+      // 将快捷导航数组按每组8个分割
+      const newArr = [] // 存储数组
+      const groupNum = 8 // 每组数量
+      let mIndex = 0 // 记录index
+      collectMenu.forEach((it, index) => {
+        if (index % groupNum === 0 && index !== 0) {
+          newArr.push(collectMenu.slice(mIndex, index))
+          mIndex = index
+        }
+        if ((index + 1) === collectMenu.length) {
+          newArr.push(collectMenu.slice(mIndex, (index + 1)))
+        }
+      })
+      console.log(newArr)
+      this.collectMenu = newArr
     }
   }
 }
@@ -51,16 +90,15 @@ export default {
     margin-right: 15px;
     text-align: center;
     margin-bottom: 10px;
+    cursor: pointer;
     .item-icon {
       width: 100%;
       height: 60px;
-      background: #f8f8f8;
       display: flex;
       justify-content: center;
       align-items: center;
       font-size: 28px;
       color: $blueColor;
-      margin-bottom: 5px;
     }
     .item-tit {
       display: block;

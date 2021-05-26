@@ -5,8 +5,9 @@
 
 // 暂时限制登录名称为'admin' 和 'editor'，便于测试动态路由权限
 export function validUsername(str) {
-  const valid_map = ['admin', 'editor','李少勇']
-  return valid_map.indexOf(str.trim()) >= 0
+  // const valid_map = ['admin', 'editor','李少勇']
+  // return valid_map.indexOf(str.trim()) >= 0
+  return /^[a-zA-Z0-9_-]{2,10}$/.test(str)
 }
 
 // 只能输入3-20个字母、数字、下划线
@@ -42,4 +43,3 @@ export const validateEmail = (rule, value, callback) => {
     callback()
   }
 }
-

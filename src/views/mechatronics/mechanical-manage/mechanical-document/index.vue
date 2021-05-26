@@ -25,9 +25,10 @@
     />
     <!-- 新建弹窗 -->
     <form-dialog
+      ref="createDialog"
       :config="initCreateConfig()"
       :dialog-visible="createDialogVisible"
-      @upload-click="openUploadDialog"
+      @upload-click="(row) => openUploadDialog('createDialog', row)"
       @close-dialog="createDialogVisible = false"
       @submit="createSubmit"
     />
@@ -36,7 +37,7 @@
       ref="editDialog"
       :config="initEditConfig()"
       :dialog-visible="editDialogVisible"
-      @upload-click="openUploadDialog"
+      @upload-click="(row) => openUploadDialog('editDialog', row)"
       @close-dialog="editDialogVisible = false"
       @submit="editSubmit"
     />
@@ -44,17 +45,10 @@
     <!-- 上传附件 -->
     <upload-file
       :dialog-visible="uploadDialogVisible"
-      :multiple="false"
       @close-dialog="uploadDialogVisible = false"
       @upload-submit="uploadSubmit"
     />
 
-    <!-- <operation-file
-      ref="fileDialog"
-      :dialog-visible="fileDialogVisible"
-      @upload-click="openUploadDialog"
-      @close-dialog="fileDialogVisible = false"
-    /> -->
   </div>
 </template>
 
@@ -157,13 +151,16 @@ export default {
       this.$message.success('编辑成功')
     },
 
-    openUploadDialog(row) {
+    openUploadDialog(ref, row) {
+      // 记录当前打开弹窗ref
+      this.dialogRef = ref
       this.uploadDialogVisible = true
       this.uploadRow = row
     },
     // 上传文件控件成功回调
     uploadSubmit(fileList) {
       console.log(fileList)
+      this.$refs[this.dialogRef].updateFile(fileList)
       this.uploadDialogVisible = false
     }
 

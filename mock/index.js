@@ -15,6 +15,8 @@ const controlMeasure = require('./control-measure')
 const authorityManagement = require('./authority-management')
 const gis = require('./gis')
 const mechatronics = require('./mechatronics')
+const productDispatch = require('./product-dispatch')
+const portalManage = require('./portal-manage')
 
 const mocks = [
   ...user,
@@ -30,7 +32,9 @@ const mocks = [
   ...controlMeasure,
   ...authorityManagement,
   ...gis,
-  ...mechatronics
+  ...mechatronics,
+  ...productDispatch,
+  ...portalManage
 ]
 
 // for front mock

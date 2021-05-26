@@ -1,105 +1,373 @@
 <template>
-  <div class="page-container">
-    <div class="filter-bar">
-      <div class="filter-bar__item">
-        <label>关键字：</label>
-        <el-input
-          v-model="keywords"
-          class="filter-item"
-          style="width:200px"
-          placeholder="请输入设备类型、使用地点"
-          suffix-icon="el-icon-search"
+  <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
+    <tree-bar
+      ref="treeBar"
+      :tree-data="treeData"
+      @handleNodeClick="handleNodeClick"
+      @handleSwitch="handleSwitch"
+    />
+
+    <div class="tree-form-container">
+      <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
+        <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
+      </span>
+      <filter-bar
+        :config="UsingEquipFilterConfig"
+        @search-click="queryData"
+        @reset-click="queryData"
+      />
+      <!-- 表格 -->
+      <list-table
+        :id="id"
+        :list="list"
+        :list-loading="listLoading"
+        :config="UsingEquipTableConfig"
+        height="calc(100% - 157px)"
+        @other-click="otherClick"
+      />
+
+      <div v-show="total>0" class="page-bottom">
+        <pagination
+          :total="total"
+          :page.sync="listQuery.page"
+          :limit.sync="listQuery.pagerows"
+          @pagination="__fetchData"
         />
       </div>
-      <div class="filter-bar__item">
-        <el-button type="primary" size="medium" @click="search()">搜索</el-button>
-      </div>
+
+      <!-- 回收 -->
+      <form-dialog
+        ref="recycleDialog"
+        :config="initRecycleConfig()"
+        :dialog-visible="recycleDialogVisible"
+        @close-dialog="recycleDialogVisible = false"
+        @submit="recycleSubmit"
+      />
+      <!-- 移交 -->
+      <form-dialog
+        ref="turnDialog"
+        :config="initTurnConfig()"
+        :dialog-visible="turnDialogVisible"
+        @upload-click="(row) => openUploadDialog('turnDialog', row)"
+        @close-dialog="turnDialogVisible = false"
+        @submit="turnSubmit"
+      />
+      <!-- 查交 -->
+      <form-dialog
+        ref="checkDialog"
+        :config="initCheckConfig()"
+        :dialog-visible="checkDialogVisible"
+        @close-dialog="checkDialogVisible = false"
+        @submit="checkSubmit"
+      />
+      <!-- 上传附件 -->
+      <upload-file
+        :dialog-visible="uploadDialogVisible"
+        @close-dialog="uploadDialogVisible = false"
+        @upload-submit="uploadSubmit"
+      />
     </div>
-    <el-table
-      :data="tableData"
-      border
-      fit
-      :cell-style="cellStyle"
-      header-cell-class-name="pre-line"
-    >
-      <el-table-column align="center" label="序号" width="95" fixed>
-        <template slot-scope="scope">
-          {{ scope.$index+1 }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="name" align="center" label="设备类型" width="100px" />
-      <el-table-column prop="model" align="center" label="规格型号" width="110px" />
-      <el-table-column prop="assetNum" align="center" label="固定资产编号" width="110px" />
-      <el-table-column prop="code" align="center" label="内部编码" />
-      <el-table-column prop="supplier" align="center" label="生产厂家" />
-      <el-table-column prop="productDate" align="center" label="出厂日期" width="100px" />
-      <el-table-column prop="useDate" align="center" label="领用日期" width="100px" />
-      <el-table-column prop="drawPerson" align="center" label="领料人" />
-      <el-table-column prop="oraganization" align="center" label="使用单位" />
-      <el-table-column prop="addr" align="center" label="使用地点" />
-      <el-table-column prop="unit" align="center" label="计量单位" />
-      <el-table-column prop="remark" align="center" label="备注" />
-      <el-table-column fixed="right" label="操作" width="160" align="center">
-        <el-button type="text" size="small" @click="edit()">回收</el-button>
-        <el-button type="text" size="small" @click="edit()">查交</el-button>
-        <el-button type="text" size="small" @click="edit()">编辑</el-button>
-        <el-button type="text" size="small" style="color: #f56c6c" @click="del()">删除</el-button>
-      </el-table-column>
-    </el-table>
   </div>
 </template>
+
 <script>
+import { getUsingList, createRecycle, createTransfer, createCheck } from '@/api/mechatronics'
+import { getOrganTree } from '@/api/authority-management'
+
+import TreeBar from '@/components/TreeBar'
+import FilterBar from '@/components/FilterBar'
+import ListTable from '@/components/ListTable'
+import Pagination from '@/components/Pagination'
+import FormDialog from '@/components/FormDialog'
+import UploadFile from '@/components/UploadFile'
+import { UsingEquipTableConfig, UsingEquipFilterConfig, RecycleTableConfig, TurnTableConfig, CheckTableConfig } from '@/data/mechatronics'
+import { parseTime } from '@/utils'
+
 export default {
+  components: {
+    TreeBar,
+    FilterBar,
+    ListTable,
+    Pagination,
+    FormDialog,
+    UploadFile
+  },
   data() {
     return {
-      keywords: '',
-      tableData: [
-        {
-          name: '带式输送机',
-          model: '5TJ-800/2*40',
-          assetNum: '0000671003',
-          code: 'ZL98457',
-          supplier: '无铭牌',
-          productDate: '2017-08-12',
-          useDate: '2019-01-21',
-          drawPerson: '杜飞',
-          oraganization: '掘进一区',
-          addr: '1125(3)运顺',
-          unit: '台',
-          remark: ''
-        }
-      ]
+      id: 'using-equipment',
+      list: [],
+      total: 0,
+      listQuery: {
+        page: 1,
+        pagerows: 10
+      },
+      filter: {}, // 筛选项
+      listLoading: true,
+      UsingEquipFilterConfig,
+      UsingEquipTableConfig,
+      RecycleTableConfig,
+      TurnTableConfig,
+      CheckTableConfig,
+      recycleDialogVisible: false, // 回收
+      turnDialogVisible: false, // 移交
+      checkDialogVisible: false, // 查交
+      treeExtend: true,
+      treeData: {
+        title: '设备类型',
+        title2: '组织结构',
+        tId: 'id',
+        list: []
+      },
+      treeSelectId: '', //  左侧树型结构id
+      tabIndex: '0', //  左侧树型结构tab
+      uploadRow: null,
+      uploadDialogVisible: false
     }
   },
+
+  created() {
+    this.__fetchData()
+    this.__updateCategoryTree()
+  },
   methods: {
-    search() {
-      console.log(this.keywords)
+    // 获取设备类型树结构列表
+    __updateCategoryTree() {
+      this.$store.dispatch('mecha/getCategoryList').then((data) => {
+        data.forEach(it => {
+          it.label = it.typeName
+        })
+        this.treeData.list = [{
+          id: '',
+          label: '全部',
+          children: data
+        }]
+        // 设置树结构默认选中项
+        this.$refs.treeBar.setCurrentKey('')
+      }).catch((err) => {
+        console.log(err)
+      })
     },
-    edit() {
-      console.log('edit')
+    // 获取组织结构树列表
+    __updateOrganTree() {
+      getOrganTree().then(response => {
+        console.log(response.data)
+        // 更新左侧树结构数据
+        this.treeData.list = [{
+          id: '',
+          label: '全部',
+          children: response.data
+        }]
+        // 设置树结构默认选中项
+        this.$refs.treeBar.setCurrentKey('')
+      })
     },
-    del() {
-      console.log('del')
+    // 获取归还单位列表
+    __updateRecycleUnitTree() {
+      // 数据字典 - 所属单位
+      const parentId = 111133
+      this.$store.dispatch('mecha/getDataDictionary', parentId).then((data) => {
+        data.forEach(it => {
+          it.value = it.dictValue
+          it.label = it.dictName
+        })
+        RecycleTableConfig.columns.forEach(it => {
+          if (it.field === 'returnUnit') {
+            it.options = data
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
     },
-    // 表格单元格样式
-    cellStyle() {
-      return 'font-size: 13px'
+    // 获取转交单位列表
+    __updateTurnUnitTree() {
+      // 数据字典 - 所属单位
+      const parentId = 111133
+      this.$store.dispatch('mecha/getDataDictionary', parentId).then((data) => {
+        data.forEach(it => {
+          it.value = it.dictValue
+          it.label = it.dictName
+        })
+        TurnTableConfig.columns.forEach(it => {
+          if (it.field === 'transferUnit' || it.field === 'toTransferUnit') {
+            it.options = data
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+
+    __fetchData() {
+      this.listLoading = true
+      const filter = {
+        ...this.filter,
+        keywordField: ['machineName', 'useAddr']
+      }
+      let query = {}
+      if (this.tabIndex === '0') {
+        query = Object.assign(this.listQuery, filter, {
+          machineTypeId: this.treeSelectId
+        })
+        delete query.sysDeptId
+      } else {
+        query = Object.assign(this.listQuery, filter, {
+          sysDeptId: this.treeSelectId
+        })
+        delete query.machineTypeId
+      }
+      getUsingList(query).then(response => {
+        this.listLoading = false
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
+      })
+    },
+    // 查询数据
+    queryData(filter) {
+      this.filter = Object.assign(this.filter, filter)
+      this.$set(this.listQuery, 'page', 1)
+      this.__fetchData()
+    },
+
+    // 初始化新建窗口配置
+    initCreateConfig() {
+      const createConfig = Object.assign({
+        title: '新建',
+        width: '1000px',
+        form: this.UsingEquipTableConfig.columns
+      })
+      return createConfig
+    },
+    // 初始化编辑窗口配置
+    initEditConfig() {
+      const editConfig = Object.assign({
+        title: '编辑',
+        width: '1000px',
+        form: this.UsingEquipTableConfig.columns
+      })
+      return editConfig
+    },
+    // 初始化回收窗口配置
+    initRecycleConfig() {
+      const recycleConfig = Object.assign({
+        title: '回收',
+        width: '1000px',
+        form: this.RecycleTableConfig.columns
+      })
+      return recycleConfig
+    },
+    // 初始化移交窗口配置
+    initTurnConfig() {
+      const turnConfig = Object.assign({
+        title: '移交',
+        width: '1000px',
+        form: this.TurnTableConfig.columns
+      })
+      return turnConfig
+    },
+    // 初始化查交窗口配置
+    initCheckConfig() {
+      const checkConfig = Object.assign({
+        title: '查交',
+        width: '1000px',
+        form: this.CheckTableConfig.columns
+      })
+      return checkConfig
+    },
+
+    // 回收，移交，查交按钮
+    otherClick(row, index, item) {
+      console.log(row)
+      const info = {
+        bnsId: row.id,
+        machineName: row.machineName,
+        modelStd: row.modelStd,
+        assetsCode: row.assetsCode
+      }
+      if (item === '回收') {
+        this.__updateRecycleUnitTree()
+        this.$refs.recycleDialog.updataForm(info)
+        this.recycleDialogVisible = true
+      } else if (item === '移交') {
+        this.__updateTurnUnitTree()
+        this.$refs.turnDialog.updataForm(info)
+        this.turnDialogVisible = true
+      } else if (item === '查交') {
+        this.$refs.checkDialog.updataForm(info)
+        this.checkDialogVisible = true
+      }
+    },
+
+    // 回收
+    recycleSubmit(submitData) {
+      const query = Object.assign(submitData)
+      createRecycle(query).then(response => {
+        console.log(response)
+        this.recycleDialogVisible = false
+        this.$message.success('回收成功')
+        this.$refs.recycleDialog.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.recycleDialog.resetSubmitBtn()
+      })
+    },
+    // 移交
+    turnSubmit(submitData) {
+      const query = Object.assign(submitData)
+      createTransfer(query).then(response => {
+        console.log(response)
+        this.turnDialogVisible = false
+        this.$message.success('移交成功')
+        this.$refs.turnDialog.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.turnDialog.resetSubmitBtn()
+      })
+    },
+    // 查交
+    checkSubmit(submitData) {
+      const query = Object.assign(submitData)
+      createCheck(query).then(response => {
+        console.log(response)
+        this.checkDialogVisible = false
+        this.$message.success('查交成功')
+        this.$refs.checkDialog.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.checkDialog.resetSubmitBtn()
+      })
+    },
+
+    // 点击树形菜单时触发
+    handleNodeClick(data) {
+      this.treeSelectId = data.parentId || data.id
+      this.queryData()
+    },
+    // 点击切换树型菜单
+    handleSwitch(tab) {
+      this.tabIndex = tab.index
+      if (this.tabIndex === '0') {
+        this.__updateCategoryTree()
+      } else {
+        this.__updateOrganTree()
+      }
+    },
+    // 打开上传文件空间
+    openUploadDialog(ref, row) {
+      // 记录当前打开弹窗ref
+      this.dialogRef = ref
+      this.uploadDialogVisible = true
+      this.uploadRow = row
+    },
+    // 上传文件控件成功回调
+    uploadSubmit(fileList) {
+      console.log(fileList)
+      this.$refs[this.dialogRef].updateFile(fileList)
+      this.uploadDialogVisible = false
     }
   }
 }
 </script>
-<style lang="scss" scoped>
-  .filter-bar {
-    margin-bottom: 10px;
-    &__item {
-      display: inline-block;
-      margin: 0 40px 15px 0;
-      font-size: 14px;
-      label {
-        font-weight: normal;
-        font-size: 14px;
-        margin-right: 4px;
-      }
-    }
-  }
-</style>

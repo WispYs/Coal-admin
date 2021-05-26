@@ -14,17 +14,16 @@
       @selection-change="selectionChange"
     />
     <div v-show="total>0" class="page-bottom">
-      <el-button
-        class="page-bottom__delete"
-        type="warning"
-        size="small"
-        plain
-        :disabled="deleteDisabled"
-        @click="deleteBatches"
-      >
+      <el-button class="page-bottom__delete" type="warning" size="small" plain :disabled="deleteDisabled" @click="deleteBatches">
         <i class="el-icon-delete el-icon--left" />批量删除
       </el-button>
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="pagination" />
+      <pagination
+        v-show="total>0"
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.pagerows"
+        @pagination="pagination"
+      />
     </div>
     <!-- 新建弹窗 -->
     <form-dialog
@@ -47,12 +46,11 @@
     <!-- 人员管理弹窗 -->
     <member-dialog
       :config="initTableConfig()"
-      :roleUserInfo = "roleUserInfo"
-      :selectRole = "selectRole"
+      :role-user-info="roleUserInfo"
+      :select-role="selectRole"
       :dialog-visible="tableDialogVisible"
-      @closeDialog="tableDialogVisible = false"
+      @closeDialog="MembersClose"
       @membersVisible="membersVisible"
-      @removeMember="removeMember"
       @synchro="synchro"
       @search="search"
       @updataPage="updataPage"
@@ -60,19 +58,20 @@
     <!-- 添加人员弹窗 -->
     <add-member-dialog
       :config="initAddMemberConfig()"
-      :selectRole = "selectRole"
-      :roleUserInfo = "roleUserInfo"
+      :select-role="selectRole"
+      :role-user-info="roleUserInfo"
       :dialog-visible="addMembersVisible"
       @closeDialog="addMembersClose"
       @membersVisible="membersVisible"
       @keywordSearch="keywordSearch"
       @contentSearch="contentSearch"
       @treeClick="treeClick"
+      @updataPage="updataPage"
     />
 
     <role-permission-dialog
-      :moduleInfo="moduleInfo"
-      :selectRole="selectRole"
+      :module-info="moduleInfo"
+      :select-role="selectRole"
       :config="initAuthorityConfig()"
       :dialog-visible="authorityVisible"
       @closeDialog="authorityVisible = false"
@@ -86,11 +85,14 @@ import {
   getRoleList,
   saveRole,
   deleteRole,
+  batchDeleteRole,
   updateRole,
   getRoleUserList,
   RoleTypeSelectBox,
   selectCombox,
-  getMenuOrButtonList
+  getMenuOrButtonList,
+  getRoleById,
+  getOrganTree
 } from '@/api/authority-management'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
@@ -100,9 +102,9 @@ import MemberDialog from './conponments/MemberDialog/index.vue'
 import AddMemberDialog from './conponments/AddMemberDialog/index.vue'
 import RolePermissionDialog from './conponments/RolePermissionDialog/index.vue'
 import {
-  UserTableConfig,
   RoleTableConfig,
-  RoleFilterConfig
+  RoleFilterConfig,
+  memberConfig
 } from '@/data/authority-management'
 
 export default {
@@ -128,7 +130,6 @@ export default {
       listLoading: true,
       RoleFilterConfig,
       RoleTableConfig,
-      UserTableConfig,
       selectRole: {},
       createDialogVisible: false,
       editDialogVisible: false,
@@ -136,35 +137,38 @@ export default {
       addMembersVisible: false,
       authorityVisible: false,
       deleteDisabled: true,
-      multipleSelection:[],
+      multipleSelection: [],
       roleUserInfo: {
-        roleUserList:[],
+        roleUserList: [],
         total: 0,
-        listQuery: {
-          page: 1,
-          pagerows: 10
-        }
+        deptTree: [],
+        memberConfig
       },
-      roleTypeList:[],
-      moduleInfo:{
+      roleTypeList: [],
+      moduleInfo: {
         title: '',
         checkbox: true,
-        list:[]
+        list: [],
+        menuId: [],
+        loading: true,
+        tId: 'sysMenuId'
       }
     }
   },
-
   created() {
     this.__fetchData()
     this.__getRoleType()
     this.__getSiteTree()
   },
   methods: {
-    __getSiteTree(){
+    __getSiteTree() {
       selectCombox().then(res => {
-        let tList = res.data
-        for(let d in res.data){
-          this.siteRecursion(tList[d],res.data[d])
+        const tList = []
+        for (const d in res.data) {
+          tList.push({
+            value: res.data[d].sysManageId,
+            label: res.data[d].site
+          })
         }
         RoleTableConfig.columns.forEach(it => {
           if (it.field === 'sysManageId') {
@@ -173,30 +177,22 @@ export default {
         })
       })
     },
-    siteRecursion(list,data){
-      list.label = data.site
-      list.value = data.sysManageId
-      if(data.children && data.children.length > 0){
-        for(let d in data.children){
-          this.siteRecursion(list.children[d],data.children[d])
-        }
-      }
-    },
-    __getRoleType(){
+    __getRoleType() {
       RoleTypeSelectBox().then(res => {
-        console.log(res)
-        this.roleTypeList = res.data
-        for(let d in res.data){
-          this.roleRecursion(this.roleTypeList[d],res.data[d])
+        this.roleTypeList = []
+        for (const d in res.data) {
+          this.roleTypeList.push({
+            value: res.data[d].sysRoleTypeId,
+            label: res.data[d].typeName,
+            sysManageId: res.data[d].sysManageId,
+            site: res.data[d].site
+          })
         }
-        console.log(this.roleTypeList);
-
         RoleFilterConfig.filters.forEach(it => {
           if (it.field === 'sysRoleTypeId') {
             it.options = this.roleTypeList
           }
         })
-
         RoleTableConfig.columns.forEach(it => {
           if (it.field === 'sysRoleTypeId') {
             it.options = this.roleTypeList
@@ -204,47 +200,40 @@ export default {
         })
       })
     },
-    roleRecursion(list,data){
-      list.label = data.typeName
-      list.value = data.sysRoleTypeId
-      if(data.children && data.children.length > 0){
-        for(let d in data.children){
-          this.roleRecursion(list.children[d],data.children[d])
-        }
-      }
-    },
     __fetchData(_id) {
-      console.log(_id);
       this.listLoading = true
-      let query = {
+      const query = {
         page: this.listQuery.page,
         pagerows: this.listQuery.pagerows,
         entity: {
-          "sysRoleTypeId": _id
+          'sysRoleTypeId': _id
         },
-        sort:{
-          asc:["orderNum"]
+        sort: {
+          asc: ['orderNum']
         }
       }
-      console.log();
-      getRoleList(query).then(res => {
-        console.log(res)
-        this.list = res.data.rows
-        this.total = parseInt(res.data.records);
-        this.listLoading = false;
+      getRoleList(query).then(response => {
+        if (response.data.rows.length > 0) {
+          this.list = response.data.rows
+          this.total = parseInt(response.data.records)
+          this.listLoading = false
+        } else {
+          if (this.listQuery.page > 0) {
+            this.listQuery.page = this.listQuery.page - 1
+            this.__fetchData()
+          } else {
+            this.listLoading = false
+            this.list = []
+            this.total = 0
+          }
+        }
       })
     },
-    pagination(_data){
-      console.log(_data);
-      this.listQuery.page= _data.page
-      this.listQuery.pagerows = _data.pagerows
-      this.__fetchData();
+    pagination(_data) {
+      this.__fetchData()
     },
     // 查询数据
     queryData(filter) {
-      console.log(filter);
-      // this.filter = Object.assign(this.filter, filter)
-      console.log(this.filter);
       this.__fetchData(filter.sysRoleTypeId)
     },
     // 初始化表格窗口配置
@@ -261,7 +250,7 @@ export default {
     initAddMemberConfig() {
       const createConfig = Object.assign({
         title: '选择用户',
-        width: '900px',
+        width: '1000px',
         type: 'addMember',
         form: this.RoleTableConfig.columns
       })
@@ -300,7 +289,9 @@ export default {
       this[visible] = true
       if (row) {
         // 如果有数据，更新子组件的 formData
-        this.$refs.editDialog.updataForm(row)
+        getRoleById(row.sysRoleId).then(response => {
+          this.$refs.editDialog.updataForm(response.data)
+        })
       }
     },
     // 删除
@@ -310,14 +301,13 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(id);
         deleteRole(id.sysRoleId).then(res => {
           this.__fetchData()
           this.$message.success('删除成功')
         })
       })
     },
-    selectionChange(val){
+    selectionChange(val) {
       this.multipleSelection = val
       if (this.multipleSelection.length > 0) {
         this.deleteDisabled = false
@@ -327,142 +317,168 @@ export default {
     },
     // submit data  创建角色
     createSubmit(submitData) {
-      console.log(submitData);
+      const siteList = this.roleTypeList.filter(p => p.sysRoleTypeId === submitData.value)[0]
+      submitData.sysManageId = siteList.sysManageId
+      submitData.site = siteList.site
       const query = Object.assign(submitData, {
         orderNum: Number(submitData.orderNum) || 0,
         memberNum: Number(submitData.memberNum) || 0
       })
       saveRole(submitData).then(res => {
-        console.log(res)
         this.__fetchData()
         this.createDialogVisible = false
         this.$refs.createDialog.resetForm()
         this.$message.success('新建成功')
+      }).catch(err => {
+        this.$refs.createDialog.resetSubmitBtn()
       })
     },
     editSubmit(submitData) {
-      console.log(submitData)
+      const siteList = this.roleTypeList.filter(p => p.sysRoleTypeId === submitData.value)[0]
+      submitData.sysManageId = siteList.sysManageId
+      submitData.site = siteList.site
+      const query = Object.assign(submitData, {
+        orderNum: Number(submitData.orderNum) || 0,
+        memberNum: Number(submitData.memberNum) || 0
+      })
       updateRole(submitData).then(res => {
-        console.log(res);
         this.__fetchData()
         this.editDialogVisible = false
         this.$refs.editDialog.resetForm()
         this.$message.success('编辑成功')
+      }).catch(err => {
+        this.$refs.createDialog.resetSubmitBtn()
       })
     },
     otherClick(row, index, item) {
-      console.log(row,index,item);
-      console.log(item)
       this.roleUserInfo.roleUserList = []
       this.roleUserInfo.total = 0
-      this.roleUserInfo.listQuery.page = 1
-      this.roleUserInfo.listQuery.pagerows = 10
       if (item == '管理成员') {
-        this.selectRole = row;
-        this.tableDialogVisible = true
+        this.selectRole = row
         const flag = 1
-        this.getRoleUserList(this.selectRole.sysRoleId,this.listQuery.page,this.listQuery.pagerows,'',flag)
+        this.getRoleUserList(this.selectRole.sysRoleId, 1, 10, '', flag)
+        this.getDeptTree()
+        this.tableDialogVisible = true
       } else if (item == '编辑权限') {
-        this.selectRole = row;
-        this.getRoleMeauList(row.sysRoleId);
+        this.selectRole = row
+        this.moduleInfo.loading = true
+        this.getRoleMeauList(row.sysRoleId)
         this.authorityVisible = true
       }
     },
-    // 获取模块授权信息
-    getRoleMeauList(_id){
-      let query ={
-        parentId: 0,
-        roleId: _id,
-        type: 1
-      }
-      getMenuOrButtonList(query).then(res => {
-        console.log(res);
-        this.moduleInfo.list = res.data
-        for(let m in this.moduleInfo.list){
-          this.moduleInfoPotting(this.moduleInfo.list[m],this.moduleInfo.list[m].children)
-        }
-        console.log(this.moduleInfo);
+    getDeptTree() {
+      getOrganTree().then(response => {
+        this.roleUserInfo.deptTree = response.data
+        this.roleUserInfo.memberConfig.columns.forEach(it => {
+          if (it.field == 'sysDeptId') {
+            it.options = response.data
+          }
+        })
       })
     },
-    moduleInfoPotting(module,m_children){
-      module.label = module.meta.title
+    // 获取模块授权信息
+    getRoleMeauList(_id) {
+      const query = {
+        parentId: 0,
+        roleId: _id
+      }
+      getMenuOrButtonList(query).then(res => {
+        this.moduleInfo.list = res.data.menuTree
+        this.moduleInfo.menuId = res.data.checked
+        this.moduleInfo.loading = false
+      })
     },
-    treeClick(_data){
-      console.log(_data);
-      this.getRoleUserList(this.selectRole.sysRoleId,this.listQuery.page,this.listQuery.pagerows,'',2,_data.value)
+    treeClick(_data) {
+      this.getRoleUserList(this.selectRole.sysRoleId, this.listQuery.page, this.listQuery.pagerows, '', 2, _data.value)
     },
     // 获取角色下的所有用户列表
-    getRoleUserList(_id,_page,_rows,_search,_falg,_p_id) {
-      console.log(_id,_page,_rows,_search);
+    getRoleUserList(_id, _page, _rows, _search, _falg, _p_id) {
       const query = {
         page: _page,
         pagerows: _rows,
         entity: {
-          "sysRoleId": _id,
-          "userName": _search,
-          "loginName": _search,
-          "sysDeptId": _p_id
+          'sysRoleId': _id,
+          'sysDeptId': _p_id
         },
-        extra:{
-          "flag": _falg
+        keyword: _search,
+        keywordField: ['userName', 'loginName'],
+        extra: {
+          'flag': _falg
         }
       }
-      getRoleUserList(query).then(res => {
-        console.log(res);
-        this.roleUserInfo.roleUserList = res.data.rows
-        this.roleUserInfo.total = Number(res.data.records)
-        this.roleUserInfo.page = _page
-        this.roleUserInfo.pagerows = _rows
-        console.log(this.roleUserInfo);
+      getRoleUserList(query).then(response => {
+        if (response.data.rows.length > 0) {
+          this.listLoading = false
+          this.roleUserInfo.roleUserList = response.data.rows
+          this.roleUserInfo.total = Number(response.data.records)
+          this.roleUserInfo.page = _page
+          this.roleUserInfo.pagerows = _rows
+        } else {
+          if (this.listQuery.page > 0) {
+            this.listQuery.page = _page - 1
+            this.getRoleUserList(_id, _page - 1, _rows, _search, _falg, _p_id)
+          } else {
+            this.roleUserInfo.roleUserList = []
+            this.roleUserInfo.total = 0
+            this.roleUserInfo.page = 1
+            this.roleUserInfo.pagerows = 10
+          }
+        }
+      }).catch(err => {
+        this.listLoading = false
       })
     },
-    updataPage(_data,_num){
-      console.log(_data);
-      this.getRoleUserList(this.selectRole.sysRoleId,_data.page,_data.limit,'',_num);
+    updataPage(_data, _num) {
+      this.getRoleUserList(this.selectRole.sysRoleId, _data.page, _data.limit, '', _num)
     },
     membersVisible() {
-      const flag= 2
-      this.getRoleUserList(this.selectRole.sysRoleId,this.listQuery.page,this.listQuery.pagerows,'',flag,1)
+      const flag = 2
+      this.getRoleUserList(this.selectRole.sysRoleId, this.listQuery.page, this.listQuery.pagerows, '', flag, 1)
       this.tableDialogVisible = false
       this.addMembersVisible = true
     },
-    addMembersClose() {
-      this.getRoleUserList(this.selectRole.sysRoleId,this.listQuery.page,this.listQuery.pagerows,'',1)
+    MembersClose() {
+      this.tableDialogVisible = false
+      this.__fetchData()
+    },
+    addMembersClose(data) {
+      this.getRoleUserList(this.selectRole.sysRoleId, 1, 10, '', 1)
       this.tableDialogVisible = true
       this.addMembersVisible = false
     },
-    // 移除成员
-    removeMember() {
-      this.$message({
-        message: '恭喜你，移除成功',
-        type: 'success'
+    // 批量删除
+    deleteBatches() {
+      const selectId = []
+      this.multipleSelection.forEach(it => selectId.push(it.sysRoleId))
+      if (selectId.length === 0) {
+        this.$message.warning('请选择所删除的角色')
+        return false
+      }
+      this.$confirm('确定删除所选中角色?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        batchDeleteRole(selectId).then(response => {
+          this.__fetchData()
+          this.$message.success('删除成功')
+        })
       })
     },
-    // 批量删除
-    deleteBatches(){
-
-    },
     // 同步
-    synchro(val,_num) {
-      this.getRoleUserList(this.selectRole.sysRoleId,this.listQuery.page,this.listQuery.pagerows,'',_num)
-      this.$message.success('恭喜你，' + val + '成功')
+    synchro(page, pagerows, _num) {
+      this.getRoleUserList(this.selectRole.sysRoleId, page, pagerows, '', 1, _num)
     },
     // 搜索
-    search(val,_num) {
-      this.getRoleUserList(this.selectRole.sysRoleId,'1','10',val,_num)
-      this.$message.success("查询成功")
+    search(val, _num) {
+      this.getRoleUserList(this.selectRole.sysRoleId, '1', '10', val, _num)
     },
     // 通过关键字搜索
     keywordSearch(_id) {
-      this.getRoleUserList(this.selectRole.sysRoleId,this.listQuery.page,this.listQuery.pagerows,'',2,_id)
-      this.$message({
-        message: '恭喜你，搜索成功',
-        type: 'success'
-      })
+      this.getRoleUserList(this.selectRole.sysRoleId, this.listQuery.page, this.listQuery.pagerows, '', 2, _id)
     },
     contentSearch(val) {
-      console.log(val)
-      this.getRoleUserList("",this.listQuery.page,this.listQuery.pagerows,val)
+      this.getRoleUserList('', this.listQuery.page, this.listQuery.pagerows, val)
     }
   }
 }

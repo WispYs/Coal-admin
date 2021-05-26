@@ -2,7 +2,7 @@
   <el-dialog
     title="附件"
     :visible.sync="dialogVisible"
-    width="800px"
+    width="1000px"
     class="operation-file-dialog"
     :before-close="closeDialog"
   >
@@ -60,11 +60,9 @@ export default {
     }
   },
   methods: {
-    // 更新父组件 xxxxxDialogVisible 的值
     closeDialog() {
       this.$emit('close-dialog')
     },
-
     // 更新数据
     updataForm(data) {
       this.fileData = Object.assign(this.fileData, data, {
@@ -73,7 +71,6 @@ export default {
         pPercent: this.computePercent(data.push, data.pTotal)
       })
     },
-
     // 上传附件
     uploadFile() {
       this.$emit('upload-click')
@@ -85,6 +82,8 @@ export default {
     },
     // 批量删除
     deleteBatches() {
+      this.$message.info('敬请期待')
+      return
       const selectId = []
       console.log(this.multipleSelection)
       this.multipleSelection.forEach(it => selectId.push(it.id))
@@ -111,6 +110,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import '~@/assets/styles/theme.scss';
 @import '~@/assets/styles/variables.scss';
 
 .operation-file-container {
@@ -124,7 +124,7 @@ export default {
     margin: 0 8px;
     cursor: pointer;
     &:hover {
-      color: $primaryColor;
+      @include primaryColor($primaryColor);
     }
   }
 }

@@ -1,14 +1,14 @@
 /**
  * Parse the time to string
  * @param   {(Object|string|number)}  time
- * @param   {string}                  cFormat  YYYY-MM-DD、YYYY-MM-DD hh:mm:ss
+ * @param   {string}                  cFormat  yyyy-MM-dd、yyyy-MM-dd HH:mm:ss
  * @returns {string | null}
  */
 export function parseTime(time, cFormat) {
   if (!time) {
     return null
   }
-  const format = cFormat || 'YYYY-MM-DD'
+  const format = cFormat || 'yyyy-MM-dd'
   let date
   if (typeof time === 'object') {
     date = time
@@ -28,15 +28,15 @@ export function parseTime(time, cFormat) {
     date = new Date(time)
   }
   const formatObj = {
-    YYYY: date.getFullYear(),
+    yyyy: date.getFullYear(),
     MM: date.getMonth() + 1,
-    DD: date.getDate(),
-    hh: date.getHours(),
+    dd: date.getDate(),
+    HH: date.getHours(),
     mm: date.getMinutes(),
     ss: date.getSeconds()
   }
 
-  const time_str = format.replace(/(YYYY|MM|DD|hh|mm|ss)/g, (result, key) => {
+  const time_str = format.replace(/(yyyy|MM|dd|HH|mm|ss)/g, (result, key) => {
     const value = formatObj[key]
 
     return value.toString().padStart(2, '0')

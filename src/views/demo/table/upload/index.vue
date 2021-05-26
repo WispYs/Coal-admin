@@ -63,7 +63,6 @@
 
       <upload-file
         :dialog-visible="uploadDialogVisible"
-        :multiple="false"
         @close-dialog="uploadDialogVisible = false"
         @upload-submit="uploadSubmit"
       />
@@ -183,6 +182,7 @@ export default {
     // 上传文件控件成功回调
     uploadSubmit(fileList) {
       console.log(fileList)
+      this.$refs[this.dialogRef].updateFile(fileList)
       this.uploadDialogVisible = false
     },
 

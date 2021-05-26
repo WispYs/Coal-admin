@@ -57,12 +57,13 @@
 </template>
 
 <script>
-import { getHistoryFaultList, createApplication, editApplication, getApplicationInfo, delApplication, getOrganTree } from '@/api/mechatronics'
+import { getHistoryFaultList, createHistoryFault, editHistoryFault, getHistoryFaultInfo, delHistoryFault, getOrganTree } from '@/api/mechatronics'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import { HistoryFaultTableConfig, HistoryFaultFilterConfig } from '@/data/mechatronics'
+import { parseTime } from '@/utils'
 
 export default {
   components: { FilterBar, ListTable, Pagination, FormDialog },
@@ -75,6 +76,7 @@ export default {
         page: 1,
         pagerows: 10
       },
+      currentNum: 0, // 当前页数据数量，用于判断删除后是否跳转到上一页
       filter: {}, // 筛选项
       listLoading: true,
       HistoryFaultFilterConfig,
@@ -89,35 +91,56 @@ export default {
 
   created() {
     this.__fetchData()
+    this.__initEquipPlace()
   },
   methods: {
+    // 初始化所属场所下拉框数据
+    __initEquipPlace() {
+      this.$store.dispatch('mecha/getEquipPlaceList').then((data) => {
+        const placeData = []
+        data.forEach(it => {
+          placeData.push({
+            label: it.typeName,
+            value: it.id + ''
+          })
+        })
+        HistoryFaultTableConfig.columns.forEach(it => {
+          if (it.field === 'deviceTypeId') {
+            it.options = placeData
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
     __fetchData() {
       this.listLoading = true
-      const entity = {
-        ...this.filter
+      const filter = {
+        ...this.filter,
+        keywordField: ['accidentKw', 'faultRecord']
       }
-      const sort = {
-        sort: {
-          asc: ['orderNum']
-        }
-      }
-      const query = Object.assign(this.listQuery, sort, { entity })
+      const query = Object.assign(this.listQuery, filter)
       getHistoryFaultList(query).then(response => {
         this.listLoading = false
+        response.data.rows.forEach(it => {
+          it.occurTime = parseTime(it.occurTime)
+        })
         this.list = response.data.rows
         this.total = Number(response.data.records)
+        this.currentNum = response.data.rows.length
       })
     },
     // 查询数据
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
+      this.$set(this.listQuery, 'page', 1)
       this.__fetchData()
     },
     // 初始化新建窗口配置
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.HistoryFaultTableConfig.columns
       })
       return createConfig
@@ -126,7 +149,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.HistoryFaultTableConfig.columns
       })
       return editConfig
@@ -136,23 +159,29 @@ export default {
       console.log(name, row)
       const visible = `${name}DialogVisible`
       this[visible] = true
-      // getOrganTree().then(response => {
-      //   console.log(response.data)
-      //   // 更新新增、编辑config数据
-      //   HistoryFaultTableConfig.columns.forEach(it => {
-      //     if (it.field === 'sysDeptId') {
-      //       it.options = response.data
-      //     }
-      //   })
-      // })
+      // 初始化所属场所下拉框数据
+      this.__initEquipPlace()
+
       // 如果有数据，更新子组件的 formData
       if (row) {
-        getApplicationInfo(row.sysManageId).then(response => {
+        getHistoryFaultInfo(row.id).then(response => {
           const info = Object.assign(response.data, {
-            sysDeptId: Number(response.data.sysDeptId) || 0
+            occurTime: parseTime(response.data.occurTime)
           })
           this.$refs.editDialog.updataForm(info)
         })
+      }
+    },
+    // 删除当前页最后一条数据后跳转到前一页
+    /**
+     * @params{number} num 删除数量
+     */
+    changeCurrentPage(num) {
+      this.currentNum = this.currentNum - num
+      if (this.currentNum <= 0) {
+        if (this.listQuery.page > 1) {
+          this.$set(this.listQuery, 'page', this.listQuery.page - 1)
+        }
       }
     },
     // 删除
@@ -162,23 +191,18 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(row.sysManageId)
-        delApplication(row.sysManageId).then(response => {
+        delHistoryFault(row.id).then(response => {
           console.log(response)
           this.$message.success('删除成功')
+          this.changeCurrentPage(1)
           this.__fetchData()
         })
       })
     },
     // 新建
     createSubmit(submitData) {
-      console.log(submitData)
-      const query = Object.assign(submitData, {
-        orderNum: Number(submitData.orderNum) || 0,
-        sysDeptId: Number(submitData.sysDeptId) || 0
-      })
-      createApplication(query).then(response => {
-        console.log(response)
+      const query = Object.assign(submitData)
+      createHistoryFault(query).then(response => {
         this.createDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDialog.resetForm()
@@ -190,16 +214,15 @@ export default {
     },
     // 编辑
     editSubmit(submitData) {
-      console.log(submitData)
-      const query = Object.assign(submitData, {
-        orderNum: Number(submitData.orderNum) || 0
-      })
-      editApplication(query).then(response => {
-        console.log(response)
+      const query = Object.assign(submitData)
+      editHistoryFault(query).then(response => {
         this.editDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDialog.resetForm()
         this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.editDialog.resetSubmitBtn()
       })
     },
 
@@ -229,8 +252,9 @@ export default {
         type: 'warning'
       }).then(() => {
         console.log(selectId)
-        this.__fetchData()
         this.$message.success('删除成功')
+        this.changeCurrentPage(selectId.length)
+        this.__fetchData()
       })
     }
 

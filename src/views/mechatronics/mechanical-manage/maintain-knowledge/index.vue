@@ -75,6 +75,7 @@ export default {
         page: 1,
         pagerows: 10
       },
+      currentNum: 0, // 当前页数据数量，用于判断删除后是否跳转到上一页
       filter: {}, // 筛选项
       listLoading: true,
       KnowLedgeFilterConfig,
@@ -89,53 +90,74 @@ export default {
 
   created() {
     this.__fetchData()
-    this.__updateEquipAreaTree()
+    // 初始化所属场所下拉框数据
+    this.__updateEquipPlace()
+    // 获取检修周期列表
+    this.__updateServiceCycle()
   },
   methods: {
-    // 接口获取所属场所
-    __updateEquipAreaTree() {
-      // getOrganTree().then(response => {
-      //   console.log(response.data)
-      //   // 更新左侧树结构数据
-      //   this.treeData.list = response.data
-      //   // 更新新增、编辑config数据
-      //   const areaData = []
-      //   response.data.forEach(it => {
-      //     areaData.push({
-      //       label: it.label,
-      //       value: Number(it.value)
-      //     })
-      //   })
-      //   MechLargeEquipTableConfig.columns.forEach(it => {
-      //     if (it.field === 'area') {
-      //       it.options = areaData
-      //     }
-      //   })
-      // })
+    // 初始化所属场所下拉框数据
+    __updateEquipPlace() {
+      this.$store.dispatch('mecha/getEquipPlaceList').then((data) => {
+        const placeData = []
+        data.forEach(it => {
+          placeData.push({
+            label: it.typeName,
+            value: it.id + ''
+          })
+        })
+        KnowLedgeTableConfig.columns.forEach(it => {
+          if (it.field === 'deviceTypeId') {
+            it.options = placeData
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 获取检修周期列表
+    __updateServiceCycle() {
+      // 数据字典 - 检修周期
+      const parentId = 111339
+      this.$store.dispatch('mecha/getDataDictionary', parentId).then((data) => {
+        data.forEach(it => {
+          it.value = it.dictValue
+          it.label = it.dictName
+        })
+        KnowLedgeTableConfig.columns.forEach(it => {
+          if (it.field === 'cycle') {
+            it.options = data
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
     },
     __fetchData() {
       this.listLoading = true
       const filter = {
         ...this.filter,
-        keywordField: ['workNumber', 'loginName', 'userName']
+        keywordField: ['belongPlace', 'pos']
       }
       const query = Object.assign(this.listQuery, filter)
       getKnowLedgeList(query).then(response => {
         this.listLoading = false
         this.list = response.data.rows
         this.total = Number(response.data.records)
+        this.currentNum = response.data.rows.length
       })
     },
     // 查询数据
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
+      this.$set(this.listQuery, 'page', 1)
       this.__fetchData()
     },
     // 初始化新建窗口配置
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.KnowLedgeTableConfig.columns
       })
       return createConfig
@@ -144,7 +166,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.KnowLedgeTableConfig.columns
       })
       return editConfig
@@ -156,15 +178,29 @@ export default {
       this[visible] = true
 
       // 接口获取所属场所，更新config数据
-      this.__updateEquipAreaTree()
+      this.__updateEquipPlace()
       // 如果有数据，更新子组件的 formData
       if (row) {
         getKnowLedgeInfo(row.id).then(response => {
           const info = Object.assign(response.data, {
+            deviceTypeId: response.data.deviceTypeId + '',
+            cycle: response.data.cycle + '',
             dutyBy: response.data.dutyBy + ''
           })
           this.$refs.editDialog.updataForm(info)
         })
+      }
+    },
+    // 删除当前页最后一条数据后跳转到前一页
+    /**
+     * @params{number} num 删除数量
+     */
+    changeCurrentPage(num) {
+      this.currentNum = this.currentNum - num
+      if (this.currentNum <= 0) {
+        if (this.listQuery.page > 1) {
+          this.$set(this.listQuery, 'page', this.listQuery.page - 1)
+        }
       }
     },
     // 删除
@@ -178,16 +214,15 @@ export default {
         delKnowLedge(row.id).then(response => {
           console.log(response)
           this.$message.success('删除成功')
+          this.changeCurrentPage(1)
           this.__fetchData()
         })
       })
     },
     // 新建
     createSubmit(submitData) {
-      console.log(submitData)
       const query = Object.assign(submitData)
       createKnowLedge(query).then(response => {
-        console.log(response)
         this.createDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDialog.resetForm()
@@ -201,7 +236,6 @@ export default {
     editSubmit(submitData) {
       const query = Object.assign(submitData)
       editKnowLedge(query).then(response => {
-        console.log(response)
         this.editDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDialog.resetForm()
@@ -235,8 +269,9 @@ export default {
         type: 'warning'
       }).then(() => {
         console.log(selectId)
-        this.__fetchData()
         this.$message.success('删除成功')
+        this.changeCurrentPage(selectId.length)
+        this.__fetchData()
       })
     }
 

@@ -24,7 +24,7 @@
         </el-col>
         <el-col :span="20" class="empower">
           <div v-if="!!moduleVisible">
-            <tree-bar :tree-data="moduleInfo" @extend-click="treeExtend = !treeExtend" @checkChange="checkChange"/>
+            <tree-bar v-loading="moduleInfo.loading" :tree-data="moduleInfo" :menuId="moduleInfo.menuId" @extend-click="treeExtend = !treeExtend" @checkChange="checkChange"/>
           </div>
           <!-- <div v-if="!!buttonVisible">
             <div class="buttons">
@@ -205,6 +205,7 @@ export default {
         checkbox: true,
         list: []
       },
+      loading: true,
       // treeData1: {
       //   title: '',
       //   checkbox: true,
@@ -214,6 +215,7 @@ export default {
     }
   },
   created() {
+    console.log(this.menuId);
     const {
       form
     } = {
@@ -305,12 +307,9 @@ export default {
       // this.$emit("updateClick",this.selectData[0]);
     },
     empowerSubmit() {
-      console.log(this.sysMenuIds);
-      console.log(this.selectRole);
       let query = {
         sysMenuIds: this.sysMenuIds,
-        sysRoleId: Number(this.selectRole.sysRoleId),
-        type: this.empowerType
+        sysRoleId: Number(this.selectRole.sysRoleId)
       }
       console.log(query);
       roleEmpower(query).then(res => {

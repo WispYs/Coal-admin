@@ -1,84 +1,111 @@
 <template>
   <div class="page-container">
     <filter-bar :config="FilterConfig" @search-click="queryData" @create-click="openDialog('create')" @reset-click="queryData" />
-    <list-table :id="id" :list="list" :list-loading="listLoading" :config="OTableConfig" @load-tree-data="asyncData" @edit-click="(row) => openDialog('edit', row)"
-      @delete-click="deleteClick" @submit-data="editSubmit" />
+    <list-table
+      :id="id"
+      ref="organTable"
+      :list="list"
+      :list-loading="listLoading"
+      height="calc(100% - 157px)"
+      :config="OTableConfig"
+      @load-tree-data="asyncData"
+      @edit-click="(row) => openDialog('edit', row)"
+      @delete-click="deleteClick"
+      @submit-data="editSubmit"
+    />
     <div v-show="total > 0" class="page-bottom">
-      <!-- <el-button class="page-bottom__delete" type="warning" size="small" plain :disabled="deleteDisabled" @click="deleteClick">
-        <i class="el-icon-delete el-icon--left" />批量删除
-      </el-button> -->
-      <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows"
-        @pagination="pagination" />
+      <pagination
+        v-show="total > 0"
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.pagerows"
+        @pagination="pagination"
+      />
     </div>
     <!-- 新建弹窗 -->
-    <form-dialog ref="createDialog" :config="initCreateConfig()" :dialog-visible="createDialogVisible" @close-dialog="createDialogVisible = false"
-      @submit="createSubmit" />
+    <form-dialog
+      ref="createDialog"
+      :config="initCreateConfig()"
+      :dialog-visible="createDialogVisible"
+      @close-dialog="createDialogVisible = false"
+      @submit="createSubmit"
+    />
     <!-- 编辑弹窗 -->
-    <form-dialog ref="editDialog" :config="initEditConfig()" :dialog-visible="editDialogVisible" @close-dialog="editDialogVisible = false"
-      @submit="editSubmit" />
+    <form-dialog
+      ref="editDialog"
+      :config="initEditConfig()"
+      :dialog-visible="editDialogVisible"
+      @close-dialog="editDialogVisible = false"
+      @submit="editSubmit"
+    />
   </div>
 </template>
 
 <script>
-  import {
-    getRiskOrganization,
-    getRiskOrganizationSelect,
-    saveAqglRiskTissue,
-    updateAqglRiskTissue,
-    deleteAqglRiskTissue,
-    getRiskTissueChildTree,
-    getAqglRiskTissueById
-  } from '@/api/organization'
-  import FilterBar from '@/components/FilterBar'
-  import ListTable from '@/components/ListTable'
-  import Pagination from '@/components/Pagination'
-  import FormDialog from '@/components/FormDialog'
-  import {
-    FilterConfig,OTableConfig
-  } from '@/data/organization'
-  export default {
-    components: {
-      FilterBar,
-      ListTable,
-      Pagination,
-      FormDialog
-    },
-    data() {
-      return {
-        id: 'organization',
-        list: [],
-        total: 0,
-        listQuery: {
-          page: 1,
-          pagerows: 10
+import {
+  getRiskOrganization,
+  getRiskOrganizationSelect,
+  saveAqglRiskTissue,
+  updateAqglRiskTissue,
+  deleteAqglRiskTissue,
+  getRiskTissueChildTree,
+  getAqglRiskTissueById
+} from '@/api/organization'
+import FilterBar from '@/components/FilterBar'
+import ListTable from '@/components/ListTable'
+import Pagination from '@/components/Pagination'
+import FormDialog from '@/components/FormDialog'
+import {
+  FilterConfig,
+  OTableConfig
+} from '@/data/organization'
+export default {
+  components: {
+    FilterBar,
+    ListTable,
+    Pagination,
+    FormDialog
+  },
+  data() {
+    return {
+      id: 'organization',
+      list: [],
+      total: 0,
+      listQuery: {
+        page: 1,
+        pagerows: 10
+      },
+      filter: {}, // 筛选项
+      listLoading: true,
+      FilterConfig,
+      OTableConfig,
+      deleteDisabled: true,
+      createDialogVisible: false,
+      editDialogVisible: false,
+      mapArr: [], // 存储异步加载的树状节点数据数组
+      oldParentId: '' // 编辑节点前树状节点id
+    }
+  },
+  created() {
+    this.__fetchData()
+  },
+  methods: {
+    __fetchData(_filter) {
+      this.listLoading = true
+      const query = {
+        page: this.listQuery.page,
+        pagerows: this.listQuery.pagerows,
+        entity: {
+          parentId: 0
         },
-        filter: {}, // 筛选项
-        listLoading: true,
-        FilterConfig,
-        OTableConfig,
-        deleteDisabled: true,
-        createDialogVisible: false,
-        editDialogVisible: false
-      }
-    },
-    created() {
-      this.__fetchData()
-    },
-    methods: {
-      __fetchData(_filter) {
-        this.listLoading = true
-        const query = {
-          page: this.listQuery.page,
-          pagerows: this.listQuery.pagerows,
-          entity: {
-            aqglRiskTissueName: _filter,
-            parentId: 0
-          },
-          sort: {
-            asc: ["orderNum"]
-          }
+        keyword: _filter,
+        keywordField: ['aqglRiskTissueName'],
+        sort: {
+          asc: ['orderNum']
         }
-        getRiskOrganization(query).then(response => {
+      }
+      getRiskOrganization(query).then(response => {
+        if (response.data.rows.length > 0) {
           response.data.rows.forEach(it => {
             it.aqglRiskTissueId = Number(it.aqglRiskTissueId)
             if (it.parentCheck === 1) {
@@ -88,11 +115,24 @@
           this.listLoading = false
           this.list = response.data.rows
           this.total = Number(response.data.records)
-        })
-      },
-      asyncData(tree, treeNode, resolve){
-        getRiskTissueChildTree(tree.aqglRiskTissueId).then(response => {
-          const childrenTree = []
+        } else {
+          if (this.listQuery.page > 0) {
+            this.listQuery.page = this.listQuery.page - 1
+            this.__fetchData()
+          } else {
+            this.listLoading = false
+            this.list = []
+            this.total = 0
+          }
+        }
+      }).catch(err => {
+        this.listLoading = false
+      })
+    },
+    getChildTree(id) {
+      const childrenTree = []
+      return new Promise((resolve, reject) => {
+        getRiskTissueChildTree(id).then(response => {
           response.data.forEach(it => {
             const item = {
               aqglRiskTissueName: it.aqglRiskTissueName,
@@ -106,103 +146,146 @@
             childrenTree.push(item)
           })
           resolve(childrenTree)
+        }).catch(err => {
+          reject(err)
         })
-      },
-      // 查询数据
-      queryData(filter) {
-        this.__fetchData(filter.name)
-      },
-      pagination(data){
-        this.listQuery.page = data.page
-        this.listQuery.pagerows = data.pagerows
-        this.__fetchData()
-      },
-      // 初始化新建窗口配置
-      initCreateConfig() {
-        const createConfig = Object.assign({
-          title: '新建',
-          width: '800px',
-          form: this.OTableConfig.columns
-        })
-        return createConfig
-      },
-      // 初始化编辑窗口配置
-      initEditConfig() {
-        const editConfig = Object.assign({
-          title: '编辑',
-          width: '800px',
-          form: this.OTableConfig.columns
-        })
-        return editConfig
-      },
-      // 打开弹窗
-      openDialog(name, row) {
-        const visible = `${name}DialogVisible`
-        this[visible] = true
-        this.updateTableConfig()
-        if (row) {
-          getAqglRiskTissueById(row.aqglRiskTissueId).then(response => {
-            const info = Object.assign(response.data, {
-              parentId: Number(response.data.parentId) || 0
-            })
-            this.$refs.editDialog.updataForm(info)
+      })
+    },
+    async asyncData(tree, treeNode, resolve) {
+      // 将当前选中节点数据存储到mapArr中
+      this.mapArr[tree.aqglRiskTissueId] = {
+        tree,
+        treeNode,
+        resolve
+      }
+      const treeData = await this.getChildTree(tree.aqglRiskTissueId)
+      resolve(treeData)
+      return treeData
+    },
+    // 重新触发树形表格的loadTree函数
+    async refreshLoadTree(parentId) {
+      const mapsData = this.mapArr[parentId]
+      let treeData = []
+      // 如果mapsData不为undefined，则表示之前打开过树形结构
+      if (mapsData) {
+        const {
+          tree,
+          treeNode,
+          resolve
+        } = mapsData
+        treeData = this.asyncData(tree, treeNode, resolve)
+      } else {
+        treeData = await this.getChildTree(parentId)
+      }
+      this.$refs.organTable.refreshLoadTree(parentId,treeData)
+    },
+    // 查询数据
+    queryData(filter) {
+      this.__fetchData(filter.name)
+    },
+    pagination(data) {
+      this.listQuery.page = data.page
+      this.listQuery.pagerows = data.limit
+      this.__fetchData()
+    },
+    // 初始化新建窗口配置
+    initCreateConfig() {
+      const createConfig = Object.assign({
+        title: '新建',
+        width: '1000px',
+        form: this.OTableConfig.columns
+      })
+      return createConfig
+    },
+    // 初始化编辑窗口配置
+    initEditConfig() {
+      const editConfig = Object.assign({
+        title: '编辑',
+        width: '1000px',
+        form: this.OTableConfig.columns
+      })
+      return editConfig
+    },
+    // 打开弹窗
+    async openDialog(name, row) {
+      const visible = `${name}DialogVisible`
+      this[visible] = true
+      this.updateTableConfig()
+      if (row) {
+        getAqglRiskTissueById(row.aqglRiskTissueId).then(response => {
+          const info = Object.assign(response.data, {
+            parentId: Number(response.data.parentId) || 0
           })
-        }
-      },
-      updateTableConfig() {
-        let query = {
-          aqglRiskTissueId:''
-        }
-        getRiskOrganizationSelect().then(response => {
-          this.OTableConfig.columns.forEach(it => {
-            if (it.field === 'parentId') {
-              it.options = response.data
-            }
-          })
-        })
-      },
-      // 删除
-      deleteClick(row) {
-        this.$confirm('确定删除该组织结构?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          deleteAqglRiskTissue(row.aqglRiskTissueId).then(response => {
-            this.$message.success('删除成功')
-            this.__fetchData()
-          })
-        })
-      },
-      // submit data
-      createSubmit(submitData) {
-        if(!submitData.parentId){
-          submitData.parentId = 0
-        }
-        const query = Object.assign(submitData, {
-          orderNum: Number(submitData.orderNum) || 0
-        })
-        saveAqglRiskTissue(query).then(response => {
-          this.__fetchData()
-          this.$refs.createDialog.resetForm()
-          this.createDialogVisible = false
-          this.$message.success('新建成功')
-        })
-      },
-      editSubmit(submitData) {
-        if(!submitData.parentId){
-          submitData.parentId = 0
-        }
-        const query = Object.assign(submitData, {
-          orderNum: Number(submitData.orderNum) || 0
-        })
-        updateAqglRiskTissue(submitData).then(response => {
-          this.__fetchData()
-          this.$refs.editDialog.resetForm()
-          this.editDialogVisible = false
-          this.$message.success('编辑成功')
+          this.oldParentId = info.parentId
+          this.$refs.editDialog.updataForm(info)
         })
       }
+    },
+    updateTableConfig() {
+      const query = {
+        aqglRiskTissueId: ''
+      }
+      getRiskOrganizationSelect().then(response => {
+        this.OTableConfig.columns.forEach(it => {
+          if (it.field === 'parentId') {
+            it.options = response.data
+          }
+        })
+      })
+    },
+    // 删除
+    deleteClick(row) {
+      this.$confirm('确定删除该风险组织结构?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteAqglRiskTissue(row.aqglRiskTissueId).then(response => {
+          this.refreshLoadTree(row.parentId)
+          this.$message.success('删除成功')
+          this.__fetchData()
+        })
+      }).catch((err) => {
+        this.$message.info('已取消删除')
+      })
+    },
+    // submit data
+    createSubmit(submitData) {
+      if (!submitData.parentId) {
+        submitData.parentId = 0
+      }
+      const query = Object.assign(submitData, {
+        orderNum: Number(submitData.orderNum) || 0
+      })
+      saveAqglRiskTissue(query).then(response => {
+        this.refreshLoadTree(submitData.parentId)
+        this.__fetchData()
+        this.$refs.createDialog.resetForm()
+        this.createDialogVisible = false
+        this.$message.success('新建成功')
+      }).catch(err => {
+        this.$refs.createDialog.resetSubmitBtn()
+      })
+    },
+    editSubmit(submitData) {
+      if (!submitData.parentId) {
+        submitData.parentId = 0
+      }
+      const query = Object.assign(submitData, {
+        orderNum: Number(submitData.orderNum) || 0
+      })
+      updateAqglRiskTissue(submitData).then(response => {
+        // 更新编辑前后父节点数据
+        this.refreshLoadTree(submitData.parentId)
+        this.refreshLoadTree(this.oldParentId)
+        this.__fetchData()
+        this.$refs.editDialog.resetForm()
+        this.editDialogVisible = false
+        this.$message.success('编辑成功')
+      }).catch(err => {
+        this.$refs.editDialog.resetSubmitBtn()
+      })
     }
   }
+}
 </script>

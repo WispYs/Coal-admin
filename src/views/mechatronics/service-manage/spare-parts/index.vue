@@ -1,6 +1,11 @@
 <template>
   <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
-    <tree-bar :tree-data="treeData" @handleNodeClick="handleNodeClick" />
+    <tree-bar
+      ref="treeBar"
+      :tree-data="treeData"
+      :default-props="treeProp"
+      @handleNodeClick="handleNodeClick"
+    />
 
     <div class="tree-form-container">
       <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
@@ -90,7 +95,15 @@
 </template>
 
 <script>
-import { getSparePartList, createSparePart, getSparePartInfo, editSparePart, delSparePart, getEquipmentArea, createSpareReceive, createSpareStore } from '@/api/mechatronics'
+import {
+  getSparePartList,
+  createSparePart,
+  getSparePartInfo,
+  editSparePart,
+  delSparePart,
+  createSpareReceive,
+  createSpareStore
+} from '@/api/mechatronics'
 import TreeBar from '@/components/TreeBar'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
@@ -117,6 +130,7 @@ export default {
         page: 1,
         pagerows: 10
       },
+      currentNum: 0, // 当前页数据数量，用于判断删除后是否跳转到上一页
       filter: {}, // 筛选项
       listLoading: true,
       SparePartFilterConfig,
@@ -131,14 +145,13 @@ export default {
       detailDialogVisible: false, // 明细
       treeExtend: true,
       treeData: {
-        title: '',
-        list: [
-          {
-            value: 0,
-            label: '全部',
-            children: [{ value: 1, label: '主井' }, { value: 2, label: '副井' }]
-          }
-        ]
+        title: '所属场所',
+        tId: 'id',
+        list: []
+      },
+      treeProp: {
+        children: 'children',
+        label: 'typeName'
       },
       multipleSelection: [], // 多选项
       deleteDisabled: true // 批量删除置灰
@@ -147,24 +160,97 @@ export default {
 
   created() {
     this.__fetchData()
+    // 初始化所属场所树型结构数据
+    this.__updateEquipPlace()
+    // 获取计量单位列表
+    this.__updateUnitTree()
+    // 获取备品状态列表
+    this.__updateSpareStatus()
   },
   methods: {
+    // 初始化所属场所树型结构数据
+    __updateEquipPlace() {
+      this.$store.dispatch('mecha/getEquipPlaceList').then((data) => {
+        // 更新左侧树结构数据
+        this.treeData.list = [{
+          id: 0,
+          typeName: '全部',
+          children: data
+        }]
+        // 设置树结构默认选中项
+        this.$refs.treeBar.setCurrentKey(0)
+
+        // 更新新增、编辑config数据
+        const placeData = []
+        data.forEach(it => {
+          placeData.push({
+            label: it.typeName,
+            value: it.id + ''
+          })
+        })
+        SparePartTableConfig.columns.forEach(it => {
+          if (it.field === 'deviceTypeId') {
+            it.options = placeData
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 获取计量单位列表
+    __updateUnitTree() {
+      // 数据字典 - 设备计量单位
+      const parentId = 15
+      this.$store.dispatch('mecha/getDataDictionary', parentId).then((data) => {
+        data.forEach(it => {
+          it.value = it.dictValue
+          it.label = it.dictName
+        })
+        SparePartTableConfig.columns.forEach(it => {
+          if (it.field === 'unit') {
+            it.options = data
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 获取备品状态列表
+    __updateSpareStatus() {
+      // 数据字典 - 备品状态
+      const parentId = 111354
+      this.$store.dispatch('mecha/getDataDictionary', parentId).then((data) => {
+        data.forEach(it => {
+          it.value = it.dictValue
+          it.label = it.dictName
+        })
+        SparePartTableConfig.columns.forEach(it => {
+          if (it.field === 'status') {
+            it.options = data
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
     __fetchData() {
       this.listLoading = true
       const filter = {
         ...this.filter,
-        keywordField: ['workNumber', 'loginName', 'userName']
+        keywordField: ['belongPlace']
       }
       const query = Object.assign(this.listQuery, filter)
       getSparePartList(query).then(response => {
         this.listLoading = false
         this.list = response.data.rows
         this.total = Number(response.data.records)
+        this.currentNum = response.data.rows.length
       })
     },
     // 查询数据
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
+      this.$set(this.listQuery, 'page', 1)
       this.__fetchData()
     },
 
@@ -172,7 +258,7 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.SparePartTableConfig.columns
       })
       return createConfig
@@ -181,7 +267,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.SparePartTableConfig.columns
       })
       return editConfig
@@ -190,7 +276,7 @@ export default {
     initReceiveConfig() {
       const receiveConfig = Object.assign({
         title: '领用',
-        width: '800px',
+        width: '1000px',
         form: this.ReceiveTableConfig.columns
       })
       return receiveConfig
@@ -199,7 +285,7 @@ export default {
     initStoreConfig() {
       const storeConfig = Object.assign({
         title: '入库',
-        width: '800px',
+        width: '1000px',
         form: this.StoreTableConfig.columns
       })
       return storeConfig
@@ -208,7 +294,7 @@ export default {
     initDetailConfig() {
       const detailConfig = Object.assign({
         title: '明细',
-        width: '800px',
+        width: '1000px',
         form: this.DetailTableConfig.columns
       })
       return detailConfig
@@ -224,6 +310,8 @@ export default {
         this.$refs[`${name}Dialog`].updataForm(row)
         getSparePartInfo(row.id).then(response => {
           const info = Object.assign(response.data, {
+            deviceTypeId: response.data.deviceTypeId + '',
+            unit: response.data.unit + '',
             dutyBy: response.data.dutyBy + '',
             updateBy: response.data.updateBy + '',
             status: response.data.status + ''
@@ -242,8 +330,20 @@ export default {
         this.$refs.storeDialog.updataForm(info)
         this.storeDialogVisible = true
       } else if (item === '明细') {
-        this.$refs.detailDialog.updataForm(info)
+        this.$refs.detailDialog.updataForm(row.id)
         this.detailDialogVisible = true
+      }
+    },
+    // 删除当前页最后一条数据后跳转到前一页
+    /**
+     * @params{number} num 删除数量
+     */
+    changeCurrentPage(num) {
+      this.currentNum = this.currentNum - num
+      if (this.currentNum <= 0) {
+        if (this.listQuery.page > 1) {
+          this.$set(this.listQuery, 'page', this.listQuery.page - 1)
+        }
       }
     },
     // 删除
@@ -256,6 +356,7 @@ export default {
         delSparePart(row.id).then(response => {
           console.log(response)
           this.$message.success('删除成功')
+          this.changeCurrentPage(1)
           this.__fetchData()
         })
       })
@@ -288,7 +389,9 @@ export default {
     },
     // 领用
     receiveSubmit(submitData) {
-      const query = Object.assign(submitData)
+      const query = Object.assign(submitData, {
+        sparePartsId: submitData.id
+      })
       createSpareReceive(query).then(response => {
         console.log(response)
         this.receiveDialogVisible = false
@@ -302,7 +405,9 @@ export default {
     },
     // 入库
     storeSubmit(submitData) {
-      const query = Object.assign(submitData)
+      const query = Object.assign(submitData, {
+        sparePartsId: submitData.id
+      })
       createSpareStore(query).then(response => {
         console.log(response)
         this.storeDialogVisible = false
@@ -341,20 +446,17 @@ export default {
         type: 'warning'
       }).then(() => {
         console.log(selectId)
-        this.__fetchData()
         this.$message.success('删除成功')
+        this.changeCurrentPage(selectId.length)
+        this.__fetchData()
       })
     },
 
     // 点击树形菜单时触发
     handleNodeClick(data) {
-      console.log(data)
-      const entity = {
-        sysDeptId: data.value
-      }
-      console.log(entity)
-      this.filter = Object.assign(this.filter, { entity })
-      this.__fetchData()
+      const deviceTypeId = data.id
+      this.filter = Object.assign(this.filter, { deviceTypeId })
+      this.queryData()
     }
   }
 }

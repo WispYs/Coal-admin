@@ -184,11 +184,51 @@ const supplierData = Mock.mock({
     remark: ''
   }]
 })
+// 设备类型管理
+const categoryData = Mock.mock({
+  'items|3': [{
+    'name|+1': ['胶带机', '采煤机', '转载机'],
+    code: '',
+    'unit|+1': ['1', '2', '3'],
+    sort: '',
+    'parentId|+1': ['1', '2', '3'],
+    remark: ''
+  }]
+})
+// 设备型号管理
+const equipModelData = Mock.mock({
+  'items|3': [{
+    'name|+1': ['胶带机', '采煤机', '转载机'],
+    code: '',
+    'unit|+1': ['1', '2', '3'],
+    model: '',
+    createDate: '2021-01-15',
+    remark: ''
+  }]
+})
+// 设备型号管理
+const usingEquipData = Mock.mock({
+  'items|3': [{
+    'type|+1': ['1'],
+    model: '',
+    assetNum: '',
+    code: '',
+    factory: '',
+    createTime: '',
+    createCode: '',
+    receiveTime: '',
+    'receiveBy|+1': ['1', '2', '3'],
+    user: '',
+    addr: '',
+    unit: '1',
+    remark: ''
+  }]
+})
 
 module.exports = [
   // 大型设备列表
   {
-    url: '/device/detail/list',
+    url: '/equipment/list',
     type: 'post',
     response: config => {
       const items = largeEquipmentData.items
@@ -335,10 +375,55 @@ module.exports = [
   },
   // 供应商管理
   {
-    url: '/supplier/list',
+    url: '/provider/list',
     type: 'post',
     response: config => {
       const items = supplierData.items
+      return {
+        code: 200,
+        data: {
+          records: items.length,
+          rows: items
+        }
+      }
+    }
+  },
+  // 设备类型管理
+  {
+    url: '/category/list',
+    type: 'post',
+    response: config => {
+      const items = categoryData.items
+      return {
+        code: 200,
+        data: {
+          records: items.length,
+          rows: items
+        }
+      }
+    }
+  },
+  // 设备型号管理
+  {
+    url: '/equipment-model/list',
+    type: 'post',
+    response: config => {
+      const items = equipModelData.items
+      return {
+        code: 200,
+        data: {
+          records: items.length,
+          rows: items
+        }
+      }
+    }
+  },
+  // 在用设备
+  {
+    url: '/using-equipment/list',
+    type: 'post',
+    response: config => {
+      const items = usingEquipData.items
       return {
         code: 200,
         data: {

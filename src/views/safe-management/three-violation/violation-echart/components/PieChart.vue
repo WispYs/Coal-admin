@@ -28,13 +28,6 @@ export default {
           tooltip: {
             trigger: 'item'
           },
-          // grid: {
-          //   top: 10,
-          //   left: '2%',
-          //   right: '2%',
-          //   bottom: '2%',
-          //   containLabel: true
-          // },
           legend: {
             orient: 'vertical',
             right: 'right'
@@ -44,21 +37,8 @@ export default {
             {
               name: '风险数量',
               type: 'pie',
-              radius: '65%',
-              data: newData,
-              label: {
-                show: false
-              },
-              labelLine: {
-                show: false
-              },
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-              }
+              radius: '66%',
+              data: newData
             }
           ]
         }

@@ -1,108 +1,281 @@
 <template>
-  <div class="page-container">
-    <div class="filter-bar">
-      <div class="filter-bar__item">
-        <label>关键字：</label>
-        <el-input
-          v-model="keywords"
-          class="filter-item"
-          style="width:200px"
-          placeholder="请输入设备类型"
-          suffix-icon="el-icon-search"
+  <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
+    <tree-bar
+      ref="treeBar"
+      :tree-data="treeData"
+      @handleNodeClick="handleNodeClick"
+      @handleSwitch="handleSwitch"
+    />
+
+    <div class="tree-form-container">
+      <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
+        <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
+      </span>
+      <filter-bar
+        :config="RepairManageFilterConfig"
+        @search-click="queryData"
+        @reset-click="queryData"
+      />
+      <!-- 表格 -->
+      <list-table
+        :id="id"
+        :list="list"
+        :list-loading="listLoading"
+        :config="RepairManageTableConfig"
+        height="calc(100% - 157px)"
+        @other-click="otherClick"
+      />
+
+      <div v-show="total>0" class="page-bottom">
+        <pagination
+          :total="total"
+          :page.sync="listQuery.page"
+          :limit.sync="listQuery.pagerows"
+          @pagination="__fetchData"
         />
       </div>
-      <div class="filter-bar__item">
-        <el-button type="primary" size="medium" @click="search()">搜索</el-button>
-      </div>
+      <!-- 维修弹窗 -->
+      <form-dialog
+        ref="repairDialog"
+        :config="initRepairConfig()"
+        :dialog-visible="repairDialogVisible"
+        @close-dialog="repairDialogVisible = false"
+        @submit="repairSubmit"
+      />
+      <!-- 待修弹窗 -->
+      <form-dialog
+        ref="waitRepairDialog"
+        :config="initWaitRepairConfig()"
+        :dialog-visible="waitRepairDialogVisible"
+        @close-dialog="waitRepairDialogVisible = false"
+        @submit="waitRepairSubmit"
+      />
     </div>
-    <el-table
-      :data="tableData"
-      border
-      fit
-      :cell-style="cellStyle"
-      header-cell-class-name="pre-line"
-    >
-      <el-table-column align="center" label="序号" width="95" fixed>
-        <template slot-scope="scope">
-          {{ scope.$index+1 }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="name" align="center" label="设备类型" width="100px" />
-      <el-table-column prop="model" align="center" label="规格型号" width="110px" />
-      <el-table-column prop="assetNum" align="center" label="固定资产编号" width="110px" />
-      <el-table-column prop="code" align="center" label="内部编码" />
-      <el-table-column prop="supplier" align="center" label="生产厂家" />
-      <el-table-column prop="productDate" align="center" label="出厂日期" width="100px" />
-      <el-table-column prop="productCode" align="center" label="出厂编号" />
-      <el-table-column prop="unit" align="center" label="计量单位" />
-      <el-table-column prop="specification" align="center" label="设备规格" />
-      <el-table-column prop="enterDate" align="center" label="入账时间" width="100px" />
-      <el-table-column prop="parameter" align="center" label="技术参数" />
-      <el-table-column prop="ageLimit" align="center" label="折旧年限" />
-      <el-table-column prop="originalValue" align="center" label="原价" />
-      <el-table-column prop="assetType" align="center" label="资产类型" />
-      <el-table-column fixed="right" label="操作" width="160" align="center">
-        <el-button type="text" size="small" @click="edit()">维修</el-button>
-        <el-button type="text" size="small" @click="edit()">编辑</el-button>
-        <el-button type="text" size="small" style="color: #f56c6c" @click="del()">删除</el-button>
-      </el-table-column>
-    </el-table>
   </div>
 </template>
+
 <script>
+import { getUsingList, createRepair } from '@/api/mechatronics'
+import TreeBar from '@/components/TreeBar'
+import FilterBar from '@/components/FilterBar'
+import ListTable from '@/components/ListTable'
+import Pagination from '@/components/Pagination'
+import FormDialog from '@/components/FormDialog'
+import { RepairManageTableConfig, RepairManageFilterConfig, RepairTableConfig, WaitRepairTableConfig } from '@/data/mechatronics'
+import { parseTime } from '@/utils'
+
 export default {
+  components: {
+    TreeBar,
+    FilterBar,
+    ListTable,
+    Pagination,
+    FormDialog
+  },
   data() {
     return {
-      keywords: '',
-      tableData: [
-        {
-          name: '矿用隔爆兼本安型',
-          model: 'QJZ-1200/3300-10',
-          assetNum: '0032402',
-          code: 'ZL98457',
-          supplier: '比淮机械',
-          productDate: '2017-08-12',
-          productCode: 'XJ20347',
-          unit: '台',
-          specification: '800/2*40',
-          enterDate: '2018-12-25',
-          parameter: '',
-          ageLimit: 30,
-          originalValue: '',
-          assetType: '自有'
-        }
-      ]
+      id: 'repair-manage',
+      list: [],
+      total: 0,
+      listQuery: {
+        page: 1,
+        pagerows: 10
+      },
+      filter: {}, // 筛选项
+      listLoading: true,
+      RepairManageFilterConfig,
+      RepairManageTableConfig,
+      RepairTableConfig,
+      WaitRepairTableConfig,
+      repairDialogVisible: false,
+      waitRepairDialogVisible: false,
+      treeExtend: true,
+      treeData: {
+        title: '设备类型',
+        title2: '状态选择',
+        tId: 'id',
+        list: []
+      },
+      treeSelectId: '', //  左侧树型结构id
+      tabIndex: '0' //  左侧树型结构tab
     }
   },
+
+  created() {
+    this.__fetchData()
+    this.__updateCategoryTree()
+  },
   methods: {
-    search() {
-      console.log(this.keywords)
+    // 获取设备类型树结构列表
+    __updateCategoryTree() {
+      this.$store.dispatch('mecha/getCategoryList').then((data) => {
+        data.forEach(it => {
+          it.label = it.typeName
+        })
+        this.treeData.list = [{
+          id: '',
+          label: '全部',
+          children: data
+        }]
+        // 设置树结构默认选中项
+        this.$refs.treeBar.setCurrentKey('')
+      }).catch((err) => {
+        console.log(err)
+      })
     },
-    edit() {
-      console.log('edit')
+    // 获取状态选择列表
+    __updateStatusTree() {
+      // 数据字典 - 维修状态
+      const parentId = 111327
+      this.$store.dispatch('mecha/getDataDictionary', parentId).then((data) => {
+        data.forEach(it => {
+          it.id = it.dictValue
+          it.label = it.dictName
+        })
+        this.treeData.list = [{
+          id: '',
+          label: '全部',
+          children: data
+        }]
+        // 设置树结构默认选中项
+        this.$refs.treeBar.setCurrentKey('')
+      }).catch((err) => {
+        console.log(err)
+      })
     },
-    del() {
-      console.log('del')
+    // 获取维修单位列表
+    __updateRepairUnitTree() {
+      // 数据字典 - 所属单位
+      const parentId = 111133
+      this.$store.dispatch('mecha/getDataDictionary', parentId).then((data) => {
+        data.forEach(it => {
+          it.value = it.dictValue
+          it.label = it.dictName
+        })
+        RepairTableConfig.columns.forEach(it => {
+          if (it.field === 'repairUnit') {
+            it.options = data
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
     },
-    // 表格单元格样式
-    cellStyle() {
-      return 'font-size: 13px'
+
+    __fetchData() {
+      this.listLoading = true
+      const filter = {
+        ...this.filter,
+        keywordField: ['machineName']
+      }
+      let query = {}
+      if (this.tabIndex === '0') {
+        query = Object.assign(this.listQuery, filter, {
+          machineTypeId: this.treeSelectId
+        })
+        delete query.status
+      } else {
+        query = Object.assign(this.listQuery, filter, {
+          status: this.treeSelectId
+        })
+        delete query.machineTypeId
+      }
+      getUsingList(query).then(response => {
+        this.listLoading = false
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
+      })
+    },
+    // 查询数据
+    queryData(filter) {
+      this.filter = Object.assign(this.filter, filter)
+      this.$set(this.listQuery, 'page', 1)
+      this.__fetchData()
+    },
+
+    // 初始化维修窗口配置
+    initRepairConfig() {
+      const repairConfig = Object.assign({
+        title: '维修',
+        width: '1000px',
+        form: this.RepairTableConfig.columns
+      })
+      return repairConfig
+    },
+    // 初始化待修窗口配置
+    initWaitRepairConfig() {
+      const waitRepairConfig = Object.assign({
+        title: '待修',
+        width: '1000px',
+        form: this.WaitRepairTableConfig.columns
+      })
+      return waitRepairConfig
+    },
+
+    // 维修，待修按钮
+    otherClick(row, index, item) {
+      console.log(row)
+      const info = {
+        bnsId: row.id,
+        machineName: row.machineName,
+        modelStd: row.modelStd,
+        assetsCode: row.assetsCode
+      }
+      if (item === '维修') {
+        this.__updateRepairUnitTree()
+        this.$refs.repairDialog.updataForm(info)
+        this.repairDialogVisible = true
+      } else if (item === '待修') {
+        this.$refs.waitRepairDialog.updataForm(info)
+        this.waitRepairDialogVisible = true
+      }
+    },
+    // 维修
+    repairSubmit(submitData) {
+      const query = Object.assign(submitData, {
+        repairState: 2
+      })
+      createRepair(query).then(response => {
+        this.repairDialogVisible = false
+        this.$message.success('维修成功')
+        this.$refs.repairDialog.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.repairDialog.resetSubmitBtn()
+      })
+    },
+    // 待修
+    waitRepairSubmit(submitData) {
+      const query = Object.assign(submitData, {
+        repairState: 1
+      })
+      createRepair(query).then(response => {
+        this.waitRepairDialogVisible = false
+        this.$message.success('待修成功')
+        this.$refs.waitRepairDialog.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.repairDialog.resetSubmitBtn()
+      })
+    },
+
+    // 点击树形菜单时触发
+    handleNodeClick(data) {
+      this.treeSelectId = data.id
+      this.queryData()
+    },
+    // 点击切换树型菜单
+    handleSwitch(tab) {
+      this.tabIndex = tab.index
+      if (this.tabIndex === '0') {
+        this.__updateCategoryTree()
+      } else {
+        this.__updateStatusTree()
+      }
     }
+
   }
 }
 </script>
-<style lang="scss" scoped>
-  .filter-bar {
-    margin-bottom: 10px;
-    &__item {
-      display: inline-block;
-      margin: 0 40px 15px 0;
-      font-size: 14px;
-      label {
-        font-weight: normal;
-        font-size: 14px;
-        margin-right: 4px;
-      }
-    }
-  }
-</style>

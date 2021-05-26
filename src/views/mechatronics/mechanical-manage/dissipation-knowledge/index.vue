@@ -41,7 +41,7 @@
       ref="createDialog"
       :config="initCreateConfig()"
       :dialog-visible="createDialogVisible"
-      @upload-click="openUploadDialog"
+      @upload-click="(row) => openUploadDialog('createDialog', row)"
       @close-dialog="createDialogVisible = false"
       @submit="createSubmit"
     />
@@ -50,7 +50,7 @@
       ref="editDialog"
       :config="initEditConfig()"
       :dialog-visible="editDialogVisible"
-      @upload-click="openUploadDialog"
+      @upload-click="(row) => openUploadDialog('editDialog', row)"
       @close-dialog="editDialogVisible = false"
       @submit="editSubmit"
     />
@@ -58,7 +58,6 @@
     <!-- 上传附件 -->
     <upload-file
       :dialog-visible="uploadDialogVisible"
-      :multiple="false"
       @close-dialog="uploadDialogVisible = false"
       @upload-submit="uploadSubmit"
     />
@@ -80,7 +79,7 @@ import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import { DisKnowLedgeTableConfig, DisKnowLedgeFilterConfig } from '@/data/mechatronics'
-import TextDialog from './components/TextDialog'
+import TextDialog from '@/components/TextDialog'
 import UploadFile from '@/components/UploadFile'
 
 export default {
@@ -94,6 +93,7 @@ export default {
         page: 1,
         pagerows: 10
       },
+      currentNum: 0, // 当前页数据数量，用于判断删除后是否跳转到上一页
       filter: {}, // 筛选项
       listLoading: true,
       DisKnowLedgeFilterConfig,
@@ -110,19 +110,40 @@ export default {
   },
   created() {
     this.__fetchData()
+    this.__initEquipPlace()
   },
   methods: {
+    // 初始化所属场所下拉框数据
+    __initEquipPlace() {
+      this.$store.dispatch('mecha/getEquipPlaceList').then((data) => {
+        const placeData = []
+        data.forEach(it => {
+          placeData.push({
+            label: it.typeName,
+            value: it.id + ''
+          })
+        })
+        DisKnowLedgeTableConfig.columns.forEach(it => {
+          if (it.field === 'deviceTypeId') {
+            it.options = placeData
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
     __fetchData() {
       this.listLoading = true
       const filter = {
         ...this.filter,
-        keywordField: ['workNumber', 'loginName', 'userName']
+        keywordField: ['norm', 'decision']
       }
       const query = Object.assign(this.listQuery, filter)
       getDisKnowLedgeList(query).then(response => {
         this.listLoading = false
         this.list = response.data.rows
         this.total = Number(response.data.records)
+        this.currentNum = response.data.rows.length
       })
     },
     // 查询数据
@@ -134,7 +155,7 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.DisKnowLedgeTableConfig.columns
       })
       return createConfig
@@ -143,7 +164,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.DisKnowLedgeTableConfig.columns
       })
       return editConfig
@@ -152,6 +173,8 @@ export default {
     openDialog(name, row) {
       const visible = `${name}DialogVisible`
       this[visible] = true
+      // 初始化所属场所下拉框数据
+      this.__initEquipPlace()
       if (row) {
         getDisKnowLedgeInfo(row.id).then(response => {
           const info = Object.assign(response.data)
@@ -164,7 +187,18 @@ export default {
       this.htmlValue = value
       this.textDialogVisible = true
     },
-
+    // 删除当前页最后一条数据后跳转到前一页
+    /**
+     * @params{number} num 删除数量
+     */
+    changeCurrentPage(num) {
+      this.currentNum = this.currentNum - num
+      if (this.currentNum <= 0) {
+        if (this.listQuery.page > 1) {
+          this.$set(this.listQuery, 'page', this.listQuery.page - 1)
+        }
+      }
+    },
     // 删除
     deleteClick(row) {
       this.$confirm('确定删除该项?', '提示', {
@@ -176,16 +210,15 @@ export default {
         delDisKnowLedge(row.id).then(response => {
           console.log(response)
           this.$message.success('删除成功')
+          this.changeCurrentPage(1)
           this.__fetchData()
         })
       })
     },
     // submit data
     createSubmit(submitData) {
-      console.log(submitData)
       const query = Object.assign(submitData)
       createDisKnowLedge(query).then(response => {
-        console.log(response)
         this.createDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDialog.resetForm()
@@ -198,7 +231,6 @@ export default {
     editSubmit(submitData) {
       const query = Object.assign(submitData)
       editDisKnowLedge(query).then(response => {
-        console.log(response)
         this.editDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDialog.resetForm()
@@ -232,18 +264,22 @@ export default {
         type: 'warning'
       }).then(() => {
         console.log(selectId)
-        this.__fetchData()
         this.$message.success('删除成功')
+        this.changeCurrentPage(selectId.length)
+        this.__fetchData()
       })
     },
 
-    openUploadDialog(row) {
+    openUploadDialog(ref, row) {
+      // 记录当前打开弹窗ref
+      this.dialogRef = ref
       this.uploadDialogVisible = true
       this.uploadRow = row
     },
     // 上传文件控件成功回调
     uploadSubmit(fileList) {
       console.log(fileList)
+      this.$refs[this.dialogRef].updateFile(fileList)
       this.uploadDialogVisible = false
     }
 

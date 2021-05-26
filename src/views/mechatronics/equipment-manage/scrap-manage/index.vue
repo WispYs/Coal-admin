@@ -1,108 +1,178 @@
 <template>
-  <div class="page-container">
-    <div class="filter-bar">
-      <div class="filter-bar__item">
-        <label>关键字：</label>
-        <el-input
-          v-model="keywords"
-          class="filter-item"
-          style="width:200px"
-          placeholder="请输入设备类型"
-          suffix-icon="el-icon-search"
+  <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
+    <tree-bar
+      ref="treeBar"
+      :tree-data="treeData"
+      :default-props="treeProp"
+      @handleNodeClick="handleNodeClick"
+    />
+
+    <div class="tree-form-container">
+      <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
+        <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
+      </span>
+      <filter-bar
+        :config="ScrapManageFilterConfig"
+        @search-click="queryData"
+        @reset-click="queryData"
+      />
+      <!-- 表格 -->
+      <list-table
+        :id="id"
+        :list="list"
+        :list-loading="listLoading"
+        :config="ScrapManageTableConfig"
+        height="calc(100% - 157px)"
+        @other-click="otherClick"
+        @submit-data="scrapSubmit"
+      />
+
+      <div v-show="total>0" class="page-bottom">
+        <pagination
+          :total="total"
+          :page.sync="listQuery.page"
+          :limit.sync="listQuery.pagerows"
+          @pagination="__fetchData"
         />
       </div>
-      <div class="filter-bar__item">
-        <el-button type="primary" size="medium" @click="search()">搜索</el-button>
-      </div>
+
+      <!-- 报废弹窗 -->
+      <form-dialog
+        ref="scrapDialog"
+        :config="initScrapConfig()"
+        :dialog-visible="scrapDialogVisible"
+        @close-dialog="scrapDialogVisible = false"
+        @submit="scrapSubmit"
+      />
     </div>
-    <el-table
-      :data="tableData"
-      border
-      fit
-      :cell-style="cellStyle"
-      header-cell-class-name="pre-line"
-    >
-      <el-table-column align="center" label="序号" width="95" fixed>
-        <template slot-scope="scope">
-          {{ scope.$index+1 }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="name" align="center" label="设备类型" width="100px" />
-      <el-table-column prop="model" align="center" label="规格型号" width="110px" />
-      <el-table-column prop="assetNum" align="center" label="固定资产编号" width="110px" />
-      <el-table-column prop="code" align="center" label="内部编码" />
-      <el-table-column prop="supplier" align="center" label="生产厂家" />
-      <el-table-column prop="productDate" align="center" label="出厂日期" width="100px" />
-      <el-table-column prop="productCode" align="center" label="出厂编号" />
-      <el-table-column prop="unit" align="center" label="计量单位" />
-      <el-table-column prop="specification" align="center" label="设备规格" />
-      <el-table-column prop="enterDate" align="center" label="入账时间" width="100px" />
-      <el-table-column prop="parameter" align="center" label="技术参数" />
-      <el-table-column prop="ageLimit" align="center" label="折旧年限" />
-      <el-table-column prop="originalValue" align="center" label="原价" />
-      <el-table-column prop="assetType" align="center" label="资产类型" />
-      <el-table-column fixed="right" label="操作" width="160" align="center">
-        <el-button type="text" size="small" @click="edit()">报废</el-button>
-        <el-button type="text" size="small" @click="edit()">编辑</el-button>
-        <el-button type="text" size="small" style="color: #f56c6c" @click="del()">删除</el-button>
-      </el-table-column>
-    </el-table>
   </div>
 </template>
+
 <script>
+import { getUsingList, createScrap, delEquipmentService } from '@/api/mechatronics'
+import TreeBar from '@/components/TreeBar'
+import FilterBar from '@/components/FilterBar'
+import ListTable from '@/components/ListTable'
+import Pagination from '@/components/Pagination'
+import FormDialog from '@/components/FormDialog'
+import { ScrapManageTableConfig, ScrapManageFilterConfig, ScrapTableConfig } from '@/data/mechatronics'
+import { parseTime } from '@/utils'
+
 export default {
+  components: {
+    TreeBar,
+    FilterBar,
+    ListTable,
+    Pagination,
+    FormDialog
+  },
   data() {
     return {
-      keywords: '',
-      tableData: [
-        {
-          name: '矿用隔爆兼本安型',
-          model: 'QJZ-1200/3300-10',
-          assetNum: '0032402',
-          code: 'ZL98457',
-          supplier: '比淮机械',
-          productDate: '2017-08-12',
-          productCode: 'XJ20347',
-          unit: '台',
-          specification: '800/2*40',
-          enterDate: '2018-12-25',
-          parameter: '',
-          ageLimit: 30,
-          originalValue: '',
-          assetType: '自有'
-        }
-      ]
+      id: 'equipment-service',
+      list: [],
+      total: 0,
+      listQuery: {
+        page: 1,
+        pagerows: 10
+      },
+      filter: {}, // 筛选项
+      listLoading: true,
+      ScrapManageFilterConfig,
+      ScrapManageTableConfig,
+      ScrapTableConfig,
+      scrapDialogVisible: false,
+      treeExtend: true,
+      treeData: {
+        title: '选择设备类型',
+        tId: 'id',
+        list: []
+      },
+      treeProp: {
+        children: 'children',
+        label: 'typeName'
+      },
+      machineTypeId: '' //  设备类型id
     }
   },
+
+  created() {
+    this.__fetchData()
+    this.__updateCategoryTree()
+  },
   methods: {
-    search() {
-      console.log(this.keywords)
+    // 获取设备类型树结构列表
+    __updateCategoryTree() {
+      this.$store.dispatch('mecha/getCategoryList').then((data) => {
+        this.treeData.list = [{
+          id: '',
+          typeName: '全部',
+          children: data
+        }]
+        // 设置树结构默认选中项
+        this.$refs.treeBar.setCurrentKey('')
+      }).catch((err) => {
+        console.log(err)
+      })
     },
-    edit() {
-      console.log('edit')
+    __fetchData() {
+      this.listLoading = true
+      const filter = {
+        ...this.filter,
+        keywordField: ['machineName'],
+        machineTypeId: this.machineTypeId
+      }
+      const query = Object.assign(this.listQuery, filter)
+      getUsingList(query).then(response => {
+        this.listLoading = false
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
+      })
     },
-    del() {
-      console.log('del')
+    // 查询数据
+    queryData(filter) {
+      this.filter = Object.assign(this.filter, filter)
+      this.$set(this.listQuery, 'page', 1)
+      this.__fetchData()
     },
-    // 表格单元格样式
-    cellStyle() {
-      return 'font-size: 13px'
+
+    // 初始化报废窗口配置
+    initScrapConfig() {
+      const scrapConfig = Object.assign({
+        title: '报废',
+        width: '1000px',
+        form: this.ScrapTableConfig.columns
+      })
+      return scrapConfig
+    },
+
+    // 报废按钮
+    otherClick(row, index, item) {
+      const info = {
+        bnsId: row.id,
+        machineName: row.machineName,
+        modelStd: row.modelStd,
+        assetsCode: row.assetsCode
+      }
+      this.$refs.scrapDialog.updataForm(info)
+      this.scrapDialogVisible = true
+    },
+
+    // 报废
+    scrapSubmit(submitData) {
+      const query = Object.assign(submitData)
+      createScrap(query).then(response => {
+        this.scrapDialogVisible = false
+        this.$message.success('报废成功')
+        this.$refs.scrapDialog.resetForm()
+        this.__fetchData()
+      })
+    },
+
+    // 点击树形菜单时触发
+    handleNodeClick(data) {
+      this.machineTypeId = data.id
+      this.queryData()
     }
   }
 }
 </script>
-<style lang="scss" scoped>
-  .filter-bar {
-    margin-bottom: 10px;
-    &__item {
-      display: inline-block;
-      margin: 0 40px 15px 0;
-      font-size: 14px;
-      label {
-        font-weight: normal;
-        font-size: 14px;
-        margin-right: 4px;
-      }
-    }
-  }
-</style>

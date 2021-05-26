@@ -28,13 +28,13 @@ export default {
           tooltip: {
             trigger: 'item'
           },
-          // grid: {
-          //   top: 10,
-          //   left: '2%',
-          //   right: '2%',
-          //   bottom: '2%',
-          //   containLabel: true
-          // },
+          grid: {
+            top: 10,
+            left: '2%',
+            right: '2%',
+            bottom: '2%',
+            containLabel: true
+          },
           legend: {
             orient: 'vertical',
             right: 'right'
@@ -44,13 +44,13 @@ export default {
             {
               name: '风险数量',
               type: 'pie',
-              radius: '85%',
+              radius: '66%',
               data: newData,
               label: {
-                show: false
+                show: true
               },
               labelLine: {
-                show: false
+                show: true
               },
               emphasis: {
                 itemStyle: {

@@ -1,20 +1,23 @@
 <template>
   <div class="tree-container">
-    <div v-if="!treeData.title2" class="tree-title-file">{{ treeData.title }}</div>
+    <div v-if="!treeData.title2" class="tree-title">{{ treeData.title }}</div>
     <el-tabs v-else-if="!!treeData.title2" v-model="activeName" class="t_titles" @tab-click="handleClick">
-      <el-tab-pane label="文件夹" name="file">文件夹</el-tab-pane>
-      <el-tab-pane label="部门" name="dept">部门</el-tab-pane>
+      <el-tab-pane :label="treeData.title" name="file">选择{{ treeData.title }}</el-tab-pane>
+      <el-tab-pane :label="treeData.title2" name="dept">选择{{ treeData.title2 }}</el-tab-pane>
     </el-tabs>
-
     <!-- <div class="tree-title-file">{{ treeData.title }}</div> -->
     <el-input v-if="treeData.search" v-model="nodeContent" class="treeInpt" placeholder="请输入内容" prefix-icon="el-icon-search" @change="searchSite" />
     <el-tree
+      ref="tree"
       class="trees"
       :title="treeData.list"
       :show-checkbox="treeData.checkbox"
+      :default-checked-keys="treeData.menuId"
       :data="treeData.list"
       :props="defaultProps"
       default-expand-all
+      highlight-current
+      :node-key="treeData.tId"
       :expand-on-click-node="false"
       @node-click="handleNodeClick"
       @check-change="checkChange"
@@ -51,6 +54,19 @@ export default {
     menuConfig: {
       type: Array,
       default: () => {}
+    },
+    menuId: {
+      type: Array,
+      default: () => {}
+    },
+    defaultProps: {
+      type: Object,
+      default: () => {
+        return {
+          children: 'children',
+          label: 'label'
+        }
+      }
     }
   },
   data() {
@@ -60,10 +76,10 @@ export default {
       left: 0,
       treeOpen: true,
       sysMenuIds: [],
-      defaultProps: {
-        children: 'children',
-        label: 'label'
-      },
+      // defaultProps: {
+      //   children: 'children',
+      //   label: 'label'
+      // },
       nodeContent: '',
       activeName: 'file',
       tag: {}
@@ -87,6 +103,11 @@ export default {
     handleExtend() {
       this.$emit('extend-click')
     },
+    setCurrentKey(id) {
+      this.$nextTick(() => {
+        this.$refs.tree.setCurrentKey(id)
+      })
+    },
     // 点击文件夹或者部门触发
     handleClick(tab, event) {
       // console.log('tab-switch', tab.index)
@@ -94,7 +115,6 @@ export default {
       // this.$emit("handleClick",tab,event)
     },
     checkChange(data, checked, indeterminate) {
-      console.log(data, checked, indeterminate)
       if (checked) {
         this.sysMenuIds.push(data.value)
       } else {
@@ -111,7 +131,7 @@ export default {
       this.$emit('searchSite', _val)
     },
     openMenu(tag, e) {
-      console.log('tag', tag)
+      if (!this.menuConfig) return
       this.tag = tag
 
       if (tag.data.value === 0) {
@@ -135,7 +155,7 @@ export default {
         this.left = left
       }
 
-      this.top = top // tagsView height
+      this.top = top
       this.visible = true
     },
     closeMenu() {

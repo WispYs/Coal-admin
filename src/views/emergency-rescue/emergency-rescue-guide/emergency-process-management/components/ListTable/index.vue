@@ -126,23 +126,23 @@
       </el-table-column>
     </template>
 
-    <el-table-column v-if="config.actions && config.actions.length > 0" fixed="right" label="操作" width="160" align="center">
+    <el-table-column v-if="config.actions && config.actions.length > 0" fixed="right" label="操作" :width="config.actionWidth || 160" align="center">
       <template slot-scope="scope">
         <template v-if="config.actions.indexOf('other') > -1">
           <el-button v-for="item in config.otherActionTitle" :key="item" type="text" size="small" @click="otherClick(scope.row, scope.$index,item)">{{ item }}</el-button>
         </template>
         <el-button v-if="config.actions.indexOf('upload') > -1" type="text" size="small" @click="uploadFile(scope.row, scope.$index)">附件</el-button>
         <el-button v-if="config.actions.indexOf('preview') > -1" type="text" size="small" @click="handleClick(scope.row, scope.$index)">查看</el-button>
-        <el-button type="text" size="small" @click="edit(scope.row)">编辑信息</el-button>
-        <el-button type="text" size="small" @click="edit(scope.row)">编辑流程</el-button>
+        <el-button type="text" size="small" @click="edit(scope.row)">编辑</el-button>
         <el-button v-if="config.actions.indexOf('edit') > -1 && scope.row.edit" type="text" style="color: #67c23a" size="small" @click="submitRow(scope.row)">提交</el-button>
-        <el-button v-if="config.actions.indexOf('editProcess') > -1 && scope.row.edit" type="text" style="color: #e6a23c" size="small" @click="cancelSubmit(scope.row)">取消</el-button>
+        <!-- <el-button v-if="config.actions.indexOf('editProcess') > -1 && scope.row.edit" type="text" style="color: #e6a23c" size="small" @click="editProcess(scope.row)">编辑流程</el-button> -->
         <el-button v-if="config.actions.indexOf('delete') > -1" type="text" size="small" style="color: #f56c6c" @click="del(scope.row)">删除</el-button>
-        <i v-if="config.actions.indexOf('addIco') > -1" class="el-icon-plus icoButton" @click="addIco(scope.row, scope.$index)" />
+        <el-button v-if="config.actions.indexOf('editProcess') > -1" type="text" size="small" @click="editProcess(scope.row)">编辑流程</el-button>
+        <!-- <i v-if="config.actions.indexOf('addIco') > -1" class="el-icon-plus icoButton" @click="addIco(scope.row, scope.$index)" />
         <i v-if="config.actions.indexOf('editIco') > -1" class="el-icon-edit icoButton" @click="editIco(scope.row, scope.$index)" />
         <i v-if="config.actions.indexOf('deleteIco') > -1" class="el-icon-delete icoButton" @click="deleteIco(scope.row, scope.$index)" />
         <i v-if="config.actions.indexOf('moveUpIco') > -1" class="el-icon-top icoButton" @click="moveUpIco(scope.row, scope.$index)" />
-        <i v-if="config.actions.indexOf('moveDownIco') > -1" class="el-icon-bottom icoButton" @click="moveDownIco(scope.row, scope.$index)" />
+        <i v-if="config.actions.indexOf('moveDownIco') > -1" class="el-icon-bottom icoButton" @click="moveDownIco(scope.row, scope.$index)" /> -->
       </template>
     </el-table-column>
   </el-table>
@@ -255,8 +255,7 @@ export default {
     },
     // 查看
     handleClick(row, index) {
-      this.$message.success('查看信息')
-      console.log(row, index)
+      this.$emit('preview-click', row)
     },
     otherClick(row, index, item) {
       this.$emit('other-click', row, index, item)
@@ -272,7 +271,7 @@ export default {
     },
     editProcess(row) {
       console.log('编辑流程', row)
-      // this.$emit('edit-click', row)
+      this.$emit('edit-process', row)
     },
     // 提交编辑后的行内数据
     async submitRow(row) {

@@ -1,6 +1,6 @@
 <template>
   <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
-    <tree-bar :tree-data="treeData" @handleNodeClick="handleNodeClick" />
+    <tree-bar ref="tree" :tree-data="treeData" @handleNodeClick="handleNodeClick" />
 
     <div class="tree-form-container">
       <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
@@ -11,6 +11,7 @@
         @search-click="queryData"
         @create-click="openDialog('create')"
         @reset-click="queryData"
+        @refresh-click="queryData"
       />
       <!-- 表格 -->
       <list-table
@@ -26,7 +27,7 @@
       />
 
       <div v-show="total>0" class="page-bottom">
-        <!-- <el-button
+        <el-button
           class="page-bottom__delete"
           type="warning"
           size="small"
@@ -35,7 +36,7 @@
           @click="deleteBatches"
         >
           <i class="el-icon-delete el-icon--left" />批量删除
-        </el-button> -->
+        </el-button>
         <pagination
           :total="total"
           :page.sync="listQuery.page"
@@ -79,6 +80,7 @@ import {
   updateObject,
   delObject,
   getObjectById,
+  deleteBatches,
   getEmergencyCommunicationOrganizationTree
 } from '@/api/emergency-rescue'
 import {
@@ -98,7 +100,7 @@ export default {
   data() {
     return {
       id: 'emergency-communication',
-      business: 'yjjyCommunication',
+      bussiness: 'yjjyCommunication',
       list: [],
       total: 0,
       listQuery: {
@@ -115,6 +117,7 @@ export default {
       treeExtend: true,
       treeData: {
         title: '应急通讯组织结构',
+        tId: 'value',
         list: []
       },
       multipleSelection: [], // 多选项
@@ -130,20 +133,29 @@ export default {
     // 接口获取组织机构树
     __updateOrganTree() {
       getEmergencyCommunicationOrganizationTree().then(response => {
-        this.formatData(response.data)
+        this.formatData(response.data.rows)
         // 更新左侧树结构数据
-        this.treeData.list = response.data
+        const data = [
+          {
+            value: '',
+            label: '全部',
+            children: response.data.rows
+          }
+        ]
+
+        this.treeData.list = data
         // 更新新增、编辑config数据
         EmergencyCommunicationTableConfig.columns.forEach(it => {
           if (it.field === 'yjjyCommunicationTissueId') {
-            it.options = response.data
+            it.options = data
           }
         })
+        this.$refs.tree.setCurrentKey('')
       })
     },
     formatData(data) {
       data.forEach(d => {
-        d[`${this.business}Id`] = Number(d[`${this.business}Id`])
+        d[`${this.bussiness}Id`] = Number(d[`${this.bussiness}Id`])
         d.value = Number(d.value)
         if (d.children.length > 0) {
           this.formatData(d.children)
@@ -158,13 +170,18 @@ export default {
         keywordField: ['userName', 'jobNumber']
       }
       const query = Object.assign(this.listQuery, filter)
-      getObjectByPage(query, this.business).then(response => {
+      getObjectByPage(query, this.bussiness).then(response => {
         response.data.rows.forEach((r, idx) => {
           r.index = idx + 1
         })
         this.listLoading = false
         this.list = response.data.rows
         this.total = Number(response.data.records)
+
+        if (this.listQuery.page > 1 && !this.list.length) {
+          this.listQuery.page--
+          this.__fetchData()
+        }
       })
     },
     // 查询数据
@@ -176,7 +193,7 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.EmergencyCommunicationTableConfig.columns
       })
       return createConfig
@@ -185,7 +202,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.EmergencyCommunicationTableConfig.columns
       })
       return editConfig
@@ -200,7 +217,7 @@ export default {
 
       // 如果有数据，更新子组件的 formData
       if (row) {
-        getObjectById(row[`${this.business}Id`], this.business).then(response => {
+        getObjectById(row[`${this.bussiness}Id`], this.bussiness).then(response => {
           const res = response.data
           const info = Object.assign(response.data, {
             yjjyCommunicationTissueId: Number(res.yjjyCommunicationTissueId) || 0,
@@ -219,7 +236,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        delObject(row[`${this.business}Id`], this.business).then(response => {
+        delObject(row[`${this.bussiness}Id`], this.bussiness).then(response => {
           console.log(response)
           this.$message.success('删除成功')
           this.__fetchData()
@@ -234,7 +251,7 @@ export default {
       //   sysRoleId: Number(submitData.sysRoleId) || 0,
       //   yjjyCommunicationTissueId: Number(submitData.yjjyCommunicationTissueId) || 0
       // })
-      saveObject(submitData, this.business).then(response => {
+      saveObject(submitData, this.bussiness).then(response => {
         console.log(response)
         this.createDialogVisible = false
         this.$message.success('新建成功')
@@ -247,7 +264,7 @@ export default {
     },
     editSubmit(submitData) {
       const query = Object.assign(submitData)
-      updateObject(query, this.business).then(response => {
+      updateObject(query, this.bussiness).then(response => {
         console.log(response)
         this.editDialogVisible = false
         this.$message.success('编辑成功')
@@ -269,10 +286,9 @@ export default {
 
     // 批量删除
     deleteBatches() {
-      const selectId = []
-      this.multipleSelection.forEach(it => selectId.push(it.id))
-      console.log(selectId)
-      if (selectId.length === 0) {
+      const arr = []
+      this.multipleSelection.forEach(m => arr.push(m[`${this.bussiness}Id`]))
+      if (arr.length === 0) {
         this.$message.warning('请选择所删除的文件')
         return false
       }
@@ -281,9 +297,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(selectId)
-        this.__fetchData()
-        this.$message.success('删除成功')
+        deleteBatches(arr, this.bussiness).then(res => {
+          this.$message.success('删除成功')
+          this.__fetchData()
+        })
       })
     },
 

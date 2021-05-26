@@ -25,10 +25,10 @@ import { getMsgRecord } from '@/api/authority-management'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FilterBar from '@/components/FilterBar'
-import { NewsConfig,MsgFilterConfig } from '@/data/authority-management'
+import { NewsConfig, MsgFilterConfig } from '@/data/authority-management'
 
 export default {
-  components: { ListTable, Pagination,FilterBar },
+  components: { ListTable, Pagination, FilterBar },
   data() {
     return {
       id: '',
@@ -51,16 +51,13 @@ export default {
   methods: {
     __fetchData() {
       this.listLoading = true
-      const query ={
+      const query = {
         page: this.listQuery.page,
         pagerows: this.listQuery.pagerows,
         keyword: this.filter.keyword,
-        keywordField: ['dictName','title',"notifyWay"],
-        // entity: {parentId: 0},
-        // sort: {asc: ["orderNum"]}
+        keywordField: ['dictName', 'title', 'notifyWay']
       }
       getMsgRecord(query).then(response => {
-        console.log(response);
         this.listLoading = false
         this.list = response.data.rows
         this.total = Number(response.data.total)
@@ -69,7 +66,7 @@ export default {
     // 查询数据
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
-      console.log(this.filter);
+      console.log(this.filter)
       this.__fetchData()
     },
     // 初始化新建窗口配置
@@ -89,7 +86,7 @@ export default {
         form: this.NewsConfig.columns
       })
       return editConfig
-    },
+    }
   }
 }
 </script>

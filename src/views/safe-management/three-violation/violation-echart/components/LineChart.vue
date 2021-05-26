@@ -26,10 +26,14 @@ export default {
       deep: true,
       handler(newData) {
         this.options = {
+          legend: {
+            left: 'right',
+            data: ['年度三违统计趋势']
+          },
           grid: {
-            top: 10,
+            top: '10%',
             left: '2%',
-            right: '2%',
+            right: '3%',
             bottom: '2%',
             containLabel: true
           },
@@ -41,8 +45,19 @@ export default {
             type: 'value'
           },
           series: [{
+            name: '年度三违统计趋势',
             type: 'line',
-            data: newData.value
+            data: newData.value,
+            markLine: {
+              lineStyle:{
+                type:'dotted',
+                color:'red'
+              },
+              data: [{
+                type: 'average',
+                name: '平均值'
+              }]
+            }
           }]
         }
       }

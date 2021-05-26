@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-04-19 11:08:43
+ * @Last Modified time: 2021-05-25 09:45:17
  */
 
 /**
@@ -152,85 +152,85 @@ const asyncRoutes = [
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-1',
                 name: 'Geodesy1-1-1',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '矿区构造纲要图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-2',
                 name: 'Geodesy1-1-2',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '地质地形图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-3',
                 name: 'Geodesy1-1-3',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '地层综合柱状图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-4',
                 name: 'Geodesy1-1-4',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '主要地质剖面图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-5',
                 name: 'Geodesy1-1-5',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '矿井煤岩层对比图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-6',
                 name: 'Geodesy1-1-6',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '煤矿可采煤层底板等高线及资源/储量估算图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-7',
                 name: 'Geodesy1-1-7',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '井巷地质素描图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-8',
                 name: 'Geodesy1-1-8',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '水平地质切面图勘探钻孔柱状图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-9',
                 name: 'Geodesy1-1-9',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '矿井瓦斯地质图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-10',
                 name: 'Geodesy1-1-10',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '井上下对照图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-11',
                 name: 'Geodesy1-1-11',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '采掘工程平面图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-12',
                 name: 'Geodesy1-1-12',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '井巷、石门地质编录工程地质相关图件' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-13',
                 name: 'Geodesy1-1-13',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '储量损失量计算图' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-1/geodesy1-1-14',
                 name: 'Geodesy1-1-14',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '单孔柱状图层位控制图' }
               }
             ]
@@ -244,55 +244,55 @@ const asyncRoutes = [
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-2/geodesy1-2-1',
                 name: 'Geodesy1-2-1',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '采区地质说明书' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-2/geodesy1-2-2',
                 name: 'Geodesy1-2-2',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '掘进工作面地质说明书' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-2/geodesy1-2-3',
                 name: 'Geodesy1-2-3',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '采煤工作面地质说明书' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-2/geodesy1-2-4',
                 name: 'Geodesy1-2-4',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '揭煤地质说明书' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-2/geodesy1-2-5',
                 name: 'Geodesy1-2-5',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '采区采后总结' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-2/geodesy1-2-6',
                 name: 'Geodesy1-2-6',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '工作面采后总结' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-2/geodesy1-2-7',
                 name: 'Geodesy1-2-7',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '年度采面地质预报' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-2/geodesy1-2-8',
                 name: 'Geodesy1-2-8',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '月度采面地质预报' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-2/geodesy1-2-9',
                 name: 'Geodesy1-2-9',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '临时采面地质预报' }
               }
             ]
@@ -306,37 +306,37 @@ const asyncRoutes = [
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-3/geodesy1-3-1',
                 name: 'Geodesy1-3-1',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '钻孔成果卡片' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-3/geodesy1-3-2',
                 name: 'Geodesy1-3-2',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '地质构造素描卡片' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-3/geodesy1-3-3',
                 name: 'Geodesy1-3-3',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '井筒石门见煤点柱状卡片' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-3/geodesy1-3-4',
                 name: 'Geodesy1-3-4',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '地质专业的业务规程' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-3/geodesy1-3-5',
                 name: 'Geodesy1-3-5',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '理论知识' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-3/geodesy1-3-6',
                 name: 'Geodesy1-3-6',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '培训教材标准规范' }
               }
             ]
@@ -350,31 +350,31 @@ const asyncRoutes = [
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-4/geodesy1-4-1',
                 name: 'Geodesy1-4-1',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '国家地质文件标准规范' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-4/geodesy1-4-2',
                 name: 'Geodesy1-4-2',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '省市地质文件标准规范' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-4/geodesy1-4-3',
                 name: 'Geodesy1-4-3',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '公司地质文件标准规范' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-4/geodesy1-4-4',
                 name: 'Geodesy1-4-4',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '矿井地质文件标准规范' }
               },
               {
                 path: '/demo-geodesy/geodesy1/geodesy1-4/geodesy1-4-5',
                 name: 'Geodesy1-4-5',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '规章制度' }
               }
             ]
@@ -396,55 +396,55 @@ const asyncRoutes = [
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-1/geodesy2-1-1',
                 name: 'Geodesy2-1-1',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '井田区域地形图' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-1/geodesy2-1-2',
                 name: 'Geodesy2-1-2',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '工业广场平面图' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-1/geodesy2-1-3',
                 name: 'Geodesy2-1-3',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '采掘工程平面图' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-1/geodesy2-1-4',
                 name: 'Geodesy2-1-4',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '井上下对照图' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-1/geodesy2-1-5',
                 name: 'Geodesy2-1-5',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '主要保安煤柱图' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-1/geodesy2-1-6',
                 name: 'Geodesy2-1-6',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '井筒断面图' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-1/geodesy2-1-7',
                 name: 'Geodesy2-1-7',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '东西翼测量图' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-1/geodesy2-1-8',
                 name: 'Geodesy2-1-8',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '井底车场图' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-1/geodesy2-1-9',
                 name: 'Geodesy2-1-9',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '主要巷道平面图' }
               }
             ]
@@ -458,43 +458,43 @@ const asyncRoutes = [
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-2/geodesy2-2-1',
                 name: 'Geodesy2-2-1',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '安全采掘通知单' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-2/geodesy2-2-2',
                 name: 'Geodesy2-2-2',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '安全贯通通知单' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-2/geodesy2-2-3',
                 name: 'Geodesy2-2-3',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '巷道开口通知单' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-2/geodesy2-2-4',
                 name: 'Geodesy2-2-4',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '停掘、停采通知单' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-2/geodesy2-2-5',
                 name: 'Geodesy2-2-5',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '巷道变坡、拐弯通知单' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-2/geodesy2-2-6',
                 name: 'Geodesy2-2-6',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '导线技术成果台账' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-2/geodesy2-2-7',
                 name: 'Geodesy2-2-7',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '临近未保护区通知单' }
               }
             ]
@@ -508,25 +508,25 @@ const asyncRoutes = [
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-3/geodesy2-3-1',
                 name: 'Geodesy2-3-1',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '业务规程' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-3/geodesy2-3-2',
                 name: 'Geodesy2-3-2',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '理论知识' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-3/geodesy2-3-3',
                 name: 'Geodesy2-3-3',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '培训教材' }
               },
               {
                 path: '/demo-geodesy/geodesy2/geodesy2-3/geodesy2-3-4',
                 name: 'Geodesy2-3-4',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '标准规范' }
               }
             ]
@@ -666,43 +666,43 @@ const asyncRoutes = [
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-3/geodesy3-3-1',
                 name: 'Geodesy3-3-1',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '中长期防治水计划' }
               },
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-3/geodesy3-3-2',
                 name: 'Geodesy3-3-2',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '年度防治水计划' }
               },
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-3/geodesy3-3-3',
                 name: 'Geodesy3-3-3',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '工程方案与设计' }
               },
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-3/geodesy3-3-4',
                 name: 'Geodesy3-3-4',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '施工结果' }
               },
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-3/geodesy3-3-5',
                 name: 'Geodesy3-3-5',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '探放水工程' }
               },
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-3/geodesy3-3-6',
                 name: 'Geodesy3-3-6',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '水文地质情况分析报告和水害防治措施' }
               },
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-3/geodesy3-3-7',
                 name: 'Geodesy3-3-7',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: {
                   title: '水文地质情况评价报告和水害隐患治理情况分析报告'
                 }
@@ -718,31 +718,31 @@ const asyncRoutes = [
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-4/geodesy3-4-1',
                 name: 'Geodesy3-4-1',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '矿井水文地质类型划分报告' }
               },
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-4/geodesy3-4-2',
                 name: 'Geodesy3-4-2',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '月度水文地质预报' }
               },
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-4/geodesy3-4-3',
                 name: 'Geodesy3-4-3',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '允许掘进通知单' }
               },
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-4/geodesy3-4-4',
                 name: 'Geodesy3-4-4',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '物探报告' }
               },
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-4/geodesy3-4-5',
                 name: 'Geodesy3-4-5',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '防治水隐患排查记录' }
               }
             ]
@@ -756,37 +756,37 @@ const asyncRoutes = [
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-5/geodesy3-5-1',
                 name: 'Geodesy3-5-1',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '矿井充水性图' }
               },
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-5/geodesy3-5-2',
                 name: 'Geodesy3-5-2',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '矿井综合水文地质柱状图' }
               },
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-5/geodesy3-5-3',
                 name: 'Geodesy3-5-3',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '矿井水文地质剖面图' }
               },
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-5/geodesy3-5-4',
                 name: 'Geodesy3-5-4',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '矿井综合水文地质图' }
               },
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-5/geodesy3-5-5',
                 name: 'Geodesy3-5-5',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '矿井涌水量与各种相关因素动态曲线图' }
               },
               {
                 path: '/demo-geodesy/geodesy3/geodesy3-5/geodesy3-5-6',
                 name: 'Geodesy3-5-6',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '年度水害分析预测表及水害预测图' }
               }
             ]
@@ -828,55 +828,55 @@ const asyncRoutes = [
           {
             path: '/demo-geodesy/geodesy4/geodesy4-1',
             name: 'Geodesy4-1',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '分工作面各月损失量分析及回采率计算基础台账' }
           },
           {
             path: '/demo-geodesy/geodesy4/geodesy4-2',
             name: 'Geodesy4-2',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '分月分采区分煤层损失量分析及回采率计算基础台账' }
           },
           {
             path: '/demo-geodesy/geodesy4/geodesy4-3',
             name: 'Geodesy4-3',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '矿井期末保有储量计算基础和汇总数字台账' }
           },
           {
             path: '/demo-geodesy/geodesy4/geodesy4-4',
             name: 'Geodesy4-4',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '矿井“三下“压煤台账' }
           },
           {
             path: '/demo-geodesy/geodesy4/geodesy4-5',
             name: 'Geodesy4-5',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '矿井永久煤柱台账' }
           },
           {
             path: '/demo-geodesy/geodesy4/geodesy4-6',
             name: 'Geodesy4-6',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '矿井损失量摊销台账' }
           },
           {
             path: '/demo-geodesy/geodesy4/geodesy4-7',
             name: 'Geodesy4-7',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '矿井储量增减、变动审批情况台账' }
           },
           {
             path: '/demo-geodesy/geodesy4/geodesy4-8',
             name: 'Geodesy4-8',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '矿井储量动态数字台账' }
           },
           {
             path: '/demo-geodesy/geodesy4/geodesy4-9',
             name: 'Geodesy4-9',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '“三量”计算成果台账' }
           }
         ]
@@ -902,7 +902,7 @@ const asyncRoutes = [
           {
             path: '/demo-geodesy/geodesy4/geodesy5-3',
             name: 'Geodesy5-3',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '巷道贯通管理' }
           },
           {
@@ -1038,22 +1038,19 @@ const asyncRoutes = [
           {
             path: '/mining-management/production-management/working-lifecycle',
             name: 'WorkingLifecycle',
-            component:
-              '/mining-management/production-management/working-lifecycle/index',
+            component: '/mining-management/production-management/working-lifecycle/index',
             meta: { title: '工作面生命周期管理' }
           },
           {
             path: '/mining-management/production-management/roadway-lifecycle',
             name: 'RoadwayLifecycle',
-            component:
-              '/mining-management/production-management/roadway-lifecycle/index',
+            component: '/mining-management/production-management/roadway-lifecycle/index',
             meta: { title: '巷道生命周期管理' }
           },
           {
             path: '/mining-management/production-management/mining-operation',
             name: 'MiningOperation',
-            component:
-              '/mining-management/production-management/mining-operation/index',
+            component: '/mining-management/production-management/mining-operation/index',
             meta: { title: '采掘作业规程' }
           }
         ]
@@ -1067,25 +1064,25 @@ const asyncRoutes = [
           {
             path: '/mining-management/excavate4/excavate4-1',
             name: 'Excavate4-1',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '工作面图纸' }
           },
           {
             path: '/mining-management/excavate4/excavate4-2',
             name: 'Excavate4-2',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '巷道图纸' }
           },
           {
             path: '/mining-management/excavate4/excavate4-3',
             name: 'Excavate4-3',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '采掘工程设计图' }
           },
           {
             path: '/mining-management/excavate4/excavate4-4',
             name: 'Excavate4-4',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '单项工程图纸' }
           }
         ]
@@ -1099,55 +1096,55 @@ const asyncRoutes = [
           {
             path: '/mining-management/excavate5/excavate5-1',
             name: 'Excavate5-1',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '掘进开拓方案' }
           },
           {
             path: '/mining-management/excavate5/excavate5-2',
             name: 'Excavate5-2',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '采煤方案' }
           },
           {
             path: '/mining-management/excavate5/excavate5-3',
             name: 'Excavate5-3',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '理论知识' }
           },
           {
             path: '/mining-management/excavate5/excavate5-4',
             name: 'Excavate5-4',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '培训教材' }
           },
           {
             path: '/mining-management/excavate5/excavate5-5',
             name: 'Excavate5-5',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '标准规范' }
           },
           {
             path: '/mining-management/excavate5/excavate5-6',
             name: 'Excavate5-6',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '上报上级单位周报' }
           },
           {
             path: '/mining-management/excavate5/excavate5-7',
             name: 'Excavate5-7',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '上报上级单位月报' }
           },
           {
             path: '/mining-management/excavate5/excavate5-8',
             name: 'Excavate5-8',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '上报上级单位季报' }
           },
           {
             path: '/mining-management/excavate5/excavate5-9',
             name: 'Excavate5-9',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '上报上级单位年报' }
           }
         ]
@@ -1159,235 +1156,234 @@ const asyncRoutes = [
     path: '/product-dispatch',
     name: 'DemoDispatch',
     component: 'Layout',
-    redirect: '/product-dispatch/dispatch-parameter/hcgzmqdzhbjl',
+    redirect: '/product-dispatch/ledger/cmgzmrb',
     meta: { title: '生产调度', important: true },
     children: [
       {
-        path: '/product-dispatch/dispatch1',
-        name: 'Dispatch1',
+        path: '/product-dispatch/ledger',
+        name: 'DispatchLedger',
         component: '/demo/index',
         meta: { title: '调度台账' },
         children: [
           {
-            path: '/product-dispatch/dispatch1/dispatch1-1',
-            name: 'Dispatch1-1',
+            path: '/product-dispatch/ledger/cmgzmrb',
+            name: 'DispatchCmgzmrb',
             component: '/demo/index',
             meta: { title: '采煤工作面日报' }
           },
           {
-            path: '/product-dispatch/dispatch1/dispatch1-2',
-            name: 'Dispatch1-2',
+            path: '/product-dispatch/ledger/zjtsjddscdt',
+            name: 'DispatchZjtsjddscdt',
             component: '/demo/index',
             meta: { title: '主井提升及调度生产动态' }
           },
           {
-            path: '/product-dispatch/dispatch1/dispatch1-3',
-            name: 'Dispatch1-3',
+            path: '/product-dispatch/ledger/zyqfjtsqkb',
+            name: 'DispatchZyqfjtsqkb',
             component: '/demo/index',
             meta: { title: '中央区副井提升情况表' }
           },
           {
-            path: '/product-dispatch/dispatch1/dispatch1-4',
-            name: 'Dispatch1-4',
+            path: '/product-dispatch/ledger/nqfjtsqkb',
+            name: 'DispatchNqfjtsqkb',
             component: '/demo/index',
             meta: { title: '南区副井提升情况表' }
           },
           {
-            path: '/product-dispatch/dispatch1/dispatch1-5',
-            name: 'Dispatch1-5',
+            path: '/product-dispatch/ledger/dqfjtsqkb',
+            name: 'DispatchDqfjtsqkb',
             component: '/demo/index',
             meta: { title: '东区副井提升情况表' }
           },
           {
-            path: '/product-dispatch/dispatch1/dispatch1-6',
-            name: 'Dispatch1-6',
+            path: '/product-dispatch/ledger/sbjvjtsqkb',
+            name: 'DispatchSbjvjtsqkb',
             component: '/demo/index',
             meta: { title: '深部基本井提升情况表' }
           },
           {
-            path: '/product-dispatch/dispatch-parameter/hcgzmqdzhbjl',
-            name: 'Dispatch1-7',
-            component:
-              '/product-dispatch/dispatch-parameter/hcgzmqdzhbjl/index',
+            path: '/product-dispatch/ledger/hcgzmqdzhbjl',
+            name: 'DispatchHcgzmqdzhbjl',
+            component: '/product-dispatch/ledger/hcgzmqdzhbjl/index',
             meta: { title: '回采工作面区队长汇报记录' }
           },
           {
-            path: '/product-dispatch/dispatch-parameter/jjscqk',
-            name: 'Dispatch1-8',
-            component: '/product-dispatch/dispatch-parameter/jjscqk/index',
+            path: '/product-dispatch/ledger/jjscqk',
+            name: 'DispatchJjscqk',
+            component: '/product-dispatch/ledger/jjscqk/index',
             meta: { title: '掘进工作面区队长汇报记录' }
           },
           {
-            path: '/product-dispatch/dispatch1/dispatch1-9',
-            name: 'Dispatch1-9',
+            path: '/product-dispatch/ledger/hdgtrb',
+            name: 'DispatchHdgtrb',
             component: '/demo/index',
             meta: { title: '巷道贯通日报' }
           },
           {
-            path: '/product-dispatch/dispatch1/dispatch1-10',
-            name: 'Dispatch1-10',
+            path: '/product-dispatch/ledger/hdjmrb',
+            name: 'DispatchHdjmrb',
             component: '/demo/index',
             meta: { title: '巷道揭煤日报' }
           },
           {
-            path: '/product-dispatch/dispatch1/dispatch1-11',
-            name: 'Dispatch1-11',
+            path: '/product-dispatch/ledger/gzmazrb',
+            name: 'DispatchGzmazrb',
             component: '/demo/index',
             meta: { title: '工作面安装日报' }
           },
           {
-            path: '/product-dispatch/dispatch1/dispatch1-12',
-            name: 'Dispatch1-12',
+            path: '/product-dispatch/ledger/gzmccrb',
+            name: 'DispatchGzmccrb',
             component: '/demo/index',
             meta: { title: '工作面拆除日报' }
           },
           {
-            path: '/product-dispatch/dispatch1/dispatch1-13',
-            name: 'Dispatch1-13',
+            path: '/product-dispatch/ledger/mgkscxxrb',
+            name: 'DispatchMgkscxxrb',
             component: '/demo/index',
             meta: { title: '煤管科生产信息日报' }
           },
           {
-            path: '/product-dispatch/dispatch1/dispatch1-14',
-            name: 'Dispatch1-14',
+            path: '/product-dispatch/ledger/gscddxxb',
+            name: 'DispatchGscddxxb',
             component: '/demo/index',
             meta: { title: '矸石仓地点信息表' }
           },
           {
-            path: '/product-dispatch/dispatch1/dispatch1-15',
-            name: 'Dispatch1-15',
+            path: '/product-dispatch/ledger/gscfgrb',
+            name: 'DispatchGscfgrb',
             component: '/demo/index',
             meta: { title: '矸石仓放矸日报' }
           }
         ]
       },
       {
-        path: '/product-dispatch/dispatch2',
-        name: 'Dispatch2',
+        path: '/product-dispatch/dispatch-manage',
+        name: 'DispatchManage',
         component: '/demo/index',
         meta: { title: '调度管理' },
         children: [
           {
-            path: '/product-dispatch/dispatch2/dispatch2-1',
-            name: 'Dispatch2-1',
+            path: '/product-dispatch/dispatch-manage/rjrsrtj',
+            name: 'DispatchManageRjrsrtj',
             component: '/demo/index',
             meta: { title: '入井人数日统计' }
           },
           {
-            path: '/product-dispatch/dispatch2/dispatch2-2',
-            name: 'Dispatch2-2',
+            path: '/product-dispatch/dispatch-manage/kldzbjhb',
+            name: 'DispatchManageKldzbjhb',
             component: '/demo/index',
             meta: { title: '矿领导值班计划表' }
           },
           {
-            path: '/product-dispatch/dispatch2/dispatch2-3',
-            name: 'Dispatch2-3',
+            path: '/product-dispatch/dispatch-manage/klddbjhb',
+            name: 'DispatchManageKlddbjhb',
             component: '/demo/index',
             meta: { title: '矿领导带班计划表' }
           },
           {
-            path: '/product-dispatch/dispatch2/dispatch2-4',
-            name: 'Dispatch2-4',
+            path: '/product-dispatch/dispatch-manage/fxzbjhb',
+            name: 'DispatchManageFxzbjhb',
             component: '/demo/index',
             meta: { title: '防汛值班计划表' }
           },
           {
-            path: '/product-dispatch/dispatch2/dispatch2-5',
-            name: 'Dispatch2-5',
+            path: '/product-dispatch/dispatch-manage/ddyzbjhb',
+            name: 'DispatchManageDdyzbjhb',
             component: '/demo/index',
             meta: { title: '调度员值班计划表' }
           },
           {
-            path: '/product-dispatch/dispatch2/dispatch2-6',
-            name: 'Dispatch2-6',
+            path: '/product-dispatch/dispatch-manage/gdwzgbjhb',
+            name: 'DispatchManageGdwzgbjhb',
             component: '/demo/index',
             meta: { title: '各单位值跟班计划表' }
           },
           {
-            path: '/product-dispatch/dispatch2/dispatch2-7',
-            name: 'Dispatch2-7',
+            path: '/product-dispatch/dispatch-manage/gdwzgbjhylb',
+            name: 'DispatchManageGdwzgbjhylb',
             component: '/demo/index',
             meta: { title: '各单位值跟班计划预览表' }
           },
           {
-            path: '/product-dispatch/dispatch2/dispatch2-8',
-            name: 'Dispatch2-8',
+            path: '/product-dispatch/dispatch-manage/ddsjsd',
+            name: 'DispatchManageDdsjsd',
             component: '/demo/index',
             meta: { title: '调度数据锁定' }
           },
           {
-            path: '/product-dispatch/dispatch2/dispatch2-9',
-            name: 'Dispatch2-9',
-            component: '/demo/index',
+            path: '/product-dispatch/dispatch-manage/announce',
+            name: 'DispatchManageAnnounce',
+            component: '/product-dispatch/dispatch-manage/announce/index',
             meta: { title: '公文公告' }
           },
           {
-            path: '/product-dispatch/dispatch2/dispatch2-10',
-            name: 'Dispatch2-10',
-            component: '/demo/index',
+            path: '/product-dispatch/dispatch-manage/announce-view',
+            name: 'DispatchManageAnnounceView',
+            component: '/product-dispatch/dispatch-manage/announce-view/index',
             meta: { title: '公文公告查看' }
           },
           {
-            path: '/product-dispatch/dispatch2/dispatch2-11',
-            name: 'Dispatch2-11',
-            component: '/demo/index',
+            path: '/product-dispatch/dispatch-manage/zdhldxprw',
+            name: 'DispatchManageZdhldxprw',
+            component: '/product-dispatch/dispatch-manage/zdhldxprw/index',
             meta: { title: '早调会领导下派任务' }
           },
           {
-            path: '/product-dispatch/dispatch2/dispatch2-12',
-            name: 'Dispatch2-12',
-            component: '/demo/index',
+            path: '/product-dispatch/dispatch-manage/zdhldxprwjl',
+            name: 'DispatchManageZdhldxprwjl',
+            component: '/product-dispatch/dispatch-manage/zdhldxprwjl/index',
             meta: { title: '早调会领导下派任务记录' }
           }
         ]
       },
       {
-        path: '/product-dispatch/dispatch3',
-        name: 'Dispatch3',
+        path: '/product-dispatch/dispatch-report',
+        name: 'DispatchReport',
         component: '/demo/index',
         meta: { title: '调度汇报' },
         children: [
           {
-            path: '/product-dispatch/dispatch3/dispatch3-1',
-            name: 'Dispatch3-1',
+            path: '/product-dispatch/dispatch-report/dispatch-data',
+            name: 'DispatchReportData',
             component: '/demo/index',
             meta: { title: '调度资料' },
             children: [
               {
-                path: '/product-dispatch/dispatch3/dispatch3-1/dispatch3-1-1',
-                name: 'Dispatch3-1-1',
-                component: '/demo/index',
+                path: '/product-dispatch/dispatch-report/dispatch-data/manage-system',
+                name: 'DispatchReportManageSystem',
+                component: '/system-management/document-manage/index',
                 meta: { title: '管理制度' }
               },
               {
-                path: '/product-dispatch/dispatch3/dispatch3-1/dispatch3-1-2',
-                name: 'Dispatch3-1-2',
-                component: '/demo/index',
+                path: '/product-dispatch/dispatch-report/dispatch-data/institution',
+                name: 'DispatchReportInstitution',
+                component: '/system-management/document-manage/index',
                 meta: { title: '机构建设' }
               },
               {
-                path: '/product-dispatch/dispatch3/dispatch3-1/dispatch3-1-3',
-                name: 'Dispatch3-1-3',
-                component: '/demo/index',
+                path: '/product-dispatch/dispatch-report/dispatch-data/leader-speech',
+                name: 'DispatchReportLeaderSpeech',
+                component: '/system-management/document-manage/index',
                 meta: { title: '领导讲话' }
               },
               {
-                path: '/product-dispatch/dispatch3/dispatch3-1/dispatch3-1-4',
-                name: 'Dispatch3-1-4',
-                component: '/demo/index',
+                path: '/product-dispatch/dispatch-report/dispatch-data/policies',
+                name: 'DispatchReportPolicies',
+                component: '/system-management/document-manage/index',
                 meta: { title: '政策法规' }
               }
             ]
           },
           {
-            path: '/product-dispatch/dispatch3/dispatch3-2',
-            name: 'Dispatch3-2',
+            path: '/product-dispatch/dispatch-report/zyyjhyl',
+            name: 'DispatchReportZyyjhyl',
             component: '/demo/index',
             meta: { title: '作业月计划预览' }
           },
           {
-            path: '/product-dispatch/dispatch3/dispatch3-3',
-            name: 'Dispatch3-3',
+            path: '/product-dispatch/dispatch-report/sczhtz',
+            name: 'DispatchReportSczhtz',
             component: '/demo/index',
             meta: { title: '生产综合台账' }
           }
@@ -1416,21 +1412,24 @@ const asyncRoutes = [
             meta: { title: '达标规划' },
             children: [
               {
-                path: '/safe-management/safeProduce-normalizing/compliance-planning/annual-plan',
+                path:
+                  '/safe-management/safeProduce-normalizing/compliance-planning/annual-plan',
                 name: 'Safe1-1-1',
-                component: '/safe-management/safeProduce-normalizing/compliance-planning/annual-plan/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '年度规划' }
               },
               {
-                path: '/safe-management/safeProduce-normalizing/compliance-planning/quarterly-plan',
+                path:
+                  '/safe-management/safeProduce-normalizing/compliance-planning/quarterly-plan',
                 name: 'Safe1-1-2',
-                component: '/safe-management/safeProduce-normalizing/compliance-planning/quarterly-plan/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '季度计划' }
               },
               {
-                path: '/safe-management/safeProduce-normalizing/compliance-planning/monthly-plan',
+                path:
+                  '/safe-management/safeProduce-normalizing/compliance-planning/monthly-plan',
                 name: 'Safe1-1-3',
-                component: '/safe-management/safeProduce-normalizing/compliance-planning/monthly-plan/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '月度计划' }
               }
             ]
@@ -1450,7 +1449,8 @@ const asyncRoutes = [
                 meta: { title: '理念目标和矿长安全承诺' }
               },
               {
-                path: '/safe-management/safeProduce-normalizing/standardizationScore-manage/organization',
+                path:
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/organization',
                 name: 'Safe1-2-2',
                 component:
                   '/safe-management/safeProduce-normalizing/standardizationScore-manage/organization/index',
@@ -1473,7 +1473,8 @@ const asyncRoutes = [
                 meta: { title: '从业人员素质' }
               },
               {
-                path: '/safe-management/safeProduce-normalizing/standardizationScore-manage/safe-risk',
+                path:
+                  '/safe-management/safeProduce-normalizing/standardizationScore-manage/safe-risk',
                 name: 'Safe1-2-5',
                 component:
                   '/safe-management/safeProduce-normalizing/standardizationScore-manage/safe-risk/index',
@@ -1552,8 +1553,7 @@ const asyncRoutes = [
                 meta: { title: '质量控制_职业病危害防治和地面设施' }
               },
               {
-                path:
-                  '/safe-management/standard-scoring-manager/continued-improve',
+                path: '/safe-management/standard-scoring-manager/continued-improve',
                 name: 'Safe1-2-15',
                 component:
                   '/safe-management/standard-scoring-manager/continued-improve/index',
@@ -1594,22 +1594,21 @@ const asyncRoutes = [
             meta: { title: '管理制度' },
             children: [
               {
-                path: '/safe-management/safeRisk-gradeControl/management-system/management-system',
+                path:
+                  '/safe-management/safeRisk-gradeControl/management-system/management-system',
                 name: 'Safe2-1-1',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '安全风险分级管理制度' }
               },
               {
-                path:
-                  '/safe-management/safe1/safe1-1/safe1-1-1',
+                path: '/safe-management/safe1/safe1-1/safe1-1-1',
                 name: 'Organization',
                 component:
                   '/safe-management/risk-control/management-system/organization/index',
                 meta: { title: '风险组织结构' }
               },
               {
-                path:
-                  '/safe-management/risk-control/management-system/liability-system',
+                path: '/safe-management/risk-control/management-system/liability-system',
                 name: 'LiabilitySystem',
                 component:
                   '/safe-management/risk-control/management-system/liability-system/index',
@@ -1626,12 +1625,11 @@ const asyncRoutes = [
               {
                 path: '/safe-management/safe2/safe2-2/safe2-2-1',
                 name: 'Safe2-2-1',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '年度辨识评估报告' }
               },
               {
-                path:
-                  '/safe-management/risk-control/assessment/assessment-library',
+                path: '/safe-management/risk-control/assessment/assessment-library',
                 name: 'AssessmentLibrary',
                 component:
                   '/safe-management/risk-control/assessment/assessment-library/index',
@@ -1646,8 +1644,7 @@ const asyncRoutes = [
             meta: { title: '专项辨识：设计前' },
             children: [
               {
-                path:
-                  '/safe-management/risk-control/pre-design/pre-design-list',
+                path: '/safe-management/risk-control/pre-design/pre-design-list',
                 name: 'PreDesignList',
                 component:
                   '/safe-management/risk-control/pre-design/pre-design-list/index',
@@ -1656,7 +1653,7 @@ const asyncRoutes = [
               {
                 path: '/safe-management/safe2/safe2-3/safe2-3-2',
                 name: 'Safe2-3-2',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '设计前辨识报告' }
               }
             ]
@@ -1668,8 +1665,7 @@ const asyncRoutes = [
             meta: { title: '专项辨识：变化后' },
             children: [
               {
-                path:
-                  '/safe-management/risk-control/after-change/after-change-list',
+                path: '/safe-management/risk-control/after-change/after-change-list',
                 name: 'AfterChangeList',
                 component:
                   '/safe-management/risk-control/after-change/after-change-list/index',
@@ -1678,7 +1674,7 @@ const asyncRoutes = [
               {
                 path: '/safe-management/safe2/safe2-4/safe2-4-2',
                 name: 'Safe2-4-2',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '变化后辨识报告' }
               }
             ]
@@ -1690,8 +1686,7 @@ const asyncRoutes = [
             meta: { title: '专项辨识：施工前' },
             children: [
               {
-                path:
-                  '/safe-management/risk-control/pre-construct/pre-construct-list',
+                path: '/safe-management/risk-control/pre-construct/pre-construct-list',
                 name: 'PreConstructList',
                 component:
                   '/safe-management/risk-control/pre-construct/pre-construct-list/index',
@@ -1700,7 +1695,7 @@ const asyncRoutes = [
               {
                 path: '/safe-management/safe2/safe2-5/safe2-5-2',
                 name: 'Safe2-5-2',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '施工前辨识报告' }
               }
             ]
@@ -1712,8 +1707,7 @@ const asyncRoutes = [
             meta: { title: '专项辨识：事故后' },
             children: [
               {
-                path:
-                  '/safe-management/risk-control/after-accident/after-accident-list',
+                path: '/safe-management/risk-control/after-accident/after-accident-list',
                 name: 'AfterAccidentList',
                 component:
                   '/safe-management/risk-control/after-accident/after-accident-list/index',
@@ -1722,7 +1716,7 @@ const asyncRoutes = [
               {
                 path: '/safe-management/safe2/safe2-6/safe2-6-2',
                 name: 'Safe2-6-2',
-                component: '/demo/table/upload/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '事故后辨识报告' }
               }
             ]
@@ -1760,16 +1754,14 @@ const asyncRoutes = [
             meta: { title: '工作机制' },
             children: [
               {
-                path:
-                  '/safe-management/hidden-danger/working-mechanism/organization',
+                path: '/safe-management/hidden-danger/working-mechanism/organization',
                 name: 'DangerOrganization',
                 component:
                   '/safe-management/hidden-danger/working-mechanism/organization/index',
                 meta: { title: '隐患组织结构' }
               },
               {
-                path:
-                  '/safe-management/hidden-danger/working-mechanism/liability-system',
+                path: '/safe-management/hidden-danger/working-mechanism/liability-system',
                 name: 'DangerLiability',
                 component:
                   '/safe-management/hidden-danger/working-mechanism/liability-system/index',
@@ -1780,8 +1772,7 @@ const asyncRoutes = [
           {
             path: '/safe-management/hidden-danger/danger-registration',
             name: 'DangerRegistration',
-            component:
-              '/safe-management/hidden-danger/danger-registration/index',
+            component: '/safe-management/hidden-danger/danger-registration/index',
             meta: { title: '事故隐患登记' }
           },
           {
@@ -1791,40 +1782,35 @@ const asyncRoutes = [
             meta: { title: '隐患监督管理' },
             children: [
               {
-                path:
-                  '/safe-management/hidden-danger/danger-supervision/reform',
+                path: '/safe-management/hidden-danger/danger-supervision/reform',
                 name: 'Reform',
                 component:
                   '/safe-management/hidden-danger/danger-supervision/reform/index',
                 meta: { title: '隐患整改' }
               },
               {
-                path:
-                  '/safe-management/hidden-danger/danger-supervision/delay-approval',
+                path: '/safe-management/hidden-danger/danger-supervision/delay-approval',
                 name: 'DelayApproval',
                 component:
                   '/safe-management/hidden-danger/danger-supervision/delay-approval/index',
                 meta: { title: '延期审批' }
               },
               {
-                path:
-                  '/safe-management/hidden-danger/danger-supervision/acceptance',
+                path: '/safe-management/hidden-danger/danger-supervision/acceptance',
                 name: 'Acceptance',
                 component:
                   '/safe-management/hidden-danger/danger-supervision/acceptance/index',
                 meta: { title: '隐患验收' }
               },
               {
-                path:
-                  '/safe-management/hidden-danger/danger-supervision/exceed',
+                path: '/safe-management/hidden-danger/danger-supervision/exceed',
                 name: 'DangerExceed',
                 component:
                   '/safe-management/hidden-danger/danger-supervision/exceed/index',
                 meta: { title: '超期隐患' }
               },
               {
-                path:
-                  '/safe-management/hidden-danger/danger-supervision/supervision',
+                path: '/safe-management/hidden-danger/danger-supervision/supervision',
                 name: 'DangerSupervision',
                 component:
                   '/safe-management/hidden-danger/danger-supervision/supervision/index',
@@ -1855,7 +1841,7 @@ const asyncRoutes = [
           {
             path: '/safe-management/three-violation/document-management',
             name: 'ViolationDocument',
-            component: '/demo/table/upload/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '三违文档管理' }
           },
           {
@@ -1867,8 +1853,7 @@ const asyncRoutes = [
           {
             path: '/safe-management/three-violation/violation-echart',
             name: 'ViolationEchart',
-            component:
-              '/safe-management/three-violation/violation-echart/index',
+            component: '/safe-management/three-violation/violation-echart/index',
             meta: { title: '三违分析' }
           }
         ]
@@ -1896,7 +1881,7 @@ const asyncRoutes = [
           {
             path: '/safe-management/safe6/safe6-1',
             name: 'Safe6-1',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '体检' }
           },
           {
@@ -1908,19 +1893,19 @@ const asyncRoutes = [
               {
                 path: '/safe-management/safe6/safe6-2/safe6-2-1',
                 name: 'Safe6-2-1',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '年度计划' }
               },
               {
                 path: '/safe-management/safe6/safe6-2/safe6-2-2',
                 name: 'Safe6-2-2',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '季度计划' }
               },
               {
                 path: '/safe-management/safe6/safe6-2/safe6-2-3',
                 name: 'Safe6-2-3',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '劳保发放记录' }
               }
             ]
@@ -1928,13 +1913,13 @@ const asyncRoutes = [
           {
             path: '/safe-management/safe6/safe6-3',
             name: 'Safe6-3',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '职业病危害防治' }
           },
           {
             path: '/safe-management/safe6/safe6-4',
             name: 'Safe6-4',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '职业病危害告知' }
           }
         ]
@@ -1942,7 +1927,6 @@ const asyncRoutes = [
       {
         path: '/safe-management/safe7',
         name: 'Safe7',
-        component: '/demo/index',
         meta: { title: '安全综合管理' },
         children: [
           {
@@ -1954,37 +1938,37 @@ const asyncRoutes = [
           {
             path: '/safe-management/safe7/safe7-2',
             name: 'Safe7-2',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '国家安全文件' }
           },
           {
             path: '/safe-management/safe7/safe7-3',
             name: 'Safe7-3',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '省市安全文件' }
           },
           {
             path: '/safe-management/safe7/safe7-4',
             name: 'Safe7-4',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '集团安全文件' }
           },
           {
             path: '/safe-management/safe7/safe7-5',
             name: 'Safe7-5',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '矿井安全文件' }
           },
           {
             path: '/safe-management/safe7/safe7-6',
             name: 'Safe7-6',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '矿井安全例会' }
           },
           {
             path: '/safe-management/safe7/safe7-7',
             name: 'Safe7-7',
-            component: '/demo/index',
+            component: '/safe-management/safety-manage/safe-place-manage/index',
             meta: { title: '安全地点管理' }
           },
           {
@@ -2010,25 +1994,30 @@ const asyncRoutes = [
         path: '/emergency-rescue/emergency1',
         name: 'Emergency1',
         component: '/demo/index',
+        redirect: '/emergency-rescue/emergency1/emergency1-1',
         meta: { title: '应急救援指南' },
         children: [
           {
             path: '/emergency-rescue/emergency1/emergency1-1',
             name: 'Emergency1-1',
-            component: '/emergency-rescue/emergency-rescue-guide/accident-management/index',
+            component:
+              '/emergency-rescue/emergency-rescue-guide/accident-management/index',
             meta: { title: '事故管理' },
             children: [
               {
                 path: '/emergency-rescue/emergency1/emergency1-1/rescue-process-overview',
                 name: 'Emergency1-3',
-                component: '/emergency-rescue/emergency-rescue-guide/accident-management/rescue-process-overview/index',
+                component:
+                  '/emergency-rescue/emergency-rescue-guide/accident-management/rescue-process-overview/index',
                 meta: { title: '救援过程总览' },
                 hidden: true
               },
               {
-                path: '/emergency-rescue/emergency1/emergency1-1/incident-handling-process',
+                path:
+                  '/emergency-rescue/emergency1/emergency1-1/incident-handling-process',
                 name: 'Emergency1-4',
-                component: '/emergency-rescue/emergency-rescue-guide/accident-management/incident-handling-process/index',
+                component:
+                  '/emergency-rescue/emergency-rescue-guide/accident-management/incident-handling-process/index',
                 meta: { title: '事故处理流程' },
                 hidden: true
               }
@@ -2037,20 +2026,23 @@ const asyncRoutes = [
           {
             path: '/emergency-rescue/emergency1/emergency1-2',
             name: 'Emergency1-2',
-            component: '/emergency-rescue/emergency-rescue-guide/emergency-process-management/index',
+            component:
+              '/emergency-rescue/emergency-rescue-guide/emergency-process-management/index',
             meta: { title: '应急流程管理' },
             children: [
               {
                 path: '/emergency-rescue/emergency1/emergency1-2/edit-process',
                 name: 'Emergency1-5',
-                component: '/emergency-rescue/emergency-rescue-guide/emergency-process-management/edit-process/index',
+                component:
+                  '/emergency-rescue/emergency-rescue-guide/emergency-process-management/edit-process/index',
                 meta: { title: '应急流程编辑' },
                 hidden: true
               },
               {
                 path: '/emergency-rescue/emergency1/emergency1-2/preview-process',
                 name: 'Emergency1-6',
-                component: '/emergency-rescue/emergency-rescue-guide/emergency-process-management/preview-process/index',
+                component:
+                  '/emergency-rescue/emergency-rescue-guide/emergency-process-management/preview-process/index',
                 meta: { title: '应急流程预览' },
                 hidden: true
               }
@@ -2062,34 +2054,50 @@ const asyncRoutes = [
         path: '/emergency-rescue/emergency2',
         name: 'Emergency2',
         component: '/demo/index',
+        redirect: '/emergency-rescue/rescue-plan/common-plan',
         meta: { title: '应急救援预案' },
         children: [
+          // {
+          //   path: '/emergency-rescue/rescue-plan/common-plan',
+          //   name: 'EmergencyCommonPlan',
+          //   component: '/emergency-rescue/rescue-plan/common-plan/index',
+          //   meta: { title: '综合预案' }
+          // },
           {
             path: '/emergency-rescue/rescue-plan/common-plan',
             name: 'EmergencyCommonPlan',
-            component: '/emergency-rescue/rescue-plan/common-plan/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '综合预案' }
           },
           {
             path: '/emergency-rescue/rescue-plan/special-plan',
             name: 'EmergencySpecialPlan',
+            component: '/emergency-rescue/rescue-plan/special-plan/index',
+            meta: { title: '专项预案' },
             children: [
               {
                 path: '/emergency-rescue/rescue-plan/special-plan/preview',
-                name: 'Emergency3-122',
+                name: 'EmergencySpecialPlanPreview',
                 component: '/emergency-rescue/rescue-plan/special-plan/preview/index',
                 meta: { title: '预览' },
                 hidden: true
               }
-            ],
-            component: '/emergency-rescue/rescue-plan/special-plan/index',
-            meta: { title: '专项预案' }
+            ]
           },
           {
             path: '/emergency-rescue/rescue-plan/accident-plan',
             name: 'EmergencyAccidentPlan',
             component: '/emergency-rescue/rescue-plan/accident-plan/index',
-            meta: { title: '事故处置方案' }
+            meta: { title: '事故处置方案' },
+            children: [
+              {
+                path: '/emergency-rescue/rescue-plan/accident-plan/preview',
+                name: 'EmergencyAccidentPlanPreview',
+                component: '/emergency-rescue/rescue-plan/accident-plan/preview/index',
+                meta: { title: '预览' },
+                hidden: true
+              }
+            ]
           }
         ]
       },
@@ -2097,48 +2105,56 @@ const asyncRoutes = [
         path: '/emergency-rescue/emergency3',
         name: 'Emergency3',
         component: '/demo/index',
+        redirect: '/emergency-rescue/emergency3/emergency3-1',
         meta: { title: '应急救援保障' },
         children: [
           {
             path: '/emergency-rescue/emergency3/emergency3-1',
             name: 'Emergency3-1',
-            component: '/emergency-rescue/emergency-rescue-support/emergency-rescue-organization/index',
+            component:
+              '/emergency-rescue/emergency-rescue-support/emergency-rescue-organization/index',
             meta: { title: '应急通讯组织机构' }
           },
           {
             path: '/emergency-rescue/emergency3/emergency3-2',
             name: 'Emergency3-2',
-            component: '/emergency-rescue/emergency-rescue-support/emergency-communication/index',
+            component:
+              '/emergency-rescue/emergency-rescue-support/emergency-communication/index',
             meta: { title: '应急通讯' }
           },
           {
             path: '/emergency-rescue/emergency3/emergency3-3',
             name: 'Emergency3-3',
-            component: '/emergency-rescue/emergency-rescue-support/emergency-response-team/index',
+            component:
+              '/emergency-rescue/emergency-rescue-support/emergency-response-team/index',
             meta: { title: '应急队伍' }
           },
           {
             path: '/emergency-rescue/emergency3/emergency3-4',
             name: 'Emergency3-4',
-            component: '/emergency-rescue/emergency-rescue-support/emergency-experts/index',
+            component:
+              '/emergency-rescue/emergency-rescue-support/emergency-experts/index',
             meta: { title: '应急专家' }
           },
           {
             path: '/emergency-rescue/emergency3/emergency3-5',
             name: 'Emergency3-5',
-            component: '/emergency-rescue/emergency-rescue-support/emergency-supplies/index',
+            component:
+              '/emergency-rescue/emergency-rescue-support/emergency-supplies/index',
             meta: { title: '应急物资' }
           },
           {
             path: '/emergency-rescue/emergency3/emergency3-6',
             name: 'Emergency3-6',
-            component: '/emergency-rescue/emergency-rescue-support/emergency-vehicles/index',
+            component:
+              '/emergency-rescue/emergency-rescue-support/emergency-vehicles/index',
             meta: { title: '应急车辆' }
           },
           {
             path: '/emergency-rescue/emergency3/emergency3-7',
             name: 'Emergency3-7',
-            component: '/emergency-rescue/emergency-rescue-support/emergency-medical/index',
+            component:
+              '/emergency-rescue/emergency-rescue-support/emergency-medical/index',
             meta: { title: '应急医疗' }
           },
           {
@@ -2158,20 +2174,27 @@ const asyncRoutes = [
       {
         path: '/emergency-rescue/emergency4',
         name: 'Emergency4',
+        redirect: '/emergency-rescue/emergency4/emergency4-1',
         component: '/demo/index',
         meta: { title: '日常管理' },
         children: [
           {
             path: '/emergency-rescue/emergency4/emergency4-1',
             name: 'Emergency4-1',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '事故调查报告' }
           },
           {
             path: '/emergency-rescue/emergency4/emergency4-2',
             name: 'Emergency4-2',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '应急演练' }
+          },
+          {
+            path: '/emergency-rescue/emergency4/emergency4-3',
+            name: 'Emergency4-3',
+            component: '/emergency-rescue/daily-management/attachment-management/index',
+            meta: { title: '附件管理' }
           }
         ]
       }
@@ -2208,8 +2231,7 @@ const asyncRoutes = [
           {
             path: '/prevention-management/ventilate-manage/gas-daily',
             name: 'Prevention1-3',
-            component:
-              '/prevention-management/ventilate-manage/gas-daily/index',
+            component: '/prevention-management/ventilate-manage/gas-daily/index',
             meta: { title: '瓦斯日报' }
           },
           {
@@ -2227,15 +2249,13 @@ const asyncRoutes = [
                 meta: { title: '风门台账' }
               },
               {
-                path:
-                  '/prevention-management/prevention1/prevention1-4/prevention1-4-2',
+                path: '/prevention-management/prevention1/prevention1-4/prevention1-4-2',
                 name: 'Prevention1-4-2',
                 component: '/demo/table/upload/index',
                 meta: { title: '密闭台账' }
               },
               {
-                path:
-                  '/prevention-management/prevention1/prevention1-4/prevention1-4-3',
+                path: '/prevention-management/prevention1/prevention1-4/prevention1-4-3',
                 name: 'Prevention1-4-3',
                 component: '/demo/table/upload/index',
                 meta: { title: '挡风墙台账' }
@@ -2253,56 +2273,55 @@ const asyncRoutes = [
           {
             path: '/prevention-management/prevention1/prevention1-5',
             name: 'Prevention1-5',
-            component: '/demo/table/upload/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '甲烷传感器对照记录' }
           },
           {
             path: '/prevention-management/prevention1/prevention1-6',
             name: 'Prevention1-6',
-            component: '/demo/table/upload/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '便携仪发放记录' }
           },
           {
             path: '/prevention-management/prevention1/prevention1-7',
             name: 'Prevention1-7',
-            component: '/demo/table/upload/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '便携仪调校记录' }
           },
           {
             path: '/prevention-management/prevention1/prevention1-8',
             name: 'Prevention1-8',
-            component: '/demo/table/upload/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '安全技术措施' }
           },
           {
             path: '/prevention-management/prevention1/prevention1-9',
             name: 'Prevention1-9',
-            component: '/demo/table/upload/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '通风巷道检查记录' }
           },
           {
             path: '/prevention-management/ventilate-manage/anti-wind-record',
             name: 'Prevention1-10',
-            component:
-              '/prevention-management/ventilate-manage/anti-wind-record/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '反风设施检查记录' }
           },
           {
             path: '/prevention-management/prevention1/prevention1-11',
             name: 'Prevention1-11',
-            component: '/demo/table/upload/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '测风记录' }
           },
           {
             path: '/prevention-management/prevention1/prevention1-12',
             name: 'Prevention1-12',
-            component: '/demo/table/upload/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '外部漏风率报告' }
           },
           {
             path: '/prevention-management/prevention1/prevention1-13',
             name: 'Prevention1-13',
-            component: '/demo/table/upload/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '反风演习' }
           },
           {
@@ -2312,16 +2331,14 @@ const asyncRoutes = [
             meta: { title: '通风月报' },
             children: [
               {
-                path:
-                  '/prevention-management/ventilate-manage/ventilate-monthly/submit',
+                path: '/prevention-management/ventilate-manage/ventilate-monthly/submit',
                 name: 'Prevention1-14-1',
                 component:
                   '/prevention-management/ventilate-manage/ventilate-monthly/submit/index',
                 meta: { title: '填报' }
               },
               {
-                path:
-                  '/prevention-management/ventilate-manage/ventilate-monthly/preview',
+                path: '/prevention-management/ventilate-manage/ventilate-monthly/preview',
                 name: 'Prevention1-14-2',
                 component:
                   '/prevention-management/ventilate-manage/ventilate-monthly/preview/index',
@@ -2360,16 +2377,14 @@ const asyncRoutes = [
             meta: { title: '钻孔施工日报' },
             children: [
               {
-                path:
-                  '/prevention-management/ventilate-manage/drill-daily/submit',
+                path: '/prevention-management/ventilate-manage/drill-daily/submit',
                 name: 'Prevention1-16-1',
                 component:
                   '/prevention-management/ventilate-manage/drill-daily/submit/index',
                 meta: { title: '填报' }
               },
               {
-                path:
-                  '/prevention-management/ventilate-manage/drill-daily/preview',
+                path: '/prevention-management/ventilate-manage/drill-daily/preview',
                 name: 'Prevention1-16-2',
                 component:
                   '/prevention-management/ventilate-manage/drill-daily/preview/index',
@@ -2387,32 +2402,28 @@ const asyncRoutes = [
                 path:
                   '/prevention-management/ventilate-manage/ventilate-ten-day/ventilate-info',
                 name: 'Prevention1-17-1',
-                component:
-                  '/prevention-management/ventilate-manage/ventilate-ten-day/ventilate-info/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '通风信息旬报' }
               },
               {
                 path:
                   '/prevention-management/ventilate-manage/ventilate-ten-day/mrtn-report',
                 name: 'Prevention1-17-2',
-                component:
-                  '/prevention-management/ventilate-manage/ventilate-ten-day/mrtn-report/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '回风量旬报表' }
               },
               {
                 path:
                   '/prevention-management/ventilate-manage/ventilate-ten-day/coalface-report',
                 name: 'Prevention1-17-3',
-                component:
-                  '/prevention-management/ventilate-manage/ventilate-ten-day/coalface-report/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '掘进面旬报表' }
               },
               {
                 path:
                   '/prevention-management/ventilate-manage/ventilate-ten-day/working-situation-report',
                 name: 'Prevention1-17-4',
-                component:
-                  '/prevention-management/ventilate-manage/ventilate-ten-day/working-situation-report/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '采煤工作面通风情况旬报表' }
               }
             ]
@@ -2433,11 +2444,9 @@ const asyncRoutes = [
             meta: { title: '瓦斯鉴定报告' },
             children: [
               {
-                path:
-                  '/prevention-management/gas-manage/survey-report/ventilate',
+                path: '/prevention-management/gas-manage/survey-report/ventilate',
                 name: 'Prevention2-1-1',
-                component:
-                  '/prevention-management/gas-manage/survey-report/ventilate/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '通风旬报' }
               }
             ]
@@ -2451,55 +2460,55 @@ const asyncRoutes = [
               {
                 path: '/prevention-management/prevention2-2/prevention2-2-1',
                 name: 'Prevention2-2-1',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '巡查报告' }
               },
               {
                 path: '/prevention-management/prevention2-2/prevention2-2-2',
                 name: 'Prevention2-2-2',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '抽采对比台账' }
               },
               {
                 path: '/prevention-management/prevention2-2/prevention2-2-3',
                 name: 'Prevention2-2-3',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '管路巡查台账' }
               },
               {
                 path: '/prevention-management/prevention2-2/prevention2-2-4',
                 name: 'Prevention2-2-4',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '抽采阻力测定报告' }
               },
               {
                 path: '/prevention-management/prevention2-2/prevention2-2-5',
                 name: 'Prevention2-2-5',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '掉钻记录' }
               },
               {
                 path: '/prevention-management/prevention2-2/prevention2-2-6',
                 name: 'Prevention2-2-6',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '钻孔设计' }
               },
               {
                 path: '/prevention-management/prevention2-2/prevention2-2-7',
                 name: 'Prevention2-2-7',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '抽采管路设计' }
               },
               {
                 path: '/prevention-management/prevention2-2/prevention2-2-8',
                 name: 'Prevention2-2-8',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '抽采达标评判报告' }
               },
               {
                 path: '/prevention-management/prevention2-2/prevention2-2-9',
                 name: 'Prevention2-2-9',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '瓦斯抽采设计' }
               }
             ]
@@ -2507,37 +2516,37 @@ const asyncRoutes = [
           {
             path: '/prevention-management/prevention2-3',
             name: 'Prevention2-3',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '瓦斯超限记录' }
           },
           {
             path: '/prevention-management/prevention2-4',
             name: 'Prevention2-4',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '瓦斯排放措施' }
           },
           {
             path: '/prevention-management/prevention2-5',
             name: 'Prevention2-5',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '瓦斯排放记录' }
           },
           {
             path: '/prevention-management/prevention2-6',
             name: 'Prevention2-6',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '瓦斯防治中长期规划' }
           },
           {
             path: '/prevention-management/prevention2-7',
             name: 'Prevention2-7',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '通风阻力测定报告' }
           },
           {
             path: '/prevention-management/prevention2-8',
             name: 'Prevention2-8',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '通风阻力测定报告' }
           },
           {
@@ -2549,25 +2558,25 @@ const asyncRoutes = [
               {
                 path: '/prevention-management/prevention2-9/prevention2-9-1',
                 name: 'Prevention2-9-1',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '工作面区域防突设计及措施' }
               },
               {
                 path: '/prevention-management/prevention2-9/prevention2-9-2',
                 name: 'Prevention2-9-2',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '年度、季度、月度防突措施实施计划' }
               },
               {
                 path: '/prevention-management/prevention2-9/prevention2-9-3',
                 name: 'Prevention2-9-3',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '工作面抽采达标评判报告' }
               },
               {
                 path: '/prevention-management/prevention2-9/prevention2-9-4',
                 name: 'Prevention2-9-4',
-                component: '/demo/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '区域验证（局部措施效果检验）报表' }
               },
               {
@@ -2647,8 +2656,7 @@ const asyncRoutes = [
               {
                 path: '/prevention-management/gas-manage/use-gas-daily/submit',
                 name: 'Prevention2-13-1',
-                component:
-                  '/prevention-management/gas-manage/use-gas-daily/submit/index',
+                component: '/prevention-management/gas-manage/use-gas-daily/submit/index',
                 meta: { title: '填报' }
               },
               {
@@ -2686,16 +2694,14 @@ const asyncRoutes = [
             meta: { title: '重点瓦斯日报' },
             children: [
               {
-                path:
-                  '/prevention-management/gas-manage/focus-gas-daily/submit',
+                path: '/prevention-management/gas-manage/focus-gas-daily/submit',
                 name: 'Prevention2-15-1',
                 component:
                   '/prevention-management/gas-manage/focus-gas-daily/submit/index',
                 meta: { title: '填报' }
               },
               {
-                path:
-                  '/prevention-management/gas-manage/focus-gas-daily/preview',
+                path: '/prevention-management/gas-manage/focus-gas-daily/preview',
                 name: 'Prevention2-15-2',
                 component:
                   '/prevention-management/gas-manage/focus-gas-daily/preview/index',
@@ -2725,8 +2731,7 @@ const asyncRoutes = [
             meta: { title: '煤层自燃倾向性鉴定报告' },
             children: [
               {
-                path:
-                  '/prevention-management/prevention3/prevention3-2/prevention3-2-1',
+                path: '/prevention-management/prevention3/prevention3-2/prevention3-2-1',
                 name: 'Prevention3-2-1',
                 component: '/demo/index',
                 meta: { title: '预览' }
@@ -2760,8 +2765,7 @@ const asyncRoutes = [
               {
                 path: '/prevention-management/fire-manage/fire-monthly/submit',
                 name: 'Prevention3-6-1',
-                component:
-                  '/prevention-management/fire-manage/fire-monthly/submit/index',
+                component: '/prevention-management/fire-manage/fire-monthly/submit/index',
                 meta: { title: '填报' }
               },
               {
@@ -2819,36 +2823,31 @@ const asyncRoutes = [
             meta: { title: '防尘月报' },
             children: [
               {
-                path:
-                  '/prevention-management/prevention4/prevention4-6/prevention4-6-1',
+                path: '/prevention-management/prevention4/prevention4-6/prevention4-6-1',
                 name: 'Prevention4-6-1',
                 component: '/demo/index',
                 meta: { title: '采掘面防尘情况月报' }
               },
               {
-                path:
-                  '/prevention-management/prevention4/prevention4-6/prevention4-6-2',
+                path: '/prevention-management/prevention4/prevention4-6/prevention4-6-2',
                 name: 'Prevention4-6-2',
                 component: '/demo/index',
                 meta: { title: '防治高尘措施场所月报' }
               },
               {
-                path:
-                  '/prevention-management/prevention4/prevention4-6/prevention4-6-3',
+                path: '/prevention-management/prevention4/prevention4-6/prevention4-6-3',
                 name: 'Prevention4-6-3',
                 component: '/demo/index',
                 meta: { title: '粉尘浓度情况与测尘仪型号月报表' }
               },
               {
-                path:
-                  '/prevention-management/prevention4/prevention4-6/prevention4-6-4',
+                path: '/prevention-management/prevention4/prevention4-6/prevention4-6-4',
                 name: 'Prevention4-6-4',
                 component: '/demo/index',
                 meta: { title: '采掘面粉尘浓度检测月报' }
               },
               {
-                path:
-                  '/prevention-management/prevention4/prevention4-6/prevention4-6-5',
+                path: '/prevention-management/prevention4/prevention4-6/prevention4-6-5',
                 name: 'Prevention4-6-5',
                 component: '/demo/index',
                 meta: { title: '防尘月报' }
@@ -2867,8 +2866,7 @@ const asyncRoutes = [
           {
             path: '/prevention-management/safety-manage/equipment-ledger',
             name: 'Prevention5-1',
-            component:
-              '/prevention-management/safety-manage/equipment-ledger/index',
+            component: '/prevention-management/safety-manage/equipment-ledger/index',
             meta: { title: '监控设备管理台账' }
           },
           {
@@ -2878,29 +2876,25 @@ const asyncRoutes = [
             meta: { title: '安全监控设备检查、测试记录' },
             children: [
               {
-                path:
-                  '/prevention-management/prevention5/prevention5-2/prevention5-2-1',
+                path: '/prevention-management/prevention5/prevention5-2/prevention5-2-1',
                 name: 'Prevention5-2-1',
                 component: '/demo/index',
                 meta: { title: '三分闭锁测试记录' }
               },
               {
-                path:
-                  '/prevention-management/prevention5/prevention5-2/prevention5-2-2',
+                path: '/prevention-management/prevention5/prevention5-2/prevention5-2-2',
                 name: 'Prevention5-2-2',
                 component: '/demo/index',
                 meta: { title: '井下巡检记录' }
               },
               {
-                path:
-                  '/prevention-management/prevention5/prevention5-2/prevention5-2-3',
+                path: '/prevention-management/prevention5/prevention5-2/prevention5-2-3',
                 name: 'Prevention5-2-3',
                 component: '/demo/index',
                 meta: { title: '避雷设施检查记录' }
               },
               {
-                path:
-                  '/prevention-management/prevention5/prevention5-2/prevention5-2-4',
+                path: '/prevention-management/prevention5/prevention5-2/prevention5-2-4',
                 name: 'Prevention5-2-4',
                 component: '/demo/index',
                 meta: { title: '监控机房UPS电源测试记录' }
@@ -2910,8 +2904,7 @@ const asyncRoutes = [
           {
             path: '/prevention-management/safety-manage/monitoring-record',
             name: 'Prevention5-3',
-            component:
-              '/prevention-management/safety-manage/monitoring-record/index',
+            component: '/prevention-management/safety-manage/monitoring-record/index',
             meta: { title: '监控传感器校验记录' }
           },
           {
@@ -2933,43 +2926,37 @@ const asyncRoutes = [
             meta: { title: '监控月报' },
             children: [
               {
-                path:
-                  '/prevention-management/prevention5/prevention5-6/prevention5-6-1',
+                path: '/prevention-management/prevention5/prevention5-6/prevention5-6-1',
                 name: 'Prevention5-6-1',
                 component: '/demo/index',
                 meta: { title: '安全监控系统故障统计表' }
               },
               {
-                path:
-                  '/prevention-management/prevention5/prevention5-6/prevention5-6-2',
+                path: '/prevention-management/prevention5/prevention5-6/prevention5-6-2',
                 name: 'Prevention5-6-2',
                 component: '/demo/index',
                 meta: { title: '安全监控系统装备情况表' }
               },
               {
-                path:
-                  '/prevention-management/prevention5/prevention5-6/prevention5-6-3',
+                path: '/prevention-management/prevention5/prevention5-6/prevention5-6-3',
                 name: 'Prevention5-6-3',
                 component: '/demo/index',
                 meta: { title: '抽采自动计量装备情况表' }
               },
               {
-                path:
-                  '/prevention-management/prevention5/prevention5-6/prevention5-6-4',
+                path: '/prevention-management/prevention5/prevention5-6/prevention5-6-4',
                 name: 'Prevention5-6-4',
                 component: '/demo/index',
                 meta: { title: '设备使用情况表' }
               },
               {
-                path:
-                  '/prevention-management/prevention5/prevention5-6/prevention5-6-5',
+                path: '/prevention-management/prevention5/prevention5-6/prevention5-6-5',
                 name: 'Prevention5-6-5',
                 component: '/demo/index',
                 meta: { title: '采掘开等场所各类传感器安设情况表' }
               },
               {
-                path:
-                  '/prevention-management/prevention5/prevention5-6/prevention5-6-6',
+                path: '/prevention-management/prevention5/prevention5-6/prevention5-6-6',
                 name: 'Prevention5-6-6',
                 component: '/demo/index',
                 meta: { title: '监控月报' }
@@ -2988,61 +2975,61 @@ const asyncRoutes = [
           {
             path: '/prevention-management/prevention6/prevention6-1',
             name: 'Prevention6-1',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '通风系统图' }
           },
           {
             path: '/prevention-management/prevention6/prevention6-2',
             name: 'Prevention6-2',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '通风立体示意图' }
           },
           {
             path: '/prevention-management/prevention6/prevention6-3',
             name: 'Prevention6-3',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '通风网络图' }
           },
           {
             path: '/prevention-management/prevention6/prevention6-4',
             name: 'Prevention6-4',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '瓦斯地质图' }
           },
           {
             path: '/prevention-management/prevention6/prevention6-5',
             name: 'Prevention6-5',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '防尘、防火系统图' }
           },
           {
             path: '/prevention-management/prevention6/prevention6-6',
             name: 'Prevention6-6',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '避灾路线图' }
           },
           {
             path: '/prevention-management/prevention6/prevention6-7',
             name: 'Prevention6-7',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '安全监控系统布置图' }
           },
           {
             path: '/prevention-management/prevention6/prevention6-8',
             name: 'Prevention6-8',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '安全监控系统断电控制图' }
           },
           {
             path: '/prevention-management/prevention6/prevention6-9',
             name: 'Prevention6-9',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '瓦斯抽采系统图' }
           },
           {
             path: '/prevention-management/prevention6/prevention6-10',
             name: 'Prevention6-10',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '安全监控网络拓扑图' }
           }
         ]
@@ -3057,31 +3044,31 @@ const asyncRoutes = [
           {
             path: '/prevention-management/prevention7/prevention7-1',
             name: 'Prevention7-1',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '管理制度' }
           },
           {
             path: '/prevention-management/prevention7/prevention7-2',
             name: 'Prevention7-2',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '岗位责任制度' }
           },
           {
             path: '/prevention-management/prevention7/prevention7-3',
             name: 'Prevention7-3',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '岗位操作规程' }
           },
           {
             path: '/prevention-management/prevention7/prevention7-4',
             name: 'Prevention7-4',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '“一通三防”例会' }
           },
           {
             path: '/prevention-management/prevention7/prevention7-5',
             name: 'Prevention7-5',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '“一通三防”工作总结' }
           },
           {
@@ -3103,22 +3090,19 @@ const asyncRoutes = [
             meta: { title: '通防任务计划提醒' },
             children: [
               {
-                path:
-                  '/prevention-management/prevention7/prevention7-8/prevention7-8-1',
+                path: '/prevention-management/prevention7/prevention7-8/prevention7-8-1',
                 name: 'Prevention7-8-1',
                 component: '/demo/index',
                 meta: { title: '任务计划提醒' }
               },
               {
-                path:
-                  '/prevention-management/prevention7/prevention7-8/prevention7-8-2',
+                path: '/prevention-management/prevention7/prevention7-8/prevention7-8-2',
                 name: 'Prevention7-8-2',
                 component: '/demo/index',
                 meta: { title: '通防提醒日历' }
               },
               {
-                path:
-                  '/prevention-management/prevention7/prevention7-8/prevention7-8-3',
+                path: '/prevention-management/prevention7/prevention7-8/prevention7-8-3',
                 name: 'Prevention7-8-3',
                 component: '/demo/index',
                 meta: { title: '通防任务计划执行' }
@@ -3170,7 +3154,7 @@ const asyncRoutes = [
           {
             path: '/mechatronics/mechanical-manage/mechanical-document',
             name: 'Mechanical1-5',
-            component: '/mechatronics/mechanical-manage/mechanical-document/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '机电数字文档' }
           }
         ]
@@ -3208,7 +3192,7 @@ const asyncRoutes = [
           {
             path: '/mechatronics/transportation-manage/transportation-document',
             name: 'TransportationDocument',
-            component: '/mechatronics/transportation-manage/transportation-document/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '运输数字文档' }
           }
         ]
@@ -3364,13 +3348,15 @@ const asyncRoutes = [
               {
                 path: '/mechatronics/power-supply/power-consumption/team-report-1',
                 name: 'Mechanical5-6-1',
-                component: '/mechatronics/power-supply/power-consumption/team-report-1/index',
+                component:
+                  '/mechatronics/power-supply/power-consumption/team-report-1/index',
                 meta: { title: '供电一队上报' }
               },
               {
                 path: '/mechatronics/power-supply/power-consumption/team-report-2',
                 name: 'Mechanical5-6-2',
-                component: '/mechatronics/power-supply/power-consumption/team-report-2/index',
+                component:
+                  '/mechatronics/power-supply/power-consumption/team-report-2/index',
                 meta: { title: '供电二队上报' }
               }
             ]
@@ -3426,7 +3412,7 @@ const asyncRoutes = [
               {
                 path: '/mechatronics/power-supply/approve/duty-audit',
                 name: 'Mechanical5-7-8',
-                component: '/mechatronics/power-supply/approve/duty-audit/index',
+                component: '/system-management/document-manage/index',
                 meta: { title: '矿总值班审核' }
               }
             ]
@@ -3436,43 +3422,43 @@ const asyncRoutes = [
       {
         path: '/mechatronics/mechanical-maps',
         name: 'Mechanical6',
-        component: '/mechanical-maps/index',
+        component: '/mechatronics/mechanical-maps/index',
         meta: { title: '机电图件' },
         children: [
           {
             path: '/mechatronics/mechanical-maps/drain',
             name: 'Mechanical6-1',
-            component: '/mechatronics/mechanical-maps/drain/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '主排水系统图' }
           },
           {
             path: '/mechatronics/mechanical-maps/water-supply',
             name: 'Mechanical6-2',
-            component: '/mechatronics/mechanical-maps/water-supply/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '供水系统图' }
           },
           {
             path: '/mechatronics/mechanical-maps/pressure-air',
             name: 'Mechanical6-3',
-            component: '/mechatronics/mechanical-maps/pressure-air/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '压风系统图' }
           },
           {
             path: '/mechatronics/mechanical-maps/equipment-layout',
             name: 'Mechanical6-4',
-            component: '/mechatronics/mechanical-maps/equipment-layout/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '机电设备布置图' }
           },
           {
             path: '/mechatronics/mechanical-maps/power-supply',
             name: 'Mechanical6-5',
-            component: '/mechatronics/mechanical-maps/power-supply/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '井上下供电系统图' }
           },
           {
             path: '/mechatronics/mechanical-maps/transportation',
             name: 'Mechanical6-6',
-            component: '/mechatronics/mechanical-maps/transportation/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '运输系统图' }
           }
         ]
@@ -3486,31 +3472,31 @@ const asyncRoutes = [
           {
             path: '/mechatronics/technology-manage/regulation',
             name: 'Mechanical7-1',
-            component: '/mechatronics/technology-manage/regulation/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '规章制度' }
           },
           {
             path: '/mechatronics/technology-manage/operation',
             name: 'Mechanical7-2',
-            component: '/mechatronics/technology-manage/operation/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '操作规程' }
           },
           {
             path: '/mechatronics/technology-manage/information',
             name: 'Mechanical7-3',
-            component: '/mechatronics/technology-manage/information/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '资料文件' }
           },
           {
             path: '/mechatronics/technology-manage/relevant-standard',
             name: 'Mechanical7-4',
-            component: '/mechatronics/technology-manage/relevant-standard/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '相关标准' }
           },
           {
             path: '/mechatronics/technology-manage/technical-documents',
             name: 'Mechanical7-5',
-            component: '/mechatronics/technology-manage/technical-documents/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '机电技术档案' }
           }
         ]
@@ -3640,8 +3626,7 @@ const asyncRoutes = [
           {
             path: '/system-management/authority-manage/organization-manage',
             name: 'Authority3',
-            component:
-              '/system-management/authority-manage/organization-manage/index',
+            component: '/system-management/authority-manage/organization-manage/index',
             meta: { title: '组织机构管理' }
           },
           {
@@ -3665,48 +3650,46 @@ const asyncRoutes = [
           {
             path: '/system-management/authority-manage/resource-manage',
             name: 'Authority6',
-            component:
-              '/system-management/authority-manage/resource-manage/index',
+            component: '/system-management/authority-manage/resource-manage/index',
             meta: { title: '资源权限管理' }
           },
           {
             path: '/system-management/authority-manage/personnel-manage',
             name: 'Authority7',
-            component:
-              '/system-management/authority-manage/personnel-manage/index',
+            component: '/system-management/authority-manage/personnel-manage/index',
             meta: { title: '人员管理' }
           }
         ]
       },
       {
-        path: '/system-management/system1',
-        name: 'System1',
+        path: '/system-management/portal-manage',
+        name: 'PortalManage',
         component: '/demo/index',
         meta: { title: '门户设置管理' },
         children: [
           {
-            path: '/system-management/system1/system1-1',
-            name: 'System1-1',
-            component: '/demo/index',
+            path: '/system-management/portal-manage/portal-resource',
+            name: 'PortalResource',
+            component: '/system-management/portal-manage/portal-resource/index',
             meta: { title: '门户资源设置' }
           },
           {
-            path: '/system-management/system1/system1-2',
-            name: 'System1-2',
-            component: '/demo/index',
+            path: '/system-management/portal-manage/portal-authority',
+            name: 'PortalAuthority',
+            component: '/system-management/portal-manage/portal-authority/index',
+            meta: { title: '门户权限设置' }
+          },
+          {
+            path: '/system-management/portal-manage/portal-layout',
+            name: 'PortalLayout',
+            component: '/system-management/portal-manage/portal-layout/index',
             meta: { title: '门户布局设置' }
           },
           {
-            path: '/system-management/system1/system1-3',
+            path: '/system-management/portal-manage/portal-content',
             name: 'System1-3',
             component: '/demo/index',
             meta: { title: '门户内容设置' }
-          },
-          {
-            path: '/system-management/system1/system1-4',
-            name: 'System1-4',
-            component: '/demo/index',
-            meta: { title: '门户权限设置' }
           }
         ]
       },
@@ -3849,25 +3832,26 @@ const asyncRoutes = [
           {
             path: '/system-management/system5/system5-1',
             name: 'System5-1',
-            component: '/demo/index',
+            component: '/system-management/one-picture-settings/entity-type/index',
             meta: { title: '实体分类' }
           },
           {
             path: '/system-management/system5/system5-2',
             name: 'System5-2',
-            component: '/demo/index',
+            component:
+              '/system-management/one-picture-settings/disaster-avoidance-route-drawn/index',
             meta: { title: '避灾路线绘制' }
           },
           {
             path: '/system-management/system5/system5-3',
             name: 'System5-3',
-            component: '/demo/index',
+            component: '/system-management/one-picture-settings/entity-set/index',
             meta: { title: '实体设置' }
           },
           {
             path: '/system-management/system5/system5-4',
             name: 'System5-4',
-            component: '/demo/index',
+            component: '/system-management/one-picture-settings/attribute-set/index',
             meta: { title: '属性设置' }
           }
         ]
@@ -3909,7 +3893,10 @@ const asyncRoutes = [
             path: '/system-management/task1',
             name: 'Task1',
             component: '/system-management/task-scheduling/task-config/index',
-            meta: { title: '任务配置', externalUrl: 'http://192.168.1.68:18020/jobgroup' }
+            meta: {
+              title: '任务配置',
+              externalUrl: 'http://192.168.1.68:18020/jobgroup'
+            }
           },
           {
             path: '/system-management/task2',
@@ -3927,7 +3914,10 @@ const asyncRoutes = [
             path: '/system-management/task4',
             name: 'Task4',
             component: '/system-management/task-scheduling/task-log/index',
-            meta: { title: '任务调度日志', externalUrl: 'http://192.168.1.68:18020/joblog' }
+            meta: {
+              title: '任务调度日志',
+              externalUrl: 'http://192.168.1.68:18020/joblog'
+            }
           }
         ]
       },
@@ -4067,169 +4057,162 @@ const asyncRoutes = [
   },
   // 大数据分析
   {
-    path: '/demo-big-data',
-    name: 'DemoBigData',
+    path: '/big-data',
+    name: 'BigData',
     component: 'Layout',
-    redirect: '/demo-big-data/big-data1',
+    redirect: '/big-data/indicator-library/safety-diagnosis',
     meta: { title: '大数据分析' },
     children: [
       {
-        path: '/demo-big-data/big-data1',
-        name: 'BigData1',
-        component: '/demo/index',
+        path: '/big-data/indicator-library',
+        name: 'BigDataIndicatorLibrary',
+        component: '/big-data/indicator-library/index',
         meta: { title: '大数据指标库' },
         children: [
           {
-            path: '/demo-big-data/big-data1/big-data1-1',
-            name: 'BigData1-1',
-            component: '/demo/index',
+            path: '/big-data/indicator-library/safety-diagnosis',
+            name: 'BigDataSafetyDiagnosis',
+            component: '/big-data/indicator-library/safety-diagnosis/index',
             meta: { title: '安全诊断指标库' }
           },
           {
-            path: '/demo-big-data/big-data1/big-data1-2',
-            name: 'BigData1-2',
-            component: '/demo/index',
+            path: '/big-data/indicator-library/warning-alarm',
+            name: 'BigDataWarningAlarm',
+            component: '/big-data/indicator-library/warning-alarm/index',
             meta: { title: '预警报警指标库' }
           },
           {
-            path: '/demo-big-data/big-data1/big-data1-3',
-            name: 'BigData1-3',
-            component: '/demo/index',
+            path: '/big-data/indicator-library/warning-alarm-type',
+            name: 'BigDataWarningAlarmType',
+            component: '/big-data/indicator-library/warning-alarm-type/index',
             meta: { title: '预警报警指标类型' }
           },
           {
-            path: '/demo-big-data/big-data1/big-data1-4',
-            name: 'BigData1-4',
-            component: '/demo/index',
+            path: '/big-data/indicator-library/warning-alarm-data',
+            name: 'BigDataWarningAlarmData',
+            component: '/big-data/indicator-library/warning-alarm-data/index',
             meta: { title: '预警报警实时数据' }
           }
         ]
       },
       {
-        path: '/demo-big-data/big-data2',
-        name: 'BigData2',
-        component: '/demo/index',
+        path: '/big-data/literature-library',
+        name: 'BigDataLiteratureLibrary',
+        component: '/big-data/literature-library/index',
         meta: { title: '大数据分析文献知识库' },
         children: [
           {
-            path: '/demo-big-data/big-data2/big-data2-1',
-            name: 'BigData2-1',
-            component: '/demo/index',
+            path: '/big-data/literature-library/warning-alarm',
+            name: 'BigDataWarningAlarmLibrary',
+            component: '/big-data/literature-library/warning-alarm/index',
             meta: { title: '预警报警知识库' }
           },
           {
-            path: '/demo-big-data/big-data2/big-data2-2',
-            name: 'BigData2-2',
+            path: '/big-data/literature-library/hidden-danger',
+            name: 'BigDataHiddenDangerLibrary',
             component: '/demo/index',
             meta: { title: '隐患知识库' }
           },
           {
-            path: '/demo-big-data/big-data2/big-data2-3',
-            name: 'BigData2-3',
-            component: '/demo/index',
+            path: '/big-data/literature-library/three-violations',
+            name: 'BigDataThreeViolationsLibrary',
+            component: '/big-data/literature-library/three-violations/index',
             meta: { title: '三违知识库' }
           },
           {
-            path: '/demo-big-data/big-data2/big-data2-4',
-            name: 'BigData2-4',
-            component: '/demo/index',
+            path: '/big-data/literature-library/safety-specification',
+            name: 'BigDataSafetySpecification',
+            component: '/big-data/literature-library/safety-specification/index',
             meta: { title: '安全规程' }
           },
           {
-            path: '/demo-big-data/big-data2/big-data2-5',
-            name: 'BigData2-5',
-            component: '/demo/index',
+            path: '/big-data/literature-library/operating-specification',
+            name: 'BigDataOperatingSpecification',
+            component: '/big-data/literature-library/operating-specification/index',
             meta: { title: '操作规程' }
           }
         ]
       },
       {
-        path: '/demo-big-data/big-data3',
+        path: '/big-data/data-analysis',
         name: 'BigData3',
         component: '/demo/index',
         meta: { title: '大数据分析' },
         children: [
           {
-            path: '/demo-big-data/big-data3/big-data3-1',
+            path: '/big-data/data-analysis/data-analysis-1',
             name: 'BigData3-1',
             component: '/demo/index',
-            meta: { title: '决策分析' },
-            children: [
-              {
-                path: '/demo-big-data/big-data3/big-data3-1/big-data3-1-1',
-                name: 'BigData3-1-1',
-                component: '/demo/index',
-                meta: { title: '重点作业区域安全等级评价' }
-              },
-              {
-                path: '/demo-big-data/big-data3/big-data3-1/big-data3-1-2',
-                name: 'BigData3-1-2',
-                component: '/demo/index',
-                meta: { title: '风险评价' }
-              },
-              {
-                path: '/demo-big-data/big-data3/big-data3-1/big-data3-1-3',
-                name: 'BigData3-1-3',
-                component: '/demo/index',
-                meta: { title: '动态排产' }
-              },
-              {
-                path: '/demo-big-data/big-data3/big-data3-1/big-data3-1-4',
-                name: 'BigData3-1-4',
-                component: '/demo/index',
-                meta: { title: '大型设备运维及管理' }
-              },
-              {
-                path: '/demo-big-data/big-data3/big-data3-1/big-data3-1-5',
-                name: 'BigData3-1-5',
-                component: '/demo/index',
-                meta: { title: '精细化成本核算' }
-              },
-              {
-                path: '/demo-big-data/big-data3/big-data3-1/big-data3-1-6',
-                name: 'BigData3-1-6',
-                component: '/demo/index',
-                meta: { title: '应急救援' }
-              }
-            ]
+            redirect: '/big-data-analysis/decision-analysis',
+            meta: { title: '决策分析' }
           },
           {
-            path: '/demo-big-data/big-data3/big-data3-2',
+            path: '/big-data/data-analysis/data-analysis-2',
             name: 'BigData3-2',
             component: '/demo/index',
-            meta: { title: '专题分析' },
-            children: [
-              {
-                path: '/demo-big-data/big-data3/big-data3-2/big-data3-2-1',
-                name: 'BigData3-2-1',
-                component: '/demo/index',
-                meta: { title: '安全管理专题分析' }
-              },
-              {
-                path: '/demo-big-data/big-data3/big-data3-2/big-data3-2-2',
-                name: 'BigData3-2-2',
-                component: '/demo/index',
-                meta: { title: '生产运行专题分析' }
-              },
-              {
-                path: '/demo-big-data/big-data3/big-data3-2/big-data3-2-3',
-                name: 'BigData3-2-3',
-                component: '/demo/index',
-                meta: { title: '经营专题分析' }
-              },
-              {
-                path: '/demo-big-data/big-data3/big-data3-2/big-data3-2-4',
-                name: 'BigData3-2-4',
-                component: '/demo/index',
-                meta: { title: '调度专题分析' }
-              },
-              {
-                path: '/demo-big-data/big-data3/big-data3-2/big-data3-2-5',
-                name: 'BigData3-2-5',
-                component: '/demo/index',
-                meta: { title: '应急专题分析' }
-              }
-            ]
+            redirect: '/big-data-analysis/specific-analysis/safety-management',
+            meta: { title: '专题分析' }
+          }
+        ]
+      }
+    ]
+  },
+  // 大数据分析看板
+  {
+    path: '/big-data-analysis',
+    name: 'BigDataAnalysis',
+    component: '/big-data/data-analysis/index',
+    redirect: '/big-data-analysis/decision-analysis/security-level',
+    meta: { title: '大数据分析看板', hidden: true },
+    children: [
+      {
+        path: '/big-data-analysis/decision-analysis',
+        name: 'BigDataDecisionAnalysis',
+        component: '/big-data/data-analysis/decision-analysis/index',
+        meta: { title: '决策分析' }
+      },
+      {
+        path: '/big-data-analysis/specific-analysis',
+        name: 'BigDataSpecificAnalysis',
+        component: '/big-data/data-analysis/specific-analysis/index',
+        redirect: '/big-data-analysis/specific-analysis/safety-management',
+        meta: { title: '专题分析' },
+        children: [
+          {
+            path: '/big-data-analysis/specific-analysis/safety-management',
+            name: 'BigDataSafetyManagement',
+            component: '/big-data/data-analysis/specific-analysis/safety-management/index',
+            meta: { title: '安全管理' }
+          },
+          {
+            path: '/big-data-analysis/specific-analysis/wisdom-brain',
+            name: 'BigDataWisdomBrain',
+            component: '/big-data/data-analysis/specific-analysis/wisdom-brain/index',
+            meta: { title: '智慧大脑' }
+          },
+          {
+            path: '/big-data-analysis/specific-analysis/monitor-inspect',
+            name: 'BigDataWisdomBrain',
+            component: '/big-data/data-analysis/specific-analysis/monitor-inspect/index',
+            meta: { title: '监测监控' }
+          },
+          {
+            path: '/big-data-analysis/specific-analysis/business-analysis',
+            name: 'BigDataBusinessAnalysis',
+            component: '/big-data/data-analysis/specific-analysis/business-analysis/index',
+            meta: { title: '经营专题' }
+          },
+          {
+            path: '/big-data-analysis/specific-analysis/schedule-analysis',
+            name: 'BigDataScheduleAnalysis',
+            component: '/big-data/data-analysis/specific-analysis/schedule-analysis/index',
+            meta: { title: '调度专题' }
+          },
+          {
+            path: '/big-data-analysis/specific-analysis/emergency-analysis',
+            name: 'BigDataEmergencyAnalysis',
+            component: '/big-data/data-analysis/specific-analysis/emergency-analysis/index',
+            meta: { title: '应急专题' }
           }
         ]
       }
@@ -4240,19 +4223,20 @@ const asyncRoutes = [
     path: '/demo-science',
     name: 'DemoScience',
     component: 'Layout',
-    redirect: '/demo-science/science1',
+    redirect: '/demo-science/science1/science1-1',
     meta: { title: '科技创新' },
     children: [
       {
         path: '/demo-science/science1',
         name: 'Science1',
         component: '/demo/index',
+        redirect: '/demo-science/science1/science1-1',
         meta: { title: '科技成果' },
         children: [
           {
             path: '/demo-science/science1/science1-1',
             name: 'Science1-1',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '科技成果申报' }
           }
         ]
@@ -4261,12 +4245,13 @@ const asyncRoutes = [
         path: '/demo-science/science2',
         name: 'Science2',
         component: '/demo/index',
+        redirect: '/demo-science/science2/science2-1',
         meta: { title: '获奖成果' },
         children: [
           {
             path: '/demo-science/science2/science2-1',
             name: 'Science2-1',
-            component: '/demo/index',
+            component: '/system-management/document-manage/index',
             meta: { title: '历年获奖成果展示' }
           }
         ]
@@ -4357,7 +4342,7 @@ const asyncRoutes = [
       {
         path: '/demo-intelligent-search/search',
         name: 'Search',
-        component: '/demo/index',
+        component: '/intelligent-search/index',
         meta: { title: '智能检索' }
       }
     ]
@@ -4385,8 +4370,11 @@ const asyncRoutes = [
           {
             path: '/demo-data/data1/data1-2',
             name: 'Data1-2',
-            component: '/demo/index',
-            meta: { title: '数据源管理' }
+            component: '/data-management/data-collection/data-source-management/index',
+            meta: {
+              title: '数据源管理',
+              externalUrl: 'http://192.168.1.9:19000/assetsManagement/dataSource'
+            }
           },
           {
             path: '/demo-data/data1/data1-3',
@@ -4417,20 +4405,74 @@ const asyncRoutes = [
           {
             path: '/demo-data/data2/data2-1',
             name: 'Data2-1',
-            component: '/demo/index',
-            meta: { title: '数据资源管理' }
+            component: '/data-management/data-assets/data-sheet-management/index',
+            meta: {
+              title: '数据表管理',
+              externalUrl: 'http://192.168.1.9:19000/assetsManagement/dataTable'
+            }
           },
           {
             path: '/demo-data/data2/data2-2',
             name: 'Data2-2',
-            component: '/demo/index',
-            meta: { title: '资源目录管理' }
+            component: '/data-management/data-assets/data-api-management/index',
+            meta: {
+              title: '数据API管理',
+              externalUrl: 'http://192.168.1.9:19000/assetsManagement/dataApi'
+            }
           },
           {
             path: '/demo-data/data2/data2-3',
             name: 'Data2-3',
-            component: '/demo/index',
-            meta: { title: '数据质量管理' }
+            component: '/data-management/data-assets/data-quality-management/index',
+            meta: {
+              title: '数据质量管理',
+              externalUrl: 'http://192.168.1.9:19000/assetsManagement/dataQuality'
+            }
+          },
+          {
+            path: '/demo-data/data2/data2-4',
+            name: 'Data2-4',
+            component: '/data-management/data-assets/theme-library-management/index',
+            meta: {
+              title: '主题库管理',
+              externalUrl: 'http://192.168.1.9:19000/assetsManagement/topic'
+            }
+          },
+          {
+            path: '/demo-data/data2/data2-5',
+            name: 'Data2-5',
+            component: '/data-management/data-assets/data-import/index',
+            meta: {
+              title: '数据导入',
+              externalUrl: 'http://192.168.1.9:19000/assetsManagement/import'
+            }
+          },
+          {
+            path: '/demo-data/data2/data2-6',
+            name: 'Data2-6',
+            component: '/data-management/data-assets/data-approval/index',
+            meta: {
+              title: '数据审批',
+              externalUrl: 'http://192.168.1.9:19000/assetsManagement/dataApproval'
+            }
+          },
+          {
+            path: '/demo-data/data2/data2-7',
+            name: 'Data2-7',
+            component: '/data-management/data-assets/data-back/index',
+            meta: {
+              title: '数据追溯',
+              externalUrl: 'http://192.168.1.9:19000/assetsManagement/dataBack'
+            }
+          },
+          {
+            path: '/demo-data/data2/data2-8',
+            name: 'Data2-8',
+            component: '/data-management/data-assets/etl-job-management/index',
+            meta: {
+              title: 'ETL作业管理',
+              externalUrl: 'http://192.168.1.9:19000/assetsManagement/etlJob'
+            }
           }
         ]
       },
@@ -4590,7 +4632,7 @@ module.exports = [
   {
     url: '/example/route',
     type: 'get',
-    response: config => {
+    response: (config) => {
       return {
         code: 200,
         data: asyncRoutes

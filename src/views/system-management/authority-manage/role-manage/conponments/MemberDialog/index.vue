@@ -1,129 +1,134 @@
 <template>
   <el-dialog :title="config.title" :visible.sync="dialogVisible" :width="config.width || '500px'" :before-close="closeDialog">
     <div v-if="config.type =='member'" class="member">
-      <div class="filters">
-        <el-button type="primary" size="medium" @click="membersVisible"><i class="el-icon-plus el-icon--left" />添加成员
-        </el-button>
-        <el-button type="danger" size="medium" :disabled="deleteDisabled" @click="removeMember"><i class="el-icon-delete el-icon--left" />移除成员
-        </el-button>
-        <el-button size="medium" @click="synchro"><i class="el-icon-refresh el-icon--left" />同步
-        </el-button>
-        <el-input v-model="content" placeholder="工号、姓名、登录名" class="filter-item" />
-        <el-button type="primary" size="medium" @click="search">搜索
-        </el-button>
+      <div class="filter-bar">
+        <filter-bar :config="memberFilterConfig" style="display: inline-block;" @search-click="search" />
+        <div style="display: inline-block;">
+          <div class="filter-bar__item filter_button">
+            <el-button icon="el-icon-plus el-icon--left" type="primary" size="medium" @click="membersVisible()">添加成员</el-button>
+          </div>
+          <div class="filter-bar__item filter_button">
+            <el-button
+              icon="el-icon-delete el-icon--left"
+              type="primary"
+              size="medium"
+              :disabled="deleteDisabled"
+              @click="removeMember()"
+            >移除成员</el-button>
+          </div>
+        </div>
       </div>
-      <list-table :id="id" :list="roleUserInfo.roleUserList" :list-loading="listLoading" :config="memberConfig" @selection-change="selectionChange" />
+      <list-table
+        :id="id"
+        :list="roleUserInfo.roleUserList"
+        :list-loading="listLoading"
+        :config="roleUserInfo.memberConfig"
+        @selection-change="selectionChange"
+      />
     </div>
     <div slot="footer" class="dialog-footer">
-      <pagination v-show="roleUserInfo.total>0" :total="roleUserInfo.total" :page.sync="roleUserInfo.listQuery.page" :limit.sync="roleUserInfo.listQuery.pagerows"
-        @pagination="updataPage" />
+      <pagination
+        v-show="roleUserInfo.total>0"
+        :total="roleUserInfo.total"
+        :page.sync="roleUserInfo.page"
+        :limit.sync="roleUserInfo.pagerows"
+        @pagination="updataPage"
+      />
     </div>
   </el-dialog>
 </template>
 <script>
-  import {
-    deleteRoleUser
-  } from '@/api/authority-management'
-  import ListTable from '@/components/ListTable'
-  import Pagination from '@/components/Pagination'
-  import {
-    memberConfig
-  } from '@/data/authority-management'
-  export default {
-    components: {
-      ListTable,
-      Pagination
+import {
+  deleteRoleUser
+  // getOrganTree
+} from '@/api/authority-management'
+import FilterBar from '@/components/FilterBar'
+import ListTable from '@/components/ListTable'
+import Pagination from '@/components/Pagination'
+import {
+  memberFilterConfig
+} from '@/data/authority-management'
+export default {
+  components: {
+    FilterBar,
+    ListTable,
+    Pagination
+  },
+  props: {
+    dialogVisible: {
+      type: Boolean,
+      default: false
     },
-    props: {
-      dialogVisible: {
-        type: Boolean,
-        default: false
-      },
-      // 弹窗配置项
-      config: {
-        type: Object,
-        default: () => ({})
-      },
-      selectRole: {
-        type: Object,
-        default: () => ({})
-      },
-      roleUserInfo:{
-        type: Object,
-        default: () => ({})
+    // 弹窗配置项
+    config: {
+      type: Object,
+      default: () => ({})
+    },
+    selectRole: {
+      type: Object,
+      default: () => ({})
+    },
+    roleUserInfo: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  data() {
+    return {
+      formData: {}, // 弹窗表单
+      id: 'member',
+      deleteDisabled: true,
+      list: [],
+      memberFilterConfig,
+      listLoading: false,
+      // total: this.roleUserInfo.total,
+      // listQuery: {
+      //   page: 1,
+      //   pagerows: 10
+      // },
+      selectMember: []
+    }
+  },
+  created() {},
+  methods: {
+    // 更新组件内 form 数据
+    updataPage(_data) {
+      this.$emit('updataPage', _data, 1)
+    },
+    membersVisible() {
+      this.$emit('membersVisible')
+    },
+    closeDialog() {
+      this.$emit('closeDialog')
+    },
+    removeMember() {
+      const sysUserIds = []
+      for (const _s of this.selectMember) {
+        sysUserIds.push(_s.sysUserId)
       }
-      // 弹窗表单
-      // formData: {
-      //   type: Object,
-      //   default: () => ({})
-      // }
-    },
-    data() {
-      return {
-        formData: {}, // 弹窗表单
-        content: '',
-        id: 'member',
-        deleteDisabled: true,
-        list: [],
-        memberConfig,
-        listLoading: false,
-        total: this.roleUserInfo.total,
-        listQuery: {
-          page: this.roleUserInfo.page,
-          pagerows: this.roleUserInfo.pagerows
-        },
-        selectMember:[]
+      const query = {
+        sysRoleId: this.selectRole.sysRoleId,
+        sysUserIds: sysUserIds
       }
+      deleteRoleUser(query).then(response => {
+        console.log(this.roleUserInfo.page)
+        this.$emit('synchro', this.roleUserInfo.page, this.roleUserInfo.pagerows, 1)
+      })
     },
-    created() {
-      console.log(this.listQuery);
-      console.log(this.total);
+    // 搜索
+    search(data) {
+      this.$emit('search', data.keyword, 1)
     },
-    methods: {
-      // 更新组件内 form 数据
-      updataPage(_data) {
-        this.$emit("updataPage",_data,1)
-      },
-      membersVisible() {
-        this.$emit('membersVisible')
-      },
-      closeDialog() {
-        this.$emit('closeDialog')
-      },
-      removeMember() {
-        console.log(this.roleUserInfo);
-        let sysUserIds = [];
-        for(let _s of this.selectMember){
-          sysUserIds.push(_s.sysUserId);
-        }
-        const query= {
-          sysRoleId: this.selectRole.sysRoleId,
-          sysUserIds: sysUserIds
-        }
-        deleteRoleUser(query).then(response => {
-          this.$emit('synchro',"移除",1)
-        })
-      },
-      // 同步
-      synchro() {
-        this.$emit('synchro', '同步',1)
-      },
-      // 搜索
-      search() {
-        // this.getRoleUserList()/
-        this.$emit("search",this.content,1)
-      },
-      selectionChange(val) {
-        this.selectMember = val
-        console.log(val)
-        if (val.length > 0) {
-          this.deleteDisabled = false
-        } else {
-          this.deleteDisabled = true
-        }
+    selectionChange(val) {
+      this.selectMember = val
+      if (val.length > 0) {
+        this.deleteDisabled = false
+      } else {
+        this.deleteDisabled = true
       }
     }
   }
+}
 </script>
 <style lang="scss" scoped>
   .file-title {
@@ -160,5 +165,25 @@
     .pagination-container {
       padding: 0;
     }
+  }
+
+  .filter-bar {
+    margin: 12px 0 -6px 24px;
+
+    &__item {
+      display: inline-block;
+      margin: 0 40px 0px 0;
+      font-size: 14px;
+
+      label {
+        font-weight: normal;
+        font-size: 14px;
+        margin-right: 4px;
+      }
+    }
+  }
+
+  .filter_button {
+    margin: 0 22px 0px 0;
   }
 </style>

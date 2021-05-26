@@ -12,27 +12,27 @@
           <el-row class="info-list">
             <el-col :span="12">
               <span class="info-tit">所属场所：</span>
-              <span>{{ recordData.area }}</span>
+              <span>{{ recordData.belongPlace }}</span>
             </el-col>
             <el-col :span="12">
               <span class="info-tit">设备名称：</span>
-              <span>{{ recordData.name }}</span>
+              <span>{{ recordData.deviceName }}</span>
             </el-col>
           </el-row>
           <el-row class="info-list">
             <el-col :span="12">
               <span class="info-tit">责任人员：</span>
-              <span>{{ recordData.person }}</span>
+              <span>{{ recordData.dutyBy | formatDutyBy }}</span>
             </el-col>
             <el-col :span="12">
               <span class="info-tit">检修周期：</span>
-              <span>{{ recordData.period }}</span>
+              <span>{{ formatCycle(recordData.cycle) }}</span>
             </el-col>
           </el-row>
           <el-row class="info-list">
             <el-col :span="24">
               <span class="info-tit">维检内容：</span>
-              <span>{{ recordData.maintain }}</span>
+              <span>{{ recordData.maintContent }}</span>
             </el-col>
           </el-row>
         </div>
@@ -42,15 +42,15 @@
         <div class="record-item__info">
           <el-timeline>
             <el-timeline-item
-              v-for="(item,index) in recordData.records"
+              v-for="(item,index) in recordData.dailys"
               :key="index"
               placement="top"
-              :timestamp="item.dateTime"
-              :color="item.complete ? '#0bbd87' : ''"
+              :timestamp="item.oveTime | parseTime"
+              color="#0bbd87"
             >
               <el-card class="info-card">
-                <b style="display:block">维检结果：{{ item.result }}</b>
-                <p>{{ item.log }}</p>
+                <b style="display:block">维检结果：{{ item.oveResult | formatResult }}</b>
+                <p>{{ item.createdBy | formatDutyBy }}于 {{ item.oveTime | parseTimeHMS }} 进行了维检，检修结果为{{ item.oveResult | formatResult }}</p>
               </el-card>
             </el-timeline-item>
           </el-timeline>
@@ -64,7 +64,34 @@
 
 </template>
 <script>
+import { parseTime } from '@/utils'
+
 export default {
+  filters: {
+    parseTime,
+    parseTimeHMS: value => {
+      return parseTime(value, 'yyyy-MM-dd HH:mm:ss')
+    },
+    formatResult: value => value ? '正常' : '异常',
+    // formatCycle: value => {
+    //   const cycleMap = {
+    //     '1': '年',
+    //     '2': '月',
+    //     '3': '周',
+    //     '4': '日'
+    //   }
+    //   return cycleMap[value]
+    // },
+    formatDutyBy: value => {
+      const dutyByMap = {
+        '1': '超级管理员',
+        '2': '管理员',
+        '3': '操作工',
+        '4': '访客'
+      }
+      return dutyByMap[value]
+    }
+  },
   props: {
     dialogVisible: {
       type: Boolean,
@@ -73,45 +100,49 @@ export default {
   },
   data() {
     return {
+      cycleMap: {},
       recordData: {
-        area: '中央区主井提升机房',
-        name: '主电机碳刷',
-        person: '管理员',
-        period: '月',
-        maintain: '请您及时人员对副井主电机碳刷完好情况进行检查',
-        records: [
-          {
-            dateTime: '2021-02-01',
-            complete: 1,
-            result: '正常',
-            log: '超级管理员于2021年02月12日0:00进行了检修，结果为正常'
-          },
-          {
-            dateTime: '2021-01-21',
-            complete: 1,
-            result: '正常',
-            log: '超级管理员于2021年02月12日0:00进行了检修，结果为正常'
-          },
-          {
-            dateTime: '2021-01-21',
-            complete: 1,
-            result: '正常',
-            log: '超级管理员于2021年02月12日0:00进行了检修，结果为正常'
-          }
-        ]
+        belongPlace: '',
+        dailys: []
       }
     }
   },
+  created() {
+    this.__updateCycleMap()
+  },
   methods: {
+    // 获取检修周期列表
+    __updateCycleMap() {
+      // 数据字典 - 检修周期
+      const parentId = 111339
+      this.$store.dispatch('mecha/getDataDictionary', parentId).then((data) => {
+        data.forEach(it => {
+          this.cycleMap[it.dictValue] = it.dictName
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 格式化检修周期
+    formatCycle(val) {
+      return this.cycleMap[val]
+    },
     // 更新父组件 xxxxxDialogVisible 的值
     closeDialog() {
       this.$emit('close-dialog')
     },
 
     // 更新数据
-    updataForm(id) {
-      console.log(id)
-      this.recordData = Object.assign(this.recordData)
+    updataForm(recordData) {
+      console.log(recordData)
+      if (recordData) {
+        this.recordData = Object.assign(this.recordData, recordData)
+      } else {
+        this.recordData = {
+          belongPlace: '',
+          dailys: []
+        }
+      }
     }
 
   }

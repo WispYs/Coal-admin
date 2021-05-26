@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <div class="buttons">
+    <!-- <div class="buttons">
       <div class="buttons_item">
         <el-button type="primary" size="medium" @click="createFeedback"><i class="el-icon-plus el-icon--left" />新建
         </el-button>
@@ -14,7 +14,12 @@
         <el-input v-model="feedbackSearch" size="medium" placeholder="问题名称所属专业创建人终身" />
         <el-button type="primary" size="medium" @click="startSearch">搜索</el-button>
       </div>
-    </div>
+    </div> -->
+    <filter-bar
+      :config="FeedbackFilterConfig"
+      @search-click="queryData"
+      @create-click="openDialog('create')"
+    />
     <list-table :id="id" :list="list" :list-loading="listLoading" :config="FeedbackConfig" @selectionChange="selectionChange" />
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
@@ -33,7 +38,6 @@
     <!-- 上传附件弹窗-->
     <upload-file
       :dialog-visible="uploadDialogVisible"
-      :multiple="false"
       @close-dialog="uploadDialogVisible = false"
       @upload-submit="uploadSubmit"
     />
@@ -49,6 +53,7 @@
 </template>
 
 <script>
+import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
@@ -56,12 +61,14 @@ import UploadFile from '@/components/UploadFile'
 import ProblemHandlingDialog from './components/ProblemHandlingDialog/index.vue'
 // '@/feedback/components/ProblemHandlingDialog/index.vue'
 import {
+  FeedbackFilterConfig,
   FeedbackConfig,
   CreateFeedbackConfig
 } from '@/data/login-log'
 
 export default {
   components: {
+    FilterBar,
     ListTable,
     Pagination,
     FormDialog,
@@ -133,6 +140,7 @@ export default {
       filter: {}, // 筛选项
       listLoading: true,
       // createVisible: false,
+      FeedbackFilterConfig,
       FeedbackConfig,
       CreateFeedbackConfig,
       createDialogVisible: false,

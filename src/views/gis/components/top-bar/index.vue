@@ -23,10 +23,11 @@
         </el-tooltip>
       </span>
       <el-select
-        v-model="value"
+        v-model="defaultMap"
         class="switch"
         size="small"
         placeholder="切换地图"
+        @change="handleChange"
       >
         <el-option
           v-for="item in options"
@@ -42,25 +43,23 @@
 <script>
 export default {
   props: {
-    config: Array
+    config: {
+      type: Array,
+      default: () => {}
+    },
+    options: {
+      type: Array,
+      default: () => {}
+    }
   },
   data() {
     return {
-      options: [
-        {
-          value: '选项1',
-          label: '煤综合图1'
-        },
-        {
-          value: '选项2',
-          label: '煤综合图2'
-        },
-        {
-          value: '选项3',
-          label: '煤综合图3'
-        }
-      ],
-      value: ''
+      defaultMap: '0'
+    }
+  },
+  methods: {
+    handleChange(selectedVal) {
+      this.$emit('handleChange', selectedVal)
     }
   }
 }

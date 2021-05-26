@@ -2,7 +2,7 @@
   <el-dialog
     title="查看备品备件"
     :visible.sync="dialogVisible"
-    width="800px"
+    width="1000px"
     :before-close="closeDialog"
     class="check-spare-wrapper"
   >
@@ -78,7 +78,7 @@ export default {
       this.listLoading = true
       const filter = {
         ...this.filter,
-        keywordField: ['workNumber', 'loginName', 'userName']
+        keywordField: ['spareName', 'area', 'storagePos']
       }
       const query = Object.assign(this.listQuery, filter)
       getSparePartList(query).then(response => {
@@ -88,8 +88,11 @@ export default {
       })
     },
     // 查询数据
-    queryData(filter) {
-      this.filter = Object.assign(this.filter, filter)
+    queryData() {
+      this.filter = Object.assign(this.filter, {
+        kw: this.keyword
+      })
+      this.$set(this.listQuery, 'page', 1)
       this.__fetchData()
     },
     // 更新父组件 xxxxxDialogVisible 的值

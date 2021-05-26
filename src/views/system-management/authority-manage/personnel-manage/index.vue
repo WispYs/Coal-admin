@@ -54,7 +54,6 @@
       <!-- 上传附件弹窗-->
       <upload-file
         :dialog-visible="uploadDialogVisible"
-        :multiple="false"
         @close-dialog="uploadDialogVisible = false"
         @upload-submit="uploadSubmit"
       />
@@ -221,7 +220,7 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.personnelConfig.columns
       })
       return createConfig
@@ -230,7 +229,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.personnelConfig.columns
       })
       return editConfig

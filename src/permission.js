@@ -25,7 +25,7 @@ router.beforeEach(async(to, from, next) => {
       NProgress.done()
     } else {
       // 初始化侧边栏
-      store.dispatch('headbar/initSidebarRoutes', to.path)
+      store.dispatch('sidebar/initSidebarRoutes', to.path)
 
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
       if (hasRoles) {
@@ -34,7 +34,15 @@ router.beforeEach(async(to, from, next) => {
         try {
           const { roles } = await store.dispatch('user/getInfo')
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+          // 在动态路由最后添加 * 重定向到404路由页面
+          accessRoutes.push({
+            path: '*',
+            redirect: '/404',
+            hidden: true
+          })
           router.addRoutes(accessRoutes)
+          // 存储用户收藏菜单
+          await store.dispatch('user/getCollectMenu')
 
           // 如果参数 to 不能找到对应的路由的话，就再执行一次beforeEach直到能找到对应的路由为止。
           // 使用 replace: true 替换掉当前的 history 记录

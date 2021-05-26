@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { getDailyServiceList } from '@/api/mechatronics'
+import { getServicePlanList, getDailyServiceInfo, createDailyService } from '@/api/mechatronics'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -71,21 +71,61 @@ export default {
 
   created() {
     this.__fetchData()
+    // 初始化所属场所下拉框数据
+    this.__updateEquipPlace()
+    // 获取检修周期列表
+    this.__updateServiceCycle()
   },
   methods: {
+    // 初始化所属场所下拉框数据
+    __updateEquipPlace() {
+      this.$store.dispatch('mecha/getEquipPlaceList').then((data) => {
+        const placeData = []
+        data.forEach(it => {
+          placeData.push({
+            label: it.typeName,
+            value: it.id + ''
+          })
+        })
+        DailyServiceTableConfig.columns.forEach(it => {
+          if (it.field === 'deviceTypeId') {
+            it.options = placeData
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 获取检修周期列表
+    __updateServiceCycle() {
+      // 数据字典 - 检修周期
+      const parentId = 111339
+      this.$store.dispatch('mecha/getDataDictionary', parentId).then((data) => {
+        data.forEach(it => {
+          it.value = it.dictValue
+          it.label = it.dictName
+        })
+        DailyServiceTableConfig.columns.forEach(it => {
+          if (it.field === 'cycle') {
+            it.options = data
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
     __fetchData() {
       this.listLoading = true
-      const entity = {
-        ...this.filter
+      const filter = {
+        ...this.filter,
+        keywordField: ['belongPlace', 'deviceName']
       }
-      const query = Object.assign(this.listQuery, { entity })
-      getDailyServiceList(query).then(response => {
+      const query = Object.assign(this.listQuery, filter)
+      getServicePlanList(query).then(response => {
         this.listLoading = false
         response.data.rows.forEach(it => {
           it.createTime = parseTime(it.createTime)
           it.oveTime = parseTime(it.oveTime)
-          it.dutyBy = it.dutyBy + ''
-          it.ccBy = it.ccBy + ''
         })
         this.list = response.data.rows
         this.total = Number(response.data.records)
@@ -94,6 +134,7 @@ export default {
     // 查询数据
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
+      this.$set(this.listQuery, 'page', 1)
       this.__fetchData()
     },
 
@@ -101,24 +142,37 @@ export default {
     otherClick(row, index, item) {
       if (item === '日常维检') {
         const info = {
-          id: row.id,
-          area: row.area,
+          overhaulPlanId: row.id,
+          deviceTypeId: row.deviceTypeId,
+          belongPlace: row.belongPlace,
           deviceName: row.deviceName
         }
         this.$refs.dailyService.updataForm(info)
         this.dailyServiceVisible = true
       } else if (item === '维检记录') {
-        this.$refs.serviceRecord.updataForm(row.id)
-        this.serviceRecordVisible = true
+        getDailyServiceInfo(row.id).then(response => {
+          const info = Object.assign(response.data, {
+            cycle: response.data.cycle + ''
+          })
+          this.$refs.serviceRecord.updataForm(info)
+          this.serviceRecordVisible = true
+        }).catch(err => {
+          console.log(err)
+        })
       }
     },
 
     // 日常维检提交
     dailyServiceSubmit(submitData) {
-      console.log(submitData)
-      this.dailyServiceVisible = false
-      this.$message.success('提交成功')
-      // this.$refs.dailyService.resetForm()
+      createDailyService(submitData).then(response => {
+        this.dailyServiceVisible = false
+        this.$message.success('提交成功')
+        this.$refs.dailyService.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.dailyService.resetSubmitBtn()
+      })
     }
 
   }

@@ -2,25 +2,25 @@
   <el-dialog
     title="操作明细"
     :visible.sync="dialogVisible"
-    width="800px"
+    width="1000px"
     :before-close="closeDialog"
   >
     <div class="spare-detail-container">
       <el-tabs v-model="detailActive">
         <el-tab-pane label="领用信息" name="receive">
-          <div class="detail-item">
+          <div v-loading="detailLoading" class="detail-item">
             <div class="detail-item__info">
               <el-timeline>
                 <el-timeline-item
-                  v-for="(item,index) in detailData.receives"
+                  v-for="(item,index) in detailData"
                   :key="index"
                   placement="top"
-                  :timestamp="item.dateTime"
-                  :color="item.complete ? '#0bbd87' : ''"
+                  :timestamp="item.pickTime | parseTime"
+                  color="#0bbd87"
                 >
                   <el-card class="info-card">
                     <b style="display:block">领用</b>
-                    <p>{{ item.log }}</p>
+                    <p>{{ item.pickBy | formatDutyBy }}领用了{{ item.pickNum }}个</p>
                   </el-card>
                 </el-timeline-item>
               </el-timeline>
@@ -28,19 +28,19 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="入库信息" name="store">
-          <div class="detail-item">
+          <div v-loading="detailLoading" class="detail-item">
             <div class="detail-item__info">
               <el-timeline>
                 <el-timeline-item
-                  v-for="(item,index) in detailData.store"
+                  v-for="(item,index) in detailData"
                   :key="index"
                   placement="top"
-                  :timestamp="item.dateTime"
-                  :color="item.complete ? '#0bbd87' : ''"
+                  :timestamp="item.storageTime | parseTime"
+                  color="#0bbd87"
                 >
                   <el-card class="info-card">
                     <b style="display:block">入库</b>
-                    <p>{{ item.log }}</p>
+                    <p>{{ item.storageBy | formatDutyBy }}领用了{{ item.storageNum }}个</p>
                   </el-card>
                 </el-timeline-item>
               </el-timeline>
@@ -55,7 +55,22 @@
 
 </template>
 <script>
+import { getSpareReceiveList, getSpareStoreList } from '@/api/mechatronics'
+import { parseTime } from '@/utils'
+
 export default {
+  filters: {
+    parseTime,
+    formatDutyBy: value => {
+      const dutyByMap = {
+        '1': '超级管理员',
+        '2': '管理员',
+        '3': '操作工',
+        '4': '访客'
+      }
+      return dutyByMap[value]
+    }
+  },
   props: {
     dialogVisible: {
       type: Boolean,
@@ -64,49 +79,51 @@ export default {
   },
   data() {
     return {
+      id: '',
+      detailLoading: false,
       detailActive: 'receive',
-      detailData: {
-        area: '中央区主井提升机房',
-        name: '主电机碳刷',
-        fault: '主电机设备出现异常',
-        condition: '请您及时对主电机进行检查',
-        time: '2021-03-12 14:41:45',
-        receives: [
-          {
-            dateTime: '2021-02-01',
-            complete: 1,
-            log: '超级管理员于2021年02月12日0:00领用了交流器'
-          },
-          {
-            dateTime: '2021-01-21',
-            complete: 1,
-            log: '超级管理员于2021年02月12日0:00领用了交流器'
-          }
-        ],
-        store: [
-          {
-            dateTime: '2021-02-01',
-            complete: 1,
-            log: '超级管理员于2021年02月12日0:00入库了压风机'
-          },
-          {
-            dateTime: '2021-01-21',
-            complete: 1,
-            log: '超级管理员于2021年02月12日0:00入库了压风机'
-          }
-        ]
-      }
+      detailData: {}
     }
   },
+  watch: {
+    detailActive(val) {
+      if (val === 'receive') {
+        this.__fetchSpareReceiveList()
+      } else if (val === 'store') {
+        this.__fetchSpareStoreList()
+      }
+    }
+
+  },
+  mounted() {
+    this.__fetchSpareReceiveList()
+  },
   methods: {
+    // 获取领用明细列表
+    __fetchSpareReceiveList() {
+      this.detailLoading = true
+      getSpareReceiveList({ sparePartsId: this.id }).then(response => {
+        this.detailLoading = false
+        this.detailData = response.data.rows
+      })
+    },
+    // 获取入库明细列表
+    __fetchSpareStoreList() {
+      getSpareStoreList({ sparePartsId: this.id }).then(response => {
+        this.detailData = response.data.rows
+      })
+    },
     // 更新父组件 xxxxxDialogVisible 的值
     closeDialog() {
+      this.detailData = {}
+      this.detailActive = 'receive'
       this.$emit('close-dialog')
     },
 
     // 更新数据
-    updataForm(data) {
-      this.detailData = Object.assign(this.detailData, data)
+    updataForm(id) {
+      this.id = id
+      this.__fetchSpareReceiveList()
     }
 
   }

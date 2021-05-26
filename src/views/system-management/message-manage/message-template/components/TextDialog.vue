@@ -2,7 +2,7 @@
   <el-dialog
     title="详情"
     :visible.sync="dialogVisible"
-    width="800px"
+    width="1000px"
     class="operation-file-dialog"
     :before-close="closeDialog"
   >

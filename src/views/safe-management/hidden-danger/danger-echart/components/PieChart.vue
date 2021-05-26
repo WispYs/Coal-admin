@@ -44,7 +44,7 @@ export default {
             {
               name: '风险数量',
               type: 'pie',
-              radius: '65%',
+              radius: '66%',
               data: newData,
               label: {
                 show: false

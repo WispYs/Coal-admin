@@ -40,7 +40,7 @@ export function getRiskTissueChildTree(id){
 // 保存风险组织机构对象
 export function saveAqglRiskTissue(data){
   return request({
-    url: SafeManagement + '/aqglRiskTissue/save',
+    url: SafeManagement + '/aqglRiskTissue/saveEntity',
     method: 'post',
     data
   })
@@ -49,7 +49,7 @@ export function saveAqglRiskTissue(data){
 // 更新风险组织机构对象
 export function updateAqglRiskTissue(data){
   return request({
-    url: SafeManagement + '/aqglRiskTissue/update',
+    url: SafeManagement + '/aqglRiskTissue/updateEntity',
     method: 'post',
     data
   })
@@ -85,7 +85,7 @@ export function getAqglHiddenTissueById(id){
 // 保存隐患组织机构
 export function saveAqglHiddenTissue(data){
   return request({
-    url: SafeManagement + '/aqglHiddenTissue/save',
+    url: SafeManagement + '/aqglHiddenTissue/saveEntity',
     method: 'post',
     data
   })
@@ -94,7 +94,7 @@ export function saveAqglHiddenTissue(data){
 // 更新隐患组织机构
 export function updateaqglHiddenTissue(data){
   return request({
-    url: SafeManagement + '/aqglHiddenTissue/update',
+    url: SafeManagement + '/aqglHiddenTissue/updateEntity ',
     method: 'post',
     data
   })

@@ -7,7 +7,11 @@
         <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
       </el-breadcrumb-item>
     </transition-group>
+    <img v-if="!isCollected" class="collect-menu" src="@/assets/images/star_icon_1.png" alt="" @click="setCollectMenu">
+    <img v-else class="collect-menu" src="@/assets/images/star_icon_2.png" alt="" @click="setCollectMenu">
+
   </el-breadcrumb>
+
 </template>
 
 <script>
@@ -16,7 +20,8 @@ import pathToRegexp from 'path-to-regexp'
 export default {
   data() {
     return {
-      levelList: null
+      levelList: null,
+      isCollected: false
     }
   },
   watch: {
@@ -25,29 +30,20 @@ export default {
         return
       }
       this.getBreadcrumb()
+      this.__initCollectMenu()
     }
   },
   created() {
     this.getBreadcrumb()
+    this.__initCollectMenu()
   },
+
   methods: {
     getBreadcrumb() {
-      let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
-      const first = matched[0]
-
-      if (!this.isDashboard(first)) {
-        matched = [{ path: '/dashboard', meta: { title: '首页' }}].concat(matched)
-      }
-
+      const matched = this.$route.matched.filter(item => item.meta && item.meta.title)
       this.levelList = matched
     },
-    isDashboard(route) {
-      const name = route && route.name
-      if (!name) {
-        return false
-      }
-      return name.trim().toLocaleLowerCase() === 'Dashboard'.toLocaleLowerCase()
-    },
+    // 编译path路径
     pathCompile(path) {
       const { params } = this.$route
       var toPath = pathToRegexp.compile(path)
@@ -60,6 +56,45 @@ export default {
         return
       }
       this.$router.push(this.pathCompile(path))
+    },
+    // 获取快捷导航，已收藏的菜单在导航栏中显示满星
+    __initCollectMenu() {
+      const collectMenu = this.$store.state.user.collectMenu
+      const isCollectedMenu = collectMenu.filter(it => it.menuId === this.$route.name)
+      if (isCollectedMenu && isCollectedMenu.length > 0) {
+        this.isCollected = true
+      } else {
+        this.isCollected = false
+      }
+    },
+
+    // 设置快捷导航
+    setCollectMenu() {
+      const routeInfo = {
+        menuId: this.$route.name,
+        menuResource: JSON.stringify({ title: this.$route.meta.title, path: this.$route.path })
+      }
+      if (this.isCollected) {
+        this.$store.dispatch('user/delCollectMenu', this.$route.name).then(data => {
+          console.log(data)
+          this.__initCollectMenu()
+          this.$message.success('取消收藏')
+          // 如果是在门店布局设置页面编辑，刷新当前页面
+          if (this.$route.path === '/system-management/portal-manage/portal-layout') {
+            this.$router.go(0)
+          }
+        })
+      } else {
+        this.$store.dispatch('user/setCollectMenu', routeInfo).then(data => {
+          console.log(data)
+          this.__initCollectMenu()
+          this.$message.success('收藏成功')
+          // 如果是在门店布局设置页面编辑，刷新当前页面
+          if (this.$route.path === '/system-management/portal-manage/portal-layout') {
+            this.$router.go(0)
+          }
+        })
+      }
     }
   }
 }
@@ -87,5 +122,17 @@ export default {
   .current {
     @include primaryColor($primaryColor);
   }
+  .collect-menu {
+    display: inline-block;
+    margin-left: 10px;
+    margin-top: -2px;
+    cursor: pointer;
+  }
+  &:hover {
+    .collect-menu {
+      display: inline-block;
+    }
+  }
 }
+
 </style>

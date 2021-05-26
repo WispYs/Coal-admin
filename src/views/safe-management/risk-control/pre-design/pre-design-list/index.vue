@@ -16,6 +16,7 @@
         :id="id"
         :list="list"
         :list-loading="listLoading"
+        height="calc(100% - 157px)"
         :config="PreDesignTableConfig"
         @selection-change="selectionChange"
       />
@@ -122,7 +123,6 @@ export default {
             } else if (query[q].parentId == 17) {
               if (it.field === 'riskGradeId') {
                 it.options = selectList
-                console.log(it);
               }
             }
           })
@@ -152,11 +152,22 @@ export default {
         keywordField:['riskUserName']
       }
       getAqglRiskIdentifyList(query).then(response => {
-        console.log(response);
+        if (response.data.rows.length > 0) {
+          this.listLoading = false
+          this.list = response.data.rows
+          this.total = Number(response.data.records)
+        } else {
+          if (this.listQuery.page > 0) {
+            this.listQuery.page = this.listQuery.page - 1
+            this.__fetchData()
+          } else {
+            this.listLoading = false
+            this.list = []
+            this.total = 0
+          }
+        }
+      }).catch(err => {
         this.listLoading = false
-        this.list = response.data.rows
-        this.total = Number(response.data.records)
-        console.log(this.list,this.total);
       })
     },
     // 查询数据

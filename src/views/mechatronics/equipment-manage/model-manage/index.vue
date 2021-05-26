@@ -1,219 +1,307 @@
 <template>
-  <div
-    class="page-container has-tree"
-    :class="treeExtend ? 'open-tree' : 'close-tree'"
-  >
-    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" />
+  <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
+    <tree-bar
+      ref="treeBar"
+      :tree-data="treeData"
+      :default-props="treeProp"
+      @handleNodeClick="handleNodeClick"
+    />
 
     <div class="tree-form-container">
-      <div class="filter-bar">
-        <div class="filter-bar__item">
-          <label>关键字：</label>
-          <el-input
-            v-model="keywords"
-            class="filter-item"
-            style="width:200px"
-            placeholder="请输入设备类型"
-            suffix-icon="el-icon-search"
-          />
-        </div>
-        <div class="filter-bar__item">
-          <el-button
-            type="primary"
-            size="medium"
-            @click="search()"
-          >搜索</el-button>
-        </div>
+      <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
+        <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
+      </span>
+      <filter-bar
+        :config="EquipModelFilterConfig"
+        @search-click="queryData"
+        @create-click="openDialog('create')"
+        @reset-click="queryData"
+      />
+      <!-- 表格 -->
+      <list-table
+        :id="id"
+        :list="list"
+        :list-loading="listLoading"
+        :config="EquipModelTableConfig"
+        height="calc(100% - 157px)"
+        @edit-click="(row) => openDialog('edit', row)"
+        @delete-click="deleteClick"
+        @submit-data="editSubmit"
+        @selection-change="selectionChange"
+      />
+
+      <div v-show="total>0" class="page-bottom">
+        <el-button
+          class="page-bottom__delete"
+          type="warning"
+          size="small"
+          plain
+          :disabled="deleteDisabled"
+          @click="deleteBatches"
+        >
+          <i class="el-icon-delete el-icon--left" />批量删除
+        </el-button>
+        <pagination
+          :total="total"
+          :page.sync="listQuery.page"
+          :limit.sync="listQuery.pagerows"
+          @pagination="__fetchData"
+        />
       </div>
-      <el-table
-        ref="multipleTable"
-        v-loading="listLoading"
-        :data="tableData"
-        border
-        fit
-        row-key="id"
-        :load="load"
-        lazy
-        :cell-style="cellStyle"
-        header-cell-class-name="pre-line"
-        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-      >
-        <el-table-column align="center" label="序号" width="95" fixed>
-          <template slot-scope="scope">
-            {{ scope.$index + 1 }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="name" align="center" label="设备类型名称" />
-        <el-table-column prop="code" align="center" label="设备类型编码" />
-        <el-table-column prop="unit" align="center" label="单位" />
-        <el-table-column prop="model" align="center" label="规格型号" />
-        <el-table-column prop="createTime" align="center" label="录入时间" />
-        <el-table-column prop="remark" align="center" label="备注" />
-        <el-table-column fixed="right" label="操作" width="160" align="center">
-          <el-button type="text" size="small" @click="edit()">编辑</el-button>
-          <el-button
-            type="text"
-            size="small"
-            style="color: #f56c6c"
-            @click="del()"
-          >删除</el-button>
-        </el-table-column>
-      </el-table>
+
+      <!-- 新建弹窗 -->
+      <form-dialog
+        ref="createDialog"
+        :config="initCreateConfig()"
+        :dialog-visible="createDialogVisible"
+        @close-dialog="createDialogVisible = false"
+        @submit="createSubmit"
+      />
+      <!-- 编辑弹窗 -->
+      <form-dialog
+        ref="editDialog"
+        :config="initEditConfig()"
+        :dialog-visible="editDialogVisible"
+        @close-dialog="editDialogVisible = false"
+        @submit="editSubmit"
+      />
+
     </div>
+
   </div>
 </template>
+
 <script>
+import { getModelList, createModel, getModelInfo, editModel, delModel, getCategoryList } from '@/api/mechatronics'
 import TreeBar from '@/components/TreeBar'
+import FilterBar from '@/components/FilterBar'
+import ListTable from '@/components/ListTable'
+import Pagination from '@/components/Pagination'
+import FormDialog from '@/components/FormDialog'
+import { EquipModelTableConfig, EquipModelFilterConfig } from '@/data/mechatronics'
+import { parseTime } from '@/utils'
 export default {
-  components: { TreeBar },
+  components: {
+    TreeBar,
+    FilterBar,
+    ListTable,
+    Pagination,
+    FormDialog
+  },
   data() {
     return {
+      id: 'model-manage',
+      list: [],
+      total: 0,
+      listQuery: {
+        page: 1,
+        pagerows: 10
+      },
+      currentNum: 0, // 当前页数据数量，用于判断删除后是否跳转到上一页
+      filter: {}, // 筛选项
+      listLoading: true,
+      EquipModelFilterConfig,
+      EquipModelTableConfig,
+      createDialogVisible: false,
+      editDialogVisible: false,
       treeExtend: true,
       treeData: {
-        title: '选择专业',
-        list: [
-          {
-            label: '专业',
-            children: [
-              {
-                label: '安检'
-              },
-              {
-                label: '采煤'
-              },
-              {
-                label: '掘进（中央区）'
-              },
-              {
-                label: '掘进（南区）'
-              },
-              {
-                label: '机电运输'
-              },
-              {
-                label: '一通三防'
-              },
-              {
-                label: '地面设施'
-              },
-              {
-                label: '维护'
-              },
-              {
-                label: '地质灾害防治'
-              }
-            ]
-          }
-        ]
+        title: '选择设备类型',
+        tId: 'id',
+        list: []
       },
-      keywords: '',
-      listLoading: false,
-      tableData: [
-        {
-          id: '1',
-          name: '采煤机',
-          code: '02',
-          unit: '台',
-          model: 'GQ022114',
-          createTime: '2021.01.25',
-          hasChildren: true,
-          remark: ''
-        }
-      ],
-      maps: new Map()
+      treeProp: {
+        children: 'children',
+        label: 'typeName'
+      },
+      machineTypeId: '', //  设备类型id
+      multipleSelection: [], // 多选项
+      deleteDisabled: true // 批量删除置灰
     }
   },
+
+  created() {
+    this.__fetchData()
+    this.__updateCategoryTree()
+  },
   methods: {
-    search() {
-      console.log(this.keywords)
-    },
-    edit() {
-      console.log('edit')
-      console.log(this.tableData)
-      this.refreshLoadTree('1')
-    },
-    del() {
-      console.log('del')
-    },
-    // 表格单元格样式
-    cellStyle() {
-      return 'font-size: 13px'
-    },
-    load(tree, treeNode, resolve, data) {
-      this.listLoading = true
-      // 将当前选中节点数据存储到map中
-      this.maps.set(tree.id, { tree, treeNode, resolve })
-      const newData = data || [
-        {
-          id: '2',
-          name: '采煤机',
-          code: '12',
-          unit: '台',
-          model: 'GQ022114',
-          createTime: '2021.01.25',
-          remark: ''
-        }, {
-          id: '3',
-          name: '采煤机',
-          code: '13',
-          unit: '台',
-          model: 'GQ022114',
-          createTime: '2021.01.25',
-          remark: ''
-        }
-      ]
-      setTimeout(() => {
-        resolve(newData)
-        this.listLoading = false
-      }, 1000)
-    },
-    // 重新触发树形表格的loadTree函数(因项目中需要多次触发loadTree方法，故封装成一个方法)
-    refreshLoadTree(parentId) {
-      // 根据父级id取出对应节点数据
-      console.log(this.maps)
-      console.log(this.maps.get(parentId))
-      const { tree, treeNode, resolve } = this.maps.get(parentId)
+    // 接口获取设备类型列表
+    __updateCategoryTree() {
+      this.$store.dispatch('mecha/getCategoryList').then((data) => {
+        this.treeData.list = [{
+          id: '',
+          typeName: '全部',
+          children: data
+        }]
+        // 设置树结构默认选中项
+        this.$refs.treeBar.setCurrentKey('')
 
-      this.$set(this.$refs.multipleTable.store.states.lazyTreeNodeMap, parentId, [])
-      if (tree) {
-        const data = [
-          {
-            id: '2',
-            name: '挖煤机',
-            code: '12',
-            unit: '台',
-            model: 'GQ022114',
-            createTime: '2021.01.25',
-            remark: ''
-          }, {
-            id: '3',
-            name: '采煤机',
-            code: '13',
-            unit: '台',
-            model: 'GQ022114',
-            createTime: '2021.01.25',
-            remark: ''
+        // 更新设备类型下拉框数据config
+        const typeData = []
+        data.forEach(it => {
+          typeData.push({
+            label: it.typeName,
+            value: it.id + ''
+          })
+        })
+        EquipModelTableConfig.columns.forEach(it => {
+          if (it.field === 'machineTypeId') {
+            it.options = typeData
           }
-        ]
-        this.load(tree, treeNode, resolve, data)
-      }
-    }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
 
+    __fetchData() {
+      this.listLoading = true
+      const filter = {
+        ...this.filter,
+        keywordField: ['typeName', 'typeCode'],
+        machineTypeId: this.machineTypeId
+      }
+      const query = Object.assign(this.listQuery, filter)
+      getModelList(query).then(response => {
+        this.listLoading = false
+        response.data.rows.forEach(it => {
+          it.createTime = parseTime(it.createTime)
+        })
+
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
+        this.currentNum = response.data.rows.length
+      })
+    },
+    // 查询数据
+    queryData(filter) {
+      this.filter = Object.assign(this.filter, filter)
+      this.$set(this.listQuery, 'page', 1)
+      this.__fetchData()
+    },
+
+    // 初始化新建窗口配置
+    initCreateConfig() {
+      const createConfig = Object.assign({
+        title: '新建',
+        width: '1000px',
+        form: this.EquipModelTableConfig.columns
+      })
+      return createConfig
+    },
+    // 初始化编辑窗口配置
+    initEditConfig() {
+      const editConfig = Object.assign({
+        title: '编辑',
+        width: '1000px',
+        form: this.EquipModelTableConfig.columns
+      })
+      return editConfig
+    },
+
+    // 打开弹窗
+    openDialog(name, row) {
+      const visible = `${name}DialogVisible`
+      this[visible] = true
+
+      // 如果有数据，更新子组件的 formData
+      if (row) {
+        this.$refs[`${name}Dialog`].updataForm(row)
+        getModelInfo(row.id).then(response => {
+          const info = Object.assign(response.data, {
+            machineTypeId: response.data.machineTypeId + ''
+          })
+          this.$refs.editDialog.updataForm(info)
+        })
+      }
+    },
+    // 删除当前页最后一条数据后跳转到前一页
+    /**
+     * @params{number} num 删除数量
+     */
+    changeCurrentPage(num) {
+      this.currentNum = this.currentNum - num
+      if (this.currentNum <= 0) {
+        if (this.listQuery.page > 1) {
+          this.$set(this.listQuery, 'page', this.listQuery.page - 1)
+        }
+      }
+    },
+    // 删除
+    deleteClick(row) {
+      this.$confirm('确定删除该项?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        delModel(row.id).then(response => {
+          this.$message.success('删除成功')
+          this.changeCurrentPage(1)
+          this.__fetchData()
+        })
+      })
+    },
+    // 新增
+    createSubmit(submitData) {
+      const query = Object.assign(submitData)
+      createModel(query).then(response => {
+        this.createDialogVisible = false
+        this.$message.success('新建成功')
+        this.$refs.createDialog.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.createDialog.resetSubmitBtn()
+      })
+    },
+    // 编辑
+    editSubmit(submitData) {
+      const query = Object.assign(submitData)
+      editModel(query).then(response => {
+        this.editDialogVisible = false
+        this.$message.success('编辑成功')
+        this.$refs.editDialog.resetForm()
+        this.__fetchData()
+      })
+    },
+
+    // 改变所选项
+    selectionChange(val) {
+      this.multipleSelection = val
+      if (this.multipleSelection.length > 0) {
+        this.deleteDisabled = false
+      } else {
+        this.deleteDisabled = true
+      }
+      console.log(this.multipleSelection)
+    },
+
+    // 批量删除
+    deleteBatches() {
+      const selectId = []
+      this.multipleSelection.forEach(it => selectId.push(it.id))
+      console.log(selectId)
+      if (selectId.length === 0) {
+        this.$message.warning('请选择所删除的项')
+        return false
+      }
+      this.$confirm('确定删除所选中项?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(selectId)
+        this.$message.success('删除成功')
+        this.changeCurrentPage(selectId.length)
+        this.__fetchData()
+      })
+    },
+
+    // 点击树形菜单时触发
+    handleNodeClick(data) {
+      this.machineTypeId = data.id
+      this.queryData()
+    }
   }
 }
 </script>
-<style lang="scss" scoped>
-.filter-bar {
-  margin-bottom: 10px;
-  &__item {
-    display: inline-block;
-    margin: 0 40px 15px 0;
-    font-size: 14px;
-    label {
-      font-weight: normal;
-      font-size: 14px;
-      margin-right: 4px;
-    }
-  }
-}
-</style>

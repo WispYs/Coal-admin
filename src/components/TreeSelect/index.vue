@@ -6,6 +6,7 @@
     class="tree-select"
     popper-class="tree-select-popper"
     :placeholder="placeholder"
+    :disabled="disabled"
     @clear="clearHandle"
     @visible-change="dropdownShow"
   >
@@ -59,7 +60,6 @@ export default {
       type: [Number, String],
       default: () => null
     },
-    /* 可清空选项 */
     clearable: {
       type: Boolean,
       default: () => true
@@ -69,13 +69,15 @@ export default {
       type: Boolean,
       default: () => false
     },
-    /* 占位符 */
     placeholder: {
       type: String,
       default: () => '请选择'
     },
-    /* 搜索框 */
     hasSearch: {
+      type: Boolean,
+      default: () => false
+    },
+    disabled: {
       type: Boolean,
       default: () => false
     }
@@ -99,13 +101,13 @@ export default {
     }
   },
   mounted() {
-    console.log(this.options)
     this.initHandle()
   },
   methods: {
     // 初始化值
     initHandle() {
-      if (this.valueId) {
+      const selectTree = this.$refs.selectTree.getNode(this.valueId)
+      if (this.valueId && selectTree) {
         // 初始化显示
         this.valueTitle = this.$refs.selectTree.getNode(this.valueId).data[this.props.label]
         // 设置默认选中

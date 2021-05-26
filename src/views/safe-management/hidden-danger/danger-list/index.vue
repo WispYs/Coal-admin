@@ -1,14 +1,17 @@
 <template>
   <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
-    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @handleNodeClick="handleNodeClick" />
+    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @checkChange="checkChange" />
     <div class="tree-form-container">
       <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
         <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
       </span>
       <filter-bar :config="dangerListFilterConfig" @search-click="queryData" style="display: inline-block;"/>
-      <list-table :id="id" :list="list" :list-loading="listLoading" :config="dangerListTableConfig"/>
+      <list-table :id="id" :list="list" :list-loading="listLoading" :config="dangerListTableConfig" height="calc(100% - 157px)" @other-click="otherClick"/>
       <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows"
         @pagination="pagination" />
+      <detailed-information ref="threeViolationsDetailed" :dialog-visible="detailedInformationDisabled"
+          @close-dialog="detailedInformationDisabled = false">
+      </detailed-information>
     </div>
   </div>
 </template>
@@ -21,12 +24,14 @@ import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import TreeBar from '@/components/TreeBar'
+import DetailedInformation from './components/detailed-information'
 export default {
   components:{
     FilterBar,
     ListTable,
     Pagination,
-    TreeBar
+    TreeBar,
+    DetailedInformation
   },
   data() {
     return {
@@ -34,6 +39,7 @@ export default {
       dangerListFilterConfig,
       dangerListTableConfig,
       listLoading: true,
+      filter: {}, // 筛选项
       total: 0,
       listQuery: {
         page: 1,
@@ -41,12 +47,13 @@ export default {
       },
       treeData: {
         title: '所有状态',
+        checkbox: true,
         list: []
       },
       treeExtend: true,
-      keywords: '',
       list: [],
-      filter:''
+      state:[],
+      detailedInformationDisabled: false,
     }
   },
   created() {
@@ -95,11 +102,11 @@ export default {
           for (let m in response.data) {
             this.getIterationData(selectList[m], response.data[m])
           }
-          this.treeData.list = selectList
           this.dangerListTableConfig.columns.forEach(it => {
             if (query[q].parentId == 10115) {
               if(it.field === 'hiddenStatus'){
                 it.options = selectList
+                this.treeData.list = selectList
               }
             }else if(query[q].parentId == 10042){
               if(it.field === 'examinePathId'){
@@ -127,35 +134,50 @@ export default {
     __fetchData(){
       const query = {
         hiddenStatus:[
-
+          ...this.state
         ],
         pageEntity:{
-          page:1,
-          pagerows:10,
+          page: this.listQuery.page,
+          pagerows: this.listQuery.pagerows,
           keyword: this.filter.name,
-          keywordField:['hiddenStatus','hiddenGrade']
+          keywordField:['hiddenContent','rectifyPlan']
         }
       }
       getHiddenRegisterDetailList(query).then(response =>{
-        console.log(response);
+        if (response.data.rows.length > 0) {
+          this.listLoading = false
+          this.list = response.data.rows
+          this.total = Number(response.data.records)
+        } else {
+          if (this.listQuery.page > 0) {
+            this.listQuery.page = this.listQuery.page - 1
+            this.__fetchData()
+          } else {
+            this.listLoading = false
+            this.list = []
+            this.total = 0
+          }
+        }
+      }).catch(err => {
         this.listLoading = false
-        this.list = response.data.rows
-        this.total = Number(response.data.records)
       })
     },
-    handleNodeClick(){
-
-    },
-    queryData(fliter){
-      this.filter = Object.assign(this.filter, filter)
+    checkChange(_data){
+      console.log(_data);
+      this.state = _data
       this.__fetchData()
     },
-    openDialog(){
-
+    queryData(fliter){
+      this.filter = Object.assign(this.filter, fliter)
+      this.__fetchData()
     },
-    pagination(){
-
-    }
+    otherClick(row, index, item){
+      this.$refs.threeViolationsDetailed.__fetchData(row.aqglHiddenRegisterId)
+      this.detailedInformationDisabled = true
+    },
+    pagination() {
+      this.__fetchData()
+    },
   }
 }
 </script>

@@ -1,41 +1,28 @@
 
-const tokens = {
-  admin: {
-    token: 'admin-token'
-  },
-  editor: {
-    token: 'editor-token'
-  }
-}
-
 const users = {
-  'admin-token': {
-    roles: ['admin'],
-    avatar: '/assets/images/avatar.jpg',
-    name: 'Admin'
-  },
-  'editor-token': {
-    roles: ['editor'],
-    avatar: '/assets/images/avatar.jpg',
-    name: 'Editor'
-  }
+  roles: ['admin'],
+  avatar: '/assets/images/avatar.jpg',
+  name: 'Admin'
 }
-
+const collectMenu = [
+  {
+    cfgNavigationId: '1',
+    createTime: '2021-05-17 14:29:23',
+    createdBy: 'admin',
+    menuId: '1302',
+    menuResource: '{"title":"大型设备管理"}',
+    updateTime: '2021-05-17 14:29:23',
+    updatedBy: 'admin',
+    userId: '1'
+  }
+]
 module.exports = [
   // 登录
   {
     url: '/example/user/login',
     type: 'post',
     response: config => {
-      const { username } = config.body
-      const token = tokens[username]
-
-      if (!token) {
-        return {
-          code: 20001,
-          message: '用户名或密码错误'
-        }
-      }
+      const token = 'admin'
 
       return {
         code: 200,
@@ -49,15 +36,7 @@ module.exports = [
     url: '/example/user/info\.*',
     type: 'get',
     response: config => {
-      const { token } = config.query
-      const info = users[token]
-
-      if (!info) {
-        return {
-          code: 20002,
-          message: '获取个人信息失败'
-        }
-      }
+      const info = users
 
       return {
         code: 200,
@@ -74,6 +53,19 @@ module.exports = [
       return {
         code: 200,
         data: 'success'
+      }
+    }
+  },
+  // 获取用户快捷导航
+  {
+    url: '/example/user/collect-menu',
+    type: 'get',
+    response: config => {
+      const info = collectMenu
+
+      return {
+        code: 200,
+        data: info
       }
     }
   }

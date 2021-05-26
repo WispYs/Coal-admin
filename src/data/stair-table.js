@@ -3,8 +3,8 @@ export default {
    *
    * @param {number} beforeStart        距离工作开始的时间 (天)
    * @param {number} workTime           工作持续时间 (天)
-   * @param {string} sDate              工作开始日期 (YYYY-MM-DD)
-   * @param {string} eDate              工作结束日期 (YYYY-MM-DD)
+   * @param {string} sDate              工作开始日期 (yyyy-MM-dd)
+   * @param {string} eDate              工作结束日期 (yyyy-MM-dd)
    * @param {string} lateDay            工作滞后天数
    */
   title: '工作面采掘接替横道图',

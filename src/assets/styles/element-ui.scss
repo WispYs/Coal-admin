@@ -10,6 +10,12 @@
   @include primaryBorder($primaryColor)
 }
 
+.el-button.is-plain:focus,
+.el-button.is-plain:hover {
+  @include primaryColor($primaryColor);
+  @include primaryBorder($primaryColor);
+  background: #FFF;
+}
 
 .el-button:focus,
 .el-button:hover {
@@ -19,6 +25,21 @@
 .el-button--primary:focus,
 .el-button--primary:hover {
   @include primaryButtonHover($primaryButtonHover)
+}
+
+.el-button--primary.is-disabled,
+.el-button--primary.is-disabled:active,
+.el-button--primary.is-disabled:focus,
+.el-button--primary.is-disabled:hover {
+  @include primaryButtonHover($primaryButtonHover);
+  opacity: .7;
+}
+
+.el-button--danger.is-plain:focus,
+.el-button--danger.is-plain:hover {
+  background: #F56C6C !important;
+  border-color: #F56C6C !important;
+  color: #FFF !important;
 }
 
 // .el-button--primary:focus,
@@ -148,11 +169,19 @@
 
 // pagination
 .el-pagination.is-background .el-pager li:not(.disabled).active {
-  @include primaryBg($primaryColor)
+  @include primaryBg($primaryColor);
 }
 
 .el-pagination__sizes .el-input .el-input__inner:hover {
   @include primaryBorder($primaryColor)
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled):hover {
+  @include primaryColor($primaryColor)
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active:hover {
+  color: #fff;
 }
 
 // upload
@@ -161,6 +190,11 @@
 }
 
 .el-upload-dragger .el-upload__text em {
+  @include primaryColor($primaryColor)
+}
+
+.el-upload-list__item.is-success .el-upload-list__item-name:focus,
+.el-upload-list__item.is-success .el-upload-list__item-name:hover {
   @include primaryColor($primaryColor)
 }
 
@@ -218,6 +252,18 @@
   @include calendarBg($dropdownBg)
 }
 
+// el-input-number
+.el-input-number__decrease:hover,
+.el-input-number__increase:hover {
+  @include primaryColor($primaryColor)
+}
+
+.el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled),
+.el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled) {
+  @include primaryBorder($primaryColor)
+}
+
+
 .app-wrapper {
 
   // 解决 el-date-picker 样式问题
@@ -232,15 +278,30 @@
     }
   }
 
-  // 自定义表头颜色
+
   .el-table {
+
+    // 自定义表头颜色
     .pre-line {
       background: #f5f7fa;
       font-size: 14px;
+    }
 
-      .cell {
-        white-space: pre-line;
+    .cell {
+      white-space: pre-line;
+
+      .cell-span {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
+
+    }
+
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
     }
   }
 
@@ -261,6 +322,7 @@
 
     .el-dialog__footer {
       border-top: 1px solid #ededed;
+      text-align: center;
     }
 
     .el-dialog__body {
@@ -359,7 +421,8 @@
   }
 
   // 树状结构选中
-  .el-tree-node.is-current>.el-tree-node__content {
+  .el-tree-node.is-current>.el-tree-node__content,
+  .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
     background-color: $blueColor;
     color: #fff;
   }

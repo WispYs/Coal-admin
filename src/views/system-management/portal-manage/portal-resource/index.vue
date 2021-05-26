@@ -1,0 +1,273 @@
+<template>
+  <div class="page-container">
+    <filter-bar
+      :config="PortalResourceFilterConfig"
+      @search-click="queryData"
+      @create-click="openDialog('create')"
+      @reset-click="queryData"
+    />
+    <list-table
+      :id="id"
+      :list="list"
+      :list-loading="listLoading"
+      :config="PortalResourceTableConfig"
+      height="calc(100% - 157px)"
+      @edit-click="(row) => openDialog('edit', row)"
+      @delete-click="deleteClick"
+      @submit-data="editSubmit"
+      @selection-change="selectionChange"
+    />
+    <div v-show="total>0" class="page-bottom">
+      <el-button
+        class="page-bottom__delete"
+        type="warning"
+        size="small"
+        plain
+        :disabled="deleteDisabled"
+        @click="deleteBatches"
+      >
+        <i class="el-icon-delete el-icon--left" />批量删除
+      </el-button>
+      <pagination
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.pagerows"
+        @pagination="__fetchData"
+      />
+    </div>
+
+    <!-- 新建弹窗 -->
+    <form-dialog
+      ref="createDialog"
+      :config="initCreateConfig()"
+      :dialog-visible="createDialogVisible"
+      @close-dialog="createDialogVisible = false"
+      @submit="createSubmit"
+    />
+    <!-- 编辑弹窗 -->
+    <form-dialog
+      ref="editDialog"
+      :config="initEditConfig()"
+      :dialog-visible="editDialogVisible"
+      @close-dialog="editDialogVisible = false"
+      @submit="editSubmit"
+    />
+
+  </div>
+</template>
+
+<script>
+import { getPortalResourceList, createPortalResource, editPortalResource, getPortalResourceInfo, delPortalResource, getOrganTree, batchDeletePortalResource } from '@/api/portal-manage'
+import FilterBar from '@/components/FilterBar'
+import ListTable from '@/components/ListTable'
+import Pagination from '@/components/Pagination'
+import FormDialog from './components/FormDialog'
+
+import { PortalResourceTableConfig, PortalResourceFilterConfig } from '@/data/portal-manage'
+
+export default {
+  components: { FilterBar, ListTable, Pagination, FormDialog },
+  data() {
+    return {
+      id: 'application-manage',
+      list: [],
+      total: 0,
+      listQuery: {
+        page: 1,
+        pagerows: 10
+      },
+      currentNum: 0, // 当前页数据数量，用于判断删除后是否跳转到上一页
+      filter: {}, // 筛选项
+      listLoading: true,
+      PortalResourceFilterConfig,
+      PortalResourceTableConfig,
+      createDialogVisible: false,
+      editDialogVisible: false,
+      multipleSelection: [], // 多选项
+      deleteDisabled: true // 批量删除置灰
+
+    }
+  },
+
+  created() {
+    this.__fetchData()
+    this.__updatePortalData()
+  },
+  methods: {
+    // 获取数据源列表
+    __updatePortalData() {
+      // 数据字典 - 数据源
+      const parentId = 111371
+      this.$store.dispatch('mecha/getDataDictionary', parentId).then((data) => {
+        data.forEach(it => {
+          it.value = it.dictValue
+          it.label = it.dictName
+        })
+        PortalResourceTableConfig.columns.forEach(it => {
+          if (it.field === 'dataSource') {
+            it.options = data
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    __fetchData() {
+      this.listLoading = true
+      const filter = {
+        ...this.filter,
+        keywordField: ['title']
+      }
+      const query = Object.assign(this.listQuery, filter)
+      getPortalResourceList(query).then(response => {
+        this.listLoading = false
+        this.list = response.data.rows
+        this.total = Number(response.data.records)
+        this.currentNum = response.data.rows.length
+      })
+    },
+    // 查询数据
+    queryData(filter) {
+      this.filter = Object.assign(this.filter, filter)
+      this.$set(this.listQuery, 'page', 1)
+      this.__fetchData()
+    },
+    // 初始化新建窗口配置
+    initCreateConfig() {
+      const createConfig = Object.assign({
+        title: '新建',
+        width: '1000px',
+        form: this.PortalResourceTableConfig.columns
+      })
+      return createConfig
+    },
+    // 初始化编辑窗口配置
+    initEditConfig() {
+      const editConfig = Object.assign({
+        title: '编辑',
+        width: '1000px',
+        form: this.PortalResourceTableConfig.columns
+      })
+      return editConfig
+    },
+    // 打开弹窗
+    openDialog(name, row) {
+      const visible = `${name}DialogVisible`
+      this[visible] = true
+
+      // 如果有数据，更新子组件的 formData
+      if (row) {
+        getPortalResourceInfo(row.cfgResourceId).then(response => {
+          const info = Object.assign(response.data, {
+            templateId: response.data.templateId + ''
+          })
+          this.$refs.editDialog.updataForm(info)
+        })
+      }
+    },
+    // 删除当前页最后一条数据后跳转到前一页
+    /**
+     * @params{number} num 删除数量
+     */
+    changeCurrentPage(num) {
+      this.currentNum = this.currentNum - num
+      if (this.currentNum <= 0) {
+        if (this.listQuery.page > 1) {
+          this.$set(this.listQuery, 'page', this.listQuery.page - 1)
+        }
+      }
+    },
+    // 删除
+    deleteClick(row) {
+      this.$confirm('确定删除该项?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        delPortalResource(row.cfgResourceId).then(response => {
+          this.$message.success('删除成功')
+          this.changeCurrentPage(1)
+          this.__fetchData()
+        })
+      })
+    },
+    // 新建
+    createSubmit(submitData) {
+      const query = Object.assign(submitData)
+      createPortalResource(query).then(response => {
+        this.createDialogVisible = false
+        this.$message.success('新建成功')
+        this.$refs.createDialog.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.createDialog.resetSubmitBtn()
+      })
+    },
+    // 编辑
+    editSubmit(submitData) {
+      const query = Object.assign(submitData)
+      editPortalResource(query).then(response => {
+        this.editDialogVisible = false
+        this.$message.success('编辑成功')
+        this.$refs.editDialog.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.createDialog.resetSubmitBtn()
+      })
+    },
+
+    // 改变所选项
+    selectionChange(val) {
+      this.multipleSelection = val
+      if (this.multipleSelection.length > 0) {
+        this.deleteDisabled = false
+      } else {
+        this.deleteDisabled = true
+      }
+    },
+
+    // 批量删除
+    deleteBatches() {
+      const selectId = []
+      this.multipleSelection.forEach(it => selectId.push(it.cfgResourceId))
+      if (selectId.length === 0) {
+        this.$message.warning('确定删除该项')
+        return false
+      }
+      this.$confirm('确定删除该项?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        batchDeletePortalResource(selectId).then(response => {
+          console.log(selectId)
+          this.$message.success('删除成功')
+          this.changeCurrentPage(selectId.length)
+          this.__fetchData()
+        })
+      })
+    }
+
+  }
+}
+</script>
+<style lang="scss">
+.preview-wrapper {
+  width: 300px;
+  height: 200px;
+  box-shadow: 2px 2px 6px 4px rgb(57 75 115 / 15%);
+  border-radius: 4px;
+  .preview-title {
+    padding: 10px 15px;
+    border-bottom: 1px solid #f7f7f7;
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1.5;
+  }
+}
+
+</style>

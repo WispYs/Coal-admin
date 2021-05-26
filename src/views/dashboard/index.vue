@@ -1,120 +1,120 @@
 <template>
   <div class="page-container dashboard-wrapper">
-    <el-row :gutter="20">
-      <el-col :span="16">
-        <el-row :gutter="20" style="margin-bottom: 20px;">
-          <el-col :span="12">
-            <div class="board-wrapper">
-              <div class="board-title">快捷导航</div>
-              <div class="board-content nav-content">
-                <nav-board />
-              </div>
-            </div>
-          </el-col>
-          <el-col :span="12">
-            <div class="board-wrapper">
-              <div class="board-title">待办事项</div>
-              <div class="board-content backlog-content">
-                <backlog-board />
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20" style="margin-bottom: 20px;">
-          <el-col :span="24">
-            <div class="board-wrapper">
-              <div class="board-title">产量图</div>
-              <div class="board-content product-content">
-                <product-board />
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="24">
-            <div class="board-wrapper">
-              <el-tabs v-model="infoActive">
-                <el-tab-pane label="新闻中心" name="news">
-                  <div class="board-content infomation-content">
-                    <news-board />
+    <div v-if="!nullLayoutData">
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <el-row :gutter="20" style="margin-bottom: 20px;">
+            <template v-for="(it,index) in layoutBoard" class="col-content">
+              <el-col :key="index" :span="it.span" style="margin-bottom: 20px;overflow: hidden">
+                <div class="board-wrapper">
+                  <div v-if="it.class === 'list-data-content' || it.class === 'list-data2-content'" class="board-title">
+                    <span>{{ it.title }}</span>
+                    <b class="board-more">更多</b>
                   </div>
-                </el-tab-pane>
-                <el-tab-pane label="通知公告" name="notice">
-                  <div class="board-content infomation-content">
-                    <notice-board />
+                  <div v-else-if="it.class !== 'weather-content'" class="board-title">{{ it.title }}</div>
+                  <div class="board-content" :class="it.class">
+                    <component :is="it.component" :resource-data="it.resourceData" />
                   </div>
-                </el-tab-pane>
-              </el-tabs>
-            </div>
-          </el-col>
-        </el-row>
-      </el-col>
-      <el-col :span="8">
-        <el-row :gutter="20" style="margin-bottom: 20px;">
-          <el-col :span="24">
-            <div class="board-wrapper">
-              <div class="board-title">值班信息</div>
-              <div class="board-content worklog-content">
-                <worklog-board />
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20" style="margin-bottom: 20px;">
-          <el-col :span="24">
-            <div class="board-wrapper">
-              <div class="board-title">待办项目</div>
-              <div class="board-content project-content">
-                <project-board />
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20" style="margin-bottom: 20px;">
-          <el-col :span="24">
-            <div class="board-wrapper">
-              <div class="board-title">公文新闻</div>
-              <div class="board-content office-content">
-                <office-board />
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-      </el-col>
-    </el-row>
+                </div>
+              </el-col>
+            </template>
+            </draggable>
+          </el-row>
+        </el-col>
+      </el-row>
+    </div>
+    <div v-else class="null-data">
+      <div>
+        <span>未分配资源权限</span>
+        <el-button type="primary" size="medium" @click="$router.push({path: '/system-management/portal-manage/portal-authority'})">前去分配</el-button>
+      </div>
+
+    </div>
   </div>
 </template>
 
 <script>
 import NavBoard from './components/NavBoard'
-import BacklogBoard from './components/BacklogBoard'
-import ProductBoard from './components/ProductBoard'
-import WorklogBoard from './components/WorklogBoard'
-import ProjectBoard from './components/ProjectBoard'
-import OfficeBoard from './components/OfficeBoard'
-import NewsBoard from './components/NewsBoard'
-import NoticeBoard from './components/NoticeBoard'
+import LineChartLayout from './components/LineChartLayout'
+import BarChartLayout from './components/BarChartLayout'
+import PieChartLayout from './components/PieChartLayout'
+import NumberLayout1 from './components/NumberLayout1'
+import NumberLayout2 from './components/NumberLayout2'
+import NumberLayout3 from './components/NumberLayout3'
+import ListLayout1 from './components/ListLayout1'
+import ListLayout2 from './components/ListLayout2'
+import WeatherLayout from './components/WeatherLayout'
+// 导入draggable组件
+import { getAuthPortalLayout } from '@/api/portal-manage'
 
 export default {
   name: 'Dashboard',
   components: {
     NavBoard,
-    BacklogBoard,
-    WorklogBoard,
-    ProductBoard,
-    ProjectBoard,
-    OfficeBoard,
-    NewsBoard,
-    NoticeBoard
+    LineChartLayout,
+    BarChartLayout,
+    PieChartLayout,
+    NumberLayout1,
+    NumberLayout2,
+    NumberLayout3,
+    ListLayout1,
+    ListLayout2,
+    WeatherLayout
   },
   data() {
     return {
-      infoActive: 'news' // 消息模块选项卡
+      nullLayoutData: true, // 没有资源布局数据
+      layoutBoard: [],
+      // 预定模板列表，value表示模板Id
+      templateModel: [
+        { value: '1', component: LineChartLayout, class: 'chart-data-content', span: 18 },
+        { value: '2', component: BarChartLayout, class: 'chart-data-content', span: 18 },
+        { value: '3', component: PieChartLayout, class: 'chart-data-content', span: 18 },
+        { value: '4', component: ListLayout1, class: 'list-data-content', span: 6 },
+        { value: '5', component: ListLayout2, class: 'list-data2-content', span: 6 },
+        { value: '6', component: NumberLayout1, class: 'number-data-content', span: 6 },
+        { value: '7', component: NumberLayout2, class: 'number-data-content', span: 6 },
+        { value: '8', component: NumberLayout3, class: 'number-data-content', span: 6 },
+        { value: '9', component: NavBoard, class: 'nav-content', span: 6 },
+        { value: '10', component: WeatherLayout, class: 'weather-content', span: 6 }
+      ]
     }
   },
-
+  created() {
+    this.__fetchLayout()
+  },
   methods: {
-
+    // 获取当前用户门户布置设置
+    __fetchLayout() {
+      getAuthPortalLayout().then(response => {
+        const layoutList = response.data
+        if (response.data && response.data.length > 0) {
+          // 获取接口布局数据
+          const asyncLayout = []
+          layoutList.forEach(layout => {
+          // 通过比对接口数据的模板ID和预定模板的value得到对应模板
+            const layoutData = this.templateModel.filter(it => layout.templateId == it.value)[0]
+            // 如果是快捷导航，从store中获取收藏菜单数据
+            if (layout.templateId === 9) {
+              asyncLayout.push(Object.assign(layoutData, {
+                title: layout.title,
+                cfgResourceId: layout.cfgResourceId,
+                resourceData: this.$store.state.user.collectMenu
+              }))
+            } else {
+              asyncLayout.push(Object.assign(layoutData, {
+                title: layout.title,
+                cfgResourceId: layout.cfgResourceId
+              }))
+            }
+          })
+          this.nullLayoutData = false
+          this.layoutBoard = asyncLayout
+        } else {
+          this.nullLayoutData = true
+        }
+      })
+    }
   }
 }
 </script>
@@ -122,12 +122,21 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/styles/variables.scss';
 @import '~@/assets/styles/mixin.scss';
-.dashboard-wrapper {
+.col-content {
   @include clearfix;
+}
+.dashboard-wrapper {
+  min-width: 1200px;
   background: $pageBg !important;
+  .layout-btn {
+    text-align: right;
+    padding: 10px 0;
+  }
   .board-wrapper {
     position: relative;
     background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
     .board-title,
     ::v-deep .el-tabs__header {
       position: absolute;
@@ -141,6 +150,15 @@ export default {
     .board-title {
       padding: 10px 15px;
       border-bottom: 1px solid #f7f7f7;
+      b {
+        float: right;
+        color: #0387fe;
+        font-size: 14px;
+        cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
     ::v-deep {
       .el-tabs__header {
@@ -161,17 +179,15 @@ export default {
 
     .board-content {
       &.nav-content,
-      &.backlog-content,
+      &.number-data-content,
+      &.list-data-content,
+      &.weather-content,
       &.worklog-content {
-        height: 242px;
+        height: 240px;
       }
-      &.product-content,
-      &.project-content {
-        height: 374px;
-      }
-      &.office-content,
-      &.infomation-content {
-        height: 400px;
+      &.list-data2-content,
+      &.chart-data-content {
+        height: 500px;
       }
       .swiper-content {
         background: #fff;
@@ -184,7 +200,6 @@ export default {
           .el-carousel {
             padding-top: 42px;
             position: relative;
-
           }
           .el-carousel__button {
             width: 10px;
@@ -205,6 +220,17 @@ export default {
         }
 
       }
+    }
+  }
+  .null-data {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    span {
+      display: block;
+      margin-bottom: 10px;
+      color: #999;
     }
   }
 }

@@ -32,6 +32,7 @@ export default {
   height: 100%;
   position: relative;
   background: $pageBg;
+  overflow-x: auto;
 }
 
 </style>

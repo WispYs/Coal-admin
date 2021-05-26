@@ -1,6 +1,6 @@
 <template>
   <div :class="{fullscreen:fullscreen}" class="tinymce-container" :style="{width:containerWidth}">
-    <textarea :id="tinymceId" class="tinymce-textarea" />
+    <textarea :id="tinymceId" class="tinymce-textarea" :disabled="disabled" />
     <div class="editor-custom-btn-container">
       <el-button icon="el-icon-upload" size="mini" type="primary" @click="uploadDialogVisible = true">
         上传图片
@@ -9,6 +9,7 @@
 
     </div>
     <upload-file
+      :action="action"
       :accept="accept"
       :data="uploadData"
       :dialog-visible="uploadDialogVisible"
@@ -22,7 +23,7 @@
 import UploadFile from '@/components/UploadFile'
 import { Plugins, Toolbar, FontFormats, FontSizeFormats } from './config'
 import load from './loadScript'
-import { getImg } from '@/api/tinymce'
+import { FileUrl } from '@/api/url'
 
 const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.5/tinymce.min.js'
 
@@ -36,15 +37,18 @@ export default {
         return 'vue-tinymce-' + +new Date() + ((Math.random() * 1000).toFixed(0) + '')
       }
     },
+    /* 富文本内容 */
     value: {
       type: String,
       default: ''
     },
+    /* 工具栏 */
     toolbar: {
       type: Array,
       required: false,
       default: () => ([])
     },
+    /* 菜单栏 */
     menubar: {
       type: String,
       default: 'file edit insert view format table'
@@ -58,21 +62,25 @@ export default {
       type: [Number, String],
       required: false,
       default: 'auto'
+    },
+    uploadData: {
+      type: Object,
+      default: () => {}
+    },
+    disabled: {
+      type: Boolean,
+      default: () => false
     }
   },
   data() {
     return {
+      action: `${FileUrl}/sysFileInfo/saveImg`,
       accept: ['jpg', 'jpeg', 'png'],
       uploadDialogVisible: false,
-      hasChange: false,
+      keyUpChange: false,
       hasInit: false,
       tinymceId: this.id,
-      fullscreen: false,
-      uploadData: {
-        sysFileDictId: 0,
-        // menuId: this.$route.name
-        menuId: 90022
-      }
+      fullscreen: false
     }
   },
   computed: {
@@ -86,8 +94,9 @@ export default {
   },
   watch: {
     value(val, oldVal) {
-      this.hasChange = val === oldVal
-      if (!this.hasChange && this.hasInit) {
+      // keyUpChange 手动按键修改值
+      // this.keyUpChange = val === oldVal
+      if (!this.keyUpChange && this.hasInit) {
         this.$nextTick(() => {
           window.tinymce.get(this.tinymceId).setContent(val || '')
         })
@@ -148,8 +157,12 @@ export default {
             editor.setContent(_this.value)
           }
           _this.hasInit = true
-          editor.on('NodeChange Change KeyUp SetContent', () => {
-            this.hasChange = true
+          editor.on('NodeChange Change SetContent', () => {
+            this.keyUpChange = false
+            // this.$emit('input', editor.getContent())
+          })
+          editor.on('KeyUp', () => {
+            this.keyUpChange = true
             this.$emit('input', editor.getContent())
           })
         },
@@ -185,16 +198,16 @@ export default {
       window.tinymce.get(this.tinymceId).setContent(value)
     },
     getContent() {
-      window.tinymce.get(this.tinymceId).getContent()
+      return window.tinymce.get(this.tinymceId).getContent()
     },
     // 上传文件提交
     uploadSubmit(fileList) {
       console.log(fileList)
       fileList.forEach(it => {
-        getImg(it.path).then(res => {
-          window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${res.data.url}" >`)
-        })
+        window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${it.url}" >`)
       })
+      // 上传图片后手动更新数据
+      this.$emit('submit-text-editor', this.getContent())
       this.uploadDialogVisible = false
     },
     // 富文本编辑器内容提交

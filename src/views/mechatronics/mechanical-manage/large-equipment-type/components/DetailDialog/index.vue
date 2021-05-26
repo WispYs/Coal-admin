@@ -98,7 +98,7 @@ export default {
       this.listLoading = true
       const filter = {
         ...this.filter,
-        keywordField: ['workNumber', 'loginName', 'userName']
+        keywordField: ['attrName', 'attrVal']
       }
       const query = Object.assign(this.listQuery, filter)
       getEquipmentAreaList(query).then(response => {
@@ -110,7 +110,7 @@ export default {
     // 查询数据
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
-      console.log(this.filter)
+      this.$set(this.listQuery, 'page', 1)
       this.__fetchData()
     },
 
@@ -125,7 +125,6 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success('删除成功')
         delEquipmentArea(row.id).then(response => {
           console.log(response)
           this.$message.success('删除成功')

@@ -76,7 +76,7 @@ export default {
               },
               formatter: function(value) {
                 const timestamp = new Date(newData.startTime).getTime() + 86400000 * value // 86400000，一天的毫秒数
-                return parseTime(timestamp, 'YYYY-MM-DD')
+                return parseTime(timestamp, 'yyyy-MM-dd')
               }
             }
           },

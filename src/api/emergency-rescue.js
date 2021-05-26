@@ -1,11 +1,11 @@
 // 应急救援
 import request from '@/utils/request'
-import { SystemUrl, EmergencyRescue } from './url'
+import { SystemUrl, EmergencyRescue, FileUrl } from './url'
 
 // 获取下拉列表框
 export function getSelectData(data, business) {
   return request({
-    url: `${EmergencyRescue}/tomo-business/${business}/baseSelectCombox`,
+    url: `${EmergencyRescue}/${business}/baseSelectCombox`,
     method: 'post',
     data
   })
@@ -14,14 +14,14 @@ export function getSelectData(data, business) {
 // 根据ID删除对象
 export function delObject(entityId, business) {
   return request({
-    url: `${EmergencyRescue}/tomo-business/${business}/delete/${entityId}`,
+    url: `${EmergencyRescue}/${business}/delete/${entityId}`,
     method: 'delete'
   })
 }
 // 根据ID获取对象
 export function getObjectById(entityId, business) {
   return request({
-    url: `${EmergencyRescue}/tomo-business/${business}/get/${entityId}`,
+    url: `${EmergencyRescue}/${business}/get/${entityId}`,
     method: 'get'
   })
 }
@@ -29,7 +29,7 @@ export function getObjectById(entityId, business) {
 // 保存对象
 export function saveObject(data, business) {
   return request({
-    url: `${EmergencyRescue}/tomo-business/${business}/save`,
+    url: `${EmergencyRescue}/${business}/save`,
     method: 'post',
     data
   })
@@ -38,7 +38,7 @@ export function saveObject(data, business) {
 // 分页查询对象
 export function getObjectByPage(data, business) {
   return request({
-    url: `${EmergencyRescue}/tomo-business/${business}/search`,
+    url: `${EmergencyRescue}/${business}/search`,
     method: 'post',
     data
   })
@@ -47,8 +47,17 @@ export function getObjectByPage(data, business) {
 // 更新对象
 export function updateObject(data, business) {
   return request({
-    url: `${EmergencyRescue}/tomo-business/${business}/update`,
+    url: `${EmergencyRescue}/${business}/update`,
     method: 'post',
+    data
+  })
+}
+
+// 批量删除
+export function deleteBatches(data, bussiness) {
+  return request({
+    url: `${EmergencyRescue}/${bussiness}/delete`,
+    method: 'delete',
     data
   })
 }
@@ -56,34 +65,60 @@ export function updateObject(data, business) {
 // 获取应急通讯组织结构名称树
 export function getEmergencyCommunicationOrganizationTree(data = {}) {
   return request({
-    url: `${EmergencyRescue}/tomo-business/yjjyCommunicationTissue/getYjjyCommunicationTissueTree`,
+    url: `${EmergencyRescue}/yjjyCommunicationTissue/getYjjyCommunicationTissuePageTree`,
+    method: 'post',
+    data
+  })
+}
+
+// 获取全部应急通讯组织结构名称树
+export function getYjjyCommunicationTissueAllTree(data = {}) {
+  return request({
+    url: `${EmergencyRescue}/yjjyCommunicationTissue/getYjjyCommunicationTissueTree`,
     method: 'post',
     data
   })
 }
 
 // 获取应急通讯组织结构名称树
-export function getYjjySpecialPlansTree(data = {}) {
+export function getYjjySpecialPlansTree(menuId) {
   return request({
-    url: `${EmergencyRescue}/tomo-business/yjjySpecialPlans/getYjjySpecialPlansTree`,
-    method: 'post',
-    data
+    url: `${EmergencyRescue}/yjjySpecialPlans/getYjjySpecialPlansTree/${menuId}`,
+    method: 'post'
   })
 }
 
 // 获取专项预案事故文件
 export function download(data = {}) {
   return request({
-    url: `${EmergencyRescue}/file/convert`,
+    url: `${FileUrl}/convert`,
     method: 'post',
     responseType: 'blob',
     data
   })
 }
 
+// 获取字典数据
 export function getDictData(parentId) {
   return request({
     url: `${SystemUrl}/sysDict/findParentId?parentId=${parentId}`,
     method: 'post'
+  })
+}
+
+// 获取事故总览
+export function getAccountOverview(parentId) {
+  return request({
+    url: `${EmergencyRescue}/yjjyAccidentManage/overview`,
+    method: 'get'
+  })
+}
+
+// 获取附件管理文件
+export function getFileNameByEventId(data) {
+  return request({
+    url: `${FileUrl}/sysFileInfo/listByEventIds`,
+    method: 'post',
+    data
   })
 }

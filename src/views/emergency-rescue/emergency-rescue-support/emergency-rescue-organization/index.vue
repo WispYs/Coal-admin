@@ -9,11 +9,11 @@
     />
     <list-table
       :id="id"
+      ref="organTable"
       :list="list"
       :list-loading="listLoading"
       :config="EmergencyCommunicationOrganizationTableConfig"
       height="calc(100% - 157px)"
-      @load-tree-data="asyncData"
       @edit-click="(row) => openDialog('edit', row)"
       @delete-click="deleteClick"
       @submit-data="editSubmit"
@@ -73,7 +73,9 @@ import {
   updateObject,
   getObjectByPage,
   getEmergencyCommunicationOrganizationTree,
-  getObjectById
+  getObjectById,
+  deleteBatches,
+  getYjjyCommunicationTissueAllTree
 } from '@/api/emergency-rescue'
 export default {
   components: { FilterBar, ListTable, Pagination, FormDialog },
@@ -95,16 +97,18 @@ export default {
       editDialogVisible: false,
       multipleSelection: [], // 多选项
       deleteDisabled: true, // 批量删除置灰
-      accidentType: []
+      accidentType: [],
+      mapArr: []
     }
   },
   created() {
+    this.__updateOrganTree()
     this.__fetchData()
   },
   methods: {
     // 接口获取组织机构树，更新config数据
     __updateOrganTree() {
-      getEmergencyCommunicationOrganizationTree().then(response => {
+      getYjjyCommunicationTissueAllTree().then(response => {
         this.formatData(response.data)
         EmergencyCommunicationOrganizationTableConfig.columns.forEach(it => {
           if (it.field === 'parentId') {
@@ -115,7 +119,7 @@ export default {
     },
     formatData(data) {
       data.forEach(d => {
-        d[`${this.business}Id`] = Number(d[`${this.business}Id`])
+        d[`${this.bussiness}Id`] = Number(d[`${this.bussiness}Id`])
         d.value = Number(d.value)
         if (d.children.length > 0) {
           this.formatData(d.children)
@@ -125,31 +129,26 @@ export default {
     // 获取组织机构列表
     __fetchData() {
       this.listLoading = true
-      // 初次加载只获取根节点数据
-      const entity = {
-        'parentId': 0
-      }
       const filter = {
         ...this.filter,
-        ...{ entity },
         keywordField: ['name']
       }
       const query = Object.assign(this.listQuery, filter)
-      getObjectByPage(query, this.bussiness).then(response => {
+      getEmergencyCommunicationOrganizationTree(query).then(response => {
         this.listLoading = false
-        response.data.rows.forEach(it => {
-          it.value = Number(it.value)
-          it.hasChildren = true
-          // if (it.children.length) {
-          //   it.hasChildren = true
-          // }
-        })
+        // console.log(response.data)
         this.list = response.data.rows
         this.total = Number(response.data.records)
+
+        if (this.listQuery.page > 1 && !this.list.length) {
+          this.listQuery.page--
+          this.__fetchData()
+        }
       })
     },
     // 异步获取树子节点数据
     asyncData(tree, treeNode, resolve) {
+      this.mapArr[tree['parentId']] = { tree, treeNode, resolve }
       const data = {
         entity: {
           parentId: tree.yjjyCommunicationTissueId
@@ -160,13 +159,14 @@ export default {
         response.data.rows.forEach(it => {
           const item = {
             beginTime: it.beginTime,
-            code: Number(it.code),
+            code: it.code,
             delFlag: it.delFlag,
             name: it.name,
             orderNum: it.orderNum,
-            parentId: Number(it.parentId),
+            parentId: it.parentId,
             remark: it.remark,
-            yjjyCommunicationTissueId: Number(it.yjjyCommunicationTissueId)
+            yjjyCommunicationTissueId: it.yjjyCommunicationTissueId,
+            hasChildren: it.hasChildren
           }
           childrenTree.push(item)
         })
@@ -190,6 +190,19 @@ export default {
       //   }])
       // }, 1000)
     },
+    // 重新触发树形表格的loadTree函数
+    refreshLoadTree(parentId) {
+      const mapsData = this.mapArr[parentId]
+      console.log('mapArr[parentId]', mapsData)
+      console.log('mapArr', this.mapArr)
+      console.log('parentId', parentId)
+      // 如果mapsData不为undefined，则表示之前打开过树形结构
+      if (mapsData) {
+        const { tree, treeNode, resolve } = mapsData
+        this.asyncData(tree, treeNode, resolve)
+      }
+      this.$refs.organTable.refreshLoadTree(parentId)
+    },
     // 查询数据
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
@@ -199,17 +212,16 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.EmergencyCommunicationOrganizationTableConfig.columns
       })
-      console.log(createConfig)
       return createConfig
     },
     // 初始化编辑窗口配置
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.EmergencyCommunicationOrganizationTableConfig.columns
       })
       return editConfig
@@ -227,10 +239,11 @@ export default {
           const res = response.data
           const info = Object.assign(response.data, {
             parentId: Number(res.parentId) || 0,
-            code: Number(res.code),
+            code: res.code,
             // value: Number(res.value),
             yjjyCommunicationTissueId: Number(res.yjjyCommunicationTissueId)
           })
+          this.oldParentId = info.parentId
           this.$refs.editDialog.updataForm(info)
         })
       }
@@ -250,16 +263,19 @@ export default {
     },
     // 新建
     createSubmit(submitData) {
-      console.log(submitData)
       const query = Object.assign(submitData, {
-        orderNum: Number(submitData.orderNum) || 0,
-        sysDeptId: Number(submitData.sysDeptId) || 0
+        orderNum: Number(submitData.orderNum) || 0
       })
+      if (!submitData.parentId) {
+        submitData.parentId = 0
+      }
+      console.log('onSubmit formData', submitData)
       saveObject(query, this.bussiness).then(response => {
+        this.__fetchData()
         this.createDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDialog.resetForm()
-        this.__fetchData()
+        // this.__fetchData()
       }).catch(err => {
         console.log(err)
         this.$refs.createDialog.resetSubmitBtn()
@@ -267,10 +283,11 @@ export default {
     },
     // 编辑
     editSubmit(submitData) {
-      console.log(submitData)
-      const query = Object.assign(submitData, {
-        orderNum: Number(submitData.orderNum) || 0
-      })
+      // console.log(submitData)
+      if (!submitData.parentId) {
+        submitData.parentId = 0
+      }
+      const query = Object.assign(submitData)
       updateObject(query, this.bussiness).then(response => {
         this.editDialogVisible = false
         this.$message.success('编辑成功')
@@ -287,15 +304,14 @@ export default {
       } else {
         this.deleteDisabled = true
       }
-      console.log(this.multipleSelection)
+      // console.log(this.multipleSelection)
     },
 
     // 批量删除
     deleteBatches() {
-      const selectId = []
-      this.multipleSelection.forEach(it => selectId.push(it.id))
-      console.log(selectId)
-      if (selectId.length === 0) {
+      const arr = []
+      this.multipleSelection.forEach(m => arr.push(m['parentId']))
+      if (arr.length === 0) {
         this.$message.warning('请选择所删除的文件')
         return false
       }
@@ -304,9 +320,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(selectId)
-        this.__fetchData()
-        this.$message.success('删除成功')
+        deleteBatches(arr, this.bussiness).then(res => {
+          this.$message.success('删除成功')
+          this.__fetchData()
+        })
       })
     }
 

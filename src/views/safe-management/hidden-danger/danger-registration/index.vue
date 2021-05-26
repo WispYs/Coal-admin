@@ -42,7 +42,7 @@
       ref="createDialog"
       :config="initCreateConfig()"
       :dialog-visible="createDialogVisible"
-      @upload-click="openUploadDialog"
+      @upload-click="(row) => openUploadDialog('createDialog', row)"
       @close-dialog="createDialogVisible = false"
       @submit="createSubmit"
     />
@@ -51,14 +51,13 @@
       ref="editDialog"
       :config="initEditConfig()"
       :dialog-visible="editDialogVisible"
-      @upload-click="openUploadDialog"
+      @upload-click="(row) => openUploadDialog('editDialog', row)"
       @close-dialog="editDialogVisible = false"
       @submit="editSubmit"
     />
     <!-- 上传附件 -->
     <upload-file
       :dialog-visible="uploadDialogVisible"
-      :multiple="false"
       @close-dialog="uploadDialogVisible = false"
       @upload-submit="uploadSubmit"
     />
@@ -67,23 +66,25 @@
 
 <script>
 import {
-    getsysDictListById,
-    getAqglHiddenRegister,
-    getAqglHiddenRegisterById,
-    updateAqglHiddenRegister,
-    saveAqglHiddenRegister,
-    deleteAqglHiddenRegister
-  } from '@/api/hidden-danger'
+  getsysDictListById,
+  getAqglHiddenRegister,
+  getAqglHiddenRegisterById,
+  updateAqglHiddenRegister,
+  saveAqglHiddenRegister,
+  deleteAqglHiddenRegister,
+  batchDeleteHiddenRegister,
+  getSelectRiskList
+} from '@/api/hidden-danger'
 import {
   getAqglHiddenTissueTree
-  } from '@/api/organization'
+} from '@/api/organization'
 import { getOrganTree } from '@/api/authority-management'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import UploadFile from '@/components/UploadFile'
-import { dangeRegistrationFilterConfig , dangeRegistConfig} from '@/data/hidden-danger'
+import { dangeRegistrationFilterConfig, dangeRegistConfig } from '@/data/hidden-danger'
 import exportExcel from '@/utils/export-excel'
 
 export default {
@@ -110,32 +111,47 @@ export default {
       createDialogVisible: false,
       editDialogVisible: false,
       multipleSelection: [], // 多选项
-      deleteDisabled: true ,// 批量删除置灰
+      deleteDisabled: true, // 批量删除置灰
       uploadRow: null,
-      uploadDialogVisible: false
+      uploadDialogVisible: false,
+      organizationList: [], // 组织机构
+      organizationFlag: true ,// 终止获取复查单位递归
+      examinePath: []
     }
   },
   created() {
     this.__fetchUnit()
     this.__fetchHiddenUnit()
+    this.__fetchExaminePath()
     this.__fetchData()
     this.__fetchSelectList()
   },
 
   methods: {
-    __fetchUnit(){
+    __fetchExaminePath(){
+      getSelectRiskList().then(response =>{
+        this.dangeRegistConfig.columns.forEach(it => {
+            if (it.field === 'examinePathId') {
+              this.examinePath= response.data
+              it.options = response.data
+            }
+        })
+      })
+    },
+    __fetchUnit() {
       getOrganTree().then(response => {
+        this.organizationList = response.data
         // 更新新增、编辑config数据
         this.dangeRegistConfig.columns.forEach(it => {
-          if(it.field === 'examineUnit'){
+          if (it.field === 'examineUnit') {
             it.options = response.data
-          }else if(it.field === 'reviewUnitId'){
+          } else if (it.field === 'reviewUnitId') {
             it.options = response.data
           }
         })
       })
     },
-    __fetchHiddenUnit(){
+    __fetchHiddenUnit() {
       const query = {
         aqglHiddenTissueId: ''
       }
@@ -152,38 +168,42 @@ export default {
         parentId: 10088
       }, {
         parentId: 10092
-      },{
-        parentId: 10042
-      },{
+      }, {
         parentId: 10097
-      },{
+      }, {
         parentId: 10106
+      }, {
+        // 隐患状态
+        parentId: 10115
       }]
-      for (let q in query) {
+      for (const q in query) {
         getsysDictListById(query[q].parentId).then(response => {
-          let selectList = response.data
-          for (let m in response.data) {
-            this.getIterationData(selectList[m], response.data[m])
+          const selectList = []
+          for (const m in response.data) {
+            selectList.push({
+              value: String(response.data[m].sysDictId),
+              label: response.data[m].dictName
+            })
           }
           this.dangeRegistConfig.columns.forEach(it => {
             if (query[q].parentId == 10088) {
               if (it.field === 'examineShiftId') {
                 it.options = selectList
               }
-            }else if (query[q].parentId == 10092) {
+            } else if (query[q].parentId == 10092) {
               if (it.field === 'examineTypeId') {
                 it.options = selectList
               }
-            }else if (query[q].parentId == 10042) {
-              if (it.field === 'examinePathId') {
-                it.options = selectList
-              }
-            }else if (query[q].parentId == 10097) {
+            } else if (query[q].parentId == 10097) {
               if (it.field === 'hiddenTypeId') {
                 it.options = selectList
               }
-            }else if (query[q].parentId == 10106) {
+            } else if (query[q].parentId == 10106) {
               if (it.field === 'hiddenGrade') {
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 10115) {
+              if (it.field === 'hiddenStatus') {
                 it.options = selectList
               }
             }
@@ -191,28 +211,31 @@ export default {
         })
       }
     },
-    getIterationData(_m, _d) {
-      _m.label = _d.dictName
-      _m.value = _d.sysDictId
-      _m.children = _d.sysDictList
-      if (_d.sysDictList.length > 0) {
-        for (let m in _d.sysDictList) {
-          this.getIterationData(_m.children[m], _d.sysDictList[m])
-        }
-      }
-    },
     __fetchData() {
       this.listLoading = false
-      const query={
+      const query = {
         page: this.listQuery.page,
         pagerows: this.listQuery.pagerows,
         keyword: this.filter.name,
-        keywordField:['hiddenStatus','hiddenGrade']
+        keywordField: ['hiddenStatus', 'hiddenGrade']
       }
       getAqglHiddenRegister(query).then(response => {
+        if (response.data.rows.length > 0) {
+          this.listLoading = false
+          this.list = response.data.rows
+          this.total = Number(response.data.records)
+        } else {
+          if (this.listQuery.page > 0) {
+            this.listQuery.page = this.listQuery.page - 1
+            this.__fetchData()
+          } else {
+            this.listLoading = false
+            this.list = []
+            this.total = 0
+          }
+        }
+      }).catch(err => {
         this.listLoading = false
-        this.list = response.data.rows
-        this.total = Number(response.data.records)
       })
     },
     // 查询数据
@@ -224,7 +247,7 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.dangeRegistConfig.columns
       })
       return createConfig
@@ -233,7 +256,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.dangeRegistConfig.columns
       })
       return editConfig
@@ -245,17 +268,18 @@ export default {
       // 如果有数据，更新子组件的 formData
       if (row) {
         getAqglHiddenRegisterById(row.aqglHiddenRegisterId).then(response => {
+          response.data.hiddenGrade = String(response.data.hiddenGrade)
           this.$refs.editDialog.updataForm(response.data)
         })
       }
     },
     // 导入
-    importClick(){
-      this.$message.info("敬请期待")
+    importClick() {
+      this.$message.info('敬请期待')
     },
     // 删除
     deleteClick(row) {
-      this.$confirm('确定删除该组织吗?', '提示', {
+      this.$confirm('确定删除该隐患登记吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -268,8 +292,28 @@ export default {
         this.$message.info('已取消删除')
       })
     },
+    getOrganization(o_data, s_data) {
+      if (Number(o_data.value) == s_data.reviewUnitId) {
+        s_data.reviewUnit = o_data.label
+        this.organizationFlag = false
+      }
+      if (this.organizationFlag && o_data.children.length > 0) {
+        o_data.children.forEach(it => {
+          this.getOrganization(it, s_data)
+        })
+      }
+    },
     // 新增
     createSubmit(submitData) {
+      let examinePath= this.examinePath.filter(p => p.value === submitData.examinePathId)[0]
+      submitData.examinePathId = examinePath.value
+      submitData.examinePath = examinePath.label
+      // 获取复查单位名称
+      this.organizationList.forEach(it => {
+        if (this.organizationFlag) {
+          this.getOrganization(it, submitData)
+        }
+      })
       saveAqglHiddenRegister(submitData).then(response => {
         this.createDialogVisible = false
         this.$message.success('新建成功')
@@ -281,12 +325,17 @@ export default {
     },
     // 编辑
     editSubmit(submitData) {
+      let examinePath= this.examinePath.filter(p => p.value === submitData.examinePathId)[0]
+      submitData.examinePathId = examinePath.value
+      submitData.examinePath = examinePath.label
       const query = Object.assign(submitData)
       updateAqglHiddenRegister(query).then(response => {
         this.editDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDialog.resetForm()
         this.__fetchData()
+      }).catch(err => {
+        this.$refs.editDialog.resetSubmitBtn()
       })
     },
     // 定义导出Excel表格事件
@@ -305,32 +354,35 @@ export default {
         this.deleteDisabled = true
       }
     },
-
     // 批量删除
     deleteBatches() {
       const selectId = []
-      this.multipleSelection.forEach(it => selectId.push(it.id))
+      this.multipleSelection.forEach(it => selectId.push(it.aqglHiddenRegisterId))
       if (selectId.length === 0) {
-        this.$message.warning('请选择所删除的文件')
+        this.$message.warning('请选择所删除的隐患登记')
         return false
       }
-      this.$confirm('确定删除所选中文件?', '提示', {
+      this.$confirm('确定删除所选中隐患登记?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.__fetchData()
-        this.$message.success('删除成功')
+        batchDeleteHiddenRegister(selectId).then(response => {
+          this.__fetchData()
+          this.$message.success('删除成功')
+        })
       })
     },
-    openUploadDialog(row) {
-      this.$message.info("敬请期待")
-      return
+    // 打开上传文件组件
+    openUploadDialog(ref, row) {
+      // 记录当前打开弹窗ref
+      this.dialogRef = ref
       this.uploadDialogVisible = true
       this.uploadRow = row
     },
     // 上传文件控件成功回调
     uploadSubmit(fileList) {
+      this.$refs[this.dialogRef].updateFile(fileList)
       this.uploadDialogVisible = false
     }
   }

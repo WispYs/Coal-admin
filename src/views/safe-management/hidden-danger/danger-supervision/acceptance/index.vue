@@ -1,141 +1,261 @@
 <template>
   <div class="page-container">
     <div class="filter-bar">
-      <filter-bar :config="reformFilterConfig" @search-click="queryData" style="display: inline-block;"/>
-      <div style="display: inline-block;">
-        <div class="filter-bar__item filter_button">
-          <el-button style="padding: 10px 10px;" icon="el-icon-check" type="primary" size="medium" :disabled="hiddenAcceptanceDisabled" @click="hiddenAcceptance()">隐患验收</el-button>
-        </div>
-      </div>
+      <filter-bar :config="reformFilterConfig" style="display: inline-block;" @search-click="queryData" />
     </div>
     <!-- 表格 -->
     <list-table
       :id="id"
-      :list="tableData"
+      :list="list"
       :list-loading="listLoading"
-      :config="delayApprovalTableConfig"
+      :config="accepationTableConfig"
       height="calc(100% - 157px)"
-      @selection-change="selectionChange"
+      @other-click="otherClick"
     />
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows"
-      @pagination="__fetchData" />
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.pagerows"
+      @pagination="__fetchData"
+    />
+    <!-- 新建弹窗 -->
+    <form-dialog
+      ref="createDialog"
+      :config="initCreateConfig()"
+      :dialog-visible="createDialogVisible"
+      @upload-click="(row) => openUploadDialog('createDialog', row)"
+      @close-dialog="createDialogVisible = false"
+      @submit="createSubmit"
+    />
+    <!-- 上传附件 -->
+    <upload-file
+      :dialog-visible="uploadDialogVisible"
+      @close-dialog="uploadDialogVisible = false"
+      @upload-submit="uploadSubmit"
+    />
   </div>
 </template>
 <script>
+import {
+  getAqglHiddenRegister,
+  getsysDictListById,
+  saveReviewMsg
+} from '@/api/hidden-danger'
+import {
+  getAqglHiddenTissueTree
+} from '@/api/organization'
+import {
+  getOrganTree
+} from '@/api/authority-management'
 import ListTable from '@/components/ListTable'
-import { delayApprovalTableConfig,reformFilterConfig } from '@/data/hidden-danger'
+import { accepationTableConfig, reformFilterConfig, hiddenDangerAcceptance } from '@/data/hidden-danger'
 import Pagination from '@/components/Pagination'
 import FilterBar from '@/components/FilterBar'
+import FormDialog from '@/components/FormDialog'
+import UploadFile from '@/components/UploadFile'
 export default {
   components: {
     ListTable,
     Pagination,
-    FilterBar
+    FilterBar,
+    FormDialog,
+    UploadFile
   },
   data() {
     return {
-      id:"reform",
+      id: 'reform',
       listLoading: true,
-      delayApprovalTableConfig,
+      accepationTableConfig,
       reformFilterConfig,
+      hiddenDangerAcceptance,
+      filter: {},
       list: [],
       listQuery: {
         page: 1,
         pagerows: 10
       },
-      total:1,
-      selectCheckbox:[],
-      hiddenAcceptanceDisabled: true,
-      tableData: [
-        {
-          level: '一般隐患C',
-          status: '待修复',
-          checkDate: '2021.01.27',
-          classes: '',
-          checkType: '',
-          checkOrganization: '掘进五区区直',
-          person: '徐长春',
-          accompanyPerson: '',
-          proMan: '',
-          addr: '1163（3）轨顺',
-          dangerType: '',
-          changeDate: '2021.01.31',
-          statusExplain: '',
-          review: '',
-          content: '',
-          measure: '',
-          files: ''
-        }
-      ]
+      total: 1,
+      selectCheckbox: {},
+      createDialogVisible: false,
+      uploadRow: null,
+      uploadDialogVisible: false
     }
   },
   created() {
+    this.__fetchHiddenUnit()
+    this.__fetchSelectList()
+    this.__fetchUnit()
     this.__fetchData()
   },
   methods: {
-    __fetchData(){
-      this.listLoading = false
-      // const filter = {
-      //   ...this.filter,
-      //   keywordField: ['workNumber', 'loginName', 'userName']
-      // }
-      // const query = Object.assign(this.listQuery, filter)
-      // getUserList(query).then(response => {
-      //   this.listLoading = false
-      //   this.list = response.data.rows
-      //   this.total = Number(response.data.records)
-      // })
+    __fetchUnit() {
+      getOrganTree().then(response => {
+        // 更新新增、编辑config数据
+        this.accepationTableConfig.columns.forEach(it => {
+          if (it.field === 'examineUnit') {
+            it.options = response.data
+          } else if (it.field === 'reviewUnitId') {
+            it.options = response.data
+          }
+        })
+      })
     },
-    queryData() {
-      // console.log(this.keywords)
+    __fetchHiddenUnit() {
+      const query = {
+        aqglHiddenTissueId: ''
+      }
+      getAqglHiddenTissueTree(query).then(response => {
+        this.accepationTableConfig.columns.forEach(it => {
+          if (it.field === 'hiddenDeptId') {
+            it.options = response.data
+          }
+        })
+      })
+    },
+    __fetchSelectList() {
+      const query = [{
+        parentId: 10088
+      }, {
+        parentId: 10092
+      }, {
+        parentId: 10042
+      }, {
+        parentId: 10097
+      }, {
+        parentId: 10106
+      }, {
+        // 隐患状态
+        parentId: 10115
+      }]
+      for (const q in query) {
+        getsysDictListById(query[q].parentId).then(response => {
+          const selectList = []
+          for (const m in response.data) {
+            selectList.push({
+              value: response.data[m].sysDictId,
+              label: response.data[m].dictName
+            })
+          }
+          this.accepationTableConfig.columns.forEach(it => {
+            if (query[q].parentId == 10088) {
+              if (it.field === 'examineShiftId') {
+                it.options = selectList
+                console.log(it)
+              }
+            } else if (query[q].parentId == 10092) {
+              if (it.field === 'examineTypeId') {
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 10042) {
+              if (it.field === 'examinePathId') {
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 10097) {
+              if (it.field === 'hiddenTypeId') {
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 10106) {
+              if (it.field === 'hiddenGrade') {
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 10115) {
+              if (it.field === 'hiddenStatus') {
+                it.options = selectList
+              }
+            }
+          })
+        })
+      }
+    },
+    __fetchData() {
+      this.listLoading = false
+      const query = {
+        page: this.listQuery.page,
+        pagerows: this.listQuery.pagerows,
+        entity: {
+          hiddenStatus: 10119
+        },
+        keyword: this.filter.name,
+        keywordField: ['hiddenContent', 'rectifyPlan']
+      }
+      getAqglHiddenRegister(query).then(response => {
+        if (response.data.rows.length > 0) {
+          this.listLoading = false
+          this.list = response.data.rows
+          if (response.data.rows[0].aqglHiddenMeasure) {
+            this.list[0].abarbeitungUser = response.data.rows[0].aqglHiddenMeasure.abarbeitungUser
+            this.list[0].completeTime = response.data.rows[0].aqglHiddenMeasure.completeTime
+            this.list[0].theMoney = response.data.rows[0].aqglHiddenMeasure.theMoney
+            this.list[0].measureExplain = response.data.rows[0].aqglHiddenMeasure.measureExplain
+          }
+          this.total = Number(response.data.records)
+        } else {
+          if (this.listQuery.page > 0) {
+            this.listQuery.page = this.listQuery.page - 1
+            this.__fetchData()
+          } else {
+            this.listLoading = false
+            this.list = []
+            this.total = 0
+          }
+        }
+      }).catch(err => {
+        this.listLoading = false
+      })
+    },
+    // 初始化新建窗口配置
+    initCreateConfig() {
+      const createConfig = Object.assign({
+        title: '新建',
+        width: '1000px',
+        form: this.hiddenDangerAcceptance.columns
+      })
+      return createConfig
+    },
+    queryData(filter) {
+      this.filter = Object.assign(this.filter, filter)
       this.__fetchData()
     },
-    hiddenAcceptance(){
-
+    hiddenAcceptance() {
+      this.createDialogVisible = true
     },
-    selectionChange(row){
-      this.selectCheckbox= row
-      if(this.selectCheckbox.length == 1){
-        this.hiddenAcceptanceDisabled = false
-      }else{
-        this.hiddenAcceptanceDisabled = true
+    // 新增
+    createSubmit(submitData) {
+      const query = Object.assign(submitData, {
+        aqglHiddenRegisterId: this.selectCheckbox.aqglHiddenRegisterId,
+        reviewType: 2
+      })
+      console.log(query)
+      saveReviewMsg(query).then(response => {
+        this.createDialogVisible = false
+        this.$message.success('创建成功')
+        this.$refs.createDialog.resetForm()
+        this.__fetchData()
+      }).catch(err => {
+        this.$refs.createDialog.resetSubmitBtn()
+      })
+    },
+    // 打开上传文件组件
+    openUploadDialog(ref, row) {
+      // 记录当前打开弹窗ref
+      this.dialogRef = ref
+      this.uploadDialogVisible = true
+      this.uploadRow = row
+    },
+    // 上传文件控件成功回调
+    uploadSubmit(fileList) {
+      this.$refs[this.dialogRef].updateFile(fileList)
+      this.uploadDialogVisible = false
+    },
+    otherClick(data, index, name) {
+      this.selectCheckbox = data
+      if (name == '隐患验收') {
+        this.hiddenAcceptance()
       }
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-@import '~@/assets/styles/variables.scss';
-  .filter-bar {
-    margin-bottom: 10px;
-    &__item {
-      display: inline-block;
-      margin: 0 40px 15px 0;
-      font-size: 14px;
-      label {
-        font-weight: normal;
-        font-size: 14px;
-        margin-right: 4px;
-      }
-    }
-  }
-  .color-lump {
-    padding: 10px 20px;
-    color: $whiteColor;
-    &.green {
-      background: $greenColor;
-    }
-    &.blue {
-      background: $primaryColor;
-    }
-    &.orange {
-      background: $orangeColor;
-    }
-    &.red {
-      background: $redColor;
-    }
-  }
-  .filter_button{
-    margin: 0 22px 15px 0;
-  }
 </style>

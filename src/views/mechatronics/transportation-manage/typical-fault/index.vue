@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { getTypicalFaultList, createApplication, editApplication, getApplicationInfo, delApplication, getOrganTree } from '@/api/mechatronics'
+import { getTypicalFaultList, createTypicalFault, editTypicalFault, getTypicalFaultInfo, delTypicalFault, getOrganTree } from '@/api/mechatronics'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
@@ -75,6 +75,7 @@ export default {
         page: 1,
         pagerows: 10
       },
+      currentNum: 0, // 当前页数据数量，用于判断删除后是否跳转到上一页
       filter: {}, // 筛选项
       listLoading: true,
       TypicalFaultFilterConfig,
@@ -89,35 +90,94 @@ export default {
 
   created() {
     this.__fetchData()
+    // 初始化所属场所下拉框数据
+    this.__updateEquipPlace()
+    // 获取故障种类列表
+    this.__updateFaultType()
+    // 获取故障分级列表
+    this.__updateFaultLevel()
   },
   methods: {
+    // 初始化所属场所下拉框数据
+    __updateEquipPlace() {
+      this.$store.dispatch('mecha/getEquipPlaceList').then((data) => {
+        const placeData = []
+        data.forEach(it => {
+          placeData.push({
+            label: it.typeName,
+            value: it.id + ''
+          })
+        })
+        TypicalFaultTableConfig.columns.forEach(it => {
+          if (it.field === 'deviceTypeId') {
+            it.options = placeData
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 获取故障种类列表
+    __updateFaultType() {
+      // 数据字典 - 故障种类
+      const parentId = 111357
+      this.$store.dispatch('mecha/getDataDictionary', parentId).then((data) => {
+        data.forEach(it => {
+          it.value = it.dictValue
+          it.label = it.dictName
+        })
+        TypicalFaultTableConfig.columns.forEach(it => {
+          if (it.field === 'faultType') {
+            it.options = data
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 获取故障分级列表
+    __updateFaultLevel() {
+      // 数据字典 - 故障分级
+      const parentId = 111362
+      this.$store.dispatch('mecha/getDataDictionary', parentId).then((data) => {
+        data.forEach(it => {
+          it.value = it.dictValue
+          it.label = it.dictName
+        })
+        TypicalFaultTableConfig.columns.forEach(it => {
+          if (it.field === 'level') {
+            it.options = data
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
     __fetchData() {
       this.listLoading = true
-      const entity = {
-        ...this.filter
+      const filter = {
+        ...this.filter,
+        keywordField: ['belongPlace']
       }
-      const sort = {
-        sort: {
-          asc: ['orderNum']
-        }
-      }
-      const query = Object.assign(this.listQuery, sort, { entity })
+      const query = Object.assign(this.listQuery, filter)
       getTypicalFaultList(query).then(response => {
         this.listLoading = false
         this.list = response.data.rows
         this.total = Number(response.data.records)
+        this.currentNum = response.data.rows.length
       })
     },
     // 查询数据
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
+      this.$set(this.listQuery, 'page', 1)
       this.__fetchData()
     },
     // 初始化新建窗口配置
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.TypicalFaultTableConfig.columns
       })
       return createConfig
@@ -126,7 +186,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.TypicalFaultTableConfig.columns
       })
       return editConfig
@@ -136,23 +196,31 @@ export default {
       console.log(name, row)
       const visible = `${name}DialogVisible`
       this[visible] = true
-      // getOrganTree().then(response => {
-      //   console.log(response.data)
-      //   // 更新新增、编辑config数据
-      //   TypicalFaultTableConfig.columns.forEach(it => {
-      //     if (it.field === 'sysDeptId') {
-      //       it.options = response.data
-      //     }
-      //   })
-      // })
+      // 初始化所属场所下拉框数据
+      this.__updateEquipPlace()
+
       // 如果有数据，更新子组件的 formData
       if (row) {
-        getApplicationInfo(row.sysManageId).then(response => {
+        getTypicalFaultInfo(row.id).then(response => {
           const info = Object.assign(response.data, {
-            sysDeptId: Number(response.data.sysDeptId) || 0
+            deviceTypeId: response.data.deviceTypeId ? response.data.deviceTypeId + '' : '',
+            faultType: response.data.faultType ? response.data.faultType + '' : '',
+            level: response.data.level ? response.data.level + '' : ''
           })
           this.$refs.editDialog.updataForm(info)
         })
+      }
+    },
+    // 删除当前页最后一条数据后跳转到前一页
+    /**
+     * @params{number} num 删除数量
+     */
+    changeCurrentPage(num) {
+      this.currentNum = this.currentNum - num
+      if (this.currentNum <= 0) {
+        if (this.listQuery.page > 1) {
+          this.$set(this.listQuery, 'page', this.listQuery.page - 1)
+        }
       }
     },
     // 删除
@@ -162,23 +230,18 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(row.sysManageId)
-        delApplication(row.sysManageId).then(response => {
+        delTypicalFault(row.id).then(response => {
           console.log(response)
           this.$message.success('删除成功')
+          this.changeCurrentPage(1)
           this.__fetchData()
         })
       })
     },
     // 新建
     createSubmit(submitData) {
-      console.log(submitData)
-      const query = Object.assign(submitData, {
-        orderNum: Number(submitData.orderNum) || 0,
-        sysDeptId: Number(submitData.sysDeptId) || 0
-      })
-      createApplication(query).then(response => {
-        console.log(response)
+      const query = Object.assign(submitData)
+      createTypicalFault(query).then(response => {
         this.createDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDialog.resetForm()
@@ -190,16 +253,15 @@ export default {
     },
     // 编辑
     editSubmit(submitData) {
-      console.log(submitData)
-      const query = Object.assign(submitData, {
-        orderNum: Number(submitData.orderNum) || 0
-      })
-      editApplication(query).then(response => {
-        console.log(response)
+      const query = Object.assign(submitData)
+      editTypicalFault(query).then(response => {
         this.editDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDialog.resetForm()
         this.__fetchData()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.editDialog.resetSubmitBtn()
       })
     },
 
@@ -229,8 +291,9 @@ export default {
         type: 'warning'
       }).then(() => {
         console.log(selectId)
-        this.__fetchData()
         this.$message.success('删除成功')
+        this.changeCurrentPage(selectId.length)
+        this.__fetchData()
       })
     }
 

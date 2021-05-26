@@ -15,6 +15,8 @@
       height="calc(100% - 157px)"
       @edit-click="(row) => openDialog('edit', row)"
       @delete-click="deleteClick"
+      @preview-click="previewClick"
+      @edit-process="editProcessClick"
       @submit-data="editSubmit"
       @selection-change="selectionChange"
     />
@@ -54,20 +56,31 @@
       @close-dialog="editDialogVisible = false"
       @submit="editSubmit"
     />
+    <router-view />
   </div>
 </template>
 
 <script>
 import FilterBar from '@/components/FilterBar'
-import ListTable from '@/components/ListTable'
+import ListTable from './components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import { EmergencyTableConfig, EmergencyFilterConfig } from '@/data/emergency-rescue-guide'
+import {
+  delObject,
+  saveObject,
+  getObjectById,
+  getObjectByPage,
+  updateObject,
+  getDictData,
+  deleteBatches
+} from '@/api/emergency-rescue'
 export default {
   components: { FilterBar, ListTable, Pagination, FormDialog },
   data() {
     return {
       id: 'application-manage',
+      bussiness: 'yjjyFlowManage',
       list: [],
       total: 0,
       listQuery: {
@@ -86,21 +99,33 @@ export default {
     }
   },
   created() {
-    // this.__fetchData()
+    this.__fetchData()
+    this.__initOptions()
   },
   methods: {
+    __initOptions() {
+      // 模板管理
+      getDictData(111123).then(res => {
+        this.accidentType = res.data
+        for (const k in res.data) {
+          this.accidentType[k]['value'] = res.data[k]['dictName']
+          this.accidentType[k]['label'] = res.data[k]['dictName']
+        }
+        EmergencyTableConfig.columns.forEach(it => {
+          if (it.field === 'templateType') {
+            it.options = res.data
+          }
+        })
+      })
+    },
     __fetchData() {
       this.listLoading = true
-      const entity = {
-        ...this.filter
+      const filter = {
+        ...this.filter,
+        keywordField: ['templateName']
       }
-      const sort = {
-        sort: {
-          asc: ['orderNum']
-        }
-      }
-      const query = Object.assign(this.listQuery, sort, { entity })
-      getApplicationList(query).then(response => {
+      const query = Object.assign(this.listQuery, filter)
+      getObjectByPage(query, this.bussiness).then(response => {
         this.listLoading = false
         this.list = response.data.rows
         this.total = Number(response.data.records)
@@ -115,7 +140,7 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.EmergencyTableConfig.columns
       })
       return createConfig
@@ -124,7 +149,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.EmergencyTableConfig.columns
       })
       return editConfig
@@ -145,13 +170,19 @@ export default {
       // })
       // 如果有数据，更新子组件的 formData
       if (row) {
-        getApplicationInfo(row.sysManageId).then(response => {
+        getObjectById(row[`${this.bussiness}Id`], this.bussiness).then(response => {
           const info = Object.assign(response.data, {
             sysDeptId: Number(response.data.sysDeptId) || 0
           })
           this.$refs.editDialog.updataForm(info)
         })
       }
+    },
+    // 查看
+    previewClick(row) {
+      this.$router.push({
+        path: '/emergency-rescue/emergency1/emergency1-2/preview-process'
+      })
     },
     // 删除
     deleteClick(row) {
@@ -160,8 +191,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(row.sysManageId)
-        delApplication(row.sysManageId).then(response => {
+        delObject(row[`${this.bussiness}Id`], this.bussiness).then(response => {
           console.log(response)
           this.$message.success('删除成功')
           this.__fetchData()
@@ -175,7 +205,7 @@ export default {
         orderNum: Number(submitData.orderNum) || 0,
         sysDeptId: Number(submitData.sysDeptId) || 0
       })
-      createApplication(query).then(response => {
+      saveObject(query, this.bussiness).then(response => {
         console.log(response)
         this.createDialogVisible = false
         this.$message.success('新建成功')
@@ -192,12 +222,18 @@ export default {
       const query = Object.assign(submitData, {
         orderNum: Number(submitData.orderNum) || 0
       })
-      editApplication(query).then(response => {
+      updateObject(query, this.bussiness).then(response => {
         console.log(response)
         this.editDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDialog.resetForm()
         this.__fetchData()
+      })
+    },
+    // 编辑流程
+    editProcessClick() {
+      this.$router.push({
+        path: '/emergency-rescue/emergency1/emergency1-2/edit-process'
       })
     },
 
@@ -214,10 +250,9 @@ export default {
 
     // 批量删除
     deleteBatches() {
-      const selectId = []
-      this.multipleSelection.forEach(it => selectId.push(it.id))
-      console.log(selectId)
-      if (selectId.length === 0) {
+      const arr = []
+      this.multipleSelection.forEach(m => arr.push(m[`${this.bussiness}Id`]))
+      if (arr.length === 0) {
         this.$message.warning('请选择所删除的文件')
         return false
       }
@@ -226,9 +261,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(selectId)
-        this.__fetchData()
-        this.$message.success('删除成功')
+        deleteBatches(arr, this.bussiness).then(res => {
+          this.$message.success('删除成功')
+          this.__fetchData()
+        })
       })
     }
 

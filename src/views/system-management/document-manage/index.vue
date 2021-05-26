@@ -1,6 +1,7 @@
 <template>
   <div class="page-container upload-page has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
     <tree-bar
+      ref="tree"
       :has-menu="hasMenu"
       :tree-data="treeData"
       :menu-config="menuConfig"
@@ -13,8 +14,21 @@
         <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
       </span>
       <div class="upload-button">
-        <!-- <el-button type="primary" size="medium" @click="openDailog"><i class="el-icon-plus el-icon--left" />新建文件</el-button> -->
-        <el-button type="primary" size="medium" @click="uploadDialogVisible = true"><i class="el-icon-upload el-icon--left" />上传</el-button>
+        <div class="filter-bar__item">
+          <label>搜索：</label>
+          <el-input
+            v-model="searchVal"
+            class="filter-item"
+            size="medium"
+            style="width: 220px"
+            placeholder="请输入关键字"
+            @change="__fetchData"
+          >
+            <el-button slot="append" icon="el-icon-search" @click="__fetchData" />
+          </el-input>
+        </div>
+
+        <el-button v-if="hasMenu || selectTree === user.sysDeptId" type="primary" size="medium" @click="uploadDialogVisible = true"><i class="el-icon-upload el-icon--left" />上传</el-button>
         <el-button size="medium" plain @click="refresh"><i class="el-icon-refresh el-icon--left" />刷新</el-button>
       </div>
       <el-table ref="multipleTable" :data="list" tooltip-effect="dark" style="width: 100%" height="calc(100% - 153px)" @selection-change="handleSelectionChange">
@@ -41,12 +55,16 @@
       </el-table>
       <div v-show="total>0" class="page-bottom">
         <el-button class="page-bottom__delete" type="warning" size="small" plain :disabled="deleteDisabled" @click="deleteBatches"><i class="el-icon-delete el-icon--left" />批量删除</el-button>
-        <pagination :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
+        <pagination
+          :total="total"
+          :page.sync="listQuery.page"
+          :limit.sync="listQuery.pagerows"
+          @pagination="__fetchData"
+        />
       </div>
       <upload-file
         :data="uploadData"
         :dialog-visible="uploadDialogVisible"
-        :multiple="false"
         @close-dialog="uploadDialogVisible = false"
         @upload-submit="uploadSubmit"
       />
@@ -95,7 +113,7 @@ import TreeBar from '@/components/TreeBar'
 import Pagination from '@/components/Pagination'
 import UploadFile from '@/components/UploadFile'
 import FormDialog from '@/components/FormDialog'
-import { DocTable, TreeTable } from '@/data/document-management'
+import { DocTable, DocFilterConfig, TreeTable } from '@/data/document-management'
 import {
   getUploadList,
   updateDocument,
@@ -111,7 +129,9 @@ import {
   getTree,
   getFolderTree
 } from '@/api/tree'
-
+import {
+  getInfo
+} from '@/api/user'
 export default {
   components: {
     Pagination,
@@ -140,7 +160,11 @@ export default {
         }
       ],
       selectTree: 0,
-      uploadData: null,
+      uploadData: {
+        sysFileDictId: 0,
+        menuId: this.$route.name,
+        menuPath: this.getLevel()
+      },
       folderName: '',
       hasMenu: true,
       tag: null,
@@ -156,6 +180,7 @@ export default {
         pagerows: 10
       },
       DocTable,
+      DocFilterConfig,
       TreeTable,
       multipleSelection: [],
       uploadDialogVisible: false,
@@ -164,31 +189,71 @@ export default {
       treeData: {
         title: '文件夹',
         title2: '部门',
-        list: []
-      }
+        tId: 'value',
+        list: [{
+          label: '根目录',
+          value: 0,
+          children: []
+        }]
+      },
+      user: null,
+      searchVal: ''
     }
   },
-  mounted() {
+  created() {
+    this.getInfo()
     this.__fetchData()
     this._fetchTreeData()
   },
+  mounted() {
+    this.$refs.tree.setCurrentKey(0)
+  },
   methods: {
+    // 获取层级
+    getLevel() {
+      let level = ''
+      this.$route.matched.some(item => {
+        if (item.meta) {
+          if (level === '') {
+            level += `${item.meta.title}`
+          } else {
+            level += ` / ${item.meta.title}`
+          }
+        }
+      })
+      return level
+    },
+    // 获取用户信息
+    getInfo() {
+      getInfo().then(res => {
+        this.user = res.data
+      })
+    },
+    // 获取文件类型
     getFileType(row) {
-      // const type = row.suffix
-      // const img = ['png', 'jpg', 'jpeg'].includes(type)
-      // const doc = ['doc', 'docx'].includes(type)
-      // const xls = ['xls', 'xlsx'].includes(type)
-      // if (img) {
-      //   return require(`@/assets/images/img.png`)
-      // }
-      // if (doc) {
-      //   return require(`@/assets/images/doc.png`)
-      // }
-      // if (xls) {
-      //   return require(`@/assets/images/xls.png`)
-      // }
+      const type = row.suffix.toLocaleLowerCase()
+      const img = ['png', 'jpg', 'jpeg'].includes(type)
+      const doc = ['doc', 'docx'].includes(type)
+      const xls = ['xls', 'xlsx'].includes(type)
+      const pdf = ['pdf'].includes(type)
+      const dwg = ['dwg'].includes(type)
+      if (img) {
+        return require(`@/assets/images/PICTURE.png`)
+      }
+      if (doc) {
+        return require(`@/assets/images/WORD.png`)
+      }
+      if (xls) {
+        return require(`@/assets/images/EXCEL.png`)
+      }
+      if (dwg) {
+        return require(`@/assets/images/DWG.png`)
+      }
+      if (pdf) {
+        return require(`@/assets/images/PDF.png`)
+      }
 
-      return require(`@/assets/images/file.png`)
+      return require(`@/assets/images/UNKNOW.png`)
     },
     createFolder(tag) {
       this.dialogTitle = '添加'
@@ -261,16 +326,18 @@ export default {
     //   })
     //   return operationConfig
     // },
-    openDailog() {
-      this.$message({
-        message: '谢谢您，点击新建文件',
-        type: 'success'
-      })
-      this.dialogVisible = true
-    },
     // 获取部门树
     _fetchDepartTreeData(pId = 0) {
-      getTree(pId).then(res => { this.treeData.list = res.data })
+      getTree(pId).then(res => {
+        const _list = [{
+          label: '根目录',
+          value: 0,
+          children: []
+        }]
+        _list[0].children = res.data
+        this.treeData.list = _list
+        this.$refs.tree.setCurrentKey(0)
+      })
     },
     _fetchTreeData(fId = 0) {
       // this.treeData.list = [
@@ -297,39 +364,62 @@ export default {
       })
     },
     // 获取表格数据
-    async __fetchData(tId = 0) {
+    __fetchData() {
       this.listLoading = true
       const folderData = {
-        'entity': {
-          'sysFileDictId': tId,
-          'menuId': this.$route.name
-        }
+        'sysFileDictId': this.selectTree,
+        'menuId': this.$route.name
       }
       const deptData = {
-        'entity': {
-          'sysDeptId': tId,
-          'menuId': this.$route.name
-        }
+        'sysDeptId': this.selectTree,
+        'menuId': this.$route.name
       }
-      const d = this.hasMenu ? await getUploadList(Object.assign(folderData, this.listQuery)) : await getUploadListByDept(Object.assign(deptData, this.listQuery))
-      if (d.result === 1) {
-        const res = d.data
-        this.listLoading = false
-        this.list = res.rows
-        this.total = Number(res.total)
+      const filter = {
+        keyword: this.searchVal,
+        entity: this.hasMenu ? folderData : deptData,
+        keywordField: ['fileName', 'remark']
+      }
+      const query = Object.assign(this.listQuery, filter)
+      if (this.hasMenu) {
+        getUploadList(query).then(response => {
+          const res = response.data
+          this.listLoading = false
+          this.list = res.rows
+          this.total = Number(res.records)
+          if (this.list.length == 0 && this.listQuery.page > 1) {
+            this.listQuery.page--
+            this.__fetchData()
+          }
+        })
+      } else {
+        getUploadListByDept(query).then(response => {
+          const res = response.data
+          this.listLoading = false
+          this.list = res.rows
+          this.total = Number(res.records)
+          if (this.list.length == 0 && this.listQuery.page > 1) {
+            this.listQuery.page--
+            this.__fetchData()
+          }
+        })
       }
     },
     // 切换tree
     handleSwitch(el) {
       const idx = Number(el.index)
+      this.selectTree = 0
+      this.searchVal = ''
       if (idx === 1) {
         this.hasMenu = false
         this._fetchDepartTreeData()
-        this.__fetchData(1)
+        this.__fetchData()
+        delete this.uploadData.sysFileDictId
+        this.uploadData.sysDeptId = 0
       } else if (idx === 0) {
         this.hasMenu = true
         this._fetchTreeData()
         this.__fetchData()
+        this.$refs.tree.setCurrentKey(0)
       }
     },
     // 改变所选项
@@ -344,7 +434,6 @@ export default {
     },
     // 上传文件控件成功回调
     uploadSubmit(fileList) {
-      // console.log(fileList)
       this.uploadDialogVisible = false
       this.__fetchData(this.selectTree)
     },
@@ -367,9 +456,7 @@ export default {
     },
     // 点击预览时触发
     previewClick(row) {
-      previewDocument(row.sysFileInfoId).then(res => {
-        console.log(res)
-      })
+      previewDocument(row.sysFileInfoId)
     },
     // 下载文件
     downloadClick(row) {
@@ -405,23 +492,39 @@ export default {
     },
     // 点击树结构时触发
     handleNodeClick(_data) {
+      this.searchVal = ''
       this.selectTree = _data.value
-      this.uploadData = this.hasMenu ? {
-        sysFileDictId: this.selectTree,
-        menuId: this.$route.name
-      } : {
-        sysDeptId: this.selectTree,
-        menuId: this.$route.name
-      }
+      const d = this.hasMenu ? { sysFileDictId: this.selectTree } : { sysDeptId: this.selectTree }
+      this.uploadData = Object.assign(this.uploadData, d)
       this.__fetchData(this.selectTree)
     }
   }
 }
 </script>
 <style lang="scss" scoped>
+.tree-container{
+  overflow: hidden !important;
+  ::v-deep .el-tree {
+    overflow: auto;
+    height: 86%;
+    .el-tree-node {
+      width: fit-content;
+    }
+  }
+}
+.filter-bar__item {
+      display: inline-block;
+      margin: 0 20px 15px 0;
+      font-size: 14px;
+      label {
+        font-weight: normal;
+        font-size: 14px;
+        margin-right: 4px;
+      }
+    }
   .upload-page {
     .upload-button {
-      padding: 10px 0;
+      padding: 0 0 10px 0;
       border-bottom: 1px solid #ededed;
     }
 

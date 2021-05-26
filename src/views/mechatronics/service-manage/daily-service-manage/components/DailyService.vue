@@ -2,17 +2,17 @@
   <el-dialog
     title="日常维检"
     :visible.sync="dialogVisible"
-    width="800px"
+    width="1000px"
     :before-close="closeDialog"
   >
-    <el-form ref="formData" class="dialog-container" :model="formData" :rules="formRules" label-width="120px" size="medium" :inline="true">
-      <el-form-item label="所属场所" prop="area">
-        <el-input v-model="formData.area" style="200px;" disabled class="form-item" placeholder="请填写所属场所" />
+    <el-form ref="formData" class="dialog-container" :model="formData" :rules="formRules" label-width="200px" size="medium" :inline="true">
+      <el-form-item label="所属场所：" prop="belongPlace">
+        <el-input v-model="formData.belongPlace" style="200px;" disabled class="form-item" placeholder="请填写所属场所" />
       </el-form-item>
-      <el-form-item label="所属计划" prop="deviceName">
+      <el-form-item label="所属计划：" prop="deviceName">
         <el-input v-model="formData.deviceName" style="200px;" disabled class="form-item" placeholder="请填写所属计划" />
       </el-form-item>
-      <el-form-item label="维检时间" prop="oveTime">
+      <el-form-item label="维检时间：" prop="oveTime">
         <el-date-picker
           v-model="formData.oveTime"
           class="form-item"
@@ -21,7 +21,7 @@
           placeholder="请选择维检时间"
         />
       </el-form-item>
-      <el-form-item label="维检情况" prop="oveContent" class="full-line">
+      <el-form-item label="维检情况：" prop="oveContent" class="full-line">
         <el-input
           v-model="formData.oveContent"
           type="textarea"
@@ -29,38 +29,45 @@
           style="width: 100%"
         />
       </el-form-item>
-      <el-form-item label="维检结果" prop="oveResult" class="full-line">
+      <el-form-item label="维检结果：" prop="oveResult" class="full-line">
         <el-radio-group v-model="formData.oveResult">
           <el-radio-button :label="1">正常</el-radio-button>
           <el-radio-button :label="0">异常</el-radio-button>
         </el-radio-group>
       </el-form-item>
       <template v-if="!formData.oveResult">
-        <el-form-item label="故障主题" prop="subject" class="full-line">
+        <el-form-item label="故障主题：" prop="faultTheme" class="full-line">
           <el-input
-            v-model="formData.subject"
+            v-model="formData.faultTheme"
             type="textarea"
             placeholder="请填写故障主题"
             style="width: 100%"
           />
         </el-form-item>
-        <el-form-item label="故障情况" prop="fault" class="full-line">
+        <el-form-item label="故障情况：" prop="faultContent" class="full-line">
           <el-input
-            v-model="formData.fault"
+            v-model="formData.faultContent"
             type="textarea"
             placeholder="请填写故障情况"
             style="width: 100%"
           />
         </el-form-item>
-        <el-form-item label="指定维修人" prop="server" class="full-line">
-          <el-input v-model="formData.server" style="200px;" class="form-item" placeholder="请填写指定维修人" />
+        <el-form-item label="指定维修人：" prop="toOveBy" class="full-line">
+          <el-select v-model="formData.toOveBy" class="form-item" placeholder="请填写指定维修人">
+            <el-option
+              v-for="it in personOptions"
+              :key="it.value"
+              :label="it.label"
+              :value="it.value"
+            />
+          </el-select>
         </el-form-item>
       </template>
 
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button size="medium" @click="closeDialog">取消</el-button>
       <el-button :loading="submitLoading" type="primary" size="medium" @click="onSubmit">提交</el-button>
+      <el-button size="medium" @click="closeDialog">取消</el-button>
     </span>
   </el-dialog>
 </template>
@@ -76,15 +83,21 @@ export default {
   },
   data() {
     return {
+      personOptions: [
+        { value: '1', label: '超级管理员' },
+        { value: '2', label: '管理员' },
+        { value: '3', label: '操作工' },
+        { value: '4', label: '访客' }
+      ],
       formData: {
-        area: '中央区主井提升机房',
+        belongPlace: '中央区主井提升机房',
         deviceName: '主电机碳刷',
         oveTime: '',
         oveContent: '',
         oveResult: 1,
-        subject: '',
-        fault: '',
-        server: ''
+        faultTheme: '',
+        faultContent: '',
+        toOveBy: ''
       },
       submitLoading: false, // 提交按钮loading状态
       formRules: {
@@ -97,13 +110,13 @@ export default {
         oveResult: [
           { required: true, message: '请选择维检结果', trigger: 'blur' }
         ],
-        subject: [
+        faultTheme: [
           { required: true, message: '请填写故障主题', trigger: 'blur' }
         ],
-        fault: [
+        faultContent: [
           { required: true, message: '请填写故障情况', trigger: 'blur' }
         ],
-        server: [
+        toOveBy: [
           { required: true, message: '请填写指定维修人', trigger: 'blur' }
         ]
       }
@@ -157,7 +170,7 @@ export default {
   }
   .el-form-item__content {
     display: block;
-    margin-left: 120px;
+    margin-left: 200px;
   }
 }
 </style>

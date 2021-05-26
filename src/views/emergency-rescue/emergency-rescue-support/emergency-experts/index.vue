@@ -1,67 +1,61 @@
 <template>
   <div class="page-container">
+    <filter-bar
+      :config="EmergencyExpertsFilterConfig"
+      @search-click="queryData"
+      @create-click="openDialog('create')"
+      @reset-click="queryData"
+    />
+    <!-- 表格 -->
+    <list-table
+      :id="id"
+      :list="list"
+      :list-loading="listLoading"
+      :config="EmergencyExpertsTableConfig"
+      @edit-click="(row) => openDialog('edit', row)"
+      @delete-click="deleteClick"
+      @submit-data="editSubmit"
+      @selection-change="selectionChange"
+    />
 
-    <div class="tree-form-container">
-      <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
-        <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
-      </span>
-      <filter-bar
-        :config="EmergencyExpertsFilterConfig"
-        @search-click="queryData"
-        @create-click="openDialog('create')"
-        @reset-click="queryData"
+    <div v-show="total>0" class="page-bottom">
+      <el-button
+        class="page-bottom__delete"
+        type="warning"
+        size="small"
+        plain
+        :disabled="deleteDisabled"
+        @click="deleteBatches"
+      >
+        <i class="el-icon-delete el-icon--left" />批量删除
+      </el-button>
+      <pagination
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.pagerows"
+        @pagination="__fetchData"
       />
-      <!-- 表格 -->
-      <list-table
-        :id="id"
-        :list="list"
-        :list-loading="listLoading"
-        :config="EmergencyExpertsTableConfig"
-        @edit-click="(row) => openDialog('edit', row)"
-        @delete-click="deleteClick"
-        @submit-data="editSubmit"
-        @selection-change="selectionChange"
-      />
-
-      <div v-show="total>0" class="page-bottom">
-        <!-- <el-button
-          class="page-bottom__delete"
-          type="warning"
-          size="small"
-          plain
-          :disabled="deleteDisabled"
-          @click="deleteBatches"
-        >
-          <i class="el-icon-delete el-icon--left" />批量删除
-        </el-button> -->
-        <pagination
-          :total="total"
-          :page.sync="listQuery.page"
-          :limit.sync="listQuery.pagerows"
-          @pagination="__fetchData"
-        />
-      </div>
-
-      <!-- 新建弹窗 -->
-      <form-dialog
-        ref="createDialog"
-        :config="initCreateConfig()"
-        :dialog-visible="createDialogVisible"
-        @close-dialog="createDialogVisible = false"
-        @submit="createSubmit"
-      />
-      <!-- 编辑弹窗 -->
-      <form-dialog
-        ref="editDialog"
-        :config="initEditConfig()"
-        :dialog-visible="editDialogVisible"
-        @close-dialog="editDialogVisible = false"
-        @submit="editSubmit"
-      />
-
-      <!-- 重置密码 -->
-      <reset-password ref="resetPasswordDialog" :dialog-visible="passwordDialogVisible" @close-dialog="passwordDialogVisible = false" />
     </div>
+
+    <!-- 新建弹窗 -->
+    <form-dialog
+      ref="createDialog"
+      :config="initCreateConfig()"
+      :dialog-visible="createDialogVisible"
+      @close-dialog="createDialogVisible = false"
+      @submit="createSubmit"
+    />
+    <!-- 编辑弹窗 -->
+    <form-dialog
+      ref="editDialog"
+      :config="initEditConfig()"
+      :dialog-visible="editDialogVisible"
+      @close-dialog="editDialogVisible = false"
+      @submit="editSubmit"
+    />
+
+    <!-- 重置密码 -->
+    <reset-password ref="resetPasswordDialog" :dialog-visible="passwordDialogVisible" @close-dialog="passwordDialogVisible = false" />
 
   </div>
 </template>
@@ -79,7 +73,8 @@ import {
   updateObject,
   delObject,
   getObjectById,
-  getEmergencyCommunicationOrganizationTree
+  getDictData,
+  deleteBatches
 } from '@/api/emergency-rescue'
 import {
   EmergencyExpertsTableConfig,
@@ -98,7 +93,7 @@ export default {
   data() {
     return {
       id: 'emergency-experts',
-      business: 'yjjySpecialist',
+      bussiness: 'yjjySpecialist',
       list: [],
       total: 0,
       listQuery: {
@@ -124,38 +119,43 @@ export default {
 
   created() {
     this.__fetchData()
-    // this.__updateOrganTree()
+    this.__initOptions()
   },
   methods: {
-    // 接口获取组织机构树
-    // __updateOrganTree() {
-    //   getEmergencyCommunicationOrganizationTree().then(response => {
-    //     console.log(response.data)
-    //     // 更新左侧树结构数据
-    //     this.treeData.list = response.data
-    //     // 更新新增、编辑config数据
-    //     EmergencyExpertsTableConfig.columns.forEach(it => {
-    //       if (it.field === 'yjjyCommunicationTissueId') {
-    //         it.options = response.data
-    //       }
-    //     })
-    //   })
-    // },
-
+    __initOptions() {
+      // 模板管理
+      getDictData(10028).then(res => {
+        this.accidentType = res.data
+        for (const k in res.data) {
+          this.accidentType[k]['value'] = res.data[k]['dictName']
+          this.accidentType[k]['label'] = res.data[k]['dictName']
+        }
+        EmergencyExpertsTableConfig.columns.forEach(it => {
+          if (it.field === 'major') {
+            it.options = res.data
+          }
+        })
+      })
+    },
     __fetchData() {
       this.listLoading = true
       const filter = {
         ...this.filter,
-        keywordField: ['teamUserName', 'teamType']
+        keywordField: ['specialistName', 'major']
       }
       const query = Object.assign(this.listQuery, filter)
-      getObjectByPage(query, this.business).then(response => {
+      getObjectByPage(query, this.bussiness).then(response => {
         response.data.rows.forEach((r, idx) => {
           r.index = idx + 1
         })
         this.listLoading = false
         this.list = response.data.rows
         this.total = Number(response.data.records)
+
+        if (this.listQuery.page > 1 && !this.list.length) {
+          this.listQuery.page--
+          this.__fetchData()
+        }
       })
     },
     // 查询数据
@@ -167,7 +167,7 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.EmergencyExpertsTableConfig.columns
       })
       return createConfig
@@ -176,7 +176,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.EmergencyExpertsTableConfig.columns
       })
       return editConfig
@@ -188,7 +188,7 @@ export default {
 
       // 如果有数据，更新子组件的 formData
       if (row) {
-        getObjectById(row[`${this.business}Id`], this.business).then(response => {
+        getObjectById(row[`${this.bussiness}Id`], this.bussiness).then(response => {
           const res = response.data
           res.teamType = Number(res.teamType)
           // const info = Object.assign(response.data, {
@@ -206,7 +206,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        delObject(row[`${this.business}Id`], this.business).then(response => {
+        delObject(row[`${this.bussiness}Id`], this.bussiness).then(response => {
           console.log(response)
           this.$message.success('删除成功')
           this.__fetchData()
@@ -221,7 +221,7 @@ export default {
       //   sysRoleId: Number(submitData.sysRoleId) || 0,
       //   yjjyCommunicationTissueId: Number(submitData.yjjyCommunicationTissueId) || 0
       // })
-      saveObject(submitData, this.business).then(response => {
+      saveObject(submitData, this.bussiness).then(response => {
         console.log(response)
         this.createDialogVisible = false
         this.$message.success('新建成功')
@@ -234,7 +234,7 @@ export default {
     },
     editSubmit(submitData) {
       const query = Object.assign(submitData)
-      updateObject(query, this.business).then(response => {
+      updateObject(query, this.bussiness).then(response => {
         console.log(response)
         this.editDialogVisible = false
         this.$message.success('编辑成功')
@@ -256,10 +256,9 @@ export default {
 
     // 批量删除
     deleteBatches() {
-      const selectId = []
-      this.multipleSelection.forEach(it => selectId.push(it.id))
-      console.log(selectId)
-      if (selectId.length === 0) {
+      const arr = []
+      this.multipleSelection.forEach(m => arr.push(m[`${this.bussiness}Id`]))
+      if (arr.length === 0) {
         this.$message.warning('请选择所删除的文件')
         return false
       }
@@ -268,9 +267,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(selectId)
-        this.__fetchData()
-        this.$message.success('删除成功')
+        deleteBatches(arr, this.bussiness).then(res => {
+          this.$message.success('删除成功')
+          this.__fetchData()
+        })
       })
     },
 

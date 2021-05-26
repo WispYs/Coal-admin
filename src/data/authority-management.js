@@ -18,17 +18,21 @@ export const OTableConfig = {
    * @param {boolean} sortable          是否需要排序
    * @param {string}  align             单元表格对齐方向，默认为'center'
    * @param {string}  unit              字段单位，例如：元、kw/h
-   * @param {string}  layout            表单类型
+   * @param {string}  layout            表单类型；layout为 SelectUser 时，点击该表单字段调用 '选择人员' 公共组件
    * @param {boolean} require           是否为必填字段，默认false为非必填
    * @param {boolean} rule              自定义验证方法
-   * @param {string}  dateFormat        日期格式
+   * @param {string}  dateFormat        日期格式，例如：yyyy-MM-dd、yyyy-MM-dd HH:mm:ss
    * @param {array}   options           选择器配置项
    * @param {boolean} hidden            是否在表格中隐藏，默认false，值为true时只在新建、编辑中显示该字段
-   * @param {boolean} disabled          不可在新增、编辑中修改的字段，默认false，值为true时表示该字段后台自动生成不可编辑
+   * @param {boolean} immutable         不可在新增、编辑中修改的字段，默认false，值为true时表示该字段后台自动生成不可编辑，也不再修改表单中显示
+   * @param {boolean} disabled          是否禁用表单字段，默认false，值为true时禁用该字段
    * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump 色块显示
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
    * @param {boolean} lazy              是否异步加载树形表格子节点数据，默认false，值为true时为异步
    * @param {boolean} multiple          下拉选择是否多选,默认false，值为true时多选
+   * @param {string}  subField          针对动态获取的多级联动下拉菜单，无法通过value值渲染label名称时，采取的备用名称字段
+   * @param {boolean} fullLine          该表单字段长度是否为整行，默认false，值为true时表示整行显示
+   * @param {string}  associate         针对关联字段显示隐藏(改变某字段值为绑定值才会出现的字段)，fields表示相关联字段，value表示绑定值(例如：'1,2,3')，视项目需求待添加到公共组件
    */
   actions: ['edit', 'delete'],
   rowKey: 'aqglRiskTissueId',
@@ -64,13 +68,14 @@ export const AppTableConfig = {
    * @param {boolean} sortable          是否需要排序
    * @param {string}  align             单元表格对齐方向，默认为'center'
    * @param {string}  unit              字段单位，例如：元、kw/h
-   * @param {string}  layout            表单类型
+   * @param {string}  layout            表单类型；layout为 SelectUser 时，点击该表单字段调用 '选择人员' 公共组件
    * @param {boolean} require           是否为必填字段，默认false为非必填
    * @param {boolean} rule              自定义验证方法
-   * @param {string}  dateFormat        日期格式
+   * @param {string}  dateFormat        日期格式，例如：yyyy-MM-dd、yyyy-MM-dd HH:mm:ss
    * @param {array}   options           选择器配置项
    * @param {boolean} hidden            是否在表格中隐藏，默认false，值为true时只在新建、编辑中显示该字段
-   * @param {boolean} disabled          不可在新增、编辑中修改的字段，默认false，值为true时表示该字段后台自动生成不可编辑
+   * @param {boolean} immutable         不可在新增、编辑中修改的字段，默认false，值为true时表示该字段后台自动生成不可编辑，也不再修改表单中显示
+   * @param {boolean} disabled          是否禁用表单字段，默认false，值为true时禁用该字段
    * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump-有背景色块;underline-下划线可点击
    * @param {string}  underlineText     表格内数据显示方式为underline时，下划线的文字
    * @param {string}  rowKey            行数据的key，渲染树形表格必填，一般选唯一字段 id
@@ -81,24 +86,9 @@ export const AppTableConfig = {
   columns: [
     { label: '站点名称', field: 'site', width: '160', layout: 'Text', require: true, placeholder: '请填写站点名称' },
     { label: '站点地址', field: 'url', width: '160', layout: 'Text', placeholder: '请填写站点地址' },
-    { label: '所属部门', field: 'sysDeptId', width: '120', layout: 'TreeSelect', require: true,
-      options: [
-        {
-          value: 1,
-          label: '顾桥矿',
-          children: [
-            { value: 2, label: '机关', children: [
-              { value: 3, label: '矿领导' },
-              { value: 4, label: '办公室', children: [
-                { value: 5, label: '部门' },
-                { value: 6, label: '办公室科室（中央区）' }
-              ] },
-              { value: 7, label: '人力资源部' }
-            ] }
-          ]
-        }
-      ], placeholder: '请选择所属部门' },
-    { label: '排序', field: 'orderNum', width: '80', layout: 'Text', placeholder: '请选择排序' },
+    { label: '所属部门', field: 'sysDeptId', width: '120', layout: 'TreeSelect',
+      options: [], placeholder: '请选择所属部门' },
+    { label: '排序', field: 'orderNum', width: '80', layout: 'Text', require: true, placeholder: '请选择排序' },
     { label: '备注', field: 'remark', width: '', layout: 'Textarea', placeholder: '请填写备注' }
   ]
 }
@@ -121,25 +111,39 @@ export const UserTableConfig = {
   otherActionTitle: ['重置密码'],
   checkbox: true,
   columns: [
+    { label: '姓名', field: 'userName', layout: 'Text', require: true, placeholder: '请填写姓名' },
+    { label: '工号', field: 'workNumber', layout: 'Text', require: true, placeholder: '请填写工号' },
     { label: '登录名', field: 'loginName', layout: 'Text', require: true,
       rule: [
         { min: 3, max: 18, message: '长度在 3 到 18 个字符', trigger: 'blur' }
       ], placeholder: '请填写登录名' },
-    { label: '姓名', field: 'userName', layout: 'Text', require: true, placeholder: '请填写姓名' },
-    { label: '工号', field: 'workNumber', layout: 'Text', require: true, hidden: true, placeholder: '请填写工号' },
     { label: '密码', field: 'password', layout: 'Text', require: true,
       rule: [
         { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
       ], hidden: true, placeholder: '请填写密码' },
-    { label: '手机', field: 'phone', layout: 'Text', require: true,
-      rule: [
-        { validator: validatePhone, trigger: 'blur' }
-      ], placeholder: '请填写手机号码' },
-    { label: '邮箱', field: 'email', layout: 'Text', hidden: true, placeholder: '请填写邮箱' },
     { label: '部门', field: 'sysDeptId', layout: 'TreeSelect', require: true,
       options: [], placeholder: '请选择部门' },
-    { label: '角色', field: 'sysRoleId', layout: 'Select',
-      options: [{value:1,label:"555"}], placeholder: '请选择角色' }
+    { label: '职务', field: 'duty', layout: 'Text', placeholder: '请填写职务' },
+    { label: '入职时间', field: 'entryTime', layout: 'DateTime', hidden: true, placeholder: '请填写入职时间' },
+    { label: '岗位工种', field: 'skill', layout: 'Text', hidden: true, placeholder: '请填写岗位工种' },
+    { label: '邮箱', field: 'email', layout: 'Text', hidden: true, placeholder: '请填写邮箱' },
+    { label: '性别', field: 'sex', layout: 'Radio',
+      options: [
+        { value: 1, label: '男' },
+        { value: 2, label: '女' }
+      ], placeholder: '请选择性别' },
+    { label: '手机', field: 'phone', layout: 'Text',
+      rule: [
+        { validator: validatePhone, trigger: 'blur' }
+      ], placeholder: '请填写手机' },
+    { label: '排序', field: 'orderNum', width: '110', layout: 'Text', placeholder: '请填写排序' },
+    { label: '状态', field: 'status', width: '90', layout: 'Radio',
+      options: [
+        { value: 1, label: '锁定' },
+        { value: 2, label: '正常' }
+      ], placeholder: '请选择状态' },
+    { label: '人员定位卡号', field: 'cardNo', width: '110', layout: 'Text', placeholder: '请填写人员定位卡号' },
+    { label: '备注信息', field: 'remark', width: '110', layout: 'Textarea', placeholder: '请填写备注信息' }
   ]
 }
 
@@ -198,6 +202,13 @@ export const personnelConfig = {
   ]
 }
 
+export const RoleTypeFilterConfig = {
+  actions: ['search', 'create'],
+  filters: [
+    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '名称、站点名称' }
+  ]
+}
+
 export const RoleTypeConfig = {
   actions: ['edit', 'delete'],
   otherActionTitle: [],
@@ -205,96 +216,29 @@ export const RoleTypeConfig = {
   columns: [
     { label: '名称', field: 'typeName', width: 'auto', layout: 'Text', require: true, placeholder: '请填写名称' },
     { label: '站点名称', field: 'sysManageId', width: 'auto', layout: 'Select',
-      options: [
-        { value: 1, label: '顾桥煤矿' },
-        { value: 2, label: '合肥煤矿' },
-        { value: 3, label: '上海煤矿' }
-      ], placeholder: '请选择站点名称' },
+      options: [], require: true, placeholder: '请选择站点名称' },
     { label: '排序', field: 'orderNum', width: 'auto', layout: 'Text', require: true, placeholder: '请填写排序' }
   ]
 }
-
-export const OrganizationTree = [
-  {
-    label: '顾桥煤矿',
-    children: [
-      {
-        label: '机关',
-        children: [
-          {
-            label: '矿领导'
-          },
-          {
-            label: '办公室',
-            children: [
-              {
-                label: '部门'
-              },
-              {
-                label: '办公室科直（中央区）'
-              },
-              {
-                label: '办公室职员（中央区）'
-              },
-              {
-                label: '办公室小车班'
-              }
-            ]
-          }
-        ]
-      }
-
-    ]
-  }
-]
 
 // 组织机构管理
 export const OrganTableConfig = {
   // actions: ['addIco', 'editIco', 'deleteIco', 'moveUpIco', 'moveDownIco'],
   actions: ['edit', 'delete'],
   rowKey: 'sysDeptId',
-  checkbox: true,
+  // checkbox: true,
+  noSerialNum: true,
   lazy: true,
   columns: [
-    { label: '名称', field: 'deptName', layout: 'Text', require: true, placeholder: '请填写名称' },
-    { label: '编号', field: 'deptId', width: '80', layout: 'Text', disabled: true, placeholder: '请填写编号' },
+    { label: '名称', field: 'deptName', width: '200', layout: 'Text', require: true, placeholder: '请填写名称' },
+    { label: '编号', field: 'sysDeptId', width: '80', layout: 'Text', immutable: true, placeholder: '请填写编号' },
     { label: '简称', field: 'shortName', layout: 'Text', placeholder: '请填写简称' },
     { label: '类型', field: 'deptType', layout: 'Select', require: true,
-      options: [
-        { value: '1', label: '井工矿' },
-        { value: '2', label: '矿机构' },
-        { value: '3', label: '职务' }
-      ], placeholder: '请选择类型' },
-    { label: '上级节点', field: 'parentId', layout: 'TreeSelect', require: true, hidden: true,
-      options: [
-        {
-          value: '1',
-          label: '顾桥矿',
-          children: [
-            { value: '2', label: '机关', children: [
-              { value: '3', label: '矿领导' },
-              { value: '4', label: '办公室', children: [
-                { value: '5', label: '部门', children: [
-                  { value: '6', label: '安全部门' },
-                  { value: '7', label: '监管部门' },
-                  { value: '8', label: '采掘部门' },
-                  { value: '9', label: '生产部门' },
-                  { value: '10', label: '调度部门' },
-                  { value: '11', label: '防控部门' },
-                  { value: '12', label: '应急部门' }
-                ] },
-                { value: '13', label: '办公室科室（中央区）' },
-                { value: '14', label: '办公室科室（南区）' },
-                { value: '15', label: '办公室科室（西区）' },
-                { value: '16', label: '办公室科室（东区）' }
-              ] },
-              { value: '17', label: '人力资源部' }
-            ] }
-          ]
-        }
-      ], placeholder: '请选择上级节点' },
-    { label: '排序', field: 'sort', width: '80', layout: 'Text', requeire: true, placeholder: '请填写排序' },
-    { label: '创建日期', field: 'createTime', width: '180', layout: 'DateTime', disabled: true, placeholder: '请选择创建日期' },
+      options: [], placeholder: '请选择类型' },
+    { label: '上级节点', field: 'parentId', layout: 'TreeSelect', hidden: true,
+      options: [], placeholder: '请选择上级节点' },
+    { label: '排序', field: 'sort', width: '80', layout: 'Text', require: true, placeholder: '请填写排序' },
+    { label: '创建日期', field: 'createTime', width: '180', layout: 'DateTime', immutable: true, placeholder: '请选择创建日期' },
     { label: '备注', field: 'remark', layout: 'Textarea', placeholder: '请填写备注' }
 
   ]
@@ -315,20 +259,11 @@ export const RoleTableConfig = {
   checkbox: true,
   columns: [
     { label: '角色名称', field: 'roleName', layout: 'Text', require: true, placeholder: '请填写角色名称' },
-    { label: '角色类型', field: 'sysRoleTypeId', layout: 'Select', options: [
-      { value: 1, label: '基础通用' },
-      { value: 2, label: '安全管理专业' },
-      { value: 3, label: '调度专业' }
-    ], placeholder: '请选择角色类型' },
-    { label: '所属站点', field: 'sysManageId', layout: 'Select', options: [
-      { value: 1, label: '基础通用' },
-      { value: 2, label: '安全管理专业' },
-      { value: 3, label: '调度专业' }
-    ], placeholder: '请选择所属站点' },
-    { label: '成员数量', field: 'memberNum', layout: 'Text', placeholder: '请填写成员数量' },
+    { label: '角色类型', field: 'sysRoleTypeId', layout: 'Select', options: [], require: true, placeholder: '请选择角色类型' },
+    { label: '所属站点', field: 'sysManageId', layout: 'Select', options: [], immutable: true, placeholder: '请选择所属站点' },
+    { label: '成员数量', field: 'memberNum', layout: 'Text', immutable: true, placeholder: '请填写成员数量' },
     { label: '排序', field: 'orderNum', layout: 'Text', require: true, placeholder: '请填写排序' },
     { label: '备注', field: 'remark', layout: 'Textarea', placeholder: '请填写备注' }
-
   ]
 }
 
@@ -344,73 +279,20 @@ export const RoleFilterConfig = {
 }
 
 // 菜单资源管理
-// export const menuResourceConfig = {
-//   actions: ['addIco', 'editIco', 'deleteIco', 'moveUpIco', 'moveDownIco'],
-//   otherActionTitle: [],
-//   rowKey: 'id',
-//   checkbox: true,
-//   noSerialNum: true,
-//   columns: [
-//     { label: '名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
-// { label: '编号', field: 'identifier', width: 'auto', layout: 'Text', placeholder: '请选择编号' },
-// { label: '类型', field: 'type', width: 'auto', layout: 'Text', placeholder: '请填写类型' },
-// { label: '客户端类型', field: 'clientType', width: 'auto', layout: 'Select', require: true, options: [
-//   { value: 1, label: 'PC端' },
-//   { value: 2, label: '移动端' }
-// ], placeholder: '请选择客户端类型' },
-// { label: '显示', field: 'show', width: 'auto', layout: 'Radio', options: [
-//   { value: 1, label: '可见' },
-//   { value: 2, label: '隐藏' }
-// ], placeholder: '请选择显示' },
-// { label: '状态', field: 'state', width: 'auto', layout: 'Radio', options: [
-//   { value: 1, label: '正常' },
-//   { value: 2, label: '禁用' }
-// ], placeholder: '请选择状态' },
-// { label: '地址', field: 'adress', width: 'auto', layout: 'Text', placeholder: '请填写地址' },
-// { label: '打开方式', field: 'openType', width: 'auto', layout: 'Select', options: [
-//   { value: 1, label: '内部嵌入' },
-//   { value: 2, label: '浏览器弹出' }
-// ], placeholder: '请选择打开方式' },
-// { label: '数据范围', field: 'dataRange', width: '140', layout: 'Select', options: [
-//   { value: 1, label: '未知' },
-//   { value: 2, label: '个人' },
-//   { value: 3, label: '部门' },
-//   { value: 4, label: '部门及子部门' },
-//   { value: 5, label: '公共' },
-//   { value: 6, label: '自定义' }
-// ], placeholder: '请选择数据范围' },
-// { label: '数据源', field: 'source', width: '140', layout: 'Select', options: [
-//   { value: 1, label: '无' },
-//   { value: 2, label: '默认数据源' },
-//   { value: 3, label: '技术资源数据源' },
-//   { value: 4, label: '采掘平面图数据源' },
-//   { value: 5, label: '企业证照数据源' },
-//   { value: 6, label: '特殊部门数据源' }
-// ], placeholder: '请选择数据源' },
-//     { label: '排序', field: 'sort', layout: 'Text', width: 'auto', require: true, placeholder: '请填写排序' },
-//     { label: '备注', field: 'remark', layout: 'Textarea', width: 'auto', placeholder: '请填写备注' }
-//   ]
-// }
-
-// 菜单资源管理
 export const menuResourceConfig = {
-  actions: ['addIco', 'editIco', 'deleteIco'],
-  otherActionTitle: [],
+  actions: ['edit', 'delete','other'],
+  otherActionTitle: ['按钮管理'],
   rowKey: 'id',
-  checkbox: true,
+  // checkbox: true,
   noSerialNum: true,
+  // lazy: true,
   columns: [
     { label: '菜单名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
     { label: '前端路由', field: 'component', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
     { label: '外部链接URL', field: 'externalUrl', width: '370', layout: 'Text', placeholder: '请填写名称' },
     { label: '菜单图标', field: 'icon', width: '170', layout: 'Text', placeholder: '请填写名称' },
     { label: '上级节点', field: 'parentId', layout: 'TreeSelect', require: true, hidden: true,
-      options: [
-        {
-          value: 1,
-          label: '顾桥矿'
-        }
-      ], placeholder: '请选择上级节点' },
+      options: [], placeholder: '请选择上级节点' },
     { label: '前端路由标识路径', field: 'path', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
     { label: '菜单权限标识', field: 'permission', width: '170', layout: 'Text', placeholder: '请填写名称' },
     { label: '路由重定向路径', field: 'redirect', width: '170', layout: 'Text', placeholder: '请填写名称' },
@@ -418,138 +300,43 @@ export const menuResourceConfig = {
   ]
 }
 
-// 菜单资源管理 模块
-// export const menuResourceModuleConfig = {
-//   actions: ['addIco', 'editIco', 'deleteIco', 'moveUpIco', 'moveDownIco'],
-//   otherActionTitle: [],
-//   rowKey: 'id',
-//   checkbox: true,
-//   noSerialNum: true,
-//   columns: [
-//     { label: '模块名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
-//     { label: '客户端类型', field: 'clientType', width: 'auto', layout: 'Select', require: true, options: [
-//       { value: 1, label: 'PC端' },
-//       { value: 2, label: '移动端' }
-//     ], placeholder: '请选择客户端类型' },
-//     { label: '上级节点', field: 'type', width: 'auto', layout: 'Select', options: [
-//       { value: 1, label: '根节点' },
-//       { value: 2, label: '浏览器弹出' }
-//     ], placeholder: '请选择上级节点' },
-//     { label: '排序', field: 'type', width: 'auto', layout: 'Text', require: true, placeholder: '请填写排序' },
-//     { label: '显示', field: 'type', width: 'auto', layout: 'Radio', options: [
-//       { value: 1, label: '可见' },
-//       { value: 2, label: '隐藏' }
-//     ], placeholder: '请选择显示' },
-//     { label: '状态', field: 'type', width: 'auto', layout: 'Radio', options: [
-//       { value: 1, label: '正常' },
-//       { value: 2, label: '禁用' }
-//     ], placeholder: '请选择状态' },
-//     { label: '备注', field: 'remark', layout: 'Textarea', width: 'auto', placeholder: '请填写备注' }
-//   ]
-// }
+export const menuResourButtonFilterConfig = {
+  actions: ['create'],
+  filters: [
+    // { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '按钮名称' }
+  ]
+}
 
-// 菜单资源管理 页面
-// export const menuResourcePageConfig = {
-//   actions: ['addIco', 'editIco', 'deleteIco', 'moveUpIco', 'moveDownIco'],
-//   otherActionTitle: [],
-//   rowKey: 'id',
-//   checkbox: true,
-//   noSerialNum: true,
-//   columns: [
-//     { label: '菜单名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
-//     { label: '客户端类型', field: 'clientType', width: 'auto', layout: 'Select', require: true, options: [
-//       { value: 1, label: 'PC端' },
-//       { value: 2, label: '移动端' }
-//     ], placeholder: '请选择客户端类型' },
-//     { label: '所属模块', field: 'type', width: 'auto', layout: 'Select', options: [
-//       { value: 1, label: '内部嵌入' },
-//       { value: 2, label: '浏览器弹出' }
-//     ], placeholder: '请选择打开方式' },
-//     { label: 'URL', field: 'type', width: 'auto', layout: 'Text', require: true, placeholder: '请填写URL' },
-//     { label: '图标', field: 'type', width: 'auto', layout: 'Text', placeholder: '请填写所属模块' },
-//     { label: '背景色', field: 'type', width: 'auto', layout: 'Text', require: true, placeholder: '请填写URL' },
-//     { label: '打开方式', field: 'type', width: 'auto', layout: 'Select', options: [
-//       { value: 1, label: '内部嵌入' },
-//       { value: 2, label: '浏览器弹出' }
-//     ], placeholder: '请选择打开方式' },
-//     { label: '排序', field: 'type', width: 'auto', layout: 'Text', require: true, placeholder: '请填写URL' },
-//     { label: '显示', field: 'type', width: 'auto', layout: 'Radio', options: [
-//       { value: 1, label: '可见' },
-//       { value: 2, label: '隐藏' }
-//     ], placeholder: '请选择显示' },
-//     { label: '状态', field: 'type', width: 'auto', layout: 'Radio', options: [
-//       { value: 1, label: '可见' },
-//       { value: 2, label: '隐藏' }
-//     ], placeholder: '请选择显示' },
-//     { label: '数据范围', field: 'type', width: 'auto', layout: 'Select', options: [
-//       { value: 1, label: '内部嵌入' },
-//       { value: 2, label: '浏览器弹出' }
-//     ], placeholder: '请选择打开方式' },
-//     { label: '数据源', field: 'type', width: 'auto', layout: 'Select', options: [
-//       { value: 1, label: '内部嵌入' },
-//       { value: 2, label: '浏览器弹出' }
-//     ], placeholder: '请选择打开方式' },
-//     { label: '备注', field: 'type', width: 'auto', layout: 'Textarea', placeholder: '请填写备注' }
-//   ]
-// }
-
-// 菜单资源管理 上传页面
-// export const menuResourceUploadPageConfig = {
-//   actions: ['addIco', 'editIco', 'deleteIco', 'moveUpIco', 'moveDownIco'],
-//   otherActionTitle: [],
-//   rowKey: 'id',
-//   checkbox: true,
-//   noSerialNum: true,
-//   columns: [
-//     { label: '菜单名称', field: 'menuName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
-//     { label: '所属模块', field: 'type', width: 'auto', layout: 'Select', options: [
-//       { value: 1, label: '内部嵌入' },
-//       { value: 2, label: '浏览器弹出' }
-//     ], placeholder: '请选择所属模块' },
-//     { label: '文档类别', field: 'type', width: 'auto', layout: 'Select', options: [
-//       { value: 1, label: '内部嵌入' },
-//       { value: 2, label: '浏览器弹出' }
-//     ], placeholder: '请选择文档类别' },
-//     { label: '排序', field: 'type', width: 'auto', layout: 'Text', placeholder: '请填写所属模块' },
-//     { label: '显示', field: 'type', width: 'auto', layout: 'Radio', options: [
-//       { value: 1, label: '可见' },
-//       { value: 2, label: '隐藏' }
-//     ], placeholder: '请选择显示' },
-//     { label: '状态', field: 'type', width: 'auto', layout: 'Radio', options: [
-//       { value: 1, label: '可见' },
-//       { value: 2, label: '隐藏' }
-//     ], placeholder: '请选择显示' },
-//     { label: '数据范围', field: 'type', width: 'auto', layout: 'Select', options: [
-//       { value: 1, label: '内部嵌入' },
-//       { value: 2, label: '浏览器弹出' }
-//     ], placeholder: '请选择文档类别' },
-//     { label: '数据源', field: 'type', width: 'auto', layout: 'Select', options: [
-//       { value: 1, label: '内部嵌入' },
-//       { value: 2, label: '浏览器弹出' }
-//     ], placeholder: '请选择文档类别' },
-//     { label: '公共菜单', field: 'type', width: 'Switch', layout: 'Radio', placeholder: '请选择显示' },
-//     { label: '备注', field: 'type', width: 'auto', layout: 'Textarea', placeholder: '请填写备注' }
-//   ]
-// }
+// 菜单资源管理
+export const menuResourButtonConfig = {
+  actions: ['edit', 'delete'],
+  // otherActionTitle: [],
+  rowKey: 'id',
+  noSerialNum: true,
+  columns: [
+    { label: '按钮名称', field: 'menuName', width: 'auto', layout: 'Text', placeholder: '请填写按钮名称'},
+    { label: '按钮权限标识', field: 'permission', width: 'auto', layout: 'Text', placeholder: '请填写按钮权限标识' },
+  ]
+}
 
 // 菜单filter
 export const MenuFilterConfig = {
-  actions: ['search', 'create'],
+  actions: ['search','create'],
   filters: [
-    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '名称、值' }
+    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '菜单名称' }
   ]
 }
 
 // 数据字典管理
 export const dataDictionaryConfig = {
-  actions: ['editIco', 'deleteIco'],
+  actions: ['edit', 'delete'],
   otherActionTitle: [],
   rowKey: 'sysDictId',
-  checkbox: true,
+  // checkbox: true,
   noSerialNum: true,
   lazy: true,
   columns: [
-    { label: '名称', field: 'dictName', width: '170', layout: 'Text', placeholder: '请填写名称' },
+    { label: '名称', field: 'dictName', width: '170', layout: 'Text', require: true, placeholder: '请填写名称' },
     { label: '编号', field: 'sysDictId', width: 'auto', layout: 'Text', placeholder: '请填写编号' },
     { label: '值', field: 'dictValue', width: 'auto', layout: 'Text', placeholder: '请填写值' },
     { label: '上级节点', field: 'parentId', layout: 'TreeSelect', hidden: true,
@@ -571,34 +358,51 @@ export const dataDictionaryFilterConfig = {
   ]
 }
 
+// 管理成员filter
+export const memberFilterConfig = {
+  actions: ['search'],
+  filters: [
+    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '姓名 登录名' }
+  ]
+}
+
 export const memberConfig = {
   actions: [],
   otherActionTitle: [],
   rowKey: 'num',
   checkbox: true,
+  noSerialNum: true,
   columns: [
     { label: '姓名', field: 'userName', layout: 'Text', placeholder: '请填写姓名' },
-    { label: '登录名', field: 'loginName', layout: 'Select', placeholder: '请选择登录名' },
-    { label: '所在部门', field: 'sysDeptId', layout: 'Text', placeholder: '请填写所在部门' },
-    { label: '添加日期', field: 'createTime', layout: 'Text', placeholder: '请填写添加日期' }
+    { label: '登录名', field: 'loginName', layout: 'Text', placeholder: '请选择登录名' },
+    { label: '所在部门', field: 'sysDeptId', layout: 'Select', options: [], placeholder: '请填写所在部门' },
+    // { label: '添加日期', field: 'createTime', layout: 'Text', placeholder: '请填写添加日期' }
   ]
 }
 
-export const AddMemberConfig = {
-  actions: [],
-  otherActionTitle: [],
-  rowKey: 'num',
-  checkbox: true,
-  columns: [
-    { label: '登录名', field: 'loginName', layout: 'Select', placeholder: '请选择登录名' },
-    { label: '姓名', field: 'name', layout: 'Text', placeholder: '请填写姓名' },
-    { label: '部门', field: 'department', layout: 'Text', placeholder: '请填写所在部门' }
-  ]
-}
+// // 管理成员filter
+// export const addMemberFilterConfig = {
+//   actions: ['search'],
+//   filters: [
+//     { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '姓名 登录名' }
+//   ]
+// }
+
+// export const AddMemberConfig = {
+//   actions: [],
+//   otherActionTitle: [],
+//   rowKey: 'num',
+//   checkbox: true,
+//   columns: [
+//     { label: '登录名', field: 'loginName', layout: 'Select', placeholder: '请选择登录名' },
+//     { label: '姓名', field: 'userName', layout: 'Text', placeholder: '请填写姓名' },
+//     { label: '部门', field: 'sysDeptId', layout: 'Text', options: [], placeholder: '请填写所在部门' }
+//   ]
+// }
 
 // 消息模板过滤
 export const NewsTemplateFilterConfig = {
-  actions: ['search','create'],
+  actions: ['search', 'create'],
   filters: [
     { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '模板名称' }
   ]
@@ -609,11 +413,11 @@ export const NewsTemplateConfig = {
   actions: ['edit', 'delete'],
   otherActionTitle: [],
   rowKey: 'ID',
-  checkbox: true,
+  // checkbox: true,
   columns: [
     { label: '模板名称', field: 'templateName', layout: 'Text', width: '200', require: true, placeholder: '请填写模板内容' },
     { label: '模板内容', field: 'templateContent', layout: 'TextEditor', showType: 'underline', underlineText: '模板内容', placeholder: '请填写模板内容' },
-    { label: '排序', field: 'sort', width: 'auto', layout: 'Text', placeholder: '请填写排序' },
+    { label: '排序', field: 'sort', width: 'auto', layout: 'Number', placeholder: '请填写排序' },
     { label: '备注', field: 'remark', layout: 'Textarea', width: '270', placeholder: '请填写状态' }
   ]
 }
@@ -639,52 +443,22 @@ export const NewsConfig = {
 
 export const NewsTypeConfig = {
   actions: ['editIco', 'deleteIco'],
-  otherActionTitle: [],
-  rowKey: 'ID',
-  checkbox: true,
+  rowKey: 'sysMsgTypeId',
+  noSerialNum: true,
+  lazy: true,
   columns: [
-    // { label: 'ID', field: 'typeId', layout: 'Text', width: '160', placeholder: '请填写标题' },
+    { label: 'id', field: 'sysMsgTypeId', layout: 'Text', width: '200', immutable: true, hidden:true, placeholder: '请填写内容' },
     { label: '名称', field: 'typeName', layout: 'Text', width: '200', require: true, placeholder: '请填写内容' },
     { label: '上级节点', field: 'parentId', layout: 'TreeSelect', width: 'auto',
-      options: [
-        {
-          value: 1,
-          label: '根节点'
-        }
-      ], placeholder: '请选择最近更新' },
-    { label: '消息级别', field: 'dictName', layout: 'Select', width: 'auto', options: [
-      { value: '通知', label: '通知' },
-      { value: '协同', label: '协同' },
-      { value: '报警', label: '报警' }
-    ], placeholder: '请选择消息级别' },
-    { label: '提醒方式', field: 'notifyWay', layout: 'Select', width: 'auto', options: [
-      { value: '提示', label: '提示' },
-      { value: '窗口', label: '窗口' }
-    ], placeholder: '请选择提醒类型' },
-    { label: '目标类型', field: 'targetType', layout: 'Select', width: 'auto', options: [
-      { value: '用户', label: '用户' },
-      { value: '部门', label: '部门' },
-      { value: '角色', label: '角色' }
-    ], placeholder: '请选择提醒类型' },
-    { label: '提醒目标', field: 'targetValue', layout: 'TreeSelect', width: 'auto',
-      options: [
-        {
-          value: 1,
-          label: '无'
-        }
-      ], placeholder: '请选择最近更新' },
-    { label: '发送方式', field: 'sendType', layout: 'Select', width: 'auto', options: [
-      { value: 1, label: '站内消息' },
-      { value: 2, label: 'APP' },
-      { value: 3, label: '短信' },
-      { value: 4, label: '邮件' }
-    ], placeholder: '请选择发送方式' },
-    { label: '消息模板', field: 'templateName', layout: 'Select', width: 'auto', options: [
-      { value: 1, label: '模板1' },
-      { value: 2, label: '模板2' },
-      { value: 3, label: '模板3' }
-    ], placeholder: '请选择消息模板' },
-    { label: '排序', field: 'sort', width: 'auto', layout: 'Text', placeholder: '请填写排序' },
+      options: [], placeholder: '请选择最近更新' },
+    { label: '消息级别', field: 'sysDictId', layout: 'Select', width: 'auto', options: [], placeholder: '请选择消息级别' },
+    { label: '提醒方式', field: 'notifyWay', layout: 'Select', width: 'auto', options: [], placeholder: '请选择提醒类型' },
+    { label: '目标类型', field: 'targetId', layout: 'Select', width: 'auto', options: [], placeholder: '请选择提醒类型' },
+    { label: '提醒目标', field: 'typeId', layout: 'Select', width: 'auto',
+      options: [], placeholder: '请选择最近更新' },
+    { label: '发送方式', field: 'sendType', layout: 'Select', width: 'auto', options: [], placeholder: '请选择发送方式' },
+    { label: '消息模板', field: 'sysMsgTemplateId', layout: 'Select', width: '160px', options: [], placeholder: '请选择消息模板' },
+    { label: '排序', field: 'sort', width: 'auto', layout: 'Number', placeholder: '请填写排序' },
     { label: '备注', field: 'remark', layout: 'Textarea', width: '270', placeholder: '请填写状态' }
   ]
 }
@@ -697,8 +471,16 @@ export const MsgFilterConfig = {
   ]
 }
 
+// 消息列表过滤
+export const AppPowerFilterConfig = {
+  actions: ['search','create'],
+  filters: [
+    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '名称 简称' }
+  ]
+}
+
 export const AppPowerConfig = {
-  actions: ['addIco', 'editIco', 'deleteIco'],
+  actions: ['edit', 'delete'],
   otherActionTitle: [],
   rowKey: 'ID',
   checkbox: true,
@@ -706,5 +488,68 @@ export const AppPowerConfig = {
     { label: 'App模块名称', field: 'moduleName', layout: 'Text', width: 'auto', placeholder: '请填写App模块名称' },
     { label: 'App模块URL', field: 'moduleUrl', layout: 'Text', width: 'auto', placeholder: '请填写App模块URL' },
     { label: '备注', field: 'remark', layout: 'Textarea', width: 'auto', placeholder: '请填写备注' }
+  ]
+}
+
+
+// 预警告信息模板
+export const warnMouldManageconfig = {
+  actions: ['edit', 'delete'],
+  otherActionTitle: [],
+  // rowKey: 'ID',
+  // checkbox: true,
+  columns: [
+    { label: '模板编号', field: 'formworkCode', layout: 'Text', width: '200', placeholder: '请填写模板编号' },
+    { label: '模板名称', field: 'formworkName', layout: 'Text', width: '200', require: true, placeholder: '请填写模板名称' },
+    { label: '模板内容', field: 'content', layout: 'TextEditor', showType: 'underline', underlineText: '模板内容', placeholder: '请填写模板内容' }
+  ]
+}
+
+// 预警告规则集定义 过滤
+export const warnRuleManageFilterConfig = {
+  actions: ['search','create'],
+  filters: [
+    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '规则名称' }
+  ]
+}
+
+// 预警告规则集定义
+export const warnRuleManageconfig = {
+  actions: ['edit', 'delete'],
+  otherActionTitle: [],
+  columns: [
+    { label: '规则名称', field: 'definitionName', layout: 'Text', width: '160', placeholder: '请填写规则名称' },
+    { label: '规则编码', field: 'definitionCode', layout: 'Text', width: '160', placeholder: '请填写规则编码' },
+    { label: '是否启用', field: 'definitionStatus', layout: 'Switch',width: '80', placeholder: '请填写是否启用' },
+    { label: '优先级', field: 'grade', layout: 'Text', width: '70', placeholder: '请填写优先级' },
+    { label: '提醒目标', field: 'definitionTarget', layout: 'Text', width: '120', placeholder: '请填写提醒目标' },
+    { label: '开启时间', field: 'beginTime', layout: 'Text', width: '150', placeholder: '请填写开启时间' },
+    { label: '关闭时间', field: 'endTime', layout: 'Text', width: '150', placeholder: '请填写关闭时间' },
+    { label: '指标', field: 'quota', layout: 'Text', width: '150', placeholder: '请填写指标' },
+    { label: '判定条件', field: 'jcs', layout: 'Text', width: '200', placeholder: '请填写判定条件' },
+    { label: '判定条件el解析', field: 'jcsel', layout: 'Text', width: '160', placeholder: '请填写判定条件el解析' },
+    { label: '处理描述', field: 'pdn', layout: 'Text', width: '200', placeholder: '请填写处理描述' },
+    { label: '预警告模板', field: 'gzyqFormworkId', layout: 'Select', options:[], width: '100', placeholder: '请填写预警告模板' }
+  ]
+}
+
+
+// 预警告指标管理
+export const warnTargetManageconfig = {
+  actions: ['edit', 'delete'],
+  otherActionTitle: [],
+  columns: [
+    { label: '字段名称', field: 'filedName', layout: 'Text', width: 'auto', require: true, placeholder: '请填写字段名称' },
+    { label: '字段中文名称', field: 'zwName', layout: 'Text', width: 'auto', placeholder: '请填写字段中文名称' },
+    { label: '值类型', field: 'valueType', layout: 'Select',  options: [], width: 'auto', placeholder: '请选择值类型' },
+    { label: '状态', field: 'gzyqStatus', layout: 'Radio', options: [], width: 'auto', placeholder: '请选择状态' }
+  ]
+}
+
+// 预警告指标管理 搜索
+export const warnTargetManageFilterConfig = {
+  actions: ['search','create'],
+  filters: [
+    { label: '关键字', field: 'keyword', width: '220', layout: 'Text', placeholder: '字段名称' }
   ]
 }

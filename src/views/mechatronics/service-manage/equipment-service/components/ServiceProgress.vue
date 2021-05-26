@@ -12,27 +12,27 @@
           <el-row class="info-list">
             <el-col :span="12">
               <span class="info-tit">所属场所：</span>
-              <span>{{ progressData.area }}</span>
+              <span>{{ progressData.belongPlace }}</span>
             </el-col>
             <el-col :span="12">
               <span class="info-tit">设备名称：</span>
-              <span>{{ progressData.name }}</span>
+              <span>{{ progressData.deviceName }}</span>
             </el-col>
           </el-row>
           <el-row class="info-list">
             <el-col :span="12">
               <span class="info-tit">故障主题：</span>
-              <span>{{ progressData.fault }}</span>
+              <span>{{ progressData.faultTheme }}</span>
             </el-col>
             <el-col :span="12">
               <span class="info-tit">故障情况：</span>
-              <span>{{ progressData.condition }}</span>
+              <span>{{ progressData.situation }}</span>
             </el-col>
           </el-row>
           <el-row class="info-list">
             <el-col :span="24">
               <span class="info-tit">故障发生时间：</span>
-              <span>{{ progressData.time }}</span>
+              <span>{{ progressData.occurTime }}</span>
             </el-col>
           </el-row>
         </div>
@@ -42,7 +42,7 @@
         <div class="progress-item__info">
           <el-timeline>
             <el-timeline-item
-              v-for="(item,index) in progressData.records"
+              v-for="(item,index) in progressData.daily"
               :key="index"
               placement="top"
               :timestamp="item.dateTime"
@@ -74,31 +74,7 @@ export default {
   data() {
     return {
       progressData: {
-        area: '中央区主井提升机房',
-        name: '主电机碳刷',
-        fault: '主电机设备出现异常',
-        condition: '请您及时对主电机进行检查',
-        time: '2021-03-12 14:41:45',
-        records: [
-          {
-            dateTime: '2021-02-01',
-            complete: 1,
-            result: '正常',
-            log: '超级管理员于2021年02月12日0:00进行了检修，结果为正常'
-          },
-          {
-            dateTime: '2021-01-21',
-            complete: 1,
-            result: '正常',
-            log: '超级管理员于2021年02月12日0:00进行了检修，结果为正常'
-          },
-          {
-            dateTime: '2021-01-21',
-            complete: 1,
-            result: '正常',
-            log: '超级管理员于2021年02月12日0:00进行了检修，结果为正常'
-          }
-        ]
+
       }
     }
   },

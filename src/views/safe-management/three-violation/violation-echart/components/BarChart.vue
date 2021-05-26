@@ -20,13 +20,10 @@ export default {
       options: {}
     }
   },
-  created() {
-  },
   watch: {
     cdata: {
       deep: true,
       handler(newData) {
-        console.log(newData);
         this.options = {
           tooltip: {
             trigger: 'axis',
@@ -60,7 +57,7 @@ export default {
             name: '隐患数量',
             type: 'bar',
             stack: 'vistors',
-            barWidth: '60%',
+            barWidth: '40px',
             label: {
               show: true,
               position: 'inside'
@@ -70,6 +67,8 @@ export default {
         }
       }
     }
+  },
+  created() {
   }
 
 }

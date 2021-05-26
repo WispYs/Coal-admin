@@ -10,9 +10,9 @@
         size="medium"
         :style="`width:${item.width}px`"
         :placeholder="item.placeholder"
-        @change="search()"
+        @change="search"
       >
-        <el-button slot="append" icon="el-icon-search" @click="search()" />
+        <el-button slot="append" icon="el-icon-search" @click="search" />
       </el-input>
 
       <!-- select  -->
@@ -23,7 +23,7 @@
         clearable
         :style="`width:${item.width}px`"
         :placeholder="item.placeholder"
-        @change="search()"
+        @change="search"
       >
         <el-option
           v-for="it in item.options"
@@ -61,7 +61,7 @@
         end-placeholder="结束日期"
         :picker-options="pickerOptions"
         value-format="yyyy-MM-dd"
-        @change="search()"
+        @change="search"
       />
 
       <el-date-picker
@@ -70,7 +70,7 @@
         size="medium"
         type="datetime"
         placeholder="选择日期时间"
-        @change="search()"
+        @change="search"
       />
 
     </div>
@@ -79,12 +79,12 @@
       <!-- <el-button v-if="config.actions.indexOf('search') > -1" type="primary" size="medium" @click="search()">搜索</el-button> -->
       <!-- <el-button v-if="config.actions.indexOf('reset') > -1" type="primary" size="medium" @click="reset()">重置</el-button> -->
       <!-- <el-button v-if="config.actions.indexOf('create') > -1" type="primary" size="medium" @click="create()">新建</el-button> -->
-      <el-button v-if="config.actions.indexOf('create') > -1" type="primary" size="medium" icon="el-icon-plus" @click="create()">新建</el-button>
-      <el-button v-if="config.actions.indexOf('import') > -1" type="primary" size="medium" icon="el-icon-upload2" @click="importExcel()">导入</el-button>
+      <el-button v-if="config.actions.indexOf('create') > -1" type="primary" size="medium" icon="el-icon-plus" @click="create">新建</el-button>
+      <el-button v-if="config.actions.indexOf('import') > -1" type="primary" size="medium" icon="el-icon-upload2" @click="importExcel">导入</el-button>
       <!-- <el-button v-if="config.actions.indexOf('edit') > -1" type="primary" size="medium" icon="el-icon-edit" @click="edit()">编辑</el-button> -->
       <el-button v-if="config.actions.indexOf('refresh') > -1" type="primary" size="medium" @click="refresh()"><i class="el-icon-refresh el-icon--left" />刷新</el-button>
-      <el-button v-if="config.actions.indexOf('export') > -1" type="primary" size="medium" icon="el-icon-download" @click="exportExcel()">导出</el-button>
-      <el-button v-if="config.actions.indexOf('identificationEnd') > -1" type="primary" size="medium" icon="el-icon-circle-close" @click="identificationEnd()">辨识结束</el-button>
+      <el-button v-if="config.actions.indexOf('export') > -1" type="primary" size="medium" icon="el-icon-download" @click="exportExcel">导出</el-button>
+      <el-button v-if="config.actions.indexOf('identificationEnd') > -1" type="primary" size="medium" icon="el-icon-circle-close" @click="identificationEnd">辨识结束</el-button>
     </div>
     <!-- <div v-if="config.actions && config.actions.length > 0" class="filter-bar__item" style="display:block;">
       <el-button v-if="config.actions.indexOf('delete') > -1" type="danger" size="medium" plain @click="deleteBatches()">批量删除</el-button>

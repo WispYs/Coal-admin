@@ -1,24 +1,17 @@
 <template>
   <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
-    <tree-bar :tree-data="treeData" @extend-click="treeExtend = !treeExtend" @handleNodeClick="handleNodeClick" @searchSite="searchSite" />
+    <tree-bar
+      :tree-data="treeData"
+      @extend-click="treeExtend = !treeExtend"
+      @handleNodeClick="handleNodeClick"
+      @searchSite="searchSite"
+    />
 
     <div class="tree-form-container">
       <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
         <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
       </span>
-
-      <h2 style="margin-bottom: 16px;">顾桥煤矿—角色类型</h2>
-      <div class="buttons">
-        <div class="buttons_item">
-          <el-button type="primary" size="medium" @click="openDialog('create')"><i class="el-icon-plus el-icon--left" />创建
-          </el-button>
-          <!-- <el-button type="primary" size="medium" plain :disabled="updateDisabled" @click="editClick('edit')"><i class="el-icon-edit el-icon--left" />编辑
-          </el-button>
-          <el-button type="danger" size="medium" plain :disabled="deleteDisabled" @click="deleteClick"><i class="el-icon-delete el-icon--left" />删除
-          </el-button> -->
-          <el-button type="primary" size="medium" @click="synchroClick"><i class="el-icon-refresh el-icon--left" />同步</el-button>
-        </div>
-      </div>
+      <filter-bar :config="RoleTypeFilterConfig" @search-click="queryData" @create-click="openDialog('create')" />
       <list-table
         :id="id"
         :list="list"
@@ -30,14 +23,7 @@
         @selection-change="selectionChange"
       />
       <div class="page-bottom">
-        <el-button
-          class="page-bottom__delete"
-          type="warning"
-          size="small"
-          plain
-          :disabled="deleteDisabled"
-          @click="deleteBatches"
-        >
+        <el-button class="page-bottom__delete" type="warning" size="small" plain :disabled="deleteDisabled" @click="deleteBatches">
           <i class="el-icon-delete el-icon--left" />批量删除
         </el-button>
         <pagination
@@ -70,15 +56,33 @@
 </template>
 
 <script>
-import { getUserList, saveRoleType, deleteRoleType, updateRoleType, getRoleTypeList, getSiteList, selectCombox } from '@/api/authority-management'
+import {
+  saveRoleType,
+  deleteRoleType,
+  updateRoleType,
+  getRoleTypeList,
+  selectCombox,
+  getRoleTypeById,
+  batchDeleteRoleType
+} from '@/api/authority-management'
 import TreeBar from '@/components/TreeBar'
+import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
-import { RoleTypeConfig, OrganizationTree } from '@/data/authority-management'
+import {
+  RoleTypeConfig,
+  RoleTypeFilterConfig
+} from '@/data/authority-management'
 
 export default {
-  components: { TreeBar, ListTable, Pagination, FormDialog },
+  components: {
+    TreeBar,
+    FilterBar,
+    ListTable,
+    Pagination,
+    FormDialog
+  },
   data() {
     return {
       id: 'user-manage',
@@ -90,6 +94,7 @@ export default {
       },
       listLoading: true,
       RoleTypeConfig,
+      RoleTypeFilterConfig,
       createDialogVisible: false,
       editDialogVisible: false,
       treeExtend: true,
@@ -101,25 +106,25 @@ export default {
       filter: {},
       selectData: [],
       updateDisabled: true,
-      multipleSelection: [], // 多选项
-      deleteDisabled: true // 批量删除置灰
+      deleteDisabled: true, // 批量删除置灰
+      ManageId: '' // 站点id
     }
   },
 
   created() {
     this.__fetchData()
     this._getSiteTree()
-    console.log(this.$route)
   },
   methods: {
     _getSiteTree() {
       selectCombox().then(res => {
-        console.log(res)
-        this.treeData.list = res.data
+        this.treeData.list = []
         for (const d in res.data) {
-          this.siteRecursion(this.treeData.list[d], res.data[d])
+          this.treeData.list.push({
+            value: res.data[d].sysManageId,
+            label: res.data[d].site
+          })
         }
-
         RoleTypeConfig.columns.forEach(it => {
           if (it.field === 'sysManageId') {
             it.options = this.treeData.list
@@ -127,39 +132,40 @@ export default {
         })
       })
     },
-    siteRecursion(list, data) {
-      list.label = data.site
-      list.value = data.sysManageId
-      if (data.children && data.children.length > 0) {
-        for (const d in data.children) {
-          this.siteRecursion(list.children[d], data.children[d])
-        }
-      }
-    },
-    __fetchData(_id) {
+    __fetchData() {
       this.listLoading = true
       const query = {
         page: this.listQuery.page,
         pagerows: this.listQuery.pagerows,
+        entity: {
+          'sysManageId': this.ManageId
+        },
+        keyword: this.filter.keyword,
+        keywordField: ['typeName', 'sysManageId'],
         sort: {
           asc: ['orderNum']
-        },
-        entity: {
-          'sysManageId': _id
         }
-        // entity: this.filter.entity
       }
-      getRoleTypeList(query).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.list = res.data.rows
-          this.total = parseInt(res.data.records)
+      getRoleTypeList(query).then(response => {
+        if (response.data.rows.length > 0) {
           this.listLoading = false
+          this.list = response.data.rows
+          this.total = Number(response.data.records)
+        } else {
+          if (this.listQuery.page > 0) {
+            this.listQuery.page = this.listQuery.page - 1
+            this.__fetchData()
+          } else {
+            this.listLoading = false
+            this.list = []
+            this.total = 0
+          }
         }
+      }).catch(err => {
+        this.listLoading = false
       })
     },
     pagination(_data) {
-      console.log(_data)
       this.listQuery.page = _data.page
       this.listQuery.pagerows = _data.limit
       this.__fetchData()
@@ -168,7 +174,7 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.RoleTypeConfig.columns
       })
       return createConfig
@@ -177,49 +183,40 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.RoleTypeConfig.columns
       })
       return editConfig
     },
     // 打开弹窗
     openDialog(name, row) {
-      // 获取站点列表
-      getSiteList(this.listQuery).then(res => {
-        console.log(res)
-        const siteList = []
-        if (res.code == 200) {
-          for (const _r in res.data.rows) {
-            siteList.push({
-              value: res.data.rows[_r].sysManageId,
-              label: res.data.rows[_r].site
-            })
-          }
-          console.log(siteList)
-        }
-      })
       const visible = `${name}DialogVisible`
       this[visible] = true
       if (row) {
         // 如果有数据，更新子组件的 formData
-        this.$refs.editDialog.updataForm(row)
+        getRoleTypeById(row.sysRoleTypeId).then(response => {
+          this.$refs.editDialog.updataForm(response.data)
+        })
       }
     },
-
+    queryData(fliter) {
+      this.filter = Object.assign(this.filter, fliter)
+      this.__fetchData()
+    },
     // submit data  创建角色类型
     createSubmit(submitData) {
-      console.log(submitData)
       const query = Object.assign(submitData, {
         orderNum: Number(submitData.orderNum) || 0
       })
       saveRoleType(query).then(res => {
-        console.log(res)
         if (res.code == 200) {
           this.__fetchData()
           this.createDialogVisible = false
           this.$refs.createDialog.resetForm()
           this.$message.success('新建成功')
         }
+      }).catch(err => {
+        this.$refs.createDialog.resetSubmitBtn()
       })
     },
     // 修改角色类型
@@ -230,8 +227,11 @@ export default {
         if (res.code == 200) {
           this.__fetchData()
           this.editDialogVisible = false
+          this.$refs.editDialog.resetForm()
           this.$message.success('编辑成功')
         }
+      }).catch(err => {
+        this.$refs.editDialog.resetSubmitBtn()
       })
     },
     searchSite(filter) {
@@ -240,7 +240,6 @@ export default {
     },
     // 勾选checkbox触发
     selectionChange(_data) {
-      console.log(_data)
       this.selectData = _data
       if (this.selectData.length > 0) {
         this.deleteDisabled = false
@@ -268,23 +267,24 @@ export default {
     },
     // 点击删除触发
     deleteClick(_del) {
-      // console.log();
-      // const sysRoleTypeId  = this.selectData[0].sysRoleTypeId
-      deleteRoleType(_del.sysRoleTypeId).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.__fetchData()
+      this.$confirm('确定删除该角色吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteRoleType(_del.sysRoleTypeId).then(res => {
           this.$message.success('删除成功')
-        }
+          this.__fetchData()
+        })
+      }).catch((err) => {
+        console.log(err)
+        this.$message.info('已取消删除')
       })
     },
     // 根据站点查询站点下面的角色类型
     handleNodeClick(_data) {
-      console.log(_data)
-      // this.filter= {
-      //   entity: {"sysManageId": _data.sysManageId}
-      // }
-      this.__fetchData(_data.sysManageId)
+      this.ManageId = _data.sysManageId
+      this.__fetchData()
       this.$message.success('查询成功')
     },
     // 点击同步触发
@@ -295,20 +295,21 @@ export default {
     },
     deleteBatches() {
       const selectId = []
-      this.multipleSelection.forEach(it => selectId.push(it.id))
-      console.log(selectId)
+      this.selectData.forEach(it => selectId.push(it.sysRoleTypeId))
       if (selectId.length === 0) {
-        this.$message.warning('请选择所删除的文件')
+        this.$message.warning('请选择所删除的角色')
         return false
       }
-      this.$confirm('确定删除所选中文件?', '提示', {
+      this.$confirm('确定删除所选中角色?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         console.log(selectId)
-        this.__fetchData()
-        this.$message.success('删除成功')
+        batchDeleteRoleType(selectId).then(response => {
+          this.__fetchData()
+          this.$message.success('删除成功')
+        })
       })
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container report-table">
+  <div class="page-container">
 
     <filter-bar
       :config="FlowFilterConfig"
@@ -69,7 +69,8 @@ import {
   findTable,
   saveFlow,
   delProcess,
-  updataProcess
+  updataProcess,
+  deleteBatches
 } from '@/api/flow-management'
 export default {
   components: { ListTable, Pagination, FormDialog, FilterBar },
@@ -80,6 +81,7 @@ export default {
       flowTableConfig,
       FlowFilterConfig,
       id: 'flow-manage',
+      bussiness: 'actFlowDeploy',
       list: [],
       total: 0,
       listQuery: {
@@ -105,6 +107,10 @@ export default {
         this.listLoading = false
         this.list = res.data.rows
         this.total = Number(res.data.records)
+        if (this.listQuery.page > 1 && !this.list.length) {
+          this.listQuery.page--
+          this.__fetchData()
+        }
       })
       // getFlowTableData(query).then(response => {
       //   console.log(response)
@@ -144,7 +150,7 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.flowTableConfig.columns
       })
       return createConfig
@@ -153,7 +159,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.flowTableConfig.columns
       })
       return editConfig
@@ -202,7 +208,7 @@ export default {
     // 批量删除
     deleteBatches() {
       const selectId = []
-      this.multipleSelection.forEach(it => selectId.push(it.id))
+      this.multipleSelection.forEach(it => selectId.push(it[`${this.bussiness}Id`]))
       console.log(selectId)
       if (selectId.length === 0) {
         this.$message.warning('请选择所删除的文件')
@@ -213,9 +219,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(selectId)
-        this.__fetchData()
-        this.$message.success('删除成功')
+        deleteBatches(selectId, this.bussiness).then(res => {
+          this.__fetchData()
+          this.$message.success('删除成功')
+        })
       })
     },
     // 新建

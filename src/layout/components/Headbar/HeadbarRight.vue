@@ -12,21 +12,28 @@
       <span class="headbar-dropdown__title">
         更多菜单<i class="el-icon-caret-bottom el-icon--right headbar-dropdown__icon" />
       </span>
-      <el-dropdown-menu slot="dropdown" class="headbar-dropdown__menu" style="height: 200px;overflow-y: auto">
-        <el-dropdown-item v-for="item in extendRoutes" :key="item.path">
-          <!-- <span v-if="!item.hidden && item.meta && !item.meta.important" :key="item.path">
+      <el-dropdown-menu slot="dropdown" class="headbar-dropdown__menu" style="height: auto;max-height: 200px;overflow-y: auto">
+        <template v-if="extendRoutes && extendRoutes.length > 0">
+          <div>
+            <el-dropdown-item v-for="item in extendRoutes" :key="item.path">
+              <!-- <span v-if="!item.hidden && item.meta && !item.meta.important" :key="item.path">
             {{ item.meta.title }}
           </span> -->
-          <item-link :to="item.path">
-            <span>{{ item.meta.title }}</span>
-          </item-link>
+              <item-link :to="item.path">
+                <span>{{ item.meta.title }}</span>
+              </item-link>
 
-        </el-dropdown-item>
+            </el-dropdown-item>
+          </div>
+        </template>
+        <template v-else>
+          <p class="headbar-dropdown__empty">暂无数据</p>
+        </template>
       </el-dropdown-menu>
     </el-dropdown>
     <el-dropdown class="headbar-dropdown" trigger="click">
       <span class="headbar-dropdown__title">
-        admin<i class="el-icon-caret-bottom el-icon--right headbar-dropdown__icon" />
+        {{ loginName }}<i class="el-icon-caret-bottom el-icon--right headbar-dropdown__icon" />
       </span>
       <el-dropdown-menu slot="dropdown" class="headbar-dropdown__menu">
         <!-- <el-dropdown-item>个人资料</el-dropdown-item> -->
@@ -46,7 +53,8 @@ export default {
   components: { ItemLink },
   data() {
     return {
-      exitFullscreen: false
+      exitFullscreen: false,
+      loginName: ''
     }
   },
   computed: {
@@ -56,6 +64,9 @@ export default {
     extendRoutes() {
       return this.permission_routes.filter(item => !item.hidden && item.meta && !item.meta.important)
     }
+  },
+  created() {
+    this.loginName = localStorage.getItem('loginName')
   },
   methods: {
     // 主题色弹窗
@@ -163,6 +174,13 @@ export default {
     a {
       display: block;
     }
+  }
+  .headbar-dropdown__empty {
+    padding: 0 20px;
+    margin: 0;
+    text-align: center;
+    color: #999;
+    font-size: 13px;
   }
 }
 

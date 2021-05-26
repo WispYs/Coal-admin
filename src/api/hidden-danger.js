@@ -64,6 +64,25 @@ export function deleteaqglThreeRegister(id) {
   })
 }
 
+// 批量删除 三违登记
+export function batchDeleteThreeRegister(data) {
+  return request({
+    url: SafeManagement + '/aqglThreeRegister/batchDelete?entityIds=' + data,
+    method: 'post',
+    data
+  })
+}
+
+// 获取三违登记模板
+export function downloadThreeRegisterTemplate(data) {
+  return request({
+    responseType: 'blob',
+    url: SafeManagement + '/aqglThreeRegister/downloadTemplate?fileName=' + data.fileName + '&filePath=' + data.filePath,
+    method: 'get',
+    data
+  })
+}
+
 //获取事故隐患登记
 export function getAqglHiddenRegister(data) {
   return request({
@@ -109,6 +128,43 @@ export function deleteAqglHiddenRegister(id) {
   })
 }
 
+//批量删除事故隐患登记
+export function batchDeleteHiddenRegister(ids) {
+  return request({
+    url: SafeManagement + '/aqglHiddenRegister/batchDelete?entityIds=' + ids,
+    method: 'post',
+    ids
+  })
+}
+
+// 送审复查
+export function saveHiddenMeasure(data) {
+  return request({
+    url: SafeManagement + '/aqglHiddenMeasure/save',
+    method: 'post',
+    data
+  })
+}
+
+// 延时审批
+export function saveReviewMsg(data) {
+  return request({
+    url: SafeManagement + '/aqglReviewMsg/save',
+    method: 'post',
+    data
+  })
+}
+
+// 更新督办状态
+export function updateSuperviseStatus(data) {
+  return request({
+    url: SafeManagement + '/aqglHiddenRegister/updateSuperviseStatus',
+    method: 'post',
+    data
+  })
+}
+
+
 //隐患清单  分页
 export function getHiddenRegisterDetailList(data) {
   return request({
@@ -118,6 +174,14 @@ export function getHiddenRegisterDetailList(data) {
   })
 }
 
+//获取 隐患清单详情
+export function getHiddenRegisterDetails(id) {
+  return request({
+    url: SafeManagement + '/aqglHiddenRegister/getDetails?id=' + id,
+    method: 'post',
+    id
+  })
+}
 
 //隐患统计分析  年
 export function getHiddenRegisterYearCount(data) {
@@ -204,6 +268,123 @@ export function deleteaqglThreePhoto(id) {
 export function batchDeleteThreePhoto(data) {
   return request({
     url: SafeManagement + '/aqglThreePhoto/batchDelete?entityIds=' + data,
+    method: 'post',
+    data
+  })
+}
+
+//事故教育警示教育  分页
+export function getAqglAccident(data) {
+  return request({
+    url: SafeManagement + '/aqglAccident/search',
+    method: 'post',
+    data
+  })
+}
+
+//根据id获取事故教育警示教育
+export function getAqglAccidentById(id) {
+  return request({
+    url: SafeManagement + '/aqglAccident/get/' + id,
+    method: 'get',
+    id
+  })
+}
+
+//新建 事故教育警示教育
+export function saveAqglAccident(data) {
+  return request({
+    url: SafeManagement + '/aqglAccident/save',
+    method: 'post',
+    data
+  })
+}
+
+//更新 事故教育警示教育
+export function updateAqglAccident(data) {
+  return request({
+    url: SafeManagement + '/aqglAccident/update',
+    method: 'post',
+    data
+  })
+}
+
+//根据id删除  事故教育警示教育
+export function deleteAqglAccidentById(id) {
+  return request({
+    url: SafeManagement + '/aqglAccident/delete/' + id,
+    method: 'delete',
+    id
+  })
+}
+
+//批量删除  事故教育警示教育
+export function batchDeleteAqglAccident(data) {
+  return request({
+    url: SafeManagement + '/aqglAccident/batchDelete?entityIds= ' + data,
+    method: 'post',
+    data
+  })
+}
+
+//更新 员工培训台帐
+export function getAqglEmployeesParameter(data) {
+  return request({
+    url: SafeManagement + '/aqglEmployeesParameter/search',
+    method: 'post',
+    data
+  })
+}
+
+//根据id获取员工培训台帐
+export function getAqglEmployeesParameterById(id) {
+  return request({
+    url: SafeManagement + '/aqglEmployeesParameter/get/' + id,
+    method: 'get',
+    id
+  })
+}
+
+//保存员工培训台帐
+export function saveAqglEmployeesParameter(data) {
+  return request({
+    url: SafeManagement + '/aqglEmployeesParameter/save',
+    method: 'post',
+    data
+  })
+}
+
+//更新员工培训台帐
+export function updateAqglEmployeesParameter(data) {
+  return request({
+    url: SafeManagement + '/aqglEmployeesParameter/update',
+    method: 'post',
+    data
+  })
+}
+
+//根据id删除 员工培训台帐
+export function deleteAqglEmployeesParameterById(id) {
+  return request({
+    url: SafeManagement + '/aqglEmployeesParameter/delete/' + id,
+    method: 'delete',
+    id
+  })
+}
+
+//批量删除  员工培训台帐
+export function batchDeleteAqglEmployeesParameter(data) {
+  return request({
+    url: SafeManagement + '/aqglEmployeesParameter/batchDelete?entityIds=' + data,
+    method: 'post',
+    data
+  })
+}
+
+//获取全部风险点信息
+export function getSelectRiskList(data) {
+  return request({
+    url: SafeManagement + '/aqglAddress/getSelectCombox',
     method: 'post',
     data
   })

@@ -26,7 +26,7 @@
       :config="initCreateConfig()"
       :dialog-visible="createDialogVisible"
       @close-dialog="createDialogVisible = false"
-      @upload-click="openUploadDialog"
+      @upload-click="(row) => openUploadDialog('createDialog', row)"
       @submit="createSubmit"
     />
     <!-- 编辑弹窗 -->
@@ -35,13 +35,12 @@
       :config="initEditConfig()"
       :dialog-visible="editDialogVisible"
       @close-dialog="editDialogVisible = false"
-      @upload-click="openUploadDialog"
+      @upload-click="(row) => openUploadDialog('editDialog', row)"
       @submit="editSubmit"
     />
     <!-- 上传附件 -->
     <upload-file
       :dialog-visible="uploadDialogVisible"
-      :multiple="false"
       @close-dialog="uploadDialogVisible = false"
       @upload-submit="uploadSubmit"
     />
@@ -56,17 +55,17 @@
 </template>
 
 <script>
-import { getMsgTemplateList,getMsgTemplate,updateMsgTemplate,saveMsgTemplate,delMsgTemplate } from '@/api/authority-management'
+import { getMsgTemplateList, getMsgTemplate, updateMsgTemplate, saveMsgTemplate, delMsgTemplate } from '@/api/authority-management'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FilterBar from '@/components/FilterBar'
 import FormDialog from '@/components/FormDialog'
 import UploadFile from '@/components/UploadFile'
-import TextDialog from './components/TextDialog.vue'
-import { NewsTemplateConfig,NewsTemplateFilterConfig } from '@/data/authority-management'
+import TextDialog from '@/components/TextDialog'
+import { NewsTemplateConfig, NewsTemplateFilterConfig } from '@/data/authority-management'
 
 export default {
-  components: { ListTable, Pagination,FilterBar,FormDialog,UploadFile,TextDialog },
+  components: { ListTable, Pagination, FilterBar, FormDialog, UploadFile, TextDialog },
   data() {
     return {
       id: '',
@@ -94,19 +93,30 @@ export default {
   methods: {
     __fetchData() {
       this.listLoading = true
-      const query ={
+      const query = {
         page: this.listQuery.page,
         pagerows: this.listQuery.pagerows,
         keyword: this.filter.keyword,
         keywordField: ['templateName'],
         sort: {
-          asc: ["sort"]
+          asc: ['sort']
         }
       }
       getMsgTemplateList(query).then(response => {
-        this.listLoading = false
-        this.list = response.data.rows
-        this.total = Number(response.data.total)
+        if (response.data.rows.length > 0) {
+          this.listLoading = false
+          this.list = response.data.rows
+          this.total = Number(response.data.total)
+        } else {
+          if (this.listQuery.page > 0) {
+            this.listQuery.page = this.listQuery.page - 1
+            this.__fetchData()
+          } else {
+            this.listLoading = false
+            this.list = []
+            this.total = 0
+          }
+        }
       })
     },
     // 查询数据
@@ -118,7 +128,7 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.NewsTemplateConfig.columns
       })
       return createConfig
@@ -127,7 +137,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.NewsTemplateConfig.columns
       })
       return editConfig
@@ -145,7 +155,7 @@ export default {
     },
     // 删除
     deleteClick(row) {
-      this.$confirm('确定删除该项?', '提示', {
+      this.$confirm('确定删除该模板?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -179,15 +189,20 @@ export default {
     },
     // 打开模板内容弹窗
     opentextDialog(value) {
+      console.log(value)
       this.htmlValue = value
       this.textDialogVisible = true
     },
-    openUploadDialog(row) {
+    openUploadDialog(ref, row) {
+      // 记录当前打开弹窗ref
+      this.dialogRef = ref
       this.uploadDialogVisible = true
       this.uploadRow = row
     },
     // 上传文件控件成功回调
     uploadSubmit(fileList) {
+      console.log(fileList)
+      this.$refs[this.dialogRef].updateFile(fileList)
       this.uploadDialogVisible = false
     }
   }

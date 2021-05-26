@@ -46,6 +46,9 @@
             <!-- input -->
             <el-input v-if="column.layout === 'Text'" v-model="scope.row[column.field]" size="small" :placeholder="column.placeholder" />
 
+            <!-- number -->
+            <el-input-number v-if="column.layout === 'Number'" v-model="scope.row[column.field]" controls-position="right" :placeholder="column.placeholder" />
+
             <!-- select  -->
             <el-select
               v-if="column.layout === 'Select'"
@@ -108,17 +111,23 @@
             <!-- showType 有值表示对表格内样式有特殊要求 -->
             <!-- colorLump 单元格显示背景色 -->
             <template v-if="column.showType === 'colorLump'">
-              <span class="color-lump" :class="lumpClassName(scope.row[column.field])">{{ filterField(column.options, scope.row[column.field]) }}</span>
+              <span class="cell-span color-lump" :class="lumpClassName(scope.row[column.field])" :title="filterField(column.options, scope.row[column.field])">{{ filterField(column.options, scope.row[column.field]) }}</span>
             </template>
             <!-- underline 单元格文字可点击 -->
             <template v-else-if="column.showType === 'underline'">
-              <span class="underline-text" @click="textClick(scope.row[column.field])">{{ column.underlineText || scope.row[column.field] }}</span>
+              <span class="cell-span underline-text" :title="column.underlineText || '附件'" @click="textClick(scope.row[column.field], scope.row, column.layout)">{{ column.underlineText || '附件' }}</span>
+            </template>
+            <template v-else-if="column.dateFormat">
+              <!-- 日期格式 -->
+              <span class="cell-span" :title="scope.row[column.field] | parseTime(column.dateFormat)">{{ scope.row[column.field] | parseTime(column.dateFormat) }}</span>
             </template>
             <template v-else>
-              <span v-if="column.options">
-                {{ filterField(column.options, scope.row[column.field]) }}
-              </span>
-              <span v-else>{{ scope.row[column.field] }}</span>
+              <template v-if="column.options">
+                <!-- 针对动态获取的多级联动下拉菜单 -->
+                <span v-if="column.subField" class="cell-span" :title="scope.row[column.subField]">{{ scope.row[column.subField] }}</span>
+                <span v-else class="cell-span" :title="filterField(column.options, scope.row[column.field])">{{ filterField(column.options, scope.row[column.field]) }}</span>
+              </template>
+              <span v-else class="cell-span" :title="scope.row[column.field]">{{ scope.row[column.field] }}</span>
             </template>
 
           </template>
@@ -128,6 +137,8 @@
 
     <el-table-column v-if="config.actions && config.actions.length > 0" fixed="right" label="操作" :width="config.actionWidth || 160" align="center">
       <template slot-scope="scope">
+        <!-- 根据后台某个字段判断是否显示其他按钮，hideAction为true时隐藏 -->
+        <!-- <template v-if="config.actions.indexOf('other') > -1 && !scope.row.hideAction"> -->
         <template v-if="config.actions.indexOf('other') > -1">
           <el-button v-for="item in config.otherActionTitle" :key="item" type="text" size="small" @click="otherClick(scope.row, scope.$index,item)">{{ item }}</el-button>
         </template>
@@ -149,9 +160,15 @@
 
 <script>
 import TreeSelect from '@/components/TreeSelect'
+import { parseTime } from '@/utils'
 
 export default {
   components: { TreeSelect },
+  filters: {
+    parseTime: (value, format) => {
+      return parseTime(value, format)
+    }
+  },
   props: {
     id: {
       type: String,
@@ -245,8 +262,8 @@ export default {
       return classMap[str]
     },
     // 表格文本点击
-    textClick(value) {
-      this.$emit('text-click', value)
+    textClick(value, row, layout) {
+      this.$emit('text-click', value, row, layout)
     },
     // 上传附件
     uploadFile(row, index) {
@@ -254,17 +271,17 @@ export default {
     },
     // 查看
     handleClick(row, index) {
-      this.$message.success('查看信息')
-      console.log(row, index)
+      // this.$message.success('查看信息')
+      // console.log(row, index)
+      this.$emit('preview-click', row)
     },
     otherClick(row, index, item) {
-      console.log(row, index, item);
       this.$emit('other-click', row, index, item)
     },
     // 编辑
     edit(row) {
       if (this.config && this.config.inlineEdit) {
-        console.log(row)
+        // console.log(row)
         row.edit = true
       } else {
         this.$emit('edit-click', row)
@@ -272,7 +289,7 @@ export default {
     },
     // 提交编辑后的行内数据
     async submitRow(row) {
-      console.log(row)
+      // console.log(row)
       row.edit = false
       // 提交数据时，删除 edit 属性
       delete row.edit
@@ -291,7 +308,7 @@ export default {
 
     // treeSelect 值改变
     getTreeSelect(value) {
-      console.log('getTreeSelect', value)
+      // console.log('getTreeSelect', value)
     },
 
     // 加载树形结构数据
@@ -299,9 +316,9 @@ export default {
       this.$emit('load-tree-data', tree, treeNode, resolve)
     },
     // 异步更新树状表格数据,重新触发表格的loadTreeData函数
-    refreshLoadTree(parentId) {
+    refreshLoadTree(parentId, data) {
       // 根据父级id更新节点数据
-      this.$set(this.$refs.listTable.store.states.lazyTreeNodeMap, parentId, [])
+      this.$set(this.$refs.listTable.store.states.lazyTreeNodeMap, parentId, data)
     },
 
     // 计算合计总工时
@@ -341,8 +358,18 @@ export default {
       return 'font-size: 13px'
     },
     selectionChange(val) {
-		console.log(val);
+      // console.log(val)
       this.$emit('selection-change', val)
+    },
+    // 设置选中项
+    setSelected(row) {
+      if (row && row.length > 0) {
+        row.forEach(it => {
+          this.$refs.listTable.toggleRowSelection(it, true)
+        })
+      } else {
+        this.$refs.listTable.clearSelection()
+      }
     },
     addIco(row, index) {
       this.$emit('addIco', row, index)

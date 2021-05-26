@@ -13,7 +13,7 @@
       :config="MechLargeEquipTypeTableConfig"
       height="calc(100% - 157px)"
       @edit-click="(row) => openDialog('edit', row)"
-      @other-click="(row) => openDetailDialog(row.area)"
+      @other-click="(row) => openDetailDialog(row.id)"
       @delete-click="deleteClick"
       @submit-data="editSubmit"
       @selection-change="selectionChange"
@@ -88,7 +88,6 @@ import {
   createLargeEquipmentType,
   getLargeEquipmentTypeInfo,
   editLargeEquipmentType,
-  getOrganTree,
   delLargeEquipmentType,
   getEquipmentAreaInfo,
   createEquipmentArea,
@@ -100,6 +99,7 @@ import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import DetailDialog from './components/DetailDialog'
 import { MechLargeEquipTypeTableConfig, MechLargeEquipTypeFilterConfig, MechLargeEquipDetailFilterConfig, MechLargeEquipDetailTableConfig } from '@/data/mechatronics'
+import { parseTime } from '@/utils'
 
 export default {
   components: {
@@ -114,6 +114,7 @@ export default {
       id: 'organization-manage',
       list: [],
       total: 0,
+      currentNum: 0, // 当前页数据数量，用于判断删除后是否跳转到上一页
       listQuery: {
         page: 1,
         pagerows: 10
@@ -129,6 +130,7 @@ export default {
       detailDialogVisible: false,
       createDetailDialogVisible: false,
       editDetailDialogVisible: false,
+      deviceTypeId: '', //  特有属性所属的场所id
       multipleSelection: [], // 多选项
       deleteDisabled: true // 批量删除置灰
     }
@@ -138,49 +140,52 @@ export default {
   },
 
   methods: {
-    // 接口获取组织机构树，更新config数据
-    __updateOrganTree() {
-      // getOrganTree().then(response => {
-      //   MechLargeEquipTypeTableConfig.columns.forEach(it => {
-      //     if (it.field === 'parentId') {
-      //       it.options = response.data
-      //     }
-      //   })
-      //   console.log(MechLargeEquipTypeTableConfig)
-      // })
+    // 初始化所属场所下拉框数据
+    __initEquipPlace() {
+      this.$store.dispatch('mecha/getEquipPlaceList').then((data) => {
+        const placeData = []
+        data.forEach(it => {
+          placeData.push({
+            label: it.typeName,
+            value: it.id + ''
+          })
+        })
+        MechLargeEquipTypeTableConfig.columns.forEach(it => {
+          if (it.field === 'parentId') {
+            it.options = placeData
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
     },
     // 获取组织机构列表
     __fetchData() {
       this.listLoading = true
-      // 初次加载只获取根节点数据
-      const entity = {
-        'parentId': 0
-      }
       const filter = {
         ...this.filter,
-        ...{ entity },
-        keywordField: ['deptName', 'shortName']
+        keywordField: ['typeName']
       }
       const query = Object.assign(this.listQuery, filter)
       getLargeEquipmentType(query).then(response => {
         this.listLoading = false
-
         this.list = response.data.rows
-        console.log(this.list)
         this.total = Number(response.data.records)
+        this.currentNum = response.data.rows.length
       })
     },
 
     // 查询数据
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
+      this.$set(this.listQuery, 'page', 1)
       this.__fetchData()
     },
     // 初始化新建窗口配置
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.MechLargeEquipTypeTableConfig.columns
       })
       return createConfig
@@ -189,7 +194,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.MechLargeEquipTypeTableConfig.columns
       })
       return editConfig
@@ -197,8 +202,8 @@ export default {
     // 初始化详情窗口配置
     initDetailConfig() {
       const createConfig = Object.assign({
-        title: '详情',
-        width: '800px',
+        title: '特有属性',
+        width: '1000px',
         filter: this.MechLargeEquipDetailFilterConfig,
         form: this.MechLargeEquipDetailTableConfig
       })
@@ -208,7 +213,7 @@ export default {
     initCreateDetailConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.MechLargeEquipDetailTableConfig.columns
       })
       return createConfig
@@ -217,7 +222,7 @@ export default {
     initEditDetailConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.MechLargeEquipDetailTableConfig.columns
       })
       return editConfig
@@ -232,8 +237,8 @@ export default {
       if (name.indexOf('Detail') > -1) {
         getListFn = getEquipmentAreaInfo
       } else {
-        // 接口获取组织机构树，更新config数据
-        this.__updateOrganTree()
+        // 初始化所属场所下拉框数据
+        this.__initEquipPlace()
         getListFn = getLargeEquipmentTypeInfo
       }
 
@@ -249,7 +254,20 @@ export default {
     openDetailDialog(id) {
       console.log(id)
       this.detailDialogVisible = true
-      this.$refs.detailDialog.queryData({ id })
+      this.deviceTypeId = id
+      this.$refs.detailDialog.queryData({ deviceTypeId: id })
+    },
+    // 删除当前页最后一条数据后跳转到前一页
+    /**
+     * @params{number} num 删除数量
+     */
+    changeCurrentPage(num) {
+      this.currentNum = this.currentNum - num
+      if (this.currentNum <= 0) {
+        if (this.listQuery.page > 1) {
+          this.$set(this.listQuery, 'page', this.listQuery.page - 1)
+        }
+      }
     },
     // 删除
     deleteClick(row) {
@@ -261,16 +279,15 @@ export default {
         delLargeEquipmentType(row.id).then(response => {
           console.log(response)
           this.$message.success('删除成功')
+          this.changeCurrentPage(1)
           this.__fetchData()
         })
       })
     },
     // 新增
     createSubmit(submitData) {
-      console.log(submitData)
       const query = Object.assign(submitData)
       createLargeEquipmentType(query).then(response => {
-        console.log(response)
         this.createDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDialog.resetForm()
@@ -293,11 +310,10 @@ export default {
     },
     // 详情新增
     createDetailSubmit(submitData) {
-      console.log(submitData)
-
-      const query = Object.assign(submitData)
+      const query = Object.assign(submitData, {
+        deviceTypeId: this.deviceTypeId
+      })
       createEquipmentArea(query).then(response => {
-        console.log(response)
         this.createDetailDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDetailDialog.resetForm()
@@ -311,7 +327,6 @@ export default {
     editDetailSubmit(submitData) {
       const query = Object.assign(submitData)
       editEquipmentArea(query).then(response => {
-        console.log(response)
         this.editDetailDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDetailDialog.resetForm()
@@ -345,8 +360,9 @@ export default {
         type: 'warning'
       }).then(() => {
         console.log(selectId)
-        this.__fetchData()
         this.$message.success('删除成功')
+        this.changeCurrentPage(selectId.length)
+        this.__fetchData()
       })
     }
   }

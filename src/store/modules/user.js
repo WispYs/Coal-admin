@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { authLogin, logout, getInfo, setCollectMenu, delCollectMenu, getCollectMenu } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -7,7 +7,8 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: []
+    roles: [],
+    collectMenu: []
   }
 }
 
@@ -28,6 +29,9 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_CollectMenu: (state, menu) => {
+    state.collectMenu = menu
   }
 }
 
@@ -36,11 +40,11 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      authLogin({ loginName: username.trim(), password: password }).then(response => {
         const { data } = response
         console.log(data)
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+        commit('SET_TOKEN', data)
+        setToken(data)
         resolve()
       }).catch(error => {
         console.log(error)
@@ -51,14 +55,15 @@ const actions = {
 
   // 获取用户信息
   getInfo({ commit, state }) {
+    const token = getToken()
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
+      getInfo(token).then(response => {
         const { data } = response
         if (!data) {
           return reject('获取用户信息失败，请重新登陆')
         }
         data.roles = ['admin']
-        const name = data.userName
+        const name = data.username
         // const avatar = data.avatar
         // const roles = ['admin']
         const { roles, avatar } = data
@@ -70,6 +75,40 @@ const actions = {
         commit('SET_AVATAR', avatar)
         commit('SET_ROLES', roles)
 
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  // 设置用户快捷导航
+  setCollectMenu({ dispatch, state }, data) {
+    return new Promise((resolve, reject) => {
+      setCollectMenu(data).then(async response => {
+        await dispatch('getCollectMenu')
+        resolve(state.collectMenu)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  // 取消用户快捷导航
+  delCollectMenu({ dispatch, state }, id) {
+    return new Promise((resolve, reject) => {
+      delCollectMenu(id).then(async response => {
+        await dispatch('getCollectMenu')
+        resolve(state.collectMenu)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  // 获取用户快捷导航
+  getCollectMenu({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      getCollectMenu().then(response => {
+        const { data } = response
+        commit('SET_CollectMenu', data)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -108,4 +147,3 @@ export default {
   mutations,
   actions
 }
-

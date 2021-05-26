@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <filter-bar
-      :config="FilterConfig"
+      :config="roadwayLifecyleFilterConfig"
       @search-click="queryData"
       @create-click="openDialog('create')"
       @reset-click="queryData"
@@ -10,24 +10,32 @@
       :id="id"
       :list="list"
       :list-loading="listLoading"
-      :config="TableConfig"
+      :config="roadwayLifecyleConfig"
+      height="calc(100% - 137px)"
       @edit-click="(row) => openDialog('edit', row)"
       @other-click="openProgressDialog"
       @delete-click="deleteClick"
       @submit-data="editSubmit"
+      @selection-change="selectionChange"
     />
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.pagerows"
-      @pagination="__fetchData"
-    />
+    <div v-show="total > 0" class="page-bottom">
+      <el-button class="page-bottom__delete" type="warning" size="small" plain :disabled="deleteDisabled" @click="deleteBatches">
+        <i class="el-icon-delete el-icon--left" />批量删除
+      </el-button>
+      <pagination
+        v-show="total>0"
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.pagerows"
+        @pagination="__fetchData"
+      />
+    </div>
     <!-- 新建弹窗 -->
     <form-dialog
+      ref="createDialog"
       :config="initCreateConfig()"
       :dialog-visible="createDialogVisible"
-      @upload-click="openUploadDialog"
+      @upload-click="(row) => openUploadDialog('createDialog', row)"
       @close-dialog="createDialogVisible = false"
       @submit="createSubmit"
     />
@@ -36,7 +44,7 @@
       ref="editDialog"
       :config="initEditConfig()"
       :dialog-visible="editDialogVisible"
-      @upload-click="openUploadDialog"
+      @upload-click="(row) => openUploadDialog('editDialog', row)"
       @close-dialog="editDialogVisible = false"
       @submit="editSubmit"
     />
@@ -44,7 +52,6 @@
     <!-- 上传附件 -->
     <upload-file
       :dialog-visible="uploadDialogVisible"
-      :multiple="false"
       @close-dialog="uploadDialogVisible = false"
       @upload-submit="uploadSubmit"
     />
@@ -58,14 +65,24 @@
 </template>
 
 <script>
-import { getList } from '@/api/roadway-lifecycle'
+import {
+  getTunnelLifeCycleList,
+  getTunnelLifeCycleById,
+  updateTunnelLifeCycle,
+  saveTunnelLifeCycle,
+  deleteTunnelLifeCycle,
+  batchDeleteTunnelLifeCycle,
+  selectTunnelList,
+  getProcessTunnelLifeCycle,
+  getTunnelById
+} from '@/api/mining-management'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import UploadFile from '@/components/UploadFile'
-import { TableConfig, FilterConfig } from '@/data/roadway-lifecycle'
-import RoadwayProgress from './RoadwayProgress'
+import { roadwayLifecyleConfig, roadwayLifecyleFilterConfig } from '@/data/mining-management'
+import RoadwayProgress from './components/roadway-progress/index.vue'
 
 export default {
   components: { FilterBar, ListTable, Pagination, FormDialog, UploadFile, RoadwayProgress },
@@ -80,26 +97,58 @@ export default {
       },
       filter: {}, // 筛选项
       listLoading: true,
-      FilterConfig,
-      TableConfig,
+      roadwayLifecyleFilterConfig,
+      roadwayLifecyleConfig,
       createDialogVisible: false,
       editDialogVisible: false,
       uploadDialogVisible: false,
       uploadRow: null,
-      progressDialogVisible: false
+      progressDialogVisible: false,
+      deleteDisabled: true,
+      multipleSelection: []
     }
   },
   created() {
     this.__fetchData()
+    this.__fetchTunnelList()
   },
   methods: {
+    __fetchTunnelList() {
+      selectTunnelList().then(response => {
+        this.roadwayLifecyleConfig.columns.forEach(it => {
+          if (it.field == 'tunnelNameId') {
+            it.options = response.data
+            console.log(it)
+          }
+        })
+      })
+    },
     __fetchData() {
       this.listLoading = true
-      const query = Object.assign(this.listQuery, this.filter)
-      getList(query).then(response => {
+      const query = {
+        page: this.listQuery.page,
+        pagerows: this.listQuery.pagerows,
+        keyword: this.filter.name,
+        keywordField: ['tunnelName', 'eventName'],
+        sort: { asc: ['orderNum'] }
+      }
+      getTunnelLifeCycleList(query).then(response => {
+        if (response.data.rows.length > 0) {
+          this.listLoading = false
+          this.list = response.data.rows
+          this.total = Number(response.data.records)
+        } else {
+          if (this.listQuery.page > 0) {
+            this.listQuery.page = this.listQuery.page - 1
+            this.__fetchData()
+          } else {
+            this.listLoading = false
+            this.list = []
+            this.total = 0
+          }
+        }
+      }).catch(err => {
         this.listLoading = false
-        this.list = response.data.items
-        this.total = response.data.total
       })
     },
     // 查询数据
@@ -111,8 +160,8 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '500px',
-        form: this.TableConfig.columns
+        width: '1000px',
+        form: this.roadwayLifecyleConfig.columns
       })
       return createConfig
     },
@@ -120,8 +169,8 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '500px',
-        form: this.TableConfig.columns
+        width: '1000px',
+        form: this.roadwayLifecyleConfig.columns
       })
       return editConfig
     },
@@ -131,47 +180,98 @@ export default {
       this[visible] = true
       if (row) {
         // 如果有数据，更新子组件的 formData
-        this.$refs.editDialog.updataForm(row)
+        getTunnelLifeCycleById(row.cjglTunnelLifeCycleId).then(response => {
+          this.$refs.editDialog.updataForm(response.data)
+        })
       }
     },
     // 打开其他按钮弹窗
     openProgressDialog(row) {
       this.progressDialogVisible = true
-      if (row) {
-        // 更新数据
-        this.$refs.progressDialog.updataForm(row)
-      }
+      let query = {}
+      getTunnelById(row.tunnelNameId).then(res => {
+        getProcessTunnelLifeCycle(row.tunnelNameId).then(response => {
+          query = Object.assign(response.data, {
+            tunnelName: res.data.tunnelName,
+            designerLength: res.data.designerLength
+          })
+          this.$refs.progressDialog.updataForm(query)
+        })
+      })
     },
     // 删除
-    deleteClick(id) {
-      this.$confirm('确定删除该周期?', '提示', {
+    deleteClick(row) {
+      this.$confirm('确定删除该巷道生命周期?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success('删除成功')
+        deleteTunnelLifeCycle(row.cjglTunnelLifeCycleId).then(response => {
+          this.__fetchData()
+          this.$message.success('删除成功')
+        })
       })
     },
     // submit data
     createSubmit(submitData) {
-      console.log(submitData)
-      this.createDialogVisible = false
-      this.$message.success('新建成功')
+      saveTunnelLifeCycle(submitData).then(response => {
+        this.createDialogVisible = false
+        this.__fetchData()
+        this.$refs.createDialog.resetForm()
+        this.$message.success('新建成功')
+      }).catch(err => {
+        this.$refs.createDialog.resetSubmitBtn()
+      })
     },
     editSubmit(submitData) {
-      console.log(submitData)
-      this.editDialogVisible = false
-      this.$message.success('编辑成功')
+      updateTunnelLifeCycle(submitData).then(response => {
+        this.editDialogVisible = false
+        this.__fetchData()
+        this.$refs.editDialog.resetForm()
+        this.$message.success('编辑成功')
+      }).catch(err => {
+        this.$refs.editDialog.resetSubmitBtn()
+      })
     },
-
-    openUploadDialog(row) {
+    // 打开上传文件组件
+    openUploadDialog(ref, row) {
+      // 记录当前打开弹窗ref
+      this.dialogRef = ref
       this.uploadDialogVisible = true
       this.uploadRow = row
     },
     // 上传文件控件成功回调
     uploadSubmit(fileList) {
-      console.log(fileList)
+      this.$refs[this.dialogRef].updateFile(fileList)
       this.uploadDialogVisible = false
+    },
+    // 改变所选项
+    selectionChange(val) {
+      this.multipleSelection = val
+      if (this.multipleSelection.length > 0) {
+        this.deleteDisabled = false
+      } else {
+        this.deleteDisabled = true
+      }
+    },
+    // 批量删除
+    deleteBatches() {
+      const selectId = []
+      this.multipleSelection.forEach(it => selectId.push(it.cjglTunnelLifeCycleId))
+      if (selectId.length === 0) {
+        this.$message.warning('请选择所删除的巷道生命周期')
+        return false
+      }
+      this.$confirm('确定删除所选中巷道生命周期?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        batchDeleteTunnelLifeCycle(selectId).then(response => {
+          this.__fetchData()
+          this.$message.success('删除成功')
+        })
+      })
     }
   }
 }

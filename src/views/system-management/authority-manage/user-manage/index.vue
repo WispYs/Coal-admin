@@ -27,22 +27,10 @@
       />
 
       <div v-show="total>0" class="page-bottom">
-        <el-button
-          class="page-bottom__delete"
-          type="warning"
-          size="small"
-          plain
-          :disabled="deleteDisabled"
-          @click="deleteBatches"
-        >
+        <el-button class="page-bottom__delete" type="warning" size="small" plain :disabled="deleteDisabled" @click="deleteBatches">
           <i class="el-icon-delete el-icon--left" />批量删除
         </el-button>
-        <pagination
-          :total="total"
-          :page.sync="listQuery.page"
-          :limit.sync="listQuery.pagerows"
-          @pagination="__fetchData"
-        />
+        <pagination :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagerows" @pagination="__fetchData" />
       </div>
 
       <!-- 新建弹窗 -->
@@ -70,14 +58,29 @@
 </template>
 
 <script>
-import { getUserList, createUser, getUserInfo, editUser, delUser, resetUserPassword, getOrganTree,getSelectRoleList } from '@/api/authority-management'
+import {
+  getUserList,
+  createUser,
+  getUserInfo,
+  editUser,
+  delUser,
+  batchDeleteUser,
+  resetUserPassword,
+  getOrganTree
+} from '@/api/authority-management'
+import {
+  getsysDictListById
+} from '@/api/hidden-danger'
 import TreeBar from '@/components/TreeBar'
 import FilterBar from '@/components/FilterBar'
 import ListTable from '@/components/ListTable'
 import Pagination from '@/components/Pagination'
 import FormDialog from '@/components/FormDialog'
 import ResetPassword from '@/components/ResetPassword'
-import { UserTableConfig, UserFilterConfig } from '@/data/authority-management'
+import {
+  UserTableConfig,
+  UserFilterConfig
+} from '@/data/authority-management'
 
 export default {
   components: {
@@ -116,14 +119,44 @@ export default {
 
   created() {
     this.__updateOrganTree()
-    this.__fetchRole()
+    this.__fetchSelectList()
     this.__fetchData()
   },
   methods: {
+    __fetchSelectList() {
+      const query = [{
+        // 男女
+        parentId: 111153
+      }, {
+        // 用户状态
+        parentId: 111156
+      }]
+      for (const q in query) {
+        getsysDictListById(query[q].parentId).then(response => {
+          const selectList = []
+          for (const m in response.data) {
+            selectList.push({
+              value: response.data[m].sysDictId,
+              label: response.data[m].dictName
+            })
+          }
+          this.UserTableConfig.columns.forEach(it => {
+            if (query[q].parentId == 111153) {
+              if (it.field === 'sex') {
+                it.options = selectList
+              }
+            } else if (query[q].parentId == 111156) {
+              if (it.field === 'status') {
+                it.options = selectList
+              }
+            }
+          })
+        })
+      }
+    },
     // 接口获取组织机构树
     __updateOrganTree() {
       getOrganTree().then(response => {
-        console.log(response.data)
         // 更新左侧树结构数据
         this.treeData.list = response.data
         // 更新新增、编辑config数据
@@ -134,37 +167,6 @@ export default {
         })
       })
     },
-    getIterationData(_m, _d) {
-      _m.children = _d.sysDictList
-      if (_d.sysDictList.length > 0) {
-        for (let m in _d.sysDictList) {
-          this.getIterationData(_m.children[m], _d.sysDictList[m])
-        }
-      }
-    },
-    __fetchRole(){
-      const query ={
-        entity:{},
-        selectedField:"",
-        sort:""
-      }
-      getSelectRoleList(query).then(response => {
-        console.log(response.data)
-        let selectList = response.data
-        for (let m in response.data) {
-          selectList[m].label = response.data[m].roleName
-          selectList[m].value = response.data[m].sysRoleId
-        }
-        console.log(selectList);
-        // 更新新增、编辑config数据
-        this.UserTableConfig.columns.forEach(it => {
-          if (it.field === 'sysRoleId') {
-            it.options = selectList
-          }
-        })
-        console.log(this.UserTableConfig.columns);
-      })
-    },
     __fetchData() {
       this.listLoading = true
       const filter = {
@@ -173,9 +175,22 @@ export default {
       }
       const query = Object.assign(this.listQuery, filter)
       getUserList(query).then(response => {
+        if (response.data.rows.length > 0) {
+          this.listLoading = false
+          this.list = response.data.rows
+          this.total = Number(response.data.records)
+        } else {
+          if (this.listQuery.page > 0) {
+            this.listQuery.page = this.listQuery.page - 1
+            this.__fetchData()
+          } else {
+            this.listLoading = false
+            this.list = []
+            this.total = 0
+          }
+        }
+      }).catch(err => {
         this.listLoading = false
-        this.list = response.data.rows
-        this.total = Number(response.data.records)
       })
     },
     // 查询数据
@@ -187,7 +202,7 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.UserTableConfig.columns
       })
       return createConfig
@@ -196,7 +211,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.UserTableConfig.columns
       })
       return editConfig
@@ -213,8 +228,8 @@ export default {
       if (row) {
         getUserInfo(row.sysUserId).then(response => {
           const info = Object.assign(response.data, {
-            sysDeptId: Number(response.data.sysDeptId) || 0,
-            sysRoleId: Number(response.data.sysRoleId) || 0
+            sex: String(response.data.sex),
+            status: String(response.data.status)
           })
           this.$refs.editDialog.updataForm(info)
         })
@@ -227,9 +242,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(row.sysUserId)
         delUser(row.sysUserId).then(response => {
-          console.log(response)
           this.$message.success('删除成功')
           this.__fetchData()
         })
@@ -237,36 +250,30 @@ export default {
     },
     // 新增
     createSubmit(submitData) {
-      console.log(submitData)
-
       const query = Object.assign(submitData, {
         sysRoleId: Number(submitData.sysRoleId) || 0,
         sysDeptId: Number(submitData.sysDeptId) || 0
       })
       createUser(query).then(response => {
-        console.log(response)
         this.createDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDialog.resetForm()
         this.__fetchData()
       }).catch(err => {
-        console.log(err)
         this.$refs.createDialog.resetSubmitBtn()
       })
     },
     editSubmit(submitData) {
-      console.log(submitData);
       const query = Object.assign(submitData)
-      console.log(query);
       editUser(query).then(response => {
-        console.log(response)
         this.editDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDialog.resetForm()
         this.__fetchData()
+      }).catch(err => {
+        this.$refs.editDialog.resetSubmitBtn()
       })
     },
-
     // 改变所选项
     selectionChange(val) {
       this.multipleSelection = val
@@ -277,27 +284,25 @@ export default {
       }
       console.log(this.multipleSelection)
     },
-
     // 批量删除
     deleteBatches() {
       const selectId = []
-      this.multipleSelection.forEach(it => selectId.push(it.id))
-      console.log(selectId)
+      this.multipleSelection.forEach(it => selectId.push(it.sysUserId))
       if (selectId.length === 0) {
-        this.$message.warning('请选择所删除的文件')
+        this.$message.warning('请选择所删除的用户')
         return false
       }
-      this.$confirm('确定删除所选中文件?', '提示', {
+      this.$confirm('确定删除所选中用户?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(selectId)
-        this.__fetchData()
-        this.$message.success('删除成功')
+        batchDeleteUser(selectId).then(response => {
+          this.__fetchData()
+          this.$message.success('删除成功')
+        })
       })
     },
-
     // 重置密码
     resetPassword(row) {
       this.$confirm('是否重置为默认密码?', '提示', {
@@ -306,21 +311,19 @@ export default {
         type: 'warning'
       }).then(() => {
         resetUserPassword(row.sysUserId).then(response => {
-          console.log(response)
           this.$message.success('重置成功')
           this.__fetchData()
         })
       })
     },
-
     // 点击树形菜单时触发
     handleNodeClick(data) {
-      console.log(data)
       const entity = {
         sysDeptId: data.value
       }
-      console.log(entity)
-      this.filter = Object.assign(this.filter, { entity })
+      this.filter = Object.assign(this.filter, {
+        entity
+      })
       this.__fetchData()
     }
   }

@@ -19,6 +19,15 @@ export function getaqglRiskSystemById(id) {
   })
 }
 
+// 批量删除 风险责任体系
+export function batchDeleteRiskSystem(data) {
+  return request({
+    url: SafeManagement + '/aqglRiskSystem/batchDelete?entityIds=' + data,
+    method: 'post',
+    data
+  })
+}
+
 // 保存风险责任体系对象
 export function saveAqglRiskSystem(data) {
   return request({
@@ -46,7 +55,7 @@ export function deleteAqglRiskTissue(id) {
   })
 }
 
-// 分页 获取患者责任体系列表
+// 分页 获取隐患责任体系列表
 export function getAqglHiddenSystem(data) {
   return request({
     url: SafeManagement + '/aqglHiddenSystem/search',
@@ -55,7 +64,7 @@ export function getAqglHiddenSystem(data) {
   })
 }
 
-// 根据id获取患者责任体系
+// 根据id获取隐患责任体系
 export function getaqglHiddenSystemById(id) {
   return request({
     url: SafeManagement + '/aqglHiddenSystem/get/' + id,
@@ -64,7 +73,17 @@ export function getaqglHiddenSystemById(id) {
   })
 }
 
-// 创建患者责任体系
+
+// 批量删除 隐患责任体系
+export function batchDeleteHiddenSystem(data) {
+  return request({
+    url: SafeManagement + '/aqglHiddenSystem/batchDelete?entityIds=' + data,
+    method: 'post',
+    data
+  })
+}
+
+// 创建隐患责任体系
 export function saveaqglHiddenSystem(data) {
   return request({
     url: SafeManagement + '/aqglHiddenSystem/save',
@@ -73,7 +92,7 @@ export function saveaqglHiddenSystem(data) {
   })
 }
 
-// 修改患者责任体系
+// 修改隐患责任体系
 export function updateAqglHiddenSystem(data) {
   return request({
     url: SafeManagement + '/aqglHiddenSystem/update',
@@ -82,7 +101,7 @@ export function updateAqglHiddenSystem(data) {
   })
 }
 
-// 删除患者责任体系
+// 删除隐患责任体系
 export function deleteaqglHiddenSystem(id) {
   return request({
     url: SafeManagement + '/aqglHiddenSystem/delete/' + id,

@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
+import { Message } from 'element-ui'
 
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -14,8 +14,8 @@ service.interceptors.request.use(
   config => {
     // config.headers['Content-Type'] = 'multipart/form-data'
     if (store.getters.token) {
-      config.headers['Authorization'] = 'admin'
-      // config.headers['Authorization'] = getToken()
+      // config.headers['Authorization'] = 'admin'
+      config.headers['Authorization'] = getToken()
     }
     return config
   },
@@ -39,7 +39,16 @@ service.interceptors.response.use(
       const data = JSON.parse(cfg.data)
       link.style.display = 'none'
       link.href = url
-      link.download = data.fileName
+      console.log(response)
+
+      const cd = response.headers['content-disposition']
+      if (cd && cd.indexOf('filename') > 0) {
+        const fileName = decodeURI(response.headers['content-disposition'].split('filename=')[1])
+        link.download = fileName
+      } else {
+        link.download = data.fileName
+      }
+
       document.body.appendChild(link)
       link.click()
       return res
@@ -58,8 +67,9 @@ service.interceptors.response.use(
   },
   error => {
     console.log('err' + error)
+    console.log(error.response)
     Message({
-      message: error,
+      message: error.response ? error.response.data.msg : 'Error',
       type: 'error',
       duration: 5 * 1000
     })

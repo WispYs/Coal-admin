@@ -1,8 +1,18 @@
 <template>
-  <div class="gis-container">
-    <TopBar :config="topConfig" />
+  <div
+    v-loading.lock="gisLoading"
+    element-loading-text="加载中"
+    element-loading-spinner="el-icon-loading"
+    class="gis-container"
+  >
+    <TopBar
+      v-if="!gisLoading"
+      :config="topConfig"
+      :options="gisMaps"
+      @handleChange="mapChange"
+    />
 
-    <div class="side-wrapper">
+    <div v-if="!gisLoading" class="side-wrapper">
       <div class="left-side-wrapper">
         <el-button class="side-item" type="primary" @click="openDrawer('jsDrawer', $event)">检索</el-button>
         <el-button class="side-item" type="primary" @click="openDrawer('zhDrawer', $event)">综合</el-button>
@@ -23,7 +33,6 @@
           :wrapper-closable="false"
           class="drawer"
           size="100%"
-          style="height: 488px"
         >
           <div class="drawer-wrapper">
             <el-input v-model="searchValue" placeholder="请输入内容" size="small" class="input-with-select">
@@ -87,7 +96,6 @@
           :wrapper-closable="false"
           class="drawer"
           size="100%"
-          style="height: 460px;"
         >
           <div>
             <h3 style="text-align: center;">矿井安全生产中</h3>
@@ -118,7 +126,7 @@
               </div>
               <el-divider />
               <div class="list-item-wrapper">
-                <div v-for="idx in 4" :key="idx" class="list-item">
+                <div v-for="(it, idx) in dataList" :key="idx" class="list-item">
                   <img class="js-tools-img" src="//www.baidu.com/img/flexible/logo/pc/result@2.png" alt="">
                   1126(工作面)
                   <div class="work-wrapper">
@@ -130,7 +138,7 @@
                       type="primary"
                       icon="el-icon-location-outline"
                       round
-                      @click="zoomElement"
+                      @click="zoomElement(it)"
                     >定位</el-button>
                   </div>
                 </div>
@@ -195,15 +203,25 @@
         <el-button @click="outerVisible = false">关 闭</el-button>
       </div>
     </el-dialog>
+
+    <el-popover
+      ref="vedioPopover"
+      v-model="videoVisible"
+      title="视频"
+      width="200"
+      trigger="manual"
+      content="这是视频区域"
+    />
   </div>
 </template>
 <script>
-import TopBar from './components/top-bar'
-import { getViewPoint, getPointInfo } from '@/api/gis'
-var model = null
-var api = null
+import TopBar from '@/components/TopBar'
+import { getViewPoint, getPointInfo, getAllViews } from '@/api/gis'
+import { PointIcon } from '@/config/gis-config'
+import { gisMixin } from '@/mixin/gis'
 export default {
   components: { TopBar },
+  mixins: [gisMixin],
   data() {
     return {
       papers: [
@@ -254,12 +272,31 @@ export default {
       activeName: 'second',
       searchSelected: '',
       searchValue: '', // 检索
+      gisMaps: [
+        {
+          value: '0',
+          label: '煤综合图1'
+        },
+        {
+          value: '1',
+          label: '煤综合图2'
+        },
+        {
+          value: '2',
+          label: '煤综合图3'
+        }
+      ],
       topConfig: [
         {
           name: '添加锚点',
           fn: this.location,
           icon: 'el-icon-add-location'
         },
+        // {
+        //   name: '新建工作面',
+        //   fn: this.addPolygon,
+        //   icon: 'el-icon-edit'
+        // },
         {
           name: '测距',
           status: false,
@@ -282,6 +319,26 @@ export default {
           status: false,
           fn: this.fullScreen,
           icon: 'el-icon-full-screen'
+        },
+        {
+          name: '图纸',
+          type: 'Select',
+          selectVal: '',
+          selectFn: this.mapChange,
+          options: [
+            {
+              value: '0',
+              label: '煤综合图1'
+            },
+            {
+              value: '1',
+              label: '煤综合图2'
+            },
+            {
+              value: '2',
+              label: '煤综合图3'
+            }
+          ]
         }
       ],
       jsDrawer: false,
@@ -301,156 +358,96 @@ export default {
         ''
       ],
       maps: ['综合', '地测', '生产', '通防', '机电', '安全', '应急', '监测'],
-      dataList: [],
-      viewPointData: [] // 锚点坐标列表
+      dataList: [], // 锚点数据
+      viewPointData: [], // 视点数据
+      gisLoading: true,
+      videoVisible: false, // 视频显示区域
+      pointMock: [
+        {
+          x: 1502.2999774239113,
+          y: 0,
+          z: -1138.5787307895425
+        },
+        {
+          x: 1514.0699233819114,
+          y: 0,
+          z: -1105.071159520949
+        }, {
+          x: 1553.1964768403564,
+          y: 0,
+          z: -1088.9438697438889
+        }
+      ]
     }
   },
   mounted() {
-    this.__fetchViewPoint()
-    document.querySelector('.app-main').style.padding = '20px 20px 0 20px'
     window._this = this
     this.dataList = []
     console.log(this.$route.meta.title)
-    for (var i = 0; i < this.maps.length; i++) { if (this.$route.meta.title.indexOf(this.maps[i]) > -1) this.pos = i }
-    this.fectchContent(
-      'http://122.112.148.164:9980/BIMExample/css/BIM2020.css',
-      'style'
-    )
-
-    window.bim_config = {
-      // localAddress: "http://www.probim.cn:8088/",
-      // server: "https://bimcomposer.probim.cn/api",
-      // accessToken:
-      //   "pk.eyJ1IjoiZ2Fvc2wiLCJhIjoiY2p6dDdnbXBkMDJmajNubnljbW9zd2lmNiJ9.b7tzshnJRK4ziIItMRdUHw"
-      localAddress: 'http://122.112.148.164:9980/', // 模型public => hdr 文件地址 如果私有云请改成部署站点public根目录路径
-      server: 'http://122.112.148.164:9982/api' // 模型api地址 如私有云请改成私有云相关模型api地址
-    }
-
-    // gisContext = window.gisContext = new bim365.GISContext(contextConfig);
-
-    // // 添加比例尺
-    // this.addScale();
-    // // 添加测量
-    // this.addMeasure();
-
-    var viewpointlist
-    const obj = {
-      modelID: '77b4621d-d89d-45d4-a66d-7b5be1c938f8',
-      projectID: '9759d32b-8245-4567-875b-908be0f612ce',
-      versionNO: '',
-      viewID: '',
-      DOM: document.querySelector('.gis-wrapper')
-    }
-    model = window.model = new bim365.BIMModel(obj)
-
-    model.load()
-    api = model.BIM365API
-
-    api.Events.finishRender.on('default', (e) => {
-      // 获取视点列表
-      const viewpointlist = model.BIM365API.Data.getMainModel().activeView.getViewpointList()
-      // viewpoint 视点 annotation批注数据
-      console.log(viewpointlist)
-      // for (var i = 0; i < viewpointlist.annotation.length; i++)
-      // var i = 1
-      // {
-      //   // const annotation = viewpointlist.annotation[1]
-      //   // const annotation = viewpointlist.annotation[i]
-      //   // const inf = JSON.parse(annotation.override)
-      //   // console.log(inf)
-      //   // console.log(annotation)
-
-      //   // 添加锚点
-      //   // const pos = inf.controlPostion
-      //   // pos.y = 0
-      //   // var a = 1
-      //   // delete annotation.override
-      //   // delete annotation.viewpointInfo.Override
-      //   // annotation.name = window._this.name[window._this.pos]
-      //   // console.log(annotation)
-      //   // let data = model.BIM365API.Extension.Point.addAnchorPointByPosition(pos,'http://www.probim.cn:8088/bimexample/img/point.png',annotation)
-      //   // window._this.dataList.push(data);
-      //   // point添加事件
-      //   // let pointDom = data.viewpointIcon;
-      //   // document.getElementById(data.id).addEventListener('click',()=>{
-      //   //     //alert('刚才根据' + JSON.stringify(data.data) +'添加的锚点')
-      //   //     //console.log(data.data)
-      //   //     window._this.clickPoint(data.data);
-      //   //     // window._this.$alert('<strong>'+JSON.stringify(data.data) +'</strong>', 'HTML 片段', {
-      //   //     //   dangerouslyUseHTMLString: true
-      //   //     // });
-      //   // })
-      //   // 利用锚点位置 自定义html
-      //   // pointDom.innerHTML = " <div style='background:#fff;width:300px;border:1px solid #ff0000'><li>设备名称："+annotation.name+"</li><li>设备状态：开机</li><li>生产数：88</li><li>温度：120­°C</li></div>";
-      //   // window._this.randPoint(annotation, pos)
-
-      // }
-
-      // 后台api
-      this.randPoint(this.viewPointData)
-      model.BIM365API.Extension.Point.openCluster()
-      console.log(this.dataList)
-      for (var i = 0; i < this.dataList.length; i++) {
-        var dt = this.dataList[i]
-        document.getElementById(dt.id).addEventListener('click', this.addEvent)
+    for (var i = 0; i < this.maps.length; i++) {
+      if (this.$route.meta.title.indexOf(this.maps[i]) > -1) {
+        this.pos = i
       }
-
-      // var dom=document.getElementsByClassName("gis-wrapper")[0].childNodes;
-      // for(var i=0;i<dom.length;i++)
-      //   if("DIV"==dom[i].tagName.toUpperCase()&&"viewCube"!=dom[i].id)
-      //   {
-      //     document.getElementById(dom[i].id).addEventListener('click',()=>{
-      //       window._this.clickPoint(this);
-      //     })
-      //   }
-    })
+    }
   },
   methods: {
+    gisMounted() {
+      this.__fetchViewPoint()
+    },
+    // gis更新事件
+    gisUpdate(ev) {
+      // this.addScale()
+      if (this.videoVisible) this.videoVisible = false
+    },
     // 获取所有锚点信息
-    __fetchViewPoint() {
-      getViewPoint().then(response => {
-        this.viewPointData = response.data.records
+    async __fetchViewPoint() {
+      // const points = await getViewPoint()
+      // this.viewPointData = points.data.records
+      // this.setPosPoint(this.viewPointData)
+      // this.openCluster()
+      const res = await getViewPoint()
+      this.clearAllAnchorpoint()
+      this.viewPointData = res.data.records
+      res.data.records.forEach((r, idx) => {
+        const { x, y, z } = r
+        if (x && y && z) {
+          const point = this.setPosPoint({ x, y, z })
+          // point.viewpointIcon.addEventListener('click', () => {
+          //   this.addAddrDialogVisible = true
+          //   this.$nextTick(() => {
+          //     this.$refs.addAddrDialog.updataForm(r)
+          //   })
+          // })
+        }
       })
+      // this.setPoint(this.viewPointData)
+      console.log('dataList', this.dataList)
     },
 
     // 点击锚点获取详情
     __fetchPointInfo(id) {
       getPointInfo(id).then(response => {
-        const viewPointInfo = response.data
-        this.dlgTitle = `${viewPointInfo.name}详情`
-        this.dlgData = `设备编号：${viewPointInfo.id}<br/>` +
-                      `传感器类型：${viewPointInfo.type}<br/>` +
-                      `安装地点：${viewPointInfo.addr}<br/>` +
-                      `实时值：${viewPointInfo.num}<br/>` +
+        // const viewPointInfo = response.data
+        const { name, id, type, addr, num, currDate } = { ...response.data }
+        this.dlgTitle = `${name}详情`
+        this.dlgData = `设备编号：${id}<br/>` +
+                      `传感器类型：${type}<br/>` +
+                      `安装地点：${addr}<br/>` +
+                      `实时值：${num}<br/>` +
                       `单位：%CH4<br/>` +
                       `状态：正常<br/>` +
-                      `监测时间：${viewPointInfo.currDate}`
+                      `监测时间：${currDate}`
       })
     },
-    // 全屏
-    fullScreen() {
-      const idx = this.topConfig.findIndex(t => t.name === '全屏')
-      const flag = (this.topConfig[idx]['status'] = !this.topConfig[idx]['status'])
-      const el = flag ? document.documentElement : document
-      const rfs = flag
-        ? el.requestFullScreen ||
-            el.webkitRequestFullScreen ||
-            el.mozRequestFullScreen ||
-            el.msRequestFullScreen
-        : el.cancelFullScreen ||
-            el.webkitCancelFullScreen ||
-            el.mozCancelFullScreen ||
-            el.exitFullScreen
-
-      if (rfs) {
-        rfs.call(el)
-      } else if (typeof window.ActiveXObject !== 'undefined') {
-        // for IE，这里其实就是模拟了按下键盘的F11，使浏览器全屏
-        var wscript = new ActiveXObject('WScript.Shell')
-        if (wscript != null) {
-          wscript.SendKeys('{F11}')
-        }
-      }
+    // 地图改变
+    mapChange(selectedVal) {
+      console.log('selectedVal', selectedVal)
+    },
+    // 获取所有视图
+    getAllViews() {
+      getAllViews(bim_config.model).then(res => {
+        console.log(res)
+      })
     },
     // 打开侧边栏
     openDrawer(ref, ev) {
@@ -462,35 +459,35 @@ export default {
           this[drawers[i]] = false
         }
       }
-      const el = this.$refs[ref].$el
-      const target = ev.currentTarget.getBoundingClientRect()
+      // const el = this.$refs[ref].$el
+      // const target = ev.currentTarget.getBoundingClientRect()
       // el.style.left = `${target.left + 74}px`;
       // el.style.top = `${target.top}px`;
-      el.style.left = '96px'
-      el.style.top = '16.075px'
-      el.style.position = 'absolute'
+      // el.style.left = '80px'
+      // el.style.top = '16.075px'
+      // el.style.position = 'absolute'
     },
-    // 重设顶部操作工具状态
-    resetItem(arr = [], key) {
-      let flag = false
-      arr.forEach(item => {
-        if (item.name === key) {
-          flag = item.status = !item.status
-        } else {
-          if (item.status !== undefined) item.status = false
-        }
-      })
-      return flag
+    // 添加工作面
+    addPolygon() {
+      const canvas = __GIS__dom
+      // 初始化
+      __GIS__api.Extension.Markup.initMarkup()
+      // 开启编辑模式
+      __GIS__api.Extension.Markup.beginEditMode(canvas.offsetWidth, canvas.offsetHeight)
+      // 绘制自由路径线
+      __GIS__api.Extension.Markup.activePathAndSetParam()
+      // 获取当前图形数据
+      const data = __GIS__api.Extension.Markup.serialize()
+
+      const activecamera = __GIS__api.Context.getActiveCamera()
+      const { position, rotation } = activecamera.position
+      const camera = JSON.stringify({ position, rotation })
+
+      console.log('camera: ' + camera, 'data: ' + data)
     },
     // 添加锚点
     locationFn(e) {
-      const pos = api.Context.sheetGetPosition(e)
-      pos.y = 0
-      const dt = api.Extension.Point.addAnchorPointByPosition(
-        pos,
-        'http://www.probim.cn:8088/bimexample/img/point.png'
-      )
-      console.log(pos)
+      const dt = this.setClickPoint(e)
       console.log(dt)
 
       document.getElementById(dt.id).addEventListener('click', this.addEvent)
@@ -498,28 +495,33 @@ export default {
     },
     // 锚点标记
     location() {
-      const dom = document.querySelector('.gis-wrapper')
-      dom.addEventListener('click', this.locationFn)
+      __GIS__dom.addEventListener('click', this.locationFn)
     },
     // 保存锚点信息
     saveLocation() {
       this.locationVisible = false
-      document.querySelector('.gis-wrapper').removeEventListener('click', this.locationFn)
+      __GIS__dom.removeEventListener('click', this.locationFn)
     },
     // 定位指定元素
-    zoomElement() {
-      console.log(this.dataList[1])
-      const id = this.dataList[1]['id']
-      const pos = this.dataList[1]['position']
-      api.Context.zoomToTarget(pos)
-    },
-    // 清除测距
-    measureClear() {
-      api.Extension.Measure.clearMeasure()
-      // gisContext.measure2d.clear();
+    zoomElement(item) {
+      console.log('zoomItem', item)
+      // const pos = this.dataList[1]['position']
+      __GIS__api.Context.zoomToTarget(item.position)
+      const style = this.$refs.vedioPopover.$el.style
+      const { position, top, left, zIndex } = item.viewpointIcon.style
+      style.position = position
+      style.top = `${parseInt(top) + 20}px`
+      style.left = `${parseInt(left) + 20}px`
+      style.zIndex = zIndex
+      this.videoVisible = true
+      // __GIS__api.Controller.zoomElementByElementId(item.id)
     },
     // 添加比例尺
     addScale() {
+      const w = document.querySelector('#gis-wrapper').clientWidth
+      const h = document.querySelector('#gis-wrapper').clientHeight
+      const scale = __GIS__api.Utility.pixelToDistance(100, w, h)
+      console.log('scale', scale)
       // gisContext.gisControl.addScaleControl();
     },
     addMeasure() {
@@ -529,22 +531,22 @@ export default {
       // });
     },
     // 测距
-    measureLong() {
-      this.resetItem(this.topConfig, '测距')
-        ? api.Extension.Measure.activeLengthMeasure()
-        : api.Extension.Measure.deActiveLengthMeasure()
+    measureLong(flag) {
+      this.setAllPointDisable()
+      flag
+        ? __GIS__api.Extension.Measure.activeLengthMeasure()
+        : __GIS__api.Extension.Measure.deActiveLengthMeasure()
       // gisContext.measure2d.measureDistance();
     },
     // 测面积
-    measureArea() {
-      if (this.resetItem(this.topConfig, '测面积')) {
-        this.$message({
-          message: '按ESC关闭测绘线',
-          type: 'success'
-        })
-        api.Extension.Measure.activeMeasureArea()
+    measureArea(flag) {
+      this.setAllPointDisable()
+      if (flag) {
+        this.$message.success('按ESC关闭测绘线')
+        __GIS__api.Extension.Measure.activeMeasureArea()
       } else {
-        api.Extension.Measure.deActiveMeasureArea()
+        __GIS__api.Extension.Measure.deActiveMeasureArea()
+        // this.measureClear()
       }
       // gisContext.measure2d.measureArea();
     },
@@ -561,7 +563,7 @@ export default {
     randomAdd() {
       return Math.random() * 10000 > 5000
     },
-    randPoint(viewPointData) {
+    setPoint(viewPointData) {
       viewPointData.forEach(it => {
         const pos = {
           x: it.x,
@@ -573,14 +575,15 @@ export default {
         it.c = this.randomNum()
         it.d = this.randomNum()
         it.e = this.randomNum()
-        console.log(pos)
-        console.log(it)
-        const data = model.BIM365API.Extension.Point.addAnchorPointByPosition(
-          pos,
-          'http://www.probim.cn:8088/bimexample/img/point.png',
-          it
-        )
+        // console.log(pos)
+        // console.log('viewPoint', it)
+        this.closeCluster()
+        const data = __GIS__api.Extension.Point.addAnchorPointByPosition(pos, PointIcon)
+        this.openCluster()
         this.dataList.push(data)
+        console.log(data)
+        // 闪烁指定构件
+        // __GIS__api.Controller.flashElements(elementid)
       })
       // for (var i = 1; i < 3; i++) {
       //   var dt = JSON.parse(JSON.stringify(ctl))
@@ -620,10 +623,9 @@ export default {
       // }
     },
     clickPoint(id) {
-      console.log(this.dataList)
-      const clickPoint = this.dataList.filter(it => it.id === id)
-      console.log(clickPoint)
-      this.__fetchPointInfo(clickPoint[0].data.id)
+      const clickPoint = this.dataList.find(it => it.id === id)
+      console.log('clickPoint', clickPoint)
+      clickPoint && this.__fetchPointInfo(clickPoint.id)
 
       // var data = {}
       // for (var i = 0; i < this.dataList.length; i++) { if (this.dataList[i].id == id) data = this.dataList[i] }
@@ -774,25 +776,25 @@ export default {
       // }
 
       this.outerVisible = true
-    },
-    request(url, cb) {
-      var xmlHttpReq = new XMLHttpRequest()
-      xmlHttpReq.open('GET', url, true)
-      xmlHttpReq.send(null)
-      xmlHttpReq.onreadystatechange = function() {
-        if (xmlHttpReq.readyState === 4) {
-          cb && cb(xmlHttpReq.responseText)
-        }
-      }
-    },
-    fectchContent(path, type, bim) {
-      this.request(path, function(content) {
-        var s = document.createElement(type)
-        s.innerHTML = content
-        document.getElementsByTagName('head')[0].appendChild(s)
-        if (bim != undefined) bim()
-      })
     }
+    // request(url, cb) {
+    //   var xmlHttpReq = new XMLHttpRequest()
+    //   xmlHttpReq.open('GET', url, true)
+    //   xmlHttpReq.send(null)
+    //   xmlHttpReq.onreadystatechange = function() {
+    //     if (xmlHttpReq.readyState === 4) {
+    //       cb && cb(xmlHttpReq.responseText)
+    //     }
+    //   }
+    // },
+    // fectchContent(path, type, bim) {
+    //   this.request(path, function(content) {
+    //     var s = document.createElement(type)
+    //     s.innerHTML = content
+    //     document.getElementsByTagName('head')[0].appendChild(s)
+    //     if (bim !== undefined) bim()
+    //   })
+    // }
   }
 }
 </script>
@@ -801,6 +803,7 @@ export default {
 .gis-container {
   width: 100%;
   height: 100%;
+  overflow: hidden;
   ::v-deep.el-dialog {
     height: auto;
   }
@@ -835,6 +838,10 @@ export default {
     }
     .drawer {
       width: 360px;
+      height: 460px;
+      position: absolute;
+      top: 60px;
+      left: 80px;
       overflow: auto;
       ::v-deep.el-drawer__header {
         margin-bottom: 10px;
@@ -844,7 +851,7 @@ export default {
       }
       .list-item-wrapper {
         overflow: auto;
-        height: 200px;
+        height: 164px;
         .list-item {
           border-bottom: 1px dashed #ccc;
           padding-bottom: 10px;
@@ -892,4 +899,6 @@ export default {
     }
   }
 }
+</style>
+<style lang="scss">
 </style>

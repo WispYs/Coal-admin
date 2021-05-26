@@ -1,6 +1,13 @@
 <template>
   <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
-    <tree-bar :has-menu="hasMenu" :tree-data="treeData" :menu-config="menuConfig" @handleNodeClick="handleNodeClick" />
+    <tree-bar
+      ref="treeBar"
+      :has-menu="hasMenu"
+      :tree-data="treeData"
+      :menu-config="menuConfig"
+      :default-props="treeProp"
+      @handleNodeClick="handleNodeClick"
+    />
 
     <div class="tree-form-container">
       <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
@@ -20,7 +27,7 @@
         :config="MechLargeEquipTableConfig"
         height="calc(100% - 157px)"
         @edit-click="(row) => openDialog('edit', row)"
-        @other-click="(row) => openDetailDialog(row.area)"
+        @other-click="(row) => openDetailDialog(row.deviceTypeId)"
         @delete-click="deleteClick"
         @submit-data="editSubmit"
         @selection-change="selectionChange"
@@ -50,7 +57,8 @@
         ref="createDialog"
         :config="initCreateConfig()"
         :dialog-visible="createDialogVisible"
-        @upload-click="openUploadDialog"
+        @select-change="placeSelect"
+        @upload-click="(row) => openUploadDialog('createDialog', row)"
         @close-dialog="createDialogVisible = false"
         @submit="createSubmit"
       />
@@ -59,14 +67,14 @@
         ref="editDialog"
         :config="initEditConfig()"
         :dialog-visible="editDialogVisible"
-        @upload-click="openUploadDialog"
+        @select-change="placeSelect"
+        @upload-click="(row) => openUploadDialog('editDialog', row)"
         @close-dialog="editDialogVisible = false"
         @submit="editSubmit"
       />
       <!-- 上传附件 -->
       <upload-file
         :dialog-visible="uploadDialogVisible"
-        :multiple="false"
         @close-dialog="uploadDialogVisible = false"
         @upload-submit="uploadSubmit"
       />
@@ -108,7 +116,6 @@ import {
   getLargeEquipmentInfo,
   editLargeEquipment,
   delLargeEquipment,
-  getEquipmentAreaList,
   getEquipmentAreaInfo,
   createEquipmentArea,
   editEquipmentArea
@@ -138,6 +145,7 @@ export default {
       id: 'large-equipment-manage',
       list: [],
       total: 0,
+      currentNum: 0, // 当前页数据数量，用于判断删除后是否跳转到上一页
       listQuery: {
         page: 1,
         pagerows: 10
@@ -157,7 +165,12 @@ export default {
       hasMenu: true,
       treeData: {
         title: '',
+        tId: 'id',
         list: []
+      },
+      treeProp: {
+        children: 'children',
+        label: 'typeName'
       },
       // tree右键菜单配置
       menuConfig: [
@@ -169,6 +182,7 @@ export default {
       ],
       uploadRow: null, // 上传文件信息
       uploadDialogVisible: false,
+      deviceTypeId: 0, //  特有属性所属的场所id
       multipleSelection: [], // 多选项
       deleteDisabled: true // 批量删除置灰
     }
@@ -176,36 +190,97 @@ export default {
 
   created() {
     this.__fetchData()
+    // 获取所属场所类型树结构列表
     this.__updateEquipAreaTree()
+    // 初始化生产厂家下拉框数据
+    this.__updateFactory()
   },
   methods: {
-    // 接口获取所属场所
+    // 获取所属场所类型树结构列表
     __updateEquipAreaTree() {
-      // getEquipmentAreaList().then(response => {
-      //   console.log(response.data)
-      //   // 更新左侧树结构数据
-      //   this.treeData.list = response.data
-      //   // 更新新增、编辑config数据
-      //   const areaData = []
-      //   response.data.forEach(it => {
-      //     areaData.push({
-      //       label: it.label,
-      //       value: Number(it.value)
-      //     })
-      //   })
-      //   MechLargeEquipTableConfig.columns.forEach(it => {
-      //     if (it.field === 'area') {
-      //       it.options = areaData
-      //     }
-      //   })
-      // })
+      this.$store.dispatch('mecha/getEquipTypeList').then((data) => {
+        this.treeData.list = [{
+          id: 0,
+          typeName: '全部',
+          children: data
+        }]
+        // 设置树结构默认选中项
+        this.$refs.treeBar.setCurrentKey(0)
+      }).catch((err) => {
+        console.log(err)
+      })
     },
-
+    // 初始化所属场所下拉框数据
+    __initEquipPlace() {
+      this.$store.dispatch('mecha/getEquipPlaceList').then((data) => {
+        const placeData = []
+        data.forEach(it => {
+          placeData.push({
+            label: it.typeName,
+            value: it.id + ''
+          })
+        })
+        MechLargeEquipTableConfig.columns.forEach(it => {
+          if (it.field === 'parentId') {
+            it.options = placeData
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 初始化生产厂家下拉框数据
+    __updateFactory() {
+      this.$store.dispatch('mecha/getSupplierList').then((data) => {
+        const placeData = []
+        data.forEach(it => {
+          placeData.push({
+            label: it.supName,
+            value: it.id + ''
+          })
+        })
+        MechLargeEquipTableConfig.columns.forEach(it => {
+          if (it.field === 'factory') {
+            it.options = placeData
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 改变所属场所选项
+    placeSelect(item, row) {
+      if (item.field === 'parentId') {
+        // 获取所属场所下类型列表
+        this.getChildTypeList(row)
+      }
+    },
+    // 获取所属场所下类型列表，更新config
+    getChildTypeList(id) {
+      this.$store.dispatch('mecha/getChildTypeList', id).then((data) => {
+        const placeData = []
+        data.forEach(it => {
+          placeData.push({
+            label: it.typeName,
+            value: it.id + ''
+          })
+        })
+        MechLargeEquipTableConfig.columns.forEach(it => {
+          if (it.field === 'deviceTypeId') {
+            it.options = placeData
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 获取大型设备列表
     __fetchData() {
       this.listLoading = true
       const filter = {
         ...this.filter,
-        keywordField: ['workNumber', 'loginName', 'userName']
+        keywordField: ['deviceCode', 'deviceName'],
+        deviceTypeId: this.deviceTypeId
       }
       const query = Object.assign(this.listQuery, filter)
       getLargeEquipmentList(query).then(response => {
@@ -217,19 +292,30 @@ export default {
         })
         this.list = response.data.rows
         this.total = Number(response.data.records)
+        this.currentNum = response.data.rows.length
+      }).catch(err => {
+        console.log(err)
       })
+    },
+    // 清空筛选项
+    __resetFilter() {
+      this.filter = {}
+      this.deviceTypeId = 0
+      // 设置树结构默认选中项
+      this.$refs.treeBar.setCurrentKey(0)
     },
     // 查询数据
     queryData(filter) {
       this.filter = Object.assign(this.filter, filter)
+      this.$set(this.listQuery, 'page', 1)
       this.__fetchData()
     },
     // 点击treeBar详情
     treeDetail(tag) {
       console.log(tag)
       // 只有第一级的树型结构才有详情
-      if (tag.level === 1) {
-        const tagId = tag.data.value
+      if (tag.level === 2) {
+        const tagId = tag.data.id
         this.openDetailDialog(tagId)
         this.detailDialogVisible = true
       } else {
@@ -244,7 +330,7 @@ export default {
     initCreateConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.MechLargeEquipTableConfig.columns
       })
       return createConfig
@@ -253,7 +339,7 @@ export default {
     initEditConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.MechLargeEquipTableConfig.columns
       })
       return editConfig
@@ -261,8 +347,8 @@ export default {
     // 初始化详情窗口配置
     initDetailConfig() {
       const createConfig = Object.assign({
-        title: '详情',
-        width: '800px',
+        title: '特有属性',
+        width: '1000px',
         filter: this.MechLargeEquipDetailFilterConfig,
         form: this.MechLargeEquipDetailTableConfig
       })
@@ -272,7 +358,7 @@ export default {
     initCreateDetailConfig() {
       const createConfig = Object.assign({
         title: '新建',
-        width: '800px',
+        width: '1000px',
         form: this.MechLargeEquipDetailTableConfig.columns
       })
       return createConfig
@@ -281,7 +367,7 @@ export default {
     initEditDetailConfig() {
       const editConfig = Object.assign({
         title: '编辑',
-        width: '800px',
+        width: '1000px',
         form: this.MechLargeEquipDetailTableConfig.columns
       })
       return editConfig
@@ -296,28 +382,47 @@ export default {
       if (name.indexOf('Detail') > -1) {
         getListFn = getEquipmentAreaInfo
       } else {
-        // 接口获取所属场所，更新config数据
-        this.__updateEquipAreaTree()
+        // 初始化所属场所下拉框数据
+        this.__initEquipPlace()
         getListFn = getLargeEquipmentInfo
       }
 
       // 如果有数据，更新子组件的 formData
       if (row) {
         getListFn(row.id).then(response => {
-          const info = Object.assign(response.data, {
-            arrivalTime: parseTime(response.data.arrivalTime),
-            outFacTime: parseTime(response.data.outFacTime),
-            useTime: parseTime(response.data.useTime)
-          })
+          let formatData = {}
+          if (getListFn === getLargeEquipmentInfo) {
+            formatData = {
+              parentId: response.data.parentId ? response.data.parentId + '' : '',
+              deviceTypeId: response.data.deviceTypeId ? response.data.deviceTypeId + '' : '',
+              arrivalTime: parseTime(response.data.arrivalTime),
+              outFacTime: parseTime(response.data.outFacTime),
+              useTime: parseTime(response.data.useTime)
+            }
+            this.getChildTypeList(response.data.parentId)
+          }
+          const info = Object.assign(response.data, formatData)
           this.$refs[`${name}Dialog`].updataForm(info)
         })
       }
     },
     // 打开特有属性弹窗
     openDetailDialog(id) {
-      console.log(id)
       this.detailDialogVisible = true
-      this.$refs.detailDialog.queryData({ id })
+      this.deviceTypeId = id
+      this.$refs.detailDialog.queryData({ deviceTypeId: id })
+    },
+    // 删除当前页最后一条数据后跳转到前一页
+    /**
+     * @params{number} num 删除数量
+     */
+    changeCurrentPage(num) {
+      this.currentNum = this.currentNum - num
+      if (this.currentNum <= 0) {
+        if (this.listQuery.page > 1) {
+          this.$set(this.listQuery, 'page', this.listQuery.page - 1)
+        }
+      }
     },
     // 删除
     deleteClick(row) {
@@ -329,20 +434,19 @@ export default {
         delLargeEquipment(row.id).then(response => {
           console.log(response)
           this.$message.success('删除成功')
+          this.changeCurrentPage(1)
           this.__fetchData()
         })
       })
     },
     // 新增
     createSubmit(submitData) {
-      console.log(submitData)
-
       const query = Object.assign(submitData)
       createLargeEquipment(query).then(response => {
-        console.log(response)
         this.createDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDialog.resetForm()
+        // this.__resetFilter()
         this.__fetchData()
       }).catch(err => {
         console.log(err)
@@ -353,7 +457,6 @@ export default {
     editSubmit(submitData) {
       const query = Object.assign(submitData)
       editLargeEquipment(query).then(response => {
-        console.log(response)
         this.editDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDialog.resetForm()
@@ -361,22 +464,24 @@ export default {
       })
     },
     // 打开上传文件组件
-    openUploadDialog(row) {
+    openUploadDialog(ref, row) {
+      // 记录当前打开弹窗ref
+      this.dialogRef = ref
       this.uploadDialogVisible = true
       this.uploadRow = row
     },
     // 上传文件控件成功回调
     uploadSubmit(fileList) {
       console.log(fileList)
+      this.$refs[this.dialogRef].updateFile(fileList)
       this.uploadDialogVisible = false
     },
     // 详情新增
     createDetailSubmit(submitData) {
-      console.log(submitData)
-
-      const query = Object.assign(submitData)
+      const query = Object.assign(submitData, {
+        deviceTypeId: this.deviceTypeId
+      })
       createEquipmentArea(query).then(response => {
-        console.log(response)
         this.createDetailDialogVisible = false
         this.$message.success('新建成功')
         this.$refs.createDetailDialog.resetForm()
@@ -390,7 +495,6 @@ export default {
     editDetailSubmit(submitData) {
       const query = Object.assign(submitData)
       editEquipmentArea(query).then(response => {
-        console.log(response)
         this.editDetailDialogVisible = false
         this.$message.success('编辑成功')
         this.$refs.editDetailDialog.resetForm()
@@ -424,20 +528,16 @@ export default {
         type: 'warning'
       }).then(() => {
         console.log(selectId)
-        this.__fetchData()
         this.$message.success('删除成功')
+        this.changeCurrentPage(selectId.length)
+        this.__fetchData()
       })
     },
 
     // 点击树形菜单时触发
     handleNodeClick(data) {
-      console.log(data)
-      const entity = {
-        part: data.value
-      }
-      console.log(entity)
-      this.filter = Object.assign(this.filter, { entity })
-      this.__fetchData()
+      this.deviceTypeId = data.id
+      this.queryData()
     }
   }
 }

@@ -1,6 +1,8 @@
 <template>
   <div :class="{'hidden':hidden}" class="pagination-container">
     <el-pagination
+      :small="small"
+      :pager-count="5"
       :background="background"
       :current-page.sync="currentPage"
       :page-size.sync="pageSize"
@@ -51,6 +53,10 @@ export default {
       default: true
     },
     hidden: {
+      type: Boolean,
+      default: false
+    },
+    small: {
       type: Boolean,
       default: false
     }

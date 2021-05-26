@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      expandMenuVisible: false
+
     }
   },
   computed: {
@@ -29,25 +29,7 @@ export default {
       'sidebar_status'
     ])
   },
-  watch: {
-    expandMenuVisible(value) {
-      if (value) {
-        this.showExtendMenu()
-      }
-    }
-  },
   methods: {
-    showExtendMenu() {
-      window.addEventListener('click', this.closeExtendMenu)
-    },
-    closeExtendMenu(event) {
-      const parent = event.target.closest('.extend-menu')
-      const parentItem = event.target.closest('.extend-menu__item')
-      if (!parent || parentItem) {
-        this.expandMenuVisible = false
-        window.removeEventListener('click', this.closeExtendMenu)
-      }
-    },
     toggleSideBar() {
       this.$store.dispatch('sidebar/toggleSideBar')
     }
@@ -94,7 +76,7 @@ export default {
   }
 
 }
-@media screen and (max-width: 1680px) {
+@media screen and (max-width: 1440px) {
   .headbar-menu {
     display: flex;
     justify-content: space-between;

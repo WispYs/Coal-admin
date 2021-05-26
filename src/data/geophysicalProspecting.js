@@ -14,12 +14,15 @@ export const TableConfig = {
    * @param {boolean} sortable          是否需要排序
    * @param {string}  align             单元表格对齐方向，默认为'center'
    * @param {string}  unit              字段单位，例如：元、kw/h
-   * @param {string}  layout            表单类型
-   * @param {string}  dateFormat        日期格式
+   * @param {string}  layout            表单类型；layout为 SelectUser 时，点击该表单字段调用 '选择人员' 公共组件
+   * @param {string}  dateFormat        日期格式，例如：yyyy-MM-dd、yyyy-MM-dd HH:mm:ss
    * @param {array}   options           选择器配置项
    * @param {string}  showType          表格内数据显示方式，属于对展现形式有特殊要求的配置项，例如：colorLump-有背景色块;underline-下划线可点击
    * @param {string}  underlineText     表格内数据显示方式为underline时，下划线的文字
    * @param {boolean} multiple          下拉选择是否多选,默认false，值为true时多选
+   * @param {string}  subField          针对动态获取的多级联动下拉菜单，无法通过value值渲染label名称时，采取的备用名称字段
+   * @param {boolean} fullLine          该表单字段长度是否为整行，默认false，值为true时表示整行显示
+   * @param {string}  associate         针对关联字段显示隐藏(改变某字段值为绑定值才会出现的字段)，fields表示相关联字段，value表示绑定值(例如：'1,2,3')，视项目需求待添加到公共组件
    */
   columns: [
     { label: '样品受理编号', field: 'acceptanceNo', width: '150', align: 'left', layout: 'Text', placeholder: '请填写样品受理编号' },

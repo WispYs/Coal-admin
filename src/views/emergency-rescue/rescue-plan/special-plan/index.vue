@@ -1,6 +1,6 @@
 <template>
   <div class="page-container has-tree" :class="treeExtend ? 'open-tree' : 'close-tree'">
-    <tree-bar :tree-data="treeData" @handleNodeClick="handleNodeClick" />
+    <tree-bar ref="tree" :tree-data="treeData" @handleNodeClick="handleNodeClick" />
     <div class="tree-form-container">
       <span class="tree-extend-btn" @click="treeExtend = !treeExtend">
         <i :class="treeExtend ? 'el-icon-d-arrow-left': 'el-icon-d-arrow-right'" />
@@ -10,7 +10,7 @@
         <el-button type="primary" size="medium" @click="download">下载</el-button>
         <el-button type="primary" size="medium" @click="preview">预览</el-button>
       </div>
-      <tinymce v-model="content" :height="300" @submit-content="submitContent" />
+      <tinymce ref="tinymce" v-model="content" :height="300" :upload-data="uploadData" @submit-content="submitContent" />
     </div>
     <router-view />
   </div>
@@ -23,7 +23,9 @@ import {
   getYjjySpecialPlansTree,
   getObjectById,
   updateObject,
-  download
+  download,
+  getObjectByPage,
+  getDictData
 } from '@/api/emergency-rescue'
 
 export default {
@@ -36,6 +38,7 @@ export default {
       selectTree: 0,
       treeData: {
         title: '选择事故类型',
+        tId: 'value',
         list: [
           { value: 2, label: '机关', children: [
             { value: 3, label: '矿领导' },
@@ -59,7 +62,12 @@ export default {
         ]
       },
       type: '',
-      content: ''
+      content: '',
+      uploadData: {
+        menuId: this.$route.name
+        // menuId: 90022
+      },
+      yjjySpecialPlansId: ''
     }
   },
   created() {
@@ -68,25 +76,51 @@ export default {
   methods: {
     // 更新树
     __updateOrganTree() {
-      getYjjySpecialPlansTree().then(response => {
-        console.log(response)
+      getDictData(9).then(response => {
+        response.data.forEach(r => {
+          r['value'] = r['label'] = r.dictName
+        })
         this.treeData.list = response.data
+        console.log(response.data)
+        const selectedTree = response.data[0]['dictName']
+        if (selectedTree) {
+          this.$refs.tree.setCurrentKey(selectedTree)
+          this.handleNodeClick({ value: selectedTree })
+        }
       })
+      // getYjjySpecialPlansTree(this.$route.name).then(response => {
+      //   console.log(response)
+      //   this.treeData.list = response.data
+      // })
     },
     // 点击树形菜单时触发
     handleNodeClick(data) {
       this.selectTree = data.value
-      getObjectById(data.value, this.bussiness).then(res => {
-        if (res.data) {
-          this.content = res.data.content
-          this.type = `${res.data.type}.html`
+      // getObjectById(data.value, this.bussiness).then(res => {
+      //   if (res.data) {
+      //     this.content = res.data.content
+      //     this.type = `${res.data.type}.html`
+      //   }
+      // })
+      const params = {
+        entity: {
+          type: data.value,
+          menuId: this.$route.name
+        }
+      }
+      getObjectByPage(params, this.bussiness).then(res => {
+        const rows = res.data.rows
+        if (rows && rows.length) {
+          this.content = rows[0].content
+          this.type = `${rows[0].type}.html`
+          this.yjjySpecialPlansId = rows[0].yjjySpecialPlansId
         }
       })
     },
     save() {
       const data = {
-        content: this.content,
-        yjjySpecialPlansId: this.selectTree
+        content: this.$refs.tinymce.getContent(),
+        yjjySpecialPlansId: this.yjjySpecialPlansId
       }
       updateObject(data, this.bussiness).then(res => {
         this.$message({
@@ -97,17 +131,17 @@ export default {
     },
     download() {
       const data = {
-        content: this.content,
-        name: this.type
+        content: this.$refs.tinymce.getContent(),
+        fileName: this.type
       }
       download(data)
     },
     // 预览
     preview() {
       this.$router.push({
-        name: 'EmergencySpecialPlanPreview',
-        params: {
-          docId: this.selectTree
+        path: `/emergency-rescue/rescue-plan/special-plan/preview`,
+        query: {
+          docId: this.yjjySpecialPlansId
         }
       })
     },
@@ -134,7 +168,7 @@ export default {
   margin-bottom: 10px;
 }
 .page-button {
-  padding: 10px 0;
+  padding: 0 0 10px 0;
   border-bottom: 1px solid #ededed;
 }
 </style>

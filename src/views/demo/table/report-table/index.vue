@@ -261,24 +261,26 @@ export default {
   .report-button {
     padding: 10px 0;
   }
-  // 去掉选中蓝色背景
-  .el-table {
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    -khtml-user-select: none;
-    user-select: none;
-  }
-  .editable-cell {
-    background: #fdf5e6;
-  }
+  ::v-deep {
+    // 去掉选中蓝色背景
+    .el-table {
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      -khtml-user-select: none;
+      user-select: none;
+    }
+    .editable-cell {
+      background: #fdf5e6;
+    }
 
-  // 修改边框颜色
-  .el-table td, .el-table th.is-leaf,.el-table--border, .el-table--group{
-    border-color: #999;
-  }
-  .el-table--border::after, .el-table--group::after, .el-table::before{
-    background-color: #999;
+    // 修改边框颜色
+    .el-table td, .el-table th.is-leaf,.el-table--border, .el-table--group{
+      border-color: #999;
+    }
+    .el-table--border::after, .el-table--group::after, .el-table::before{
+      background-color: #999;
+    }
   }
 
 }

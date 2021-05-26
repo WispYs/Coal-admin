@@ -8,23 +8,23 @@
   >
     <div class="progress-container">
       <div class="progress-item">
-        <p class="progress-item__title">{{ progressData.name }}推进度</p>
-        <p class="progress-item__info">已完成{{ progressData.push }}米 / 工作面总长度{{ progressData.pTotal }}米</p>
+        <p class="progress-item__title">{{ progressData.tunnelName }}推进度</p>
+        <p class="progress-item__info">已完成{{ progressData.tunnelProcess }}米 / 工作面总长度{{ progressData.designerLength }}米</p>
         <el-progress :text-inside="true" :stroke-width="26" :percentage="progressData.pPercent" />
       </div>
       <div class="progress-item">
-        <p class="progress-item__title">{{ progressData.name }}生命周期</p>
+        <p class="progress-item__title">{{ progressData.tunnelName }}生命周期</p>
         <el-timeline>
           <el-timeline-item
-            v-for="(item,index) in progressData.lifecycle"
+            v-for="(item,index) in progressData.list"
             :key="index"
             placement="top"
-            :timestamp="item.dateTime"
-            :color="item.complete ? '#0bbd87' : ''"
+            :timestamp="item.undergoDate"
+            :color="item.complete ? '' : '#0bbd87'"
           >
             <el-card>
-              <span style="margin-right: 20px;"><b>事件：</b>{{ item.event }}</span>
-              <span><b>说明：</b>{{ item.describe }}</span>
+              <span style="margin-right: 20px;"><b>事件：</b>{{ item.incident }}</span>
+              <span><b>说明：</b>{{ item.illustrate }}</span>
             </el-card>
           </el-timeline-item>
         </el-timeline>
@@ -59,15 +59,20 @@ export default {
     // 更新数据
     updataForm(data) {
       this.progressData = Object.assign(this.progressData, data, {
-        title: `${data.name}进度`,
-        pPercent: this.computePercent(data.push, data.pTotal)
+        title: `${data.tunnelName}进度`,
+        pPercent: this.computePercent(data.tunnelProcess, data.designerLength)
       })
     },
 
     // 计算百分比
     computePercent(a, b) {
-      console.log(a, b)
-      return Number((a / b * 100).toFixed(2))
+      let value
+      if(a == 0 | b == 0){
+        value = 0
+      }else{
+        value = Number((a / b * 100).toFixed(2))
+      }
+      return value
     }
   }
 }

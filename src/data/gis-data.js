@@ -1,4 +1,4 @@
-export const GisViewPoint = [
+const GisViewPoint = [
   {
     id: '001',
     // modelID: 'm001',
@@ -137,7 +137,7 @@ export const GisViewPoint = [
   }
 ]
 
-export const PointInfo = {
+const PointInfo = {
   addr: '中区11-2采区煤层回风T回',
   createBy: null,
   createDate: 0,
@@ -156,4 +156,9 @@ export const PointInfo = {
   y: 0,
   z: -1027.7581974978
 
+}
+
+export {
+  GisViewPoint,
+  PointInfo
 }

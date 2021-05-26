@@ -31,17 +31,22 @@ export function filterAsyncRoutes(routes, roles) {
     if (tmp.component === 'Layout') {
       tmp.component = Layout
     } else {
-      const showChildren = tmp.children ? tmp.children.filter(item => !item.hidden) : []
-      if (showChildren && showChildren.length !== 0) {
-        // 如果次级菜单有子菜单，则设置该菜单component为公共组件MenuMain，用于缓存
-        tmp.component = MenuMain
-      } else {
-        let sub_view = tmp.component || ''
-        sub_view = sub_view.replace(/^\/*/g, '')
-        // ESlint 报错
-        // tmp.component = () => import(`@/views/${sub_view}`)
-        tmp.component = loadView(sub_view)
-      }
+      // const showChildren = tmp.children ? tmp.children.filter(item => !item.hidden) : []
+      // if (showChildren && showChildren.length !== 0) {
+      //   // 如果次级菜单有子菜单，则设置该菜单component为公共组件MenuMain，用于缓存
+      //   tmp.component = MenuMain
+      // } else {
+      //   let sub_view = tmp.component || ''
+      //   sub_view = sub_view.replace(/^\/*/g, '')
+      //   // ESlint 报错
+      //   // tmp.component = () => import(`@/views/${sub_view}`)
+      //   tmp.component = loadView(sub_view)
+      // }
+      let sub_view = tmp.component || ''
+      sub_view = sub_view.replace(/^\/*/g, '')
+      // ESlint 报错
+      // tmp.component = () => import(`@/views/${sub_view}`)
+      tmp.component = loadView(sub_view)
     }
     if (hasPermission(roles, tmp)) {
       if (tmp.children) {
