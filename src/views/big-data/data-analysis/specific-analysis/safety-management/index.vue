@@ -1,13 +1,9 @@
 <template>
   <div class="safety-wrapper">
     <div v-for="(item, index) in safetyList" :key="index" class="safety-item">
-
-      <div v-if="item.more" class="safety-item__title has-more">
+      <div :class="['safety-item__title', item.more ? 'has-more': ''] ">
         <p>{{ item.title }}</p>
-        <span class="title-more">更多>></span>
-      </div>
-      <div v-else class="safety-item__title">
-        <p>{{ item.title }}</p>
+        <span v-if="item.more" class="title-more">更多 >></span>
       </div>
       <div class="safety-item__content">
         <component :is="item.component" :cdata="item.data" />
@@ -97,16 +93,16 @@ export default {
           ]
         }, component: ListComponent, more: true },
         { title: '2021年度风险', data: [
-          { title: '轻微风险', value: 35, color: '#1fefff' },
-          { title: '一般风险', value: 44, color: '#00d0aa' },
-          { title: '较大风险', value: 86, color: '#796afe' },
-          { title: '重大风险', value: 52, color: '#fb6a47' }
+          { title: '轻微风险', value: 35, className: 'blue' },
+          { title: '一般风险', value: 44, className: 'green' },
+          { title: '较大风险', value: 86, className: 'purple' },
+          { title: '重大风险', value: 52, className: 'orange' }
         ], component: ProgressComponent },
         { title: '5月风险', data: [
-          { title: '轻微风险', value: 35, color: '#1fefff' },
-          { title: '一般风险', value: 44, color: '#00d0aa' },
-          { title: '较大风险', value: 86, color: '#796afe' },
-          { title: '重大风险', value: 52, color: '#fb6a47' }
+          { title: '轻微风险', value: 35, className: 'blue' },
+          { title: '一般风险', value: 44, className: 'green' },
+          { title: '较大风险', value: 86, className: 'purple' },
+          { title: '重大风险', value: 52, className: 'orange' }
         ], component: ProgressComponent },
         { title: '辨识类别（风险）', data: [
           { value: 35, name: '设计前', itemStyle: { color: '#9456fb' }},
@@ -139,9 +135,10 @@ export default {
 @import '~@/assets/styles/mixin.scss';
 .safety-wrapper {
   @include clearfix;
+  height: 9rem;
   .safety-item {
     float: left;
-    width: 4.5rem;
+    width: calc((100% - 0.6rem)/4);
     height: 2.8rem;
     margin-right: .2rem;
     margin-bottom: .3rem;
@@ -172,12 +169,14 @@ export default {
           line-height: .48rem;
           font-size: .16rem;
           cursor: pointer;
+          overflow: hidden;
         }
       }
 
     }
     &__content {
       height: calc(100% - .48rem);
+      overflow: hidden;
     }
   }
 }

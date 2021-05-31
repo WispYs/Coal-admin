@@ -16,7 +16,7 @@
         <div class="footage-progress__box">
           <div v-for="(item, index) in progressData" :key="index" class="footage-progress__item">
             <span>{{ item.title }}</span>
-            <el-progress :stroke-width="12" :text-inside="true" :percentage="item.value" color="#009bf5" />
+            <el-progress :stroke-width="flexible(14)" :text-inside="true" :percentage="item.value" />
           </div>
         </div>
         <div class="footage-progress__tag">当前矿井生产产量进度正常，满足接替计划要求</div>
@@ -25,6 +25,7 @@
   </div>
 </template>
 <script>
+import flexible from './mixins/flexible'
 export default {
   data() {
     return {
@@ -44,6 +45,11 @@ export default {
         { title: '工作面7', value: 100 },
         { title: '工作面8', value: 82 }
       ]
+    }
+  },
+  methods: {
+    flexible(val) {
+      return flexible(val)
     }
   }
 }
@@ -80,6 +86,10 @@ export default {
             .el-progress__text {
               color: #fff;
               font-size: .16rem!important;
+            }
+            .el-progress-bar__inner{
+              background-color: unset;
+              background-image: linear-gradient(to right, #0097f8 , #00d2a8);
             }
           }
         }

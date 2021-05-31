@@ -1,6 +1,6 @@
 <template>
   <div class="big-data">
-    <top-nav :nav-menu="nav" />
+    <decision-top-nav :nav-menu="nav" />
     <div class="big-data__content">
       <div class="decision-wrapper">
         <div class="decision-content con-left">
@@ -28,7 +28,7 @@
   </div>
 </template>
 <script>
-import TopNav from '../components/TopNav'
+import DecisionTopNav from '../components/DecisionTopNav'
 import ProductStatus from './components/ProductStatus'
 import FootageStatus from './components/FootageStatus'
 import WorkCondition from './components/WorkCondition'
@@ -46,7 +46,7 @@ import RunFailure from './components/RunFailure'
 
 export default {
   components: {
-    TopNav,
+    DecisionTopNav,
     ProductStatus,
     FootageStatus,
     WorkCondition,
@@ -86,7 +86,7 @@ export default {
   overflow: auto;
   &__content {
     margin-top: .95rem;
-    padding: .3rem;
+    padding: .2rem .3rem;
     color: #fff;
   }
 }
@@ -96,6 +96,7 @@ export default {
 @import '~@/assets/styles/mixin.scss';
 .decision-wrapper {
   @include clearfix;
+  height: 9.4rem;
   .decision-content {
     float: left;
     height: 9.4rem;
@@ -114,6 +115,7 @@ export default {
       width: 9.2rem;
     }
     &__item {
+      overflow: hidden;
       .item-title {
         position: relative;
         height: .36rem;
@@ -172,6 +174,7 @@ export default {
       }
       .item-content {
         padding: .1rem .05rem;
+        height: calc(100% - .36rem);
       }
     }
   }

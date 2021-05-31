@@ -32,7 +32,7 @@ export const mineInformationConfig = {
    * @param {boolean} fullLine          该表单字段长度是否为整行，默认false，值为true时表示整行显示
    * @param {string}  associate         针对关联字段显示隐藏(改变某字段值为绑定值才会出现的字段)，fields表示相关联字段，value表示绑定值(例如：'1,2,3')，视项目需求待添加到公共组件
    */
-  actions: [],
+  actions: ['edit','delete'],
   otherActionTitle: [],
   summary: false,
   summaryField: [],

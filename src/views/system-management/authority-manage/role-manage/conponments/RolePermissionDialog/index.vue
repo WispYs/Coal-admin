@@ -311,7 +311,6 @@ export default {
         sysMenuIds: this.sysMenuIds,
         sysRoleId: Number(this.selectRole.sysRoleId)
       }
-      console.log(query);
       roleEmpower(query).then(res => {
         console.log(res);
         if (this.moduleVisible) {

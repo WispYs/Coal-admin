@@ -31,6 +31,7 @@ export default {
 @import '~@/assets/styles/mixin.scss';
 .list-content {
   padding: .1rem;
+  overflow: hidden;
   table {
     width: 100%;
     line-height: .4rem;
@@ -45,6 +46,7 @@ export default {
       line-height: .46rem;
       background: #22305b;
       padding: 0 .1rem;
+      min-width: 62px;
       &.text-center {
         text-align: center;
       }

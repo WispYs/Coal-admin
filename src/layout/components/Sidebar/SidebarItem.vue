@@ -1,7 +1,7 @@
 <template>
   <div v-if="!item.hidden">
     <template v-if="!hasShowChild(item.children)">
-      <app-link v-if="item.meta" :to="item.path">
+      <app-link v-if="item.meta" :to="item.path" :target="item.meta.target">
         <el-menu-item :index="item.path">
           <i v-if="item.hasIcon" class="el-icon-menu" />
           <!-- <el-tooltip :content="item.meta.title" placement="top-start"> -->

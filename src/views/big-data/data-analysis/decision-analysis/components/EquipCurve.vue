@@ -11,11 +11,16 @@
         />
       </el-select>
     </div>
-    <div class="item-content" />
+    <div class="item-content">
+      <equip-curve-chart :cdata="EquipCurveData" />
+    </div>
   </div>
 </template>
 <script>
+import EquipCurveChart from './EquipCurveChart'
+
 export default {
+  components: { EquipCurveChart },
   data() {
     return {
       date: '五月',
@@ -32,7 +37,12 @@ export default {
         { value: '十月', label: '十月' },
         { value: '十一月', label: '十一月' },
         { value: '十二月', label: '十二月' }
-      ]
+      ],
+      EquipCurveData: {
+        yAxis: [50, 100, 80, 150, 140, 300, 170],
+        xAxis: ['1月', '2月', '3月', '4月', '5月', '6月'],
+        color: '#1fefff'
+      }
     }
   }
 }

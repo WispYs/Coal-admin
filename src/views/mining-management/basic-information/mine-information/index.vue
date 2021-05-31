@@ -114,20 +114,20 @@ export default {
     }
   },
   created() {
-    this.$set(this.mineInformationPermissionConfig, 'filterAction', [])
-    this.$set(this.mineInformationPermissionConfig, 'tableActions', ['other'])
-    this.$set(this.mineInformationPermissionConfig, 'othertableActions', [])
-    this.mineInformationPermissionConfig.menuId = this.$route.name
-    this.$store.dispatch('buttonPermission/generateRoutes', mineInformationPermissionConfig).then(data => {
-      this.mineInformationFilterConfig.actions = data.filterAction
-      this.mineInformationConfig.otherActionTitle = data.othertableActions
-      this.mineInformationConfig.actions = data.tableActions
-      data.tableActions.forEach(it => {
-        if (it == 'delete') {
-          this.batchDeleteVisible = true
-        }
-      })
-    })
+    // this.$set(this.mineInformationPermissionConfig, 'filterAction', [])
+    // this.$set(this.mineInformationPermissionConfig, 'tableActions', ['other'])
+    // this.$set(this.mineInformationPermissionConfig, 'othertableActions', [])
+    // this.mineInformationPermissionConfig.menuId = this.$route.name
+    // this.$store.dispatch('buttonPermission/generateRoutes', mineInformationPermissionConfig).then(data => {
+    //   this.mineInformationFilterConfig.actions = data.filterAction
+    //   this.mineInformationConfig.otherActionTitle = data.othertableActions
+    //   this.mineInformationConfig.actions = data.tableActions
+    //   data.tableActions.forEach(it => {
+    //     if (it == 'delete') {
+    //       this.batchDeleteVisible = true
+    //     }
+    //   })
+    // })
     this.__fetchSelectList()
     this._getSiteTree()
     this.__fetchData()

@@ -2,7 +2,7 @@
  * @Author: Wisper
  * @Date: 2021-01-08 15:38:12
  * @Last Modified by: Wisper
- * @Last Modified time: 2021-05-25 09:45:17
+ * @Last Modified time: 2021-05-28 14:12:33
  */
 
 /**
@@ -4144,14 +4144,14 @@ const asyncRoutes = [
             name: 'BigData3-1',
             component: '/demo/index',
             redirect: '/big-data-analysis/decision-analysis',
-            meta: { title: '决策分析' }
+            meta: { title: '决策分析', target: '_blank' }
           },
           {
             path: '/big-data/data-analysis/data-analysis-2',
             name: 'BigData3-2',
             component: '/demo/index',
             redirect: '/big-data-analysis/specific-analysis/safety-management',
-            meta: { title: '专题分析' }
+            meta: { title: '专题分析', target: '_blank' }
           }
         ]
       }
@@ -4163,7 +4163,8 @@ const asyncRoutes = [
     name: 'BigDataAnalysis',
     component: '/big-data/data-analysis/index',
     redirect: '/big-data-analysis/decision-analysis/security-level',
-    meta: { title: '大数据分析看板', hidden: true },
+    hidden: true,
+    meta: { title: '大数据分析看板' },
     children: [
       {
         path: '/big-data-analysis/decision-analysis',

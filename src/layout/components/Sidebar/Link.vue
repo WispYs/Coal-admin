@@ -1,5 +1,5 @@
 <template>
-  <component :is="type" v-bind="linkProps(to)">
+  <component :is="type" v-bind="linkProps(to, target)">
     <slot />
   </component>
 </template>
@@ -12,6 +12,10 @@ export default {
     to: {
       type: String,
       required: true
+    },
+    target: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -27,7 +31,7 @@ export default {
     }
   },
   methods: {
-    linkProps(to) {
+    linkProps(to, target) {
       if (this.isExternal) {
         return {
           href: to,
@@ -35,8 +39,10 @@ export default {
           rel: 'noopener'
         }
       }
+      console.log(to, target)
       return {
-        to: to
+        to: to,
+        target: target
       }
     }
   }

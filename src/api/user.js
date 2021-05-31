@@ -10,13 +10,13 @@ import { BaseUrl, SystemUrl } from './url.js'
 //   })
 // }
 // 登录接口
-export function authLogin(data) {
-  return request({
-    url: `${BaseUrl}/auth/login`,
-    method: 'post',
-    data
-  })
-}
+// export function authLogin(data) {
+//   return request({
+//     url: `${BaseUrl}/auth/login`,
+//     method: 'post',
+//     data
+//   })
+// }
 
 // 登出
 export function logout() {
@@ -27,12 +27,12 @@ export function logout() {
 }
 
 // 获取用户信息
-export function getInfo(token) {
-  return request({
-    url: `${BaseUrl}/admin/sysUser/getInfo`,
-    method: 'get'
-  })
-}
+// export function getInfo(token) {
+//   return request({
+//     url: `${BaseUrl}/admin/sysUser/getInfo`,
+//     method: 'get'
+//   })
+// }
 
 // 设置用户快捷导航
 export function setCollectMenu(data) {
@@ -50,34 +50,34 @@ export function delCollectMenu(id) {
   })
 }
 // 获取用户快捷导航
-export function getCollectMenu() {
-  return request({
-    url: `${SystemUrl}/cfgNavigation/findNavigationByUserId`,
-    method: 'get'
-  })
-}
-
-/* mock api */
-// 登录
-// export function authLogin(data) {
-//   return request({
-//     url: '/example/user/login',
-//     method: 'post',
-//     data
-//   })
-// }
-// 获取用户信息
-// export function getInfo(token) {
-//   return request({
-//     url: '/example/user/info',
-//     method: 'get',
-//     params: { token }
-//   })
-// }
-// 获取用户快捷导航
 // export function getCollectMenu() {
 //   return request({
-//     url: '/example/user/collect-menu',
+//     url: `${SystemUrl}/cfgNavigation/findNavigationByUserId`,
 //     method: 'get'
 //   })
 // }
+
+/* mock api */
+// 登录
+export function authLogin(data) {
+  return request({
+    url: '/example/user/login',
+    method: 'post',
+    data
+  })
+}
+//  获取用户信息
+export function getInfo(token) {
+  return request({
+    url: '/example/user/info',
+    method: 'get',
+    params: { token }
+  })
+}
+//  获取用户快捷导航
+export function getCollectMenu() {
+  return request({
+    url: '/example/user/collect-menu',
+    method: 'get'
+  })
+}

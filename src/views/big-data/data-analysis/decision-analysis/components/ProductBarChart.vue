@@ -88,7 +88,15 @@ export default {
           type: 'bar',
           barWidth: flexible(12),
           itemStyle: {
-            color: '#35f1ff'
+            emphasis: {
+              barBorderRadius: 30
+            },
+            normal: {
+              // 柱形图圆角，初始化效果
+              barBorderRadius: [10, 10, 5, 5],
+              color: '#35f1ff'
+            }
+
           }
         }]
       }
